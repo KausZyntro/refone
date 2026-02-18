@@ -1,0 +1,143 @@
+.phone-hero-section {
+  width: 100%;
+  background: #ededed;
+  padding: 40px 0 65px;
+  box-sizing: border-box;
+}
+
+.phone-hero-header {
+  text-align: start;
+  margin-bottom: 30px;
+  padding-left: 63px;
+}
+
+.phone-hero-header h1 {
+  font-size: 56px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  color: #1d1d1f;
+}
+
+.chapter-nav {
+  position: relative;
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+}
+
+.product-list {
+  display: flex;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  list-style: none;
+  padding: 0 20px;
+  margin: 0;
+}
+
+.product-list::-webkit-scrollbar {
+  display: none;
+}
+.product-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.product-item {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.product-item a {
+  text-decoration: none;
+  color: #1d1d1f;
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.product-item img {
+  width: 70px;
+  height: 85px;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease;
+}
+
+.product-item:hover img {
+  transform: scale(1.1);
+}
+
+.nav-btn {
+  background: #f5f5f7;
+  border: none;
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #333;
+  transition: background 0.3s ease;
+  display: none;
+}
+
+.nav-btn:hover {
+  background: #e0e0e0;
+}
+
+.nav-btn.left {
+  margin-right: 10px;
+}
+
+.nav-btn.right {
+  margin-left: 10px;
+}
+
+
+@media (min-width: 1024px) {
+  .hero-header h1 {
+    font-size: 64px;
+  }
+
+  .nav-btn {
+    display: block;
+  }
+
+  .product-list {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 1023px) {
+  .hero-header h1 {
+    font-size: 48px;
+  }
+
+  .product-list {
+    gap: 30px;
+  }
+
+  .product-item img {
+    width: 60px;
+    height: 68px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-header h1 {
+    font-size: 36px;
+  }
+
+  .product-list {
+    gap: 20px;
+    padding: 0 10px;
+  }
+
+  .product-item img {
+    width: 50px;
+    height: 68px;
+  }
+
+  .product-item a {
+    font-size: 12px;
+  }
+}
