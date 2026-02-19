@@ -34,5 +34,17 @@ a {
   color: inherit;
   text-decoration: none;
 }
+.container{
+  max-width: 1250px;
+  margin: 32px auto;
+  padding: 0 20px;
+  margin-top: 78px;
+}
+.container-hero{
+  max-width: 1250px;
+  margin: 32px auto;
+  padding: 0 20px;
+  margin-top: 176px;
+}
 
 

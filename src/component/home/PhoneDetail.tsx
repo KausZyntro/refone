@@ -26,7 +26,7 @@ const PhoneDetail = () => {
   };
 
   return (
-    <section className="phone-hero-section">
+    <section className="container">
       <header className="phone-hero-header">
         <h1>iPhone</h1>
       </header>

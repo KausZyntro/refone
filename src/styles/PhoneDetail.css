@@ -8,27 +8,32 @@
 .phone-hero-header {
   text-align: start;
   margin-bottom: 30px;
-  padding-left: 63px;
+  /* padding-left: 63px; */
 }
 
 .phone-hero-header h1 {
-  font-size: 56px;
+  font-size: 50px;
   font-weight: 600;
   letter-spacing: -1px;
   color: #1d1d1f;
 }
 
 .chapter-nav {
-  position: relative;
+  /* position: relative;
   max-width: 1000px;
   margin: auto;
   display: flex;
+  align-items: center; */
   align-items: center;
+    width: 100%;
+    /* margin: auto; */
+    display: flex;
+    position: relative;
 }
 
 .product-list {
   display: flex;
-  gap: 40px;
+  gap: 64px;
   overflow-x: auto;
   scroll-behavior: smooth;
   list-style: none;
@@ -94,8 +99,8 @@
 
 
 @media (min-width: 1024px) {
-  .hero-header h1 {
-    font-size: 64px;
+  .phone-hero-header h1 {
+    /* font-size: 64px; */
   }
 
   .nav-btn {
@@ -108,7 +113,7 @@
 }
 
 @media (max-width: 1023px) {
-  .hero-header h1 {
+  .phone-hero-header h1 {
     font-size: 48px;
   }
 
@@ -123,7 +128,7 @@
 }
 
 @media (max-width: 600px) {
-  .hero-header h1 {
+  .phone-hero-header h1 {
     font-size: 36px;
   }
 

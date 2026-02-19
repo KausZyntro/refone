@@ -3,7 +3,7 @@ import "@/styles/HeroAbout.css";
 
 const HeroAbout = () => {
   return (
-    <div className="heroAbout-wrapper">
+    <div className="container">
       <div className="heroAbout-container">
         <div className="heroAbout-content">
           <h2 className="heroAbout-title">Download the App</h2>

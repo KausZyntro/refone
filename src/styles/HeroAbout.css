@@ -1,6 +1,6 @@
 .heroAbout-wrapper {
   width: 100%;
-  padding: 0 0 70px 0;
+  padding: 70px 0 70px 0;
   display: flex;
   justify-content: center;
 }
@@ -16,7 +16,6 @@
   overflow: hidden;
 }
 
-/* Desktop Layout */
 @media (min-width: 768px) {
   .heroAbout-container {
     flex-direction: row;
@@ -71,7 +70,6 @@
   height: auto;
 }
 
-/* Desktop Image */
 @media (min-width: 768px) {
   .heroAbout-image {
     margin-top: 0;

@@ -12,7 +12,7 @@ import "@/styles/HeroSlider.css";
 
 const HeroSlider = () => {
   return (
-    <div className="hero">
+    <div className="container-hero">
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         navigation
