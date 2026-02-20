@@ -1,0 +1,414 @@
+.product-detail-container {
+  padding: 60px 80px;
+  font-family: Arial, sans-serif;
+  max-width: 1400px;
+  margin: 134px auto 32px;
+}
+
+
+
+.product-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+
+.gallery .main-image {
+  width: 100%;
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f4f4f4;
+}
+
+.gallery .main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail-row {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s ease;
+}
+
+.thumb:hover {
+  transform: scale(1.05);
+}
+
+.thumb.active {
+  border: 2px solid #7a5af8;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+.product-info .category {
+  color: gray;
+  font-size: 14px;
+}
+
+.product-info .title {
+  font-size: 32px;
+  margin: 10px 0;
+}
+
+.price-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.new-price {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.description {
+  margin: 20px 0;
+  line-height: 1.6;
+  color: #555;
+}
+
+
+.color-options {
+  display: flex;
+  gap: 12px;
+  margin: 10px 0 29px;
+  flex-wrap: wrap;
+}
+
+.color {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.color.active {
+  border: 2px solid #7a5af8;
+}
+
+.black { background: #111; }
+.gray { background: #ccc; }
+.purple { background: #7a5af8; }
+.navy { background: #1e293b; }
+
+
+.size-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sizes {
+  display: flex;
+  gap: 12px;
+  margin: 15px 0 25px;
+  flex-wrap: wrap;
+}
+
+.size {
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 13px 30px;
+    transition: all .2s;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.size:hover {
+  background: #f3f3f3;
+}
+
+.size.active {
+  background: #dbeffd;
+  border: 2px solid #006aaf;
+}
+
+.storages {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 15px 0 25px;
+    display: flex;
+}
+
+.storage {
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 13px 30px;
+    transition: all .2s;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+.storage.active {
+  background: #dbeffd;
+  border: 2px solid #006aaf;
+}
+
+.button-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 34px 0px;
+}
+
+.add-cart,
+.buy-now {
+  /* flex: 1; */
+  min-width: 222px;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.add-cart {
+  background: #006aaf;
+  color: white;
+  border: none;
+  font-size: 18px;
+    font-weight: 600;
+}
+
+.buy-now {
+  background: white;
+  border: 1px solid #ddd;
+  font-size: 18px;
+    font-weight: 600;
+}
+
+
+
+.related {
+  margin-top: 80px;
+}
+
+.related h2 {
+  margin-bottom: 30px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.related-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.related-card h4 {
+  margin-top: 10px;
+}
+
+.related-card p {
+  color: #7a5af8;
+  font-weight: bold;
+}
+.payment-section {
+  /* padding: 20px 15px; */
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.payment-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+/* Keep horizontal scroll */
+.payment-wrapper {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* smooth iOS scroll */
+  
+  /* Hide scrollbar (Firefox) */
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar (Chrome, Safari, Edge) */
+.payment-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.payment-item {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 70px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.icon-box {
+  width: 50px;
+  height: 50px;
+  background: #f5f6f8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+  font-size: 22px;
+}
+
+.icon-box img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.payment-item span {
+  font-size: 12px;
+  color: #444;
+}
+
+/* Hover effect */
+.payment-item:hover .icon-box {
+  background: #e9f2ff;
+  transform: translateY(-2px);
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .payment-wrapper {
+    gap: 12px;
+  }
+
+  .payment-item {
+    min-width: 60px;
+  }
+
+  .icon-box {
+    width: 45px;
+    height: 45px;
+  }
+
+  .icon-box img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .payment-item span {
+    font-size: 11px;
+  }
+}
+
+
+
+@media (max-width: 1200px) {
+  .product-detail-container {
+    padding: 50px 40px;
+  }
+
+  .gallery .main-image {
+    height: 450px;
+  }
+
+  .related-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .product-top {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .gallery .main-image {
+    height: 400px;
+  }
+
+  .related-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail-container {
+    padding: 30px 20px;
+  }
+
+  .product-info .title {
+    font-size: 24px;
+  }
+
+  .gallery .main-image {
+    height: 320px;
+  }
+
+  .thumb {
+    width: 60px;
+    height: 60px;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .add-cart,
+  .buy-now {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery .main-image {
+    height: 250px;
+  }
+
+  .product-info .title {
+    font-size: 20px;
+  }
+
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .related-card img {
+    height: 200px;
+  }
+}

@@ -12,7 +12,7 @@
 }
 
 .phone-hero-header h1 {
-  font-size: 50px;
+  font-size: 39px;
   font-weight: 600;
   letter-spacing: -1px;
   color: #1d1d1f;
@@ -129,7 +129,7 @@
 
 @media (max-width: 600px) {
   .phone-hero-header h1 {
-    font-size: 36px;
+    font-size: 24px;
   }
 
   .product-list {

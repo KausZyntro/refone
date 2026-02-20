@@ -9,12 +9,14 @@ import PhoneDetail from "@/component/home/PhoneDetail";
 import ProductCard from "@/component/ui/ProductCard";
 import Testimonials from "@/component/home/Testimonial";
 import FAQSection from "@/component/home/FaqSection";
+import ProductSlider from "@/component/home/ProductSlider";
 
 export default function Home() {
   const products = [
    {
     id:1,
   name: "Apple iPhone 15 (128GB)",
+  slug: "long-sleeve-hoodie",
   price: 75000,
   mrp: 79900,
   discount: Math.round((79900-75000)/79900*100),
@@ -24,6 +26,7 @@ export default function Home() {
 {
   id:2,
   name: "Apple iPhone 15 Plus (128GB)",
+  slug: "long-sleeve-hoodie",
   price: 85000,
   mrp: 89900,
   discount: Math.round((89900-85000)/89900*100),
@@ -33,6 +36,7 @@ export default function Home() {
 {
   id:3,
   name: "Apple iPhone 14 (128GB)",
+  slug: "long-sleeve-hoodie",
   price: 60000,
   mrp: 69900,
   discount: Math.round((69900-60000)/69900*100),
@@ -42,6 +46,7 @@ export default function Home() {
 {
   id:4,
   name: "Apple iPhone 13 (128GB)",
+  slug: "long-sleeve-hoodie",
   price: 50000,
   mrp: 59900,
   discount: Math.round((59900-50000)/59900*100),
@@ -51,6 +56,7 @@ export default function Home() {
 {
   id:5,
   name: "Apple iPhone 15 Pro (256GB)",
+  slug: "long-sleeve-hoodie",
   price: 100000,
   mrp: 129800,
   discount: Math.round((129800-100000)/129800*100),
@@ -65,17 +71,7 @@ export default function Home() {
       <Navbar/>
       <HeroSlider />
       <PhoneDetail/>
-      <div className="container">
-      <header className="product-card-header">
-        <h1>Trending</h1>
-      </header>
-
-      <div className="horizontal-scroll">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </div>
+      <ProductSlider products={products} />
     <Testimonials/>
     <FAQSection/>
       <HeroAbout/>

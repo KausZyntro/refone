@@ -1,11 +1,12 @@
 import React from "react";
 import "@/styles/ProductCard.css";
+import Link from "next/link";
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="product-card">
-
-      <div className="product-image-section">
+    <Link href={`/product/${product.slug || ""}`} >
+  <div className="product-card">
+            <div className="product-image-section">
         <span className="wishlist">♡</span>
 
         <img
@@ -19,9 +20,7 @@ const ProductCard = ({ product }) => {
 
         <h2 className="product-title">{product.name}</h2>
 
-        {/* <div className=""> */}
           <span className="deal-badge">Limited Time Deal</span>
-        {/* </div> */}
 
         <div className="rating-section">
           <span className="stars">★★★★☆</span>
@@ -42,7 +41,8 @@ const ProductCard = ({ product }) => {
 
 
       </div>
-    </div>
+  </div>
+    </Link>
   );
 };
 

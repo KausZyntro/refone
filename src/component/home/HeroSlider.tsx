@@ -15,10 +15,9 @@ const HeroSlider = () => {
     <div className="container-hero">
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
-        navigation
         pagination={{ clickable: true }}
         autoplay={{ delay: 4000, disableOnInteraction: false }}
-        loop={true}
+        loop={false}
         effect="fade"
         className="heroSwiper"
       >

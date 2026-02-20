@@ -45,12 +45,12 @@
 }
 
 .hero-content h1 {
-  font-size: clamp(20px, 4vw, 48px);
+  font-size: clamp(16px, 4vw, 48px);
   margin-bottom: 12px;
 }
 
 .hero-content p {
-  font-size: clamp(14px, 1.5vw, 20px);
+  font-size: clamp(12px, 1.5vw, 20px);
 }
 .cta-section{
     display: flex;
@@ -67,7 +67,7 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 15px;
-  font-size: 16px;
+  font-size: 14px;
   transition: 0.3s ease;
 }
 .cta-btn-sell {
@@ -79,7 +79,7 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 15px;
-  font-size: 16px;
+  font-size: 14px;
   transition: 0.3s ease;
 }
 
@@ -87,10 +87,10 @@
   background: #00518a;
 }
 
-.swiper-button-next::after,
+/* .swiper-button-next::after,
 .swiper-button-prev::after {
   display: none;
-}
+} */
 
 
 .swiper-button-next,
@@ -161,10 +161,14 @@
     border-radius: 14px;
   }
   .cta-btn-buy{
-    padding: 14px 16px;
+    padding: 8px 16px;
+    font-size: 15px;
+    border-radius: 7px;
   }
   .cta-btn-sell{
-    padding: 14px 16px;
+    padding: 8px 16px;
+    font-size: 15px;
+    border-radius: 7px;
   }
   .swiper-button-next{
     margin-right: 0px;
@@ -187,14 +191,14 @@
   }
   .cta-section{
     display: flex;
-    width: 50%;
+    width: 33%;
     justify-content: space-around;
 }
   .cta-btn-buy{
-    padding: 10px 12px;
+    padding: 5px 7px;
   }
   .cta-btn-sell{
-    padding: 10px 12px;
+    padding: 5px 7px;
   }
   .swiper-button-next{
     margin-right: 0px;

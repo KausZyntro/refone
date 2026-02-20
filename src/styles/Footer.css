@@ -107,7 +107,8 @@
 }
 
 .footer-links a:hover {
-  color: #00bfa6;
+  color: #006aaf;
+  font-weight: 600;
 }
 
 

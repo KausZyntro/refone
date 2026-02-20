@@ -10,10 +10,10 @@
   font-size: 32px;
   font-weight: 600;
 }
-.swiper-button-prev,
+/* .swiper-button-prev,
 .swiper-button-next{
   display:none !important;
-}
+} */
 
 .testimonial-card {
   background: white;
@@ -58,7 +58,7 @@
 }
 
 /* Swiper Navigation Custom Style */
-.swiper-button-next,
+/* .swiper-button-next,
 .swiper-button-prev {
   color: white;
 }
@@ -69,4 +69,4 @@
 
 .swiper-pagination-bullet-active {
   background: #00a884;
-}
+} */

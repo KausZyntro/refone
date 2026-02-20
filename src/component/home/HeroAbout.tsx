@@ -13,7 +13,7 @@ const HeroAbout = () => {
 
           <div className="heroAbout-buttons">
             <a
-              href="https://play.google.com/store/apps/details?id=com.reglobe.cashify"
+              href="#"
               target="_blank"
               rel="noopener noreferrer"
               className="store-btn"
@@ -25,7 +25,7 @@ const HeroAbout = () => {
             </a>
 
             <a
-              href="https://itunes.apple.com/in/app/cashify/id1133551195?mt=8"
+              href="#"
               target="_blank"
               rel="noopener noreferrer"
               className="store-btn"
