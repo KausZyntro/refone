@@ -13,7 +13,6 @@ const ProductSlider = ({ products }) => {
       <header className="product-card-header">
         <h1>Trending</h1>
       </header>
-
       <Swiper
         modules={[Navigation]}
         spaceBetween={20}

@@ -47,3 +47,77 @@ a {
   margin-top: 176px;
 }
 
+
+
+.swiper-button-next,
+.swiper-button-prev {
+  width: 45px;
+  height: 45px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+}
+.swiper-navigation-icon{
+   width: 10px !important;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: #006aaf;
+}
+.swiper-button-prev{
+    margin-left: 25px !important;
+}
+
+.swiper-button-next{
+    margin-right: 25px;
+}
+
+
+
+@media (max-width: 1024px) {
+
+.swiper-button-next,
+.swiper-button-prev {
+  width: 35px;
+  height: 35px;
+}
+}
+
+
+@media (max-width: 768px) {
+
+  .slide img,
+  .slide::after {
+    border-radius: 14px;
+  }
+
+  .swiper-button-next{
+    margin-right: 0px;
+  }
+  .swiper-button-prev{
+    margin-left: 0px !important;
+  }
+}
+
+/* ========================= */
+/* Small Mobile */
+@media (max-width: 480px) {
+
+
+  .slide img,
+  .slide::after {
+    border-radius: 10px;
+  }
+  .swiper-button-next{
+    margin-right: 0px;
+  }
+  .swiper-button-prev{
+    margin-left: 0px !important;
+  }
+
+}

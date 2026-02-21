@@ -68,14 +68,12 @@ export default function Home() {
   
   return (
     <div>
-      <Navbar/>
       <HeroSlider />
       <PhoneDetail/>
       <ProductSlider products={products} />
-    <Testimonials/>
-    <FAQSection/>
+      <Testimonials/>
+      <FAQSection/>
       <HeroAbout/>
-      <Footer/>
     </div>
   );
 }

@@ -65,7 +65,7 @@ const ProductInfo = () => {
           <p>
             Size: <b>{selectedSize}</b>
           </p>
-          <span className="size-chart">View Size Chart</span>
+          {/* <span className="size-chart">View Size Chart</span> */}
         </div>
 
         <div className="sizes">
@@ -81,10 +81,10 @@ const ProductInfo = () => {
         </div>
       </div>
 
-      <div className="button-row">
+      {/* <div className="button-row">
         <button className="add-cart">Add to Cart</button>
         <button className="buy-now">Buy Now</button>
-      </div>
+      </div> */}
 
   
 

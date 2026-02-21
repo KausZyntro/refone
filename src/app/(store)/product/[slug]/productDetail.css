@@ -14,10 +14,14 @@
   align-items: start;
 }
 
+.gallery {
+  width: 100%;
+}
 
 .gallery .main-image {
   width: 100%;
-  height: 500px;
+  /* height: 500px; */
+  aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
   background: #f4f4f4;
@@ -27,6 +31,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .thumbnail-row {
@@ -209,37 +214,6 @@
     font-weight: 600;
 }
 
-
-
-.related {
-  margin-top: 80px;
-}
-
-.related h2 {
-  margin-bottom: 30px;
-}
-
-.related-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-}
-
-.related-card img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.related-card h4 {
-  margin-top: 10px;
-}
-
-.related-card p {
-  color: #7a5af8;
-  font-weight: bold;
-}
 .payment-section {
   /* padding: 20px 15px; */
   width: 100%;
@@ -253,7 +227,6 @@
   color: #222;
 }
 
-/* Keep horizontal scroll */
 .payment-wrapper {
   display: flex;
   gap: 16px;
@@ -340,12 +313,14 @@
 
 @media (max-width: 1200px) {
   .product-detail-container {
-    padding: 50px 40px;
+    /* padding: 50px 40px; */
+    padding: 40px 30px;
+
   }
 
-  .gallery .main-image {
+  /* .gallery .main-image {
     height: 450px;
-  }
+  } */
 
   .related-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -358,9 +333,9 @@
     gap: 40px;
   }
 
-  .gallery .main-image {
+  /* .gallery .main-image {
     height: 400px;
-  }
+  } */
 
   .related-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -371,34 +346,47 @@
   .product-detail-container {
     padding: 30px 20px;
   }
+  .product-detail-container {
+    padding: 30px 20px;
+  }
 
   .product-info .title {
     font-size: 24px;
   }
 
-  .gallery .main-image {
+  /* .gallery .main-image {
     height: 320px;
-  }
+  } */
 
   .thumb {
     width: 60px;
     height: 60px;
   }
 
-  .button-row {
+  /* .button-row {
     flex-direction: column;
-  }
+  } */
 
   .add-cart,
   .buy-now {
     width: 100%;
   }
+    .storage,
+  .size {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .storages,
+  .sizes {
+    gap: 8px;
+  }
 }
 
 @media (max-width: 480px) {
-  .gallery .main-image {
+  /* .gallery .main-image {
     height: 250px;
-  }
+  } */
 
   .product-info .title {
     font-size: 20px;
@@ -411,4 +399,8 @@
   .related-card img {
     height: 200px;
   }
+  .product-detail-container {
+    padding: 20px 15px;
+  }
+
 }
