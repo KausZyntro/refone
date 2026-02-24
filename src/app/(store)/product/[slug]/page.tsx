@@ -3,6 +3,7 @@ import "./productDetail.css";
 import ProductGallery from "@/component/product/ProductGallery";
 import ProductInfo from "@/component/product/ProductInfo";
 import ProductSlider from "@/component/home/ProductSlider";
+import TrustBadge from "@/component/product/TrustBadge";
 const Page = () => {
   const images = [
     "https://cdn.thewirecutter.com/wp-content/media/2025/09/BG-IPHONE-2048px_IPHONE-17-PRO-MAX_BACK.jpg?auto=webp&quality=75&width=1024f",
@@ -71,6 +72,7 @@ const Page = () => {
         <ProductInfo />
       </div>
       <ProductSlider products={relatedProducts}/>
+      <TrustBadge/>
     </div>
   );
 };

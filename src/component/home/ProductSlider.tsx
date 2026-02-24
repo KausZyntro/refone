@@ -18,11 +18,12 @@ const ProductSlider = ({ products }) => {
         spaceBetween={20}
         navigation
         breakpoints={{
-          320: { slidesPerView: 1.1 },
-          420: {slidesPerView: 1.5},
-          480: { slidesPerView: 1.6 },
-          768: { slidesPerView: 3 },
-          1024: { slidesPerView: 4.5 },
+          320: { slidesPerView: 1.1, spaceBetween: 12 },
+          480: { slidesPerView: 2, spaceBetween: 15 },
+          768: { slidesPerView: 2.5, spaceBetween: 20 },
+          1024: { slidesPerView: 3.5, spaceBetween: 25 },
+          1280: { slidesPerView: 4, spaceBetween: 30 },
+          1440: { slidesPerView: 4.5, spaceBetween: 30 },
         }}
       >
         {products.map((product) => (
