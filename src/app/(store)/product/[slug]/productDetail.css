@@ -460,7 +460,7 @@
 }
 
 .badge-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
@@ -478,7 +478,6 @@
   letter-spacing: 0.5px;
 }
 
-/* ================= Responsive ================= */
 
 /* Large Desktop */
 @media (max-width: 1400px) {
@@ -525,5 +524,292 @@
 
   .badge-title {
     font-size: 14px;
+  }
+}
+
+
+/* review section */
+
+
+.comment-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 40px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  font-family: Arial, sans-serif;
+}
+
+.comment-title {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+
+.comment-summary {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.comment-left {
+  min-width: 200px;
+}
+
+.comment-left h1 {
+  font-size: 48px;
+  margin: 0;
+}
+
+.comment-left p {
+  color: gray;
+  margin-top: 8px;
+}
+
+.comment-stars {
+  color: #f7b82f;
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+
+.comment-right {
+  flex: 1;
+  min-width: 260px;
+}
+
+.comment-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 14px;
+}
+
+.comment-bar {
+  flex: 1;
+  height: 8px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.comment-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, #f7b82f, #ddb45a);
+  border-radius: 10px;
+}
+
+.comment-rating-label {
+  min-width: 120px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+
+
+.comment-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.comment-tag {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #f3f3f3;
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.comment-tag.green {
+  background: #e8f7ec;
+  color: #1a8f3c;
+}
+
+
+
+.comment-review {
+  padding: 25px 0;
+  border-top: 1px solid #eee;
+}
+
+.comment-review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.comment-review-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.comment-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-review-header h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.comment-review-header span {
+  font-size: 12px;
+  color: gray;
+}
+
+.comment-review-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #7b2ff7;
+  font-weight: 600;
+}
+
+.comment-review p {
+  margin-top: 15px;
+  color: #444;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.comment-images {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.comment-images img {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.comment-read-more {
+  margin-top: 20px;
+  color: #7b2ff7;
+  font-weight: 600;
+  cursor: pointer;
+}
+.comment-review-user{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+
+
+/* Large Screens 1400px+ */
+@media (min-width: 1400px) {
+  .comment-container {
+    max-width: 1350px;
+  }
+}
+
+/* Laptop */
+@media (max-width: 1200px) {
+  .comment-summary {
+    gap: 40px;
+  }
+}
+
+/* Tablet Landscape */
+@media (max-width: 992px) {
+  .comment-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .comment-right {
+    width: 100%;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .comment-container {
+    padding: 25px;
+  }
+
+  .comment-left h1 {
+    font-size: 36px;
+  }
+
+  .comment-rating-row {
+    /* flex-direction: column;
+    align-items: flex-start; */
+    width: 100%;
+  }
+    .comment-bar {
+    width: 100%;  
+  }
+
+  .comment-rating-label {
+    margin-top: 5px;
+  }
+
+  .comment-images img {
+    width: 65px;
+    height: 65px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .comment-container {
+    padding: 18px;
+  }
+
+  .comment-title {
+    font-size: 22px;
+  }
+
+  .comment-left h1 {
+    font-size: 30px;
+  }
+
+  .comment-tag {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .comment-images img {
+    width: 55px;
+    height: 55px;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 400px) {
+  .comment-rating-label {
+    font-size: 12px;
+  }
+
+  .comment-review p {
+    font-size: 13px;
+  }
+
+  .comment-images img {
+    width: 48px;
+    height: 48px;
   }
 }
