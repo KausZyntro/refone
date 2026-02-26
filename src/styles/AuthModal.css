@@ -1,0 +1,143 @@
+/* BACKDROP */
+.auth-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+/* MODAL */
+.auth-modal {
+  width: 100%;
+  max-width: 950px;
+  height: 600px;
+  background: #fff;
+  border-radius: 20px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* LEFT SIDE */
+.auth-left {
+  flex: 1;
+  /* background: linear-gradient(135deg, #006aaf, #004b7a); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: #f1f1f1;
+}
+
+/* RIGHT SIDE */
+.auth-right {
+  flex: 1;
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.auth-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-input {
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.auth-input:focus {
+  border-color: #006aaf;
+}
+
+.auth-btn {
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #006aaf;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-btn:hover {
+  background: #004b7a;
+}
+
+.auth-toggle {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.auth-toggle span {
+  color: #006aaf;
+  cursor: pointer;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+/* CLOSE BUTTON */
+.auth-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .auth-modal {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .auth-left {
+    height: 200px;
+    display: none;
+  }
+
+  .auth-right {
+    padding: 40px 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-title {
+    font-size: 22px;
+  }
+
+  .auth-input {
+    font-size: 13px;
+  }
+
+  .auth-btn {
+    font-size: 14px;
+  }
+}

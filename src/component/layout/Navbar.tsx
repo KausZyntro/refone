@@ -10,11 +10,14 @@ import {
   FiX,
 } from "react-icons/fi";
 import Image from 'next/image';
+import AuthModal from './AuthModal';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
 
   return (
+    <>
     <div className="navbar">
       <div className="nav-top">
 
@@ -44,7 +47,7 @@ const Navbar = () => {
             <FiChevronDown size={14} />
           </div>
 
-          <button className="login-btn">Login</button>
+          <button className="login-btn" onClick={() => setAuthOpen(true)}>Login</button>
         </div>
       </div>
 
@@ -73,13 +76,27 @@ const Navbar = () => {
              </div>
           </div>
           <div className="mobile-item">
-            <button className="login-btns">Login</button>
+            <button
+                className="login-btns"
+                onClick={() => {
+                  setAuthOpen(true);
+                  setMenuOpen(false);
+                }}
+              >
+                Login
+              </button>
           </div>
           
           
         </div>
+
       )}
     </div>
+    <AuthModal
+        isOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+      />
+      </>
   );
 };
 

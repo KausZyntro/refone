@@ -17,5 +17,11 @@
 .sequence-title{
     font-size: 40px;
     margin-bottom: 16px;
-
+/* overflow: hidden; */
+}
+.letter{
+    display: inline-block;
+    font-weight: 800;
+    font-size: 62px;
+    color: #93d313;
 }

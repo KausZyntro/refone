@@ -47,53 +47,54 @@ useGSAP(() => {
     scrollTrigger: {
       trigger: containerRef.current,
       start: "top top",
-      end: "+=2000",
+      end: "+=500",
       scrub: 1,
       pin: true,
     },
   });
 
-  // 🔹 Part 1 — First 5 Frames
   tl.to(obj, {
-    frame: 5, // yaha tak image chalegi
+    frame: frameCount - 1, 
     snap: "frame",
     ease: "none",
-    duration: 1,
+    duration: 3,
     onUpdate: () => {
       if (imageRef.current) {
         imageRef.current.src = images[Math.round(obj.frame)];
       }
     },
+  },0);
+
+// tl.from(".letter", {
+//   // yPercent: 50,
+//   opacity: 0,
+//   stagger: 0.05,
+//   ease: "power3.out",
+//   duration: 0.5,
+// },0);
+
+
+// tl.to(".letter",{
+//   color: "#ffffff",
+//   stagger: 0.03,
+//   duration: 1,
+// },0.2)
+
+const letters = gsap.utils.toArray(".letter") as HTMLElement[];
+
+  letters.forEach((letter, i) => {
+    tl.fromTo(letter,
+      { opacity: 0, color: "#00ff00" }, 
+      { opacity: 1, color: "#00ff00", duration: 0.3 },
+      i * 0.05 
+    );
+    tl.to(letter,
+      { color: "#ffffff", duration: 0.01 }, 
+      i * 0.05 + 0.3 
+    );
   });
 
-  tl.from(".sequence-title", {
-    y: 100,
-    opacity: 0,
-    duration: 0.8,
-  });
 
-  tl.from(
-    ".sequence-description",
-    {
-      y: 100,
-      opacity: 0,
-      duration: 0.8,
-    },
-    "-=0.5"
-  );
-
-  // 🔹 Part 3 — Remaining Frames Continue
-  tl.to(obj, {
-    frame: frameCount - 1,
-    snap: "frame",
-    ease: "none",
-    duration: 2,
-    onUpdate: () => {
-      if (imageRef.current) {
-        imageRef.current.src = images[Math.round(obj.frame)];
-      }
-    },
-  });
 }, { scope: containerRef });
 
   return (
@@ -115,7 +116,13 @@ useGSAP(() => {
         }}
       />
       <div className="text-container">
-        <h1 className="sequence-title">Scroll to Animate. This is a scroll-triggered image sequence animation using GSAP and</h1>
+        <h1 className="sequence-title">{"Scroll to Animate. This is a scroll-triggered image sequence animation"
+        .split("")
+        .map((char, index)=>(
+            <span key={index} className="letter">
+                {char === " " ? "\u00A0" : char}
+            </span>
+        ))}</h1>
         <p className="sequence-description">
           This is a scroll-triggered image sequence animation using GSAP and
           ScrollTrigger.

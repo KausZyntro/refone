@@ -8,9 +8,11 @@ import ReviewsSection from "@/component/product/ReviewSection";
 const Page = () => {
   const images = [
     "https://cdn.thewirecutter.com/wp-content/media/2025/09/BG-IPHONE-2048px_IPHONE-17-PRO-MAX_BACK.jpg?auto=webp&quality=75&width=1024f",
-    "https://inventstore.in/wp-content/uploads/2023/04/iPhone_13_Green.webp",
+    "https://imgs.search.brave.com/DEqW8sVOe0pcTYCrTceHBn7lKNIHnFjcrUONQrBd08I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YTQuZ2lwaHkuY29t/L21lZGlhL3YxLlky/bGtQVGM1TUdJM05q/RXhaelUxYW5SM2Qy/dDNkbTFuY214bGIy/RnZhWGxqWnpjemRI/VTFkWHBpY0dJeE1X/MDVlRzU2TmlabGNE/MTJNVjluYVdaelgz/TmxZWEpqYUNaamRE/MW4vU1V1ZkxhSXIz/NVBZZUJ4dzFaL2dp/cGh5LmdpZg.gif",
     "https://media-ik.croma.com/prod/https://media.tatacroma.com/Croma%20Assets/Communication/Mobiles/Images/309744_0_ht3s5b.png",
-    "https://darlingretail.com/cdn/shop/files/iPhone_15_Pink_Pure_Back_iPhone_15_Pink_Pure_Front_2up_Screen__WWEN_cfd96ace-df87-4ab3-a96a-e8e9b13bb7b9_800x.jpg?v=1695104022"
+    "https://darlingretail.com/cdn/shop/files/iPhone_15_Pink_Pure_Back_iPhone_15_Pink_Pure_Front_2up_Screen__WWEN_cfd96ace-df87-4ab3-a96a-e8e9b13bb7b9_800x.jpg?v=1695104022",
+    "https://i.pinimg.com/236x/62/9c/c7/629cc724344431095326fb0de49a3d82.jpg",
+    "https://i.pinimg.com/474x/3e/95/6f/3e956fb6e022c596d231935c1268bfb1.jpg"
   ];
     const relatedProducts = [
    {
