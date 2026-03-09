@@ -14,14 +14,14 @@ const products = [
 ];
 
 const PhoneDetail = () => {
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<any>(null);
 
-  const scroll = (direction:any) => {
+  const scroll = (direction: any) => {
     const { current } = scrollRef;
     if (direction === "left") {
-      current.scrollBy({ left: -300, behavior: "smooth" });
+      current?.scrollBy({ left: -300, behavior: "smooth" });
     } else {
-      current.scrollBy({ left: 300, behavior: "smooth" });
+      current?.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
 

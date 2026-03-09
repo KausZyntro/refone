@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useRef } from "react";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 interface ProductGalleryProps {
   images: string[];
@@ -26,7 +28,6 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
 
   return (
     <div className="gallery">
-      {/* MAIN IMAGE */}
       <div
         className="main-image"
         ref={imageRef}
@@ -40,13 +41,12 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
         }}
       >
         <img
-          src={activeImage}
+          src={activeImage} 
           alt="product"
-          className={`main-img ${isZooming ? "hide" : ""}`}
+          className={`main-img ${ isZooming ? "hide" : ""}`}
         />
       </div>
 
-      {/* THUMBNAILS */}
       <div className="thumbnail-row">
         {images.map((img, index) => (
           <div

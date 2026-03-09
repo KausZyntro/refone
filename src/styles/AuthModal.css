@@ -51,6 +51,7 @@
   font-size: 28px;
   font-weight: 600;
   margin-bottom: 30px;
+  text-align: center;
 }
 
 .auth-form {
@@ -140,4 +141,47 @@
   .auth-btn {
     font-size: 14px;
   }
+}
+
+/* OTP Modal */
+
+.otp-modal{
+  max-width:420px;
+  padding:40px 30px;
+  text-align:center;
+}
+
+.otp-text{
+  font-size:14px;
+  color:#666;
+  margin-bottom:25px;
+}
+
+.otp-container{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:25px;
+}
+
+.otp-input{
+  width:40px;
+  height:40px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  text-align:center;
+  font-size:18px;
+  font-weight:600;
+  outline:none;
+  transition:0.2s;
+}
+
+.otp-input:focus{
+  border-color:#006aaf;
+  box-shadow:0 0 0 2px rgba(0,106,175,0.15);
+}
+.cart{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

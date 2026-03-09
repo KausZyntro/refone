@@ -5,7 +5,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import ProductCard from "@/component/ui/ProductCard";
+import ProductCard from "@/components/ui/ProductCard";
 
 const ProductSlider = ({ products }) => {
   return (

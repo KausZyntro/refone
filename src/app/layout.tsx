@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/component/layout/Navbar";
-import Footer from "@/component/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import ReduxProvider from "@/redux/ReduxProvider";
 
 
 export const metadata: Metadata = {
@@ -14,11 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en"> 
       <body>
+        <ReduxProvider>
         <Navbar/>
         {children}
         <Footer/>
+        </ReduxProvider>
       </body>
     </html>
   );

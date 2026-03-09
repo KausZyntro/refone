@@ -94,6 +94,15 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
+.logout-btn{
+  background: #ff362f;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
 .login-btns {
   background: #006aaf;
   color: white;
