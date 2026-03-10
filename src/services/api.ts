@@ -28,7 +28,6 @@ export const authAPI = {
         return response.data;
     },
     register: async (data: { name: string; email: string; password: string; phone: string; role_id?: number }) => {
-        // Defaulting role_id to 2 if not provided (e.g., 2 might be Customer/User role)
         const payload = { ...data, role_id: data.role_id || 3 };
         const response = await api.post("register", payload);
         // console.log("FULL RESPONSE:", response);

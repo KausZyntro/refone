@@ -16,18 +16,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { logout, verifyOtpUser } from '@/redux/features/authSlice';
 import { RootState } from "@/redux/store";
-import { FaCartShopping } from 'react-icons/fa6';
+import { FaCartShopping, FaUser } from 'react-icons/fa6';
 import { LiaShoppingCartSolid } from 'react-icons/lia';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [otpOpen, setOtpOpen] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
-  const {token} =useSelector((state: RootState) => state.auth);
-  console.log(token)
+  const {user, token} =useSelector((state: RootState) => state.auth);
+  console.log(user?.name);
+  // console.log(token)
   const handleLogout = () => {
   dispatch(logout()); 
 };
@@ -70,7 +72,24 @@ const Navbar = () => {
 
            {
             token ? (
-              <button className="logout-btn" onClick={handleLogout}>Logout</button>
+              <div className='user-profile-wrapper'>
+              <div className="user-profile" onClick={() => setProfileOpen(!profileOpen)}>
+                <FaUser />
+              <span>{user?.name || 'User'}</span>
+              <FiChevronDown size={14} />
+              </div>
+              {
+                profileOpen && (
+                    <div className="profile-dropdown">
+                    <div className="dropdown-item">Orders</div>
+                    <div className="dropdown-item" onClick={handleLogout}>
+                      Logout
+                    </div>
+                  </div>
+                )
+              }
+              </div>
+              // <button className="logout-btn" onClick={handleLogout}>Logout</button>
             ) : (
               <button className="login-btn" onClick={() => setAuthOpen(true)}>
                 Login
@@ -92,7 +111,7 @@ const Navbar = () => {
 
         {menuOpen && (
           <div className="mobile-menu">
-            <div className="mobile-item">All</div>
+            <div className="mobile-item">Orders</div>
             <div className="mobile-item">Sell Phone</div>
             <div className="mobile-item">Sell Gadgets</div>
             <div className="mobile-item">Buy Refurbished Devices</div>
@@ -105,8 +124,8 @@ const Navbar = () => {
                 <FiChevronDown size={14} />
               </div>
             </div>
-            <div className="mobile-item">
-              <button
+            <div className="mobile-item-btn">
+              {/* <button
                 className="login-btns"
                 onClick={() => {
                   setAuthOpen(true);
@@ -114,7 +133,20 @@ const Navbar = () => {
                 }}
               >
                 Login
+              </button> */}
+              {
+            token ? (
+              <button className="logout-btns" onClick={handleLogout}>Logout</button>
+            ) : (
+              <button className="login-btns" onClick={() => {
+                setAuthOpen(true); 
+                setMenuOpen(false);
+                }}
+                >
+                Login
               </button>
+            )
+          }
             </div>
 
 

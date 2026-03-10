@@ -185,3 +185,8 @@
     align-items: center;
     justify-content: center;
 }
+@media (max-width:990px){
+    .cart{
+    display: none;
+  }
+}
