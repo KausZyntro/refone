@@ -41,6 +41,19 @@ export const authAPI = {
     forgotPassword: async (email: string) => {
         const response = await api.post("/forgot-password", { email });
         return response.data;
+    },
+    resetPassword: async (user_id: number, otp: string, new_password: string) => {
+        const formData = new FormData();
+        formData.append("user_id", user_id.toString());
+        formData.append("otp", otp);
+        formData.append("new_password", new_password);
+
+        const response = await api.post("/reset-password", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data;
     }
 
 };

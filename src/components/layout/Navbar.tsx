@@ -13,6 +13,7 @@ import Image from 'next/image';
 import AuthModal from './AuthModal';
 import OtpModal from './OtpModal';
 import ForgotPasswordModal from './ForgotPasswordModal';
+import VerifyOTPResetPasswordModal from './VerifyOTPResetPasswordModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { logout, verifyOtpUser } from '@/redux/features/authSlice';
@@ -26,6 +27,7 @@ const Navbar = () => {
   const [authOpen, setAuthOpen] = useState(false);
   const [otpOpen, setOtpOpen] = useState(false);
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const [verifyResetPasswordOpen, setVerifyResetPasswordOpen] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -175,10 +177,19 @@ const Navbar = () => {
         openOtp={(id) => {
           setUserId(id);
           setForgotPasswordOpen(false);
-          setOtpOpen(true);
+          setVerifyResetPasswordOpen(true);
         }}
         openLogin={() => {
           setForgotPasswordOpen(false);
+          setAuthOpen(true);
+        }}
+      />
+      <VerifyOTPResetPasswordModal
+        isOpen={verifyResetPasswordOpen}
+        onClose={() => setVerifyResetPasswordOpen(false)}
+        userId={userId}
+        openLogin={() => {
+          setVerifyResetPasswordOpen(false);
           setAuthOpen(true);
         }}
       />
