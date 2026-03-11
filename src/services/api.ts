@@ -37,8 +37,12 @@ export const authAPI = {
         const response = await api.post("/verify-otp", { user_id, otp, device_name });
         // console.log("OTP VERIFY FULL RESPONSE:", response);
         return response.data;
+    },
+    forgotPassword: async (email: string) => {
+        const response = await api.post("/forgot-password", { email });
+        return response.data;
     }
-    
+
 };
 
 export default api;

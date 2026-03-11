@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser, registerUser, clearError } from "@/redux/features/authSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
-const AuthModal = ({ isOpen, onClose, openOtp }: { isOpen: boolean; onClose: () => void; openOtp: (userId: number) => void }) => {
+const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: boolean; onClose: () => void; openOtp: (userId: number) => void; openForgotPassword?: () => void }) => {
   const [isLogin, setIsLogin] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
   const { isLoading, error, token, registerSuccess } = useSelector((state: RootState) => state.auth);
@@ -123,7 +123,7 @@ const AuthModal = ({ isOpen, onClose, openOtp }: { isOpen: boolean; onClose: () 
                 value={phone}
                 onChange={(e) => {
                   const val = e.target.value.replace(/\D/g, "");
-                  if(val.length <= 10){
+                  if (val.length <= 10) {
                     setPhone(val);
                   }
                 }}
@@ -151,6 +151,17 @@ const AuthModal = ({ isOpen, onClose, openOtp }: { isOpen: boolean; onClose: () 
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
+            )}
+
+            {isLogin && openForgotPassword && (
+              <div style={{ textAlign: "right", width: "100%", marginBottom: "15px" }}>
+                <span
+                  onClick={() => !isLoading && openForgotPassword()}
+                  style={{ cursor: isLoading ? "not-allowed" : "pointer", color: "#e96c31", fontSize: "14px", fontWeight: "500" }}
+                >
+                  Forgot Password?
+                </span>
+              </div>
             )}
 
             <button type="submit" className="auth-btn" disabled={isLoading}>

@@ -12,6 +12,7 @@ import {
 import Image from 'next/image';
 import AuthModal from './AuthModal';
 import OtpModal from './OtpModal';
+import ForgotPasswordModal from './ForgotPasswordModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { logout, verifyOtpUser } from '@/redux/features/authSlice';
@@ -24,15 +25,16 @@ const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [otpOpen, setOtpOpen] = useState(false);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
-  const {user, token} =useSelector((state: RootState) => state.auth);
+  const { user, token } = useSelector((state: RootState) => state.auth);
   console.log(user?.name);
   // console.log(token)
   const handleLogout = () => {
-  dispatch(logout()); 
-};
+    dispatch(logout());
+  };
 
   return (
     <>
@@ -64,39 +66,39 @@ const Navbar = () => {
               <span>Rameswaram</span>
               <FiChevronDown size={14} />
             </div>
-           {token ? (
-             <div className='cart'>
-              <LiaShoppingCartSolid size={30} />
-            </div>
-           ):null}
+            {token ? (
+              <div className='cart'>
+                <LiaShoppingCartSolid size={30} />
+              </div>
+            ) : null}
 
-           {
-            token ? (
-              <div className='user-profile-wrapper'>
-              <div className="user-profile" onClick={() => setProfileOpen(!profileOpen)}>
-                <FaUser />
-              <span>{user?.name || 'User'}</span>
-              <FiChevronDown size={14} />
-              </div>
-              {
-                profileOpen && (
-                    <div className="profile-dropdown">
-                    <div className="dropdown-item">Orders</div>
-                    <div className="dropdown-item" onClick={handleLogout}>
-                      Logout
-                    </div>
+            {
+              token ? (
+                <div className='user-profile-wrapper'>
+                  <div className="user-profile" onClick={() => setProfileOpen(!profileOpen)}>
+                    <FaUser />
+                    <span>{user?.name || 'User'}</span>
+                    <FiChevronDown size={14} />
                   </div>
-                )
-              }
-              </div>
-              // <button className="logout-btn" onClick={handleLogout}>Logout</button>
-            ) : (
-              <button className="login-btn" onClick={() => setAuthOpen(true)}>
-                Login
-              </button>
-            )
-          }
-            
+                  {
+                    profileOpen && (
+                      <div className="profile-dropdown">
+                        <div className="dropdown-item">Orders</div>
+                        <div className="dropdown-item" onClick={handleLogout}>
+                          Logout
+                        </div>
+                      </div>
+                    )
+                  }
+                </div>
+                // <button className="logout-btn" onClick={handleLogout}>Logout</button>
+              ) : (
+                <button className="login-btn" onClick={() => setAuthOpen(true)}>
+                  Login
+                </button>
+              )
+            }
+
           </div>
         </div>
 
@@ -135,18 +137,18 @@ const Navbar = () => {
                 Login
               </button> */}
               {
-            token ? (
-              <button className="logout-btns" onClick={handleLogout}>Logout</button>
-            ) : (
-              <button className="login-btns" onClick={() => {
-                setAuthOpen(true); 
-                setMenuOpen(false);
-                }}
-                >
-                Login
-              </button>
-            )
-          }
+                token ? (
+                  <button className="logout-btns" onClick={handleLogout}>Logout</button>
+                ) : (
+                  <button className="login-btns" onClick={() => {
+                    setAuthOpen(true);
+                    setMenuOpen(false);
+                  }}
+                  >
+                    Login
+                  </button>
+                )
+              }
             </div>
 
 
@@ -161,6 +163,23 @@ const Navbar = () => {
           setUserId(id);
           setAuthOpen(false);
           setOtpOpen(true);
+        }}
+        openForgotPassword={() => {
+          setAuthOpen(false);
+          setForgotPasswordOpen(true);
+        }}
+      />
+      <ForgotPasswordModal
+        isOpen={forgotPasswordOpen}
+        onClose={() => setForgotPasswordOpen(false)}
+        openOtp={(id) => {
+          setUserId(id);
+          setForgotPasswordOpen(false);
+          setOtpOpen(true);
+        }}
+        openLogin={() => {
+          setForgotPasswordOpen(false);
+          setAuthOpen(true);
         }}
       />
       <OtpModal
