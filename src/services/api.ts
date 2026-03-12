@@ -13,10 +13,23 @@ const api = axios.create({
 // Interceptor to add token to requests
 api.interceptors.request.use((config) => {
     if (typeof window !== "undefined") {
-        const token = localStorage.getItem("token");
+        const authStore = localStorage.getItem("auth");
+        let token = null;
+        if (authStore) {
+            try {
+                const parsedAuth = JSON.parse(authStore);
+                token = parsedAuth.token;
+            } catch (e) {
+                console.error("Error parsing auth token", e);
+            }
+        }
+
         if (token && config.headers) {
             config.headers.Authorization = `Bearer ${token}`;
+            // config.headers.Authorization = token;
         }
+        console.log("REQUEST HEADERS:", config.headers);
+
     }
     return config;
 });
@@ -56,6 +69,14 @@ export const authAPI = {
         return response.data;
     }
 
+};
+
+export const userAPI = {
+    getUserProfile: async () => {
+        const response = await api.get("/user-profile");
+        console.log(response?.data);
+        return response.data;
+    }
 };
 
 export default api;

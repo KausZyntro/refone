@@ -20,6 +20,8 @@ import { logout, verifyOtpUser } from '@/redux/features/authSlice';
 import { RootState } from "@/redux/store";
 import { FaCartShopping, FaUser } from 'react-icons/fa6';
 import { LiaShoppingCartSolid } from 'react-icons/lia';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,9 +35,12 @@ const Navbar = () => {
 
   const { user, token } = useSelector((state: RootState) => state.auth);
   console.log(user?.name);
+  const router = useRouter();
   // console.log(token)
   const handleLogout = () => {
+    router.replace("/");
     dispatch(logout());
+    
   };
 
   return (
@@ -86,6 +91,7 @@ const Navbar = () => {
                     profileOpen && (
                       <div className="profile-dropdown">
                         <div className="dropdown-item">Orders</div>
+                        <Link href={'/my-account'}><div className="dropdown-item">My Account</div></Link>
                         <div className="dropdown-item" onClick={handleLogout}>
                           Logout
                         </div>
