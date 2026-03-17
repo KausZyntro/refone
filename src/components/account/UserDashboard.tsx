@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '@/redux/features/authSlice';
 import { AppDispatch } from '@/redux/store';
 import { useRouter } from 'next/navigation';
+import AddressList from '../address/AddressList';
 
 interface UserProfile {
     id: number;
@@ -245,7 +246,13 @@ const UserDashboard = () => {
                         )
                     )}
 
-                    {activeTab !== 'personal-info' && !isLoading && (
+                    {activeTab === 'address' && !isLoading && (
+                        <div className="address-tab-content" style={{ marginTop: '20px' }}>
+                            <AddressList />
+                        </div>
+                    )}
+
+                    {activeTab !== 'personal-info' && activeTab !== 'address' && !isLoading && (
                         <div style={{ textAlign: 'center', padding: '50px', color: '#666' }}>
                             <h2>Coming Soon</h2>
                             <p>This section is currently under development.</p>

@@ -36,11 +36,17 @@ const Navbar = () => {
   const { user, token } = useSelector((state: RootState) => state.auth);
   console.log(user?.name);
   const router = useRouter();
+
+  const [mounted, setMounted] = useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // console.log(token)
   const handleLogout = () => {
     router.replace("/");
     dispatch(logout());
-    
+
   };
 
   return (
@@ -73,14 +79,14 @@ const Navbar = () => {
               <span>Rameswaram</span>
               <FiChevronDown size={14} />
             </div>
-            {token ? (
+            {mounted && token ? (
               <div className='cart'>
                 <LiaShoppingCartSolid size={30} />
               </div>
             ) : null}
 
             {
-              token ? (
+              mounted && token ? (
                 <div className='user-profile-wrapper'>
                   <div className="user-profile" onClick={() => setProfileOpen(!profileOpen)}>
                     <FaUser />
@@ -145,7 +151,7 @@ const Navbar = () => {
                 Login
               </button> */}
               {
-                token ? (
+                mounted && token ? (
                   <button className="logout-btns" onClick={handleLogout}>Logout</button>
                 ) : (
                   <button className="login-btns" onClick={() => {

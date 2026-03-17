@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authAPI } from "@/services/api";
+import { parse } from "path";
 
 /* ---------------- TOKEN HELPER ---------------- */
 
@@ -19,6 +20,18 @@ const getToken = () => {
   return token;
 };
 
+const getUser = () => {
+    if(typeof window === "undefined") return null;
+    const auth = localStorage.getItem("auth");
+    if (!auth) return null;
+
+    const { user, expiry } = JSON.parse(auth);
+    if(Date.now() > expiry){
+        localStorage.removeItem("auth");
+        return null;
+    }
+    return user;
+}
 /* ---------------- LOGIN ---------------- */
 
 export const loginUser = createAsyncThunk(
@@ -61,11 +74,19 @@ export const verifyOtpUser = createAsyncThunk(
   ) => {
     try {
       const response = await authAPI.verifyOTP(user_id, otp, "web");
-        // console.log(response?.data?.user);
+      // console.log(response?.data?.user);
       const token = response?.data?.token;
-        
+      const maxTime = response?.data?.refreshTime
+      const hour = parseInt(maxTime);
+      console.log(hour)
+      const maxTimeInSeconds = hour * 60 * 60;
+      console.log(maxTimeInSeconds)
       if (token) {
-        const expiry = Date.now() + 24 * 60 * 60 * 1000;
+        // const expiry = Date.now() + 24 * 60 * 60 * 1000;
+
+        // Set token in cookies for Next.js middleware (Valid for 24 hours)
+        document.cookie = `token=${token}; path=/; max-age=${maxTimeInSeconds}; SameSite=Lax; Secure`;
+        const expiry = Date.now() + maxTimeInSeconds * 1000;
 
         localStorage.setItem(
           "auth",
@@ -97,7 +118,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
+  user: getUser(),
   token: getToken(),
   isLoading: false,
   error: null,
@@ -116,6 +137,7 @@ const authSlice = createSlice({
 
       if (typeof window !== "undefined") {
         localStorage.removeItem("auth");
+        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax; Secure";
       }
     },
 
@@ -169,10 +191,10 @@ const authSlice = createSlice({
     });
 
     builder.addCase(verifyOtpUser.fulfilled, (state, { payload }) => {
-        console.log("User Payload:", payload?.user);
+      console.log("User Payload:", payload?.user);
 
       state.isLoading = false;
-      state.user = payload?.user|| null;
+      state.user = payload?.user || null;
       state.token = getToken();
     });
 

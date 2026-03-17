@@ -79,4 +79,23 @@ export const userAPI = {
     }
 };
 
+export const addressAPI = {
+    getAddresses: async (userId: number) => {
+        const response = await api.get(`/addresses/${userId}`);
+        return response.data;
+    },
+    addAddress: async (data: any) => {
+        const response = await api.post(`/addresses/create`, data);
+        return response.data;
+    },
+    updateAddress: async (id:number, data:any) => {
+        const response = await api.put(`/addresses/update/${id}`, data);
+        return response.data;
+    },
+    deleteAddress: async (id: number) => {
+    const response = await api.delete(`/addresses/${id}`);
+    return response.data;
+  }
+}
+
 export default api;
