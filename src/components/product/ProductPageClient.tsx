@@ -59,7 +59,6 @@ const ProductPageClient: React.FC<ProductPageClientProps> = ({ productId }) => {
     /* ── No data yet ─────────────────────────────────────────────── */
     if (!product) return null;
 
-    /* ── Extract gallery images from all variants ────────────────── */
     const images: string[] = product.variants?.flatMap(
         (v: any) => v.images?.map((img: any) => img.image_url) ?? [],
     ) ?? [];
