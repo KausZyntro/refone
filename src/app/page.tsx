@@ -70,7 +70,8 @@ export default function Home() {
     <div>
       <HeroSlider />
       <PhoneDetail />
-      <ProductSlider products={products} />
+      {/* <ProductSlider products={products} /> */}
+      <ProductSlider/>
       <Testimonials />
       <FAQSection />
       <HeroAbout />

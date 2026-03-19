@@ -29,8 +29,8 @@
     align-items: center;
     gap: 8px;
     background: white;
-    border: 2px solid #00b894;
-    color: #00b894;
+    border: 2px solid #006ab0;
+    color: #006ab0;
     font-weight: 600;
     padding: 10px 20px;
     border-radius: 8px;
@@ -40,7 +40,7 @@
 
 .btn-add-new:hover {
     background: #e8f8f5;
-    color: #008f73;
+    color: #015b98;
 }
 
 .address-grid {
@@ -356,7 +356,7 @@
 
 .btn-submit {
     width: 100%;
-    background: #00b894;
+    background: #006ab0;
     color: white;
     font-size: 16px;
     font-weight: 600;

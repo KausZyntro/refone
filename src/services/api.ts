@@ -28,7 +28,7 @@ api.interceptors.request.use((config) => {
             config.headers.Authorization = `Bearer ${token}`;
             // config.headers.Authorization = token;
         }
-        console.log("REQUEST HEADERS:", config.headers);
+        // console.log("REQUEST HEADERS:", config.headers);
 
     }
     return config;
@@ -79,6 +79,17 @@ export const userAPI = {
     }
 };
 
+export const productAPI = {
+    getDashboardCampaigns: async () => {
+        const response = await api.get("/products/dashboard-data");
+        return response.data;
+    },
+    getProductById: async (productId: number | string) => {
+        const response = await api.get(`/products/get-product-by-id?product_id=${productId}`);
+        return response.data;
+    },
+}
+
 export const addressAPI = {
     getAddresses: async (userId: number) => {
         const response = await api.get(`/addresses/${userId}`);
@@ -88,14 +99,14 @@ export const addressAPI = {
         const response = await api.post(`/addresses/create`, data);
         return response.data;
     },
-    updateAddress: async (id:number, data:any) => {
+    updateAddress: async (id: number, data: any) => {
         const response = await api.put(`/addresses/update/${id}`, data);
         return response.data;
     },
     deleteAddress: async (id: number) => {
-    const response = await api.delete(`/addresses/${id}`);
-    return response.data;
-  }
+        const response = await api.delete(`/addresses/${id}`);
+        return response.data;
+    }
 }
 
 export default api;

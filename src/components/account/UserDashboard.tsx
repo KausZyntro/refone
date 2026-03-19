@@ -134,13 +134,7 @@ const UserDashboard = () => {
                             <FiCreditCard className="sidebar-icon" />
                             Payment Method
                         </li>
-                        <li
-                            className={`sidebar-item ${activeTab === 'password' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('password')}
-                        >
-                            <FiLock className="sidebar-icon" />
-                            Password Manager
-                        </li>
+                       
                         <li
                             className="sidebar-item"
                             onClick={handleLogout}
@@ -166,9 +160,9 @@ const UserDashboard = () => {
                                         <div style={{ fontSize: '40px', color: '#666', fontWeight: 'bold' }}>
                                             {formData.firstName ? formData.firstName.charAt(0).toUpperCase() : 'U'}
                                         </div>
-                                        <div className="avatar-edit-icon">
+                                        {/* <div className="avatar-edit-icon">
                                             <FiEdit2 size={14} />
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
 
@@ -220,7 +214,7 @@ const UserDashboard = () => {
                                                 placeholder="Enter phone number"
                                             />
                                         </div>
-                                        <div className="form-group">
+                                        {/* <div className="form-group">
                                             <label className="form-label">Gender</label>
                                             <select
                                                 name="gender"
@@ -233,7 +227,7 @@ const UserDashboard = () => {
                                                 <option value="Female">Female</option>
                                                 <option value="Other">Other</option>
                                             </select>
-                                        </div>
+                                        </div> */}
 
                                         <div className="update-btn-wrapper full-width">
                                             <button type="submit" className="update-btn">

@@ -175,12 +175,12 @@
 
 /* Update Button */
 .update-btn-wrapper {
-    margin-top: 30px;
+    margin-top: 13px;
     text-align: left;
 }
 
 .update-btn {
-    background-color: #2db26e;
+    background-color: #006ab0;
     color: white;
     padding: 12px 30px;
     border: none;
@@ -192,7 +192,7 @@
 }
 
 .update-btn:hover {
-    background-color: #259a5d;
+    background-color: #006ab0;
 }
 
 .update-btn:active {
