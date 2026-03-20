@@ -88,14 +88,66 @@
   flex-wrap: wrap;
 }
 
+/* price + rating wrapper */
+.pi-price-rating-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 8px 0 4px;
+}
+
 .old-price {
   text-decoration: line-through;
-  color: gray;
+  color: #999;
+  font-size: 15px;
 }
 
 .new-price {
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+}
+
+/* ── Stars ────────────────────────────────────────── */
+.pi-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.pi-stars {
+  display: flex;
+  gap: 2px;
+  color: #f59e0b;
+  font-size: 15px;
+}
+
+.pi-reviews {
+  font-size: 12px;
+  color: #777;
+  white-space: nowrap;
+}
+
+/* ── Description ─────────────────────────────────── */
+.pi-description {
+  margin: 14px 0 16px;
+}
+
+.pi-desc-label {
+  font-weight: 700;
+  font-size: 14px;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.pi-desc-text {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.7;
 }
 
 .description {
@@ -935,6 +987,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  background: whitesmoke;
 }
 
 .specs-list li {

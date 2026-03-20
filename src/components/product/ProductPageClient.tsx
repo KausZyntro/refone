@@ -70,6 +70,37 @@ const ProductPageClient: React.FC<ProductPageClientProps> = ({ productId }) => {
                 <ProductInfo product={product} />
             </div>
 
+            {/* ── Key Specifications — full-width below gallery+info ── */}
+            <div className="specs-section">
+                <h3 className="specs-title">Key Specifications</h3>
+                <ul className="specs-list">
+                    {product.screen_size && (
+                        <li><span>Screen Size</span><span>{product.screen_size}</span></li>
+                    )}
+                    {product.battery_capacity && (
+                        <li><span>Battery</span><span>{product.battery_capacity}</span></li>
+                    )}
+                    {product.front_camera && (
+                        <li><span>Front Camera</span><span>{product.front_camera}</span></li>
+                    )}
+                    {product.back_camera && (
+                        <li><span>Rear Camera</span><span>{product.back_camera}</span></li>
+                    )}
+                    {product.network_support && (
+                        <li><span>Network</span><span>{product.network_support}</span></li>
+                    )}
+                    {product.sim_slots && (
+                        <li><span>SIM Slots</span><span>{product.sim_slots}</span></li>
+                    )}
+                    {product.fingerprint_scanner !== undefined && (
+                        <li><span>Fingerprint Scanner</span><span>{product.fingerprint_scanner ? "Yes" : "No"}</span></li>
+                    )}
+                    {product.face_unlock !== undefined && (
+                        <li><span>Face Unlock</span><span>{product.face_unlock ? "Yes" : "No"}</span></li>
+                    )}
+                </ul>
+            </div>
+
             {/* Campaign sliders – shows related / trending products */}
             <ProductSlider />
 

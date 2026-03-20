@@ -65,7 +65,7 @@ const campaignSlice = createSlice({
       console.log(campaigns);
       state.campaigns = campaigns;
       state.products = formatProducts(campaigns);
-      console.log("Formatted Products 👉", formatProducts(campaigns));
+      // console.log("Formatted Products 👉", formatProducts(campaigns));
     });
     builder.addCase(fetchDashboardCampaigns.rejected, (state, action) => {
       state.isLoading = false;
