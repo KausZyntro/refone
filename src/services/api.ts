@@ -115,6 +115,10 @@ export const cartAPI = {
         const response = await api.post("/cart/add", payload);
         return response.data;
     },
+    fetchCartSummary: async (userId: number | string) => {
+        const response = await api.post("/checkout/summary", { user_id: userId });
+        return response.data;
+    },
 }
 
 export default api;

@@ -17,6 +17,7 @@ import VerifyOTPResetPasswordModal from './VerifyOTPResetPasswordModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { logout, verifyOtpUser } from '@/redux/features/authSlice';
+import { fetchCartSummary } from '@/redux/features/cartSlice';
 import { RootState } from "@/redux/store";
 import { FaCartShopping, FaUser } from 'react-icons/fa6';
 import { LiaShoppingCartSolid } from 'react-icons/lia';
@@ -42,6 +43,12 @@ const Navbar = () => {
   React.useEffect(() => {
     setMounted(true);
   }, []);
+
+  React.useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchCartSummary(user.id));
+    }
+  }, [user?.id, dispatch]);
 
   // console.log(token)
   const handleLogout = () => {
@@ -86,7 +93,7 @@ const Navbar = () => {
 
                 {totalQuantity > 0 && (
                   <span className="cart-badge">
-                    {totalQuantity}
+                    {totalQuantity > 99 ? "99+" : totalQuantity}
                   </span>
                 )}
               </div>

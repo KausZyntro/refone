@@ -7,7 +7,7 @@ import { FaRegCreditCard, FaRupeeSign, FaTruck } from "react-icons/fa6";
 import { MdPayment } from "react-icons/md";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { AppDispatch, RootState } from "@/redux/store";
-import { addToCart, clearCartMessage } from "@/redux/features/cartSlice";
+import { addToCart, clearCartMessage, fetchCartSummary } from "@/redux/features/cartSlice";
 import Toast from "@/components/ui/Toast";
 import "../../styles/Toast.css";
 import { useRouter } from "next/navigation";
@@ -139,6 +139,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
           quantity: 1,
         }),
       ).unwrap();
+
+      // Sync the cart summary
+      dispatch(fetchCartSummary(userId));
 
       setAddedToCart(true);
     } catch (err) {
