@@ -34,7 +34,8 @@ const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user, token } = useSelector((state: RootState) => state.auth);
-  console.log(user?.name);
+  const { totalQuantity } = useSelector((state: RootState) => state.cart);
+  // console.log(user?.name);
   const router = useRouter();
 
   const [mounted, setMounted] = useState(false);
@@ -80,8 +81,14 @@ const Navbar = () => {
               <FiChevronDown size={14} />
             </div>
             {mounted && token ? (
-              <div className='cart'>
+              <div className="cart" onClick={() => router.push("/cart")}>
                 <LiaShoppingCartSolid size={30} />
+
+                {totalQuantity > 0 && (
+                  <span className="cart-badge">
+                    {totalQuantity}
+                  </span>
+                )}
               </div>
             ) : null}
 

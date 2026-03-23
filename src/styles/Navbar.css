@@ -227,6 +227,33 @@ body {
   margin-top: 20px;
   margin-bottom: 5px;
 }
+.cart {
+  position: relative;
+  cursor: pointer;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+
+  background: #ff3b30; 
+  color: white;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  line-height: 1;
+}
 
 @media (max-width: 990px) {
 

@@ -97,6 +97,48 @@
   margin-left: 10px;
 }
 
+/* Common badge */
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+/* Icon */
+.stock-icon {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* In Stock (Green) */
+.in-stock {
+  background-color: #e6f9ec;
+  color: #1a7f37;
+}
+
+/* Out of Stock (Red) */
+.out-of-stock {
+  background-color: #fdecea;
+  color: #d93025;
+}
+button.disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Optional: hover disable */
+button.disabled:hover {
+  background-color: #ccc;
+}
+
 
 @media (min-width: 1024px) {
   .phone-hero-header h1 {

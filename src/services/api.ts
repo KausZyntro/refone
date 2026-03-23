@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { AddToCartPayload } from "@/types/cart";
 
 // Using environment variable or fallback to a local API 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api-auth.refones.com/api";
@@ -107,6 +108,13 @@ export const addressAPI = {
         const response = await api.delete(`/addresses/${id}`);
         return response.data;
     }
+}
+
+export const cartAPI = {
+    addToCart: async (payload: AddToCartPayload) => {
+        const response = await api.post("/cart/add", payload);
+        return response.data;
+    },
 }
 
 export default api;
