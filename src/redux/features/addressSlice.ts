@@ -55,18 +55,35 @@ export const deleteAddress = createAsyncThunk(
 );
 interface AddressState {
   addresses: any[];
+  selectedAddressId: number | null;
   isLoading: boolean;
   error: string | null;
 }
+const getInitialSelectedAddress = () => {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("selectedAddressId");
+    if (saved) return Number(saved);
+  }
+  return null;
+};
+
 const initialState: AddressState = {
   addresses: [],
+  selectedAddressId: getInitialSelectedAddress(),
   isLoading: false,
   error: null,
 };
 const addressSlice = createSlice({
   name: "address",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedAddress: (state, action) => {
+      state.selectedAddressId = action.payload;
+      if (typeof window !== "undefined" && action.payload !== null) {
+        localStorage.setItem("selectedAddressId", action.payload.toString());
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAddresses.pending, (state) => {
       state.isLoading = true;
@@ -99,4 +116,6 @@ const addressSlice = createSlice({
     });
   },
 });
+
+export const { setSelectedAddress } = addressSlice.actions;
 export default addressSlice.reducer;

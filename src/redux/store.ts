@@ -4,6 +4,7 @@ import addressReducer from "./features/addressSlice";
 import campaignReducer from "./features/dashboardCampaign";
 import productReducer from "./features/productSlice";
 import cartReducer from "./features/cartSlice";
+import orderReducer from "./features/orderSlice";
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         campaign: campaignReducer,
         product: productReducer,
         cart: cartReducer,
+        order: orderReducer,
     },
 });
 

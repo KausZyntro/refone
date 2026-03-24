@@ -119,6 +119,13 @@ export const cartAPI = {
         const response = await api.post("/checkout/summary", { user_id: userId });
         return response.data;
     },
-}
+};
+
+export const orderAPI = {
+    placeOrder: async (payload: any) => {
+        const response = await api.post("/checkout/place-order", payload);
+        return response.data;
+    }
+};
 
 export default api;
