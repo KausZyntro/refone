@@ -8,7 +8,7 @@ export const fetchCartSummary = createAsyncThunk(
     async (userId: number | string, { rejectWithValue }) => {
         try {
             const response = await cartAPI.fetchCartSummary(userId);
-            return response as { status: string; code: string; message: string; data: { cart_items: CartItem[] } };
+            return response as { status: string; code: string; message: string; data: { cart_items: CartItem[], pricing: import("@/types/cart").CartPricing } };
         } catch (error: any) {
             return rejectWithValue(
                 error.response?.data?.message || "Failed to fetch cart summary"
@@ -36,6 +36,7 @@ export const addToCart = createAsyncThunk(
 // ── Initial state ─────────────────────────────────────────────────────────────
 const initialState: CartState = {
     items: [],
+    pricing: null,
     totalQuantity: 0,
     isLoading: false,
     error: null,
@@ -52,6 +53,33 @@ const cartSlice = createSlice({
             state.successMessage = null;
             state.error = null;
         },
+        updateItemQuantity(state, action: import("@reduxjs/toolkit").PayloadAction<{ id: number; quantity: number }>) {
+            const item = state.items.find(i => i.id === action.payload.id);
+            if (item) {
+                const diff = action.payload.quantity - Number(item.quantity);
+                item.quantity = action.payload.quantity;
+                item.item_total = action.payload.quantity * Number(item.price?.selling_price || 0);
+                state.totalQuantity += diff;
+
+                if (state.pricing) {
+                    state.pricing.subtotal = state.items.reduce((acc, curr) => acc + curr.item_total, 0);
+                    state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
+                }
+            }
+        },
+        removeItem(state, action: import("@reduxjs/toolkit").PayloadAction<{ id: number }>) {
+            const index = state.items.findIndex(i => i.id === action.payload.id);
+            if (index !== -1) {
+                const item = state.items[index];
+                state.totalQuantity -= Number(item.quantity);
+                state.items.splice(index, 1);
+
+                if (state.pricing) {
+                    state.pricing.subtotal = state.items.reduce((acc, curr) => acc + curr.item_total, 0);
+                    state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
+                }
+            }
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -63,6 +91,7 @@ const cartSlice = createSlice({
                 state.isLoading = false;
                 const items = payload.data?.cart_items || [];
                 state.items = items;
+                state.pricing = payload.data?.pricing || null;
                 state.totalQuantity = items.reduce(
                     (total, item) => total + Number(item.quantity),
                     0
@@ -123,5 +152,5 @@ const cartSlice = createSlice({
     },
 });
 
-export const { clearCartMessage } = cartSlice.actions;
+export const { clearCartMessage, updateItemQuantity, removeItem } = cartSlice.actions;
 export default cartSlice.reducer;
