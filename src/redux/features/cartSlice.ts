@@ -79,6 +79,11 @@ const cartSlice = createSlice({
                     state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
                 }
             }
+        },
+        clearCart(state) {
+            state.items = [];
+            state.totalQuantity = 0;
+            state.pricing = null;
         }
     },
     extraReducers: (builder) => {
@@ -152,5 +157,5 @@ const cartSlice = createSlice({
     },
 });
 
-export const { clearCartMessage, updateItemQuantity, removeItem } = cartSlice.actions;
+export const { clearCartMessage, updateItemQuantity, removeItem, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

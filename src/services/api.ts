@@ -122,8 +122,20 @@ export const cartAPI = {
 };
 
 export const orderAPI = {
-    placeOrder: async (payload: any) => {
-        const response = await api.post("/checkout/place-order", payload);
+    createPaymentStatus: async (payload: FormData) => {
+        const response = await api.patch("/checkout/payment-status", payload, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data;
+    },
+    placeOrder: async (payload: FormData) => {
+        const response = await api.put("/checkout/place-order", payload, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
         return response.data;
     }
 };

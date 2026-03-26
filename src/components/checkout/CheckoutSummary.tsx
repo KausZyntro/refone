@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { placeOrder } from "@/redux/features/orderSlice";
+import { placeOrder, createPaymentStatus } from "@/redux/features/orderSlice";
+import { clearCart } from "@/redux/features/cartSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -15,7 +16,7 @@ const CheckoutSummary: React.FC = () => {
     const { user } = useSelector((state: RootState) => state.auth);
     const { items, pricing, totalQuantity } = useSelector((state: RootState) => state.cart);
     const { selectedAddressId } = useSelector((state: RootState) => state.address);
-    const { isLoading: isPlacingOrder, success } = useSelector((state: RootState) => state.order);
+    const { isLoading: isPlacingOrder, isProcessingPayment } = useSelector((state: RootState) => state.order);
 
     const formatPrice = (amount: number) => {
         return `₹ ${amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -29,24 +30,81 @@ const CheckoutSummary: React.FC = () => {
         grand_total: 0,
     };
 
-    const handlePlaceOrder = () => {
-        if (!user?.id || !selectedAddressId) return;
-
-        dispatch(
-            placeOrder({
-                user_id: user.id,
-                address_id: selectedAddressId,
-                payment_method: "Razorpay", // Mock default
-            })
-        );
+    const loadRazorpay = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
     };
 
-    // If order placed successfully, optionally router.push('/success-page')
-    if (success) {
-        alert("Order placed successfully!");
-        router.push("/");
-        // In real app, redirect to order confirmation page or reset states
-    }
+    const handlePlaceOrder = async () => {
+        if (!user?.id || !selectedAddressId) return;
+
+        const res = await loadRazorpay();
+
+        if (!res) {
+            alert("Razorpay SDK failed to load. Are you online?");
+            return;
+        }
+
+        const firstItem = items[0] || {};
+
+        const options = {
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_mock_123", // Replace with real key
+            amount: Math.round(p.grand_total * 100),
+            currency: "INR",
+            name: "Refone",
+            description: "Payment for your order",
+            handler: async function (response: any) {
+                try {
+                    // 1. Create Payment Status
+                    const pmtRes = await dispatch(
+                        createPaymentStatus({
+                            pmt_order_id: response.razorpay_order_id || "mock_order_id",
+                            payment_status: "success",
+                            payment_method: "online",
+                            amount: p.grand_total,
+                        })
+                    ).unwrap();
+
+                    const pymt_id = pmtRes.id;
+
+                    // 2. Place Order
+                    await dispatch(
+                        placeOrder({
+                            customer_id: Number(user.id),
+                            variant_id: Number(firstItem.variant_id) || 0,
+                            product_id: Number(firstItem.product_id) || 0,
+                            quantity: Number(firstItem.quantity) || 1,
+                            address_id: selectedAddressId,
+                            order_id: response.razorpay_order_id || "mock_order_id",
+                            pymt_id: pymt_id,
+                        })
+                    ).unwrap();
+
+                    alert("Order placed successfully!");
+                    dispatch(clearCart());
+                    router.push("/");
+                } catch (error: any) {
+                    alert(error || "Payment or Order failed. Please try again.");
+                }
+            },
+            prefill: {
+                name: user?.name,
+                email: user?.email,
+                contact: user?.phone,
+            },
+            theme: {
+                color: "#3399cc",
+            },
+        };
+
+        const paymentObject = new (window as any).Razorpay(options);
+        paymentObject.open();
+    };
 
     return (
         <div className="checkout-summary-card">
@@ -126,10 +184,10 @@ const CheckoutSummary: React.FC = () => {
 
             <button
                 className="btn-place-order"
-                disabled={!selectedAddressId || totalQuantity === 0 || isPlacingOrder}
+                disabled={!selectedAddressId || totalQuantity === 0 || isPlacingOrder || isProcessingPayment}
                 onClick={handlePlaceOrder}
             >
-                {isPlacingOrder ? "Processing..." : "Proceed to Payment"}
+                {isPlacingOrder || isProcessingPayment ? "Processing..." : "Proceed to Payment"}
             </button>
             {!selectedAddressId && totalQuantity > 0 && (
                 <p className="checkout-warning">Please select a delivery address to proceed.</p>
