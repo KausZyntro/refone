@@ -7,10 +7,30 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+import ActionCards from "@/components/home/ActionCards";
 
 import "@/styles/HeroSlider.css";
+import { FaMobileAlt, FaShoppingCart } from "react-icons/fa";
+import { MdAttachMoney } from "react-icons/md";
 
 const HeroSlider = () => {
+    const actions = [
+    {
+      icon: <FaMobileAlt className="action-icon"/>,
+      title: "Sell Phone",
+      subtitle: "Get Best Price",
+    },
+    {
+      icon: <FaShoppingCart className="action-icon"/>,
+      title: "Buy Refurbished",
+      subtitle: "Shop Like New",
+    },
+    {
+      icon: <MdAttachMoney className="action-icon"/>,
+      title: "Check Price",
+      subtitle: "Find Value",
+    },
+  ];
   return (
     <div className="container-hero">
       <Swiper
@@ -31,9 +51,14 @@ const HeroSlider = () => {
               <h1>Premium iPhones. Smarter Prices.</h1>
               <p>Certified. Fully Tested. Warranty Included. Delivered to Your Door.</p>
               <div className="cta-section">
-                <button className="cta-btn-buy">Buy</button>
-                <button className="cta-btn-sell">Sell</button>
+                {/* <button className="cta-btn-buy">Buy</button>
+                <button className="cta-btn-sell">Sell</button> */}
+               
               </div>
+             
+            </div>
+             <div className="action-cards-hero">
+              <ActionCards items={actions} />
             </div>
           </div>
         </SwiperSlide>
@@ -48,9 +73,13 @@ const HeroSlider = () => {
               <h1>Get the iPhone You Want. Pay Less.</h1>
               <p>Up to 40% lower than retail. Fully tested. Backed by warranty.</p>
               <div className="cta-section">
-                <button className="cta-btn-buy">Buy</button>
-                <button className="cta-btn-sell">Sell</button>
+                {/* <button className="cta-btn-buy">Buy</button>
+                <button className="cta-btn-sell">Sell</button> */}
+                
               </div>
+            </div>
+             <div className="action-cards-hero">
+              <ActionCards items={actions} />
             </div>
           </div>
         </SwiperSlide>
@@ -65,9 +94,12 @@ const HeroSlider = () => {
               <h1>Certified iPhones. Better Prices.</h1>
               <p>Warranty Included. Free Delivery.</p>
               <div className="cta-section">
-                <button className="cta-btn-buy">Buy</button>
-                <button className="cta-btn-sell">Sell</button>
+                {/* <button className="cta-btn-buy">Buy</button>
+                <button className="cta-btn-sell">Sell</button> */}
               </div>
+            </div>
+             <div className="action-cards-hero">
+              <ActionCards items={actions} />
             </div>
           </div>
         </SwiperSlide>
