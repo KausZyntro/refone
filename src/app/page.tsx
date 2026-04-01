@@ -71,7 +71,7 @@ export default function Home() {
       <HeroSlider />
       <PhoneDetail />
       {/* <ProductSlider products={products} /> */}
-      {/* <ProductSlider/> */}
+      <ProductSlider/>
       {/* <Testimonials /> */}
       {/* <FAQSection /> */}
       <HeroAbout />
