@@ -71,9 +71,9 @@ export default function Home() {
       <HeroSlider />
       <PhoneDetail />
       {/* <ProductSlider products={products} /> */}
-      <ProductSlider/>
-      <Testimonials />
-      <FAQSection />
+      {/* <ProductSlider/> */}
+      {/* <Testimonials /> */}
+      {/* <FAQSection /> */}
       <HeroAbout />
     </div>
   );

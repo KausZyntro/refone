@@ -44,11 +44,12 @@
   flex-shrink: 0;
 }
 .product-card-header{
-  text-align: start;
-    margin-bottom: 30px;
-    /* padding-left: 20px; */
-    font-size: 12px;
+text-align: start;
     color: #1d1d1f;
+    margin-bottom: 9px;
+    font-size: 17px;
+    margin-top: 61px;
+    margin-left: 10px;
 }
 .product-padding{
   padding: 40px;
@@ -65,8 +66,9 @@
 }
 
 .product-image {
-  width: 100%;
+  /* width: 100%; */
   height: 250px;
+  padding: 26px;
 }
 
 
@@ -186,7 +188,7 @@
 }
 
 .price-current {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   color: #000;
 }
@@ -198,7 +200,7 @@
 }
 
 .price-mrp {
-  font-size: 16px;
+  font-size: 14px;
   color: #777;
 }
 
