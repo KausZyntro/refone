@@ -26,9 +26,9 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
       </div>
 
       <div className={styles.priceRow}>
-        <span className={styles.sellingPrice}>₹{selectedVariant?.pricing?.selling_price}</span>
+        <span className={styles.sellingPrice}>₹{Number(selectedVariant?.pricing?.selling_price).toLocaleString("en-IN")}</span>
         {selectedVariant?.pricing?.mrp && (
-          <span className={styles.mrp}>₹{selectedVariant?.pricing?.mrp}</span>
+          <span className={styles.mrp}>₹{Number(selectedVariant?.pricing?.mrp).toLocaleString("en-IN")}</span>
         )}
       </div>
 
