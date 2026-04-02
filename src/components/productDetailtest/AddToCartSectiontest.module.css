@@ -1,0 +1,72 @@
+.addToCart {
+    margin-top: 20px;
+}
+
+.buttonRow {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.cartBtn,
+.wishlistBtn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    line-height: 1.4;
+    border: 2px solid transparent;
+}
+
+.cartBtn {
+    background-color: #006ab0;
+    color: #ffffff;
+    border-color: #006ab0;
+}
+
+.cartBtn:hover {
+    background-color: #005a96;
+}
+
+.wishlistBtn {
+    background-color: transparent;
+    color: #c62828;
+    border-color: #c62828;
+}
+
+.wishlistBtn:hover {
+    background-color: #fce4ec;
+}
+
+.shippingInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+.shippingIcon {
+    color: #2e7d32;
+    font-size: 16px;
+}
+
+.warrantyIcon {
+    color: #666;
+    font-size: 16px;
+}
+
+@media (max-width: 480px) {
+    .buttonRow {
+        flex-direction: column;
+    }
+}

@@ -29,6 +29,8 @@ const ProductPageClient: React.FC<ProductPageClientProps> = ({ productId }) => {
             dispatch(clearProduct());
         };
     }, [dispatch, productId]);
+    
+
 
     /* ── Loading ─────────────────────────────────────────────────── */
     if (isLoading) {

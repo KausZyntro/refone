@@ -9,7 +9,7 @@ import {
   FaThumbsUp,
 } from "react-icons/fa";
 
-// import "./BadgeSection.css";
+import "@/app/(store)/product/[slug]/productDetail.css";
 
 const TrustBadge = () => {
   const badges = [

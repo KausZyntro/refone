@@ -75,7 +75,7 @@ export const authAPI = {
 export const userAPI = {
     getUserProfile: async () => {
         const response = await api.get("/user-profile");
-        console.log(response?.data);
+        // console.log(response?.data);
         return response.data;
     }
 };
@@ -87,6 +87,7 @@ export const productAPI = {
     },
     getProductById: async (productId: number | string) => {
         const response = await api.get(`/products/get-product-by-id?product_id=${productId}`);
+        console.log("API RAW RESPONSE:", response.data);
         return response.data;
     },
 }
