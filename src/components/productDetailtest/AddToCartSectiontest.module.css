@@ -1,68 +1,105 @@
 .addToCart {
-    margin-top: 20px;
+    margin-top: 24px;
+        display: flex;
+    align-items: self-start;
+    justify-content: space-between;
 }
 
 .buttonRow {
-    display: flex;
+    /* display: flex;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 12px; */
+        display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-direction: row;
+    
 }
 
 .cartBtn,
+.buyNowBtn,
 .wishlistBtn {
     flex: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 6px;
+    gap: 10px;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: inherit;
-    line-height: 1.4;
-    border: 2px solid transparent;
+    line-height: 1;
+    border: 1px solid transparent;
+}
+.cartBtn,
+.buyNowBtn {
+    flex: 1;
 }
 
 .cartBtn {
     background-color: #006ab0;
     color: #ffffff;
-    border-color: #006ab0;
+    /* border-color: #2C2C2C; */
 }
 
 .cartBtn:hover {
-    background-color: #005a96;
+    background-color: #006ab0;
+}
+
+.buyNowBtn {
+    background-color: #2C2C2C;
+    color: #ffffff;
+    border-color: #2C2C2C;
+}
+
+.buyNowBtn:hover {
+    background-color: #000000;
+}
+
+.cartBtn:disabled,
+.buyNowBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.wishlistRow {
+    margin-bottom: 24px;
 }
 
 .wishlistBtn {
-    background-color: transparent;
-    color: #c62828;
-    border-color: #c62828;
+    background-color: #ffffff;
+    color: rgb(252, 84, 84);
+    border-color: rgb(252, 84, 84);
+    width: 100%;
+    font-weight: 500;
 }
 
 .wishlistBtn:hover {
-    background-color: #fce4ec;
+    background-color: #f9f9f9;
+    border-color: #ccc;
+    color: #222;
 }
 
 .shippingInfo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     font-size: 13px;
-    color: #444;
-    margin-bottom: 6px;
+    color: #555;
+    margin-bottom: 12px;
 }
 
 .shippingIcon {
     color: #2e7d32;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 .warrantyIcon {
     color: #666;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 @media (max-width: 480px) {

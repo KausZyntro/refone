@@ -53,7 +53,7 @@ const mockRelatedProducts: RelatedProductTest[] = [
         price: 849,
         image: "/images/img20.png",
     },
-    
+
 ];
 
 
@@ -135,7 +135,10 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                 selectedVariant={selectedVariant}
                                 setSelectedVariant={setSelectedVariant}
                             />
-                            <AddToCartSectiontest />
+                            <AddToCartSectiontest
+                                product={product}
+                                selectedVariant={selectedVariant}
+                            />
                             <ProductSpecstest product={product} selectedVariant={selectedVariant} />
                         </div>
                     </div>
