@@ -1,29 +1,53 @@
+'use client';
+
 import React from 'react';
 import styles from '../allProduct.module.css';
-import { Product } from '../dummyData';
+import AddToCartSectiontest from '@/components/productDetailtest/AddToCartSectiontest';
+import { VariantTest } from '@/types/producttest';
 
 interface ProductCardProps {
-    product: Product;
+    product: any;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+    // Extract first variant for display
+    const firstVariant = product.variants?.[0];
+    const displayImage = firstVariant?.images?.[0]?.image_url || '/placeholder.png';
+    const displayPrice = firstVariant?.pricing?.selling_price || '0';
+    const displaySpecs = `${firstVariant?.storage || ''} | ${firstVariant?.color || ''} | ${firstVariant?.grade || ''}`;
+
+    const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(firstVariant || null);
+
     return (
         <div className={styles.productCard}>
-            <div className={styles.productImageWrapper}>
-                <img
-                    src={product.image}
-                    alt={product.name}
-                    className={styles.productImage}
-                />
-            </div>
+            <Link href={`/product/${product.id}`} className={styles.imageLink}>
+                <div className={styles.productImageWrapper}>
+                    <img
+                        src={displayImage}
+                        alt={product.name}
+                        className={styles.productImage}
+                    />
+                </div>
+            </Link>
             <div className={styles.productDetails}>
-                <h3 className={styles.productName}>{product.name}</h3>
-                <p className={styles.productSpecs}>{product.specs}</p>
-                <p className={styles.productPrice}>₹{product.price}</p>
-                <button className={styles.addToCartBtn}>Add to Cart</button>
+                <Link href={`/product/${product.id}`} style={{ textDecoration: 'none' }}>
+                    <h3 className={styles.productName}>{product.name}</h3>
+                </Link>
+                <p className={styles.productSpecs}>{displaySpecs}</p>
+                <p className={styles.productPrice}>₹{Number(displayPrice).toLocaleString('en-IN')}</p>
+
+                <AddToCartSectiontest
+                    product={product}
+                    selectedVariant={selectedVariant}
+                    showWishlist={false}
+                    showBuyNow={true}
+                />
             </div>
         </div>
     );
 };
+
+// Import Link as it's used in the template
+import Link from 'next/link';
 
 export default ProductCard;

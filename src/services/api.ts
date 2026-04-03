@@ -90,6 +90,14 @@ export const productAPI = {
         console.log("API RAW RESPONSE:", response.data);
         return response.data;
     },
+    getFilters: async () => {
+        const response = await api.get("/filter-list");
+        return response.data;
+    },
+    getProducts: async (params: string = "") => {
+        const response = await api.get(`/product-list${params ? `?${params}` : ""}`);
+        return response.data;
+    },
 }
 
 export const addressAPI = {
@@ -120,6 +128,15 @@ export const cartAPI = {
         const response = await api.post("/checkout/summary", { user_id: userId });
         return response.data;
     },
+    removeItem: async (cart_id: number) => {
+        const response = await api.delete("/cart/remove", {
+            data: {
+                cart_id: cart_id
+            }
+        });
+        // console.log("REMOVE FROM CART RESPONSE:", response.data);
+        return response.data;
+    }
 };
 
 export const orderAPI = {

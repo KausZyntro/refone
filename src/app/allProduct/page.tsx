@@ -1,13 +1,38 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './allProduct.module.css';
-import { products, filterOptions } from './dummyData';
 import Sidebar from './components/Sidebar';
 import ProductCard from './components/ProductCard';
 import Link from 'next/link';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@/redux/store';
+import { fetchFilters } from '@/redux/features/productSlice';
+import { useProductFilters } from '@/hooks/useProductFilters';
 
 export default function AllProductPage() {
+    const dispatch = useDispatch<AppDispatch>();
+    const { products, filters: availableFilters, isProductsLoading, pagination, error } = useSelector(
+        (state: RootState) => state.product,
+    );
+
+    const { filters, handleFilterChange, handlePageChange, clearAllFilters } = useProductFilters();
+
+    useEffect(() => {
+        dispatch(fetchFilters());
+    }, [dispatch]);
+
+    const renderSkeletons = () => (
+        Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className={`${styles.productCard} ${styles.skeleton}`} style={{ height: '350px' }}>
+                <div className={styles.productImageWrapper} style={{ height: '220px', backgroundColor: '#eee' }}></div>
+                <div style={{ height: '20px', backgroundColor: '#eee', marginBottom: '10px', width: '80%' }}></div>
+                <div style={{ height: '15px', backgroundColor: '#eee', marginBottom: '10px', width: '60%' }}></div>
+                <div style={{ height: '25px', backgroundColor: '#eee', marginTop: 'auto', width: '40%' }}></div>
+            </div>
+        ))
+    );
+
     return (
         <div className={styles.pageContainer}>
             {/* Breadcrumbs */}
@@ -19,15 +44,22 @@ export default function AllProductPage() {
 
             <div className={styles.mainLayout}>
                 {/* Sidebar */}
-                <Sidebar filters={filterOptions} />
+                <Sidebar
+                    availableFilters={availableFilters}
+                    selectedFilters={filters}
+                    onFilterChange={handleFilterChange}
+                    onClearAll={clearAllFilters}
+                />
 
                 {/* Main Content Area */}
                 <div className={styles.contentArea}>
-                    {/* Header Area containing Title and Actions */}
+                    {/* Header Area */}
                     <div className={styles.contentHeader}>
                         <div className={styles.titleArea}>
                             <h1 className={styles.contentTitle}>Smartphones</h1>
-                            <p className={styles.contentSubtitle}>Browse our latest smartphone collection.</p>
+                            <p className={styles.contentSubtitle}>
+                                {pagination?.total ?? 0} products found
+                            </p>
                         </div>
 
                         <div className={styles.contentActions}>
@@ -40,27 +72,44 @@ export default function AllProductPage() {
                                     <option value="newest">Newest Arrivals</option>
                                 </select>
                             </div>
-                            <div className={styles.viewToggles}>
-                                <button className={`${styles.viewToggleBtn} ${styles.active}`} aria-label="Grid view">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z" />
-                                    </svg>
-                                </button>
-                                <button className={styles.viewToggleBtn} aria-label="List view">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
-                                    </svg>
-                                </button>
-                            </div>
                         </div>
                     </div>
 
                     {/* Product Grid */}
                     <div className={styles.productGrid}>
-                        {products.map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
+                        {isProductsLoading ? (
+                            renderSkeletons()
+                        ) : products.length > 0 ? (
+                            products.map((product: any) => (
+                                <ProductCard key={product.id} product={product} />
+                            ))
+                        ) : (
+                            <div className={styles.noProducts}>
+                                <div className={styles.noProductsIcon}>🔍</div>
+                                <h2>No products found</h2>
+                                <p>We couldn't find any products matching your current filters.</p>
+                                <button onClick={clearAllFilters} className={styles.addToCartBtn} style={{ width: 'auto', padding: '12px 30px' }}>
+                                    Clear All Filters
+                                </button>
+                            </div>
+                        )}
                     </div>
+
+                    {/* Pagination */}
+                    {pagination && pagination.last_page > 1 && (
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '40px' }}>
+                            {Array.from({ length: pagination.last_page }).map((_, i) => (
+                                <button
+                                    key={i + 1}
+                                    onClick={() => handlePageChange(i + 1)}
+                                    className={`${styles.viewToggleBtn} ${pagination.current_page === i + 1 ? styles.active : ''}`}
+                                    style={{ width: '40px' }}
+                                >
+                                    {i + 1}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaHeart, FaShoppingCart, FaTruck, FaShieldAlt, FaBolt } from "react-icons/fa";
 import styles from "./AddToCartSectiontest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
@@ -13,17 +13,26 @@ import { useRouter } from "next/navigation";
 interface AddToCartSectionProps {
     product: ProductTest | null;
     selectedVariant: VariantTest | null;
+    showWishlist?: boolean;
+    showBuyNow?: boolean;
 }
 
-const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, selectedVariant }) => {
+const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, selectedVariant,showWishlist = true,
+    showBuyNow = true }) => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const [addedToCart, setAddedToCart] = useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const { user } = useSelector((state: RootState) => state.auth);
     const { selectedAddressId } = useSelector((state: RootState) => state.address);
     const { isLoading: isCartLoading } = useSelector((state: RootState) => state.cart);
+    const [isMounted, setIsMounted] = useState(false);
     const { isProcessingPayment, isLoading: isPlacingOrder } = useSelector((state: RootState) => state.order);
+    
+    useEffect(() => {
+    setIsMounted(true);
+}, []);
 
     const loadRazorpay = () => {
         return new Promise((resolve) => {
@@ -42,6 +51,7 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
         }
 
         try {
+            setIsLoading(true);
             await dispatch(addToCart({
                 user_id: Number(user?.id),
                 product_id: product.id,
@@ -53,6 +63,7 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
         } catch (error: any) {
             alert(error || "Failed to add to cart");
         }
+        setIsLoading(false);
     };
 
     const handleBuyNow = async () => {
@@ -136,17 +147,35 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
 
     return (
         <div className={styles.addToCart}>
-            <div className={styles.buttonRow}>
+            {showBuyNow && (
+                <div className={styles.buttonRow}>
                 <button
                     className={styles.cartBtn}
-                    onClick={handleAddToCart}
-                    disabled={isCartLoading}
+                    // onClick={handleAddToCart}
+                    // onClick={addedToCart ? () => router.push("/cart"):handleAddToCart}
+                    onClick={() => {
+                        if (addedToCart) {
+                        router.push("/cart");
+                        } else {
+                        handleAddToCart();
+                        }
+                    }}
+                    // disabled={isMounted ? isCartLoading : false}
+                    disabled={isLoading}
                 >
-                    <FaShoppingCart /> {isCartLoading ? "Adding..."
+                    <FaShoppingCart /> 
+                    {/* {
+                    isCartLoading ? "Adding..."
                         : addedToCart
                         ? "Go to Cart"
-                        : "Add to Cart"}
+                        : "Add to Cart"} */}
+                        {isLoading
+                            ? "Adding..."
+                            : addedToCart
+                            ? "Go to Cart"
+                            : "Add to Cart"}
                 </button>
+             
                 {/* <button
                     className={styles.buyNowBtn}
                     onClick={addedToCart ? () => router.push("/cart") : handleAddToCart}
@@ -158,12 +187,15 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
                         : "Add to Cart"}
                 </button> */}
             </div>
+            )}
 
-            <div className={styles.wishlistRow}>
+            {showWishlist && (
+                <div className={styles.wishlistRow}>
                 <button className={styles.wishlistBtn}>
                     <FaHeart /> Add to Wishlist
                 </button>
             </div>
+            )}
                     
             
         </div>

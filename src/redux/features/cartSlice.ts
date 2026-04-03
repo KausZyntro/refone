@@ -32,6 +32,24 @@ export const addToCart = createAsyncThunk(
     }
 );
 
+export const removeFromCart = createAsyncThunk(
+    "cart/removeItem",
+    async (cart_id:number, { rejectWithValue }) => {
+        try {
+            // const response = await cartAPI.removeItem(cart_id);
+            // // console.log(cart_id);
+            // return response as { status: string; code: string; message: string; data: { cart_id: number } };
+            await cartAPI.removeItem(cart_id);
+
+            return { cart_id }
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to remove item from cart"
+            );
+        }
+    }
+);
+
 
 // ── Initial state ─────────────────────────────────────────────────────────────
 const initialState: CartState = {
@@ -151,6 +169,41 @@ const cartSlice = createSlice({
                 state.successMessage = payload.message || "Item added to cart";
             })
             .addCase(addToCart.rejected, (state, { payload }) => {
+                state.isLoading = false;
+                state.error = payload as string;
+            })
+            .addCase(removeFromCart.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(removeFromCart.fulfilled, (state, { payload }) => {
+                state.isLoading = false;
+
+                const cartId = payload.cart_id;
+                console.log(cartId)
+
+                const index = state.items.findIndex(i => i.id === cartId);
+                if (index !== -1) {
+                    const item = state.items[index];
+                    state.totalQuantity -= Number(item.quantity);
+                    state.items.splice(index, 1);
+                }
+
+                if (state.pricing) {
+                    state.pricing.subtotal = state.items.reduce(
+                        (acc, curr) => acc + curr.item_total,
+                        0
+                    );
+                    state.pricing.grand_total =
+                        state.pricing.subtotal +
+                        state.pricing.delivery_charge +
+                        state.pricing.tax -
+                        state.pricing.discount;
+                }
+
+                // state.successMessage = payload.message || "Item removed from cart";
+            })
+            .addCase(removeFromCart.rejected, (state, { payload }) => {
                 state.isLoading = false;
                 state.error = payload as string;
             });

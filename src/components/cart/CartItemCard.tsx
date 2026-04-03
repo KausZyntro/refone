@@ -4,16 +4,17 @@ import React from "react";
 import Image from "next/image";
 import { FiTrash2 } from "react-icons/fi";
 import { useDispatch } from "react-redux";
-import { updateItemQuantity, removeItem } from "@/redux/features/cartSlice";
+import { updateItemQuantity, removeItem, removeFromCart } from "@/redux/features/cartSlice";
 import type { CartItem } from "@/types/cart";
 import QuantityControl from "./QuantityControl";
+import { AppDispatch } from "@/redux/store";
 
 interface CartItemCardProps {
     item: CartItem;
 }
 
 const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const quantity = Number(item.quantity) || 1;
 
     const variantInfo = item.variant?.[0];
@@ -30,9 +31,11 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
             dispatch(updateItemQuantity({ id: item.id, quantity: quantity - 1 }));
         }
     };
+    console.log(item.id);
 
     const handleRemove = () => {
         dispatch(removeItem({ id: item.id }));
+        dispatch(removeFromCart(item.id ));
     };
 
     const priceAmount = Number(item.price?.selling_price || 0);

@@ -1,5 +1,6 @@
 import React from "react";
 import "@/styles/ProductCard.css";
+import styles from '@/app/allProduct/allProduct.module.css';
 import Link from "next/link";
 
 const ProductCard = ({ product }: { product: any }) => {
@@ -10,7 +11,37 @@ const ProductCard = ({ product }: { product: any }) => {
 
   return (
     <Link href={`/product/${product.id || product.slug || ""}`}>
-      <div className="product-card">
+      <div className={styles.productCard}>
+            <div className={styles.productImageWrapper}>
+                <img
+                    src={product.image}
+                    alt={product.name}
+                    className={styles.productImage}
+                />
+            </div>
+            <div className={styles.productDetails}>
+                <h3 className={styles.productName}>{product.name}</h3>
+                <p className={styles.productSpecs}>{product.specs}</p>
+                {/* <p className={styles.productPrice}>₹{product.price}</p> */}
+                {product.price && (
+            <div className="price-wrapper">
+              <span className="price-current">₹{product.price}</span>
+              <div className="price-secondary">
+                {product.mrp && (
+                  <span className="price-mrp">
+                    M.R.P: <s>₹{product.mrp}</s>
+                  </span>
+                )}
+                {discount !== null && (
+                  <span className="price-discount">({discount}% off)</span>
+                )}
+              </div>
+            </div>
+          )}
+                <button className={styles.addToCartBtn}>Add to Cart</button>
+            </div>
+        </div>
+      {/* <div className="product-card">
         <div className="product-image-section">
           <span className="wishlist">♡</span>
           <img
@@ -45,7 +76,7 @@ const ProductCard = ({ product }: { product: any }) => {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
     </Link>
   );
 };

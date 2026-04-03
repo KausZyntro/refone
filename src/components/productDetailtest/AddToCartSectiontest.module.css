@@ -2,7 +2,8 @@
     margin-top: 24px;
         display: flex;
     align-items: self-start;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: space-around;
 }
 
 .buttonRow {
@@ -42,6 +43,7 @@
 .cartBtn {
     background-color: #006ab0;
     color: #ffffff;
+    padding: 15px 29px;
     
 }
 
