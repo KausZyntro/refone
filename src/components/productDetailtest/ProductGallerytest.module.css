@@ -1,5 +1,5 @@
 .gallery {
-    width: 350px;
+    width: 363px;
     min-width: 320px;
     background-color: #ffffff;
     padding: 20px;
@@ -135,9 +135,27 @@
     background-color: #666;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .gallery {
         width: 100%;
         min-width: unset;
+        padding: 0;
+        /* Let parent handle padding */
+    }
+
+    .specList,
+    .socialIcons {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .mainImageWrapper {
+        margin-bottom: 12px;
+    }
+
+    .thumbnailWrapper {
+        width: 50px;
+        height: 50px;
     }
 }

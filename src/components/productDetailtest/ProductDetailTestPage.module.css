@@ -40,13 +40,21 @@
 
 .productRow {
     display: flex;
-    gap: 24px;
+    gap: 80px;
     align-items: flex-start;
+}
+
+.mainImageWrapper {
+    order: 1;
 }
 
 .infoColumn {
     flex: 1;
     min-width: 0;
+}
+
+.infoColumn {
+    order: 2;
 }
 
 /* ===== Responsive ===== */
@@ -57,34 +65,86 @@
     }
 
     .productRow {
-        gap: 16px;
+        gap: 30px;
     }
 }
 
 @media (max-width: 1024px) {
+    .pageWrapper {
+        margin-top: 100px;
+        padding: 16px 15px;
+    }
+
     .mainLayout {
-        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 24px;
     }
 
     .centerContent {
         order: 1;
-        flex-basis: 100%;
+        width: 100%;
+        padding: 20px;
+        margin-top: 60px;
+    }
+
+    .relatedSidebar {
+        order: 2;
+        width: 100%;
+    }
+
+    .productRow {
+        gap: 40px;
     }
 }
 
 @media (max-width: 768px) {
-    .productRow {
-        flex-direction: column;
+    .pageWrapper {
+        margin-top: 80px;
+        padding: 12px 10px;
     }
 
-    .pageWrapper {
-        padding: 12px 16px;
-        margin-top: 60px;
+    .productRow {
+        flex-direction: column;
+        gap: 0;
+        /* Remove gap between gallery components and info column */
+    }
+
+    .centerContent {
+        padding: 15px;
+        width: 100%;
+    }
+
+    .infoColumn {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+    }
+
+    .breadcrumb {
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+    /* Ensure specific spacing for sections now that row gap is removed */
+    .specsSection {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
     }
 }
 
 @media (max-width: 480px) {
+    .pageWrapper {
+        margin-top: 60px;
+    }
+
     .breadcrumb {
-        font-size: 12px;
+        font-size: 11px;
+        gap: 4px;
+    }
+
+    .centerContent {
+        padding: 12px;
     }
 }

@@ -121,7 +121,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
             {/* Main layout */}
             <div className={styles.mainLayout}>
                 {/* Left Sidebar */}
-                <FiltersSidebartest />
+                {/* <FiltersSidebartest /> */}
 
                 {/* Center: Gallery + Info + Specs */}
                 <div className={styles.centerContent}>
@@ -139,7 +139,10 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                 product={product}
                                 selectedVariant={selectedVariant}
                             />
-                            <ProductSpecstest product={product} selectedVariant={selectedVariant} />
+                            <div  className={styles.specsSection}>
+                                <ProductSpecstest product={product}  selectedVariant={selectedVariant} />                     
+                            </div>
+                            
                         </div>
                     </div>
 
@@ -147,12 +150,14 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                 </div>
 
                 {/* Right Sidebar */}
-                <RelatedProductstest products={mockRelatedProducts} />
+                <div className={styles.relatedSidebar}>
+                    <RelatedProductstest products={mockRelatedProducts} />
+                </div>
             </div>
             {/* <ProductSlider /> */}
 
-            <TrustBadge />
-            <ReviewsSection />
+            {/* <TrustBadge />
+            <ReviewsSection /> */}
         </div>
     );
 }

@@ -43,3 +43,24 @@
     color: #555;
     vertical-align: top;
 }
+
+@media (max-width: 480px) {
+    .specsTable tr {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .labelCell {
+        width: 100%;
+        display: block;
+        border-right: none;
+        border-bottom: 1px solid #e8e8e8;
+        background-color: #f5f5f5;
+    }
+
+    .valueCell {
+        width: 100%;
+        display: block;
+        padding: 8px 12px;
+    }
+}
