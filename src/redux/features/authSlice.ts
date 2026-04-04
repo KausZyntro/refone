@@ -36,9 +36,9 @@ const getUser = () => {
 
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async ({ email, password }: any, { rejectWithValue }) => {
+  async ({ email: identifier, password }: { email: string; password?: string }, { rejectWithValue }) => {
     try {
-      const response = await authAPI.login(email, password);
+      const response = await authAPI.login(identifier, password);
       return response.data || response;
     } catch (error: any) {
       return rejectWithValue(

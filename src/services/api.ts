@@ -36,8 +36,15 @@ api.interceptors.request.use((config) => {
 });
 
 export const authAPI = {
-    login: async (email: string, password: string) => {
-        const response = await api.post("/login", { email, password });
+    login: async (identifier: string, password?: string) => {
+        const payload: any = {};
+        if (identifier.includes("@")) {
+            payload.email = identifier;
+        } else {
+            payload.phone = identifier;
+        }
+        if (password) payload.password = password;
+        const response = await api.post("/login", payload);
         // console.log("FULL RESPONSE:", response);
         return response.data;
     },

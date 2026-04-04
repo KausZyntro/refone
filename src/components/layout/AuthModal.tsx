@@ -48,11 +48,11 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isLogin) {
-      if (!email || !password) return alert("Please fill all fields");
-      dispatch(loginUser({ email, password }))
+      if (!email || email.length !== 10) return alert("Please enter a valid 10-digit phone number");
+
+      dispatch(loginUser({ email }))
         .unwrap()
         .then((res: any) => {
-
           // API response (thunk unwraps to response.data directly)
           const requiresOtp = res?.otpRequired || res?.data?.otpRequired;
           const uid = res?.userId || res?.data?.userId || res?.user?.id || res?.data?.user?.id;
@@ -60,9 +60,7 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
           if (requiresOtp) {
             openOtp(uid);
           }
-
         });
-
     } else {
       if (!name || !email || !password || !phone) return alert("Please fill all required fields");
       if (password !== confirmPassword) return alert("Passwords do not match");
@@ -106,12 +104,23 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
             )}
 
             <input
-              type="email"
-              placeholder={isLogin ? "Email / Mobile Number" : "Email"}
+              type={isLogin ? "tel" : "email"}
+              placeholder={isLogin ? "Phone Number" : "Email"}
               className="auth-input"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+              onChange={(e) => {
+                const val = e.target.value;
+                if (isLogin) {
+                  const numericVal = val.replace(/\D/g, "");
+                  if (numericVal.length <= 10) {
+                    setEmail(numericVal);
+                  }
+                } else {
+                  setEmail(val);
+                }
+              }}
+              pattern={isLogin ? "[0-9]{10}" : "^[^\s@]+@[^\s@]+\.[^\s@]+$"}
+              maxLength={isLogin ? 10 : undefined}
               required
             />
 
@@ -133,14 +142,16 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
               />
             )}
 
-            <input
-              type="password"
-              placeholder="Password"
-              className="auth-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            {!isLogin && (
+              <input
+                type="password"
+                placeholder="Password"
+                className="auth-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            )}
 
             {!isLogin && (
               <input
@@ -151,17 +162,6 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
-            )}
-
-            {isLogin && openForgotPassword && (
-              <div style={{ textAlign: "right", width: "100%", marginBottom: "15px" }}>
-                <span
-                  onClick={() => !isLoading && openForgotPassword()}
-                  style={{ cursor: isLoading ? "not-allowed" : "pointer", color: "#e96c31", fontSize: "14px", fontWeight: "500" }}
-                >
-                  Forgot Password?
-                </span>
-              </div>
             )}
 
             <button type="submit" className="auth-btn" disabled={isLoading}>
