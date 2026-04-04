@@ -22,16 +22,34 @@ export default function AllProductPage() {
         dispatch(fetchFilters());
     }, [dispatch]);
 
+    // const renderSkeletons = () => (
+    //     Array.from({ length: 8 }).map((_, i) => (
+    //         <div key={i} className={`${styles.productCard} ${styles.skeleton}`} style={{ height: '350px' }}>
+    //             <div className={styles.productImageWrapper} style={{ height: '220px', backgroundColor: '#eee' }}></div>
+    //             <div style={{ height: '20px', backgroundColor: '#eee', marginBottom: '10px', width: '80%' }}></div>
+    //             <div style={{ height: '15px', backgroundColor: '#eee', marginBottom: '10px', width: '60%' }}></div>
+    //             <div style={{ height: '25px', backgroundColor: '#eee', marginTop: 'auto', width: '40%' }}></div>
+    //         </div>
+    //     ))
+    // );
+
     const renderSkeletons = () => (
         Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className={`${styles.productCard} ${styles.skeleton}`} style={{ height: '350px' }}>
-                <div className={styles.productImageWrapper} style={{ height: '220px', backgroundColor: '#eee' }}></div>
-                <div style={{ height: '20px', backgroundColor: '#eee', marginBottom: '10px', width: '80%' }}></div>
-                <div style={{ height: '15px', backgroundColor: '#eee', marginBottom: '10px', width: '60%' }}></div>
-                <div style={{ height: '25px', backgroundColor: '#eee', marginTop: 'auto', width: '40%' }}></div>
+            <div key={i} className={`${styles.productCard} ${styles.skeleton}`}>
+            
+            <div className={styles.productImageWrapper}>
+                <div className={styles.skeletonBox} style={{ height: "100%", width: "100%" }} />
+            </div>
+
+            <div className={styles.productDetails}>
+                <div className={styles.skeletonBox} style={{ height: '20px', width: '80%' }} />
+                <div className={styles.skeletonBox} style={{ height: '15px', width: '60%' }} />
+                <div className={styles.skeletonBox} style={{ height: '25px', width: '40%', marginTop: 'auto' }} />
+            </div>
+
             </div>
         ))
-    );
+        );
 
     return (
         <div className={styles.pageContainer}>

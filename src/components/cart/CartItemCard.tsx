@@ -8,6 +8,7 @@ import { updateItemQuantity, removeItem, removeFromCart } from "@/redux/features
 import type { CartItem } from "@/types/cart";
 import QuantityControl from "./QuantityControl";
 import { AppDispatch } from "@/redux/store";
+import { formatPrice, parsePrice } from "@/utils/format";
 
 interface CartItemCardProps {
     item: CartItem;
@@ -17,7 +18,8 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
     const dispatch = useDispatch<AppDispatch>();
     const quantity = Number(item.quantity) || 1;
 
-    const variantInfo = item.variant?.[0];
+    // Resilient variant extraction
+    const variantInfo = Array.isArray(item.variant) ? item.variant[0] : item.variant;
     const storageInfo = variantInfo?.storage ? `${variantInfo.storage} Storage` : "";
     const colorInfo = variantInfo?.color ? `${variantInfo.color} Color` : "";
     const variantDetails = [storageInfo, colorInfo].filter(Boolean).join(" | ");
@@ -35,13 +37,13 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
 
     const handleRemove = () => {
         dispatch(removeItem({ id: item.id }));
-        dispatch(removeFromCart(item.id ));
+        dispatch(removeFromCart(item.id));
     };
 
-    const priceAmount = Number(item.price?.selling_price || 0);
+    const priceAmount = parsePrice(item.price?.selling_price);
     const itemTotal = item.item_total || (priceAmount * quantity);
 
-    const imageUrl = item.variant?.[0]?.images?.[0]?.image_url;
+    const imageUrl = variantInfo?.images?.[0]?.image_url || item.product?.image;
     console.log(imageUrl)
 
     return (
@@ -89,11 +91,11 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
 
                     <div className="cart-item-pricing">
                         <div className="cart-item-total">
-                            ₹{itemTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            {formatPrice(itemTotal)}
                         </div>
                         {quantity > 1 && (
                             <div className="cart-item-unit-price">
-                                {priceAmount.toLocaleString()} each
+                                {formatPrice(priceAmount)} each
                             </div>
                         )}
                     </div>

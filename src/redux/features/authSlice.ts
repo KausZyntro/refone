@@ -21,16 +21,16 @@ const getToken = () => {
 };
 
 const getUser = () => {
-    if(typeof window === "undefined") return null;
-    const auth = localStorage.getItem("auth");
-    if (!auth) return null;
+  if (typeof window === "undefined") return null;
+  const auth = localStorage.getItem("auth");
+  if (!auth) return null;
 
-    const { user, expiry } = JSON.parse(auth);
-    if(Date.now() > expiry){
-        localStorage.removeItem("auth");
-        return null;
-    }
-    return user;
+  const { user, expiry } = JSON.parse(auth);
+  if (Date.now() > expiry) {
+    localStorage.removeItem("auth");
+    return null;
+  }
+  return user;
 }
 /* ---------------- LOGIN ---------------- */
 
@@ -115,6 +115,8 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   registerSuccess: boolean;
+  isLoginModalOpen: boolean;
+  redirectPath: string | null;
 }
 
 const initialState: AuthState = {
@@ -123,6 +125,8 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
   registerSuccess: false,
+  isLoginModalOpen: false,
+  redirectPath: null,
 };
 
 /* ---------------- SLICE ---------------- */
@@ -143,6 +147,22 @@ const authSlice = createSlice({
 
     clearError: (state) => {
       state.error = null;
+    },
+
+    openLoginModal: (state) => {
+      state.isLoginModalOpen = true;
+    },
+
+    closeLoginModal: (state) => {
+      state.isLoginModalOpen = false;
+    },
+
+    setRedirectPath: (state, action) => {
+      state.redirectPath = action.payload;
+    },
+
+    clearRedirectPath: (state) => {
+      state.redirectPath = null;
     },
   },
 
@@ -207,5 +227,12 @@ const authSlice = createSlice({
 
 /* ---------------- EXPORTS ---------------- */
 
-export const { logout, clearError } = authSlice.actions;
+export const {
+  logout,
+  clearError,
+  openLoginModal,
+  closeLoginModal,
+  setRedirectPath,
+  clearRedirectPath,
+} = authSlice.actions;
 export default authSlice.reducer;

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { cartAPI } from "@/services/api";
 import type { AddToCartPayload, CartItem, CartState } from "@/types/cart";
+import { parsePrice } from "@/utils/format";
 
 // ── Thunk ─────────────────────────────────────────────────────────────────────
 export const fetchCartSummary = createAsyncThunk(
@@ -34,7 +35,7 @@ export const addToCart = createAsyncThunk(
 
 export const removeFromCart = createAsyncThunk(
     "cart/removeItem",
-    async (cart_id:number, { rejectWithValue }) => {
+    async (cart_id: number, { rejectWithValue }) => {
         try {
             // const response = await cartAPI.removeItem(cart_id);
             // // console.log(cart_id);
@@ -76,11 +77,13 @@ const cartSlice = createSlice({
             if (item) {
                 const diff = action.payload.quantity - Number(item.quantity);
                 item.quantity = action.payload.quantity;
-                item.item_total = action.payload.quantity * Number(item.price?.selling_price || 0);
+
+                const unitPrice = parsePrice(item.price?.selling_price);
+                item.item_total = action.payload.quantity * unitPrice;
                 state.totalQuantity += diff;
 
                 if (state.pricing) {
-                    state.pricing.subtotal = state.items.reduce((acc, curr) => acc + curr.item_total, 0);
+                    state.pricing.subtotal = state.items.reduce((acc, curr) => acc + (curr.item_total || 0), 0);
                     state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
                 }
             }
@@ -93,7 +96,7 @@ const cartSlice = createSlice({
                 state.items.splice(index, 1);
 
                 if (state.pricing) {
-                    state.pricing.subtotal = state.items.reduce((acc, curr) => acc + curr.item_total, 0);
+                    state.pricing.subtotal = state.items.reduce((acc, curr) => acc + (curr.item_total || 0), 0);
                     state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
                 }
             }
@@ -102,6 +105,52 @@ const cartSlice = createSlice({
             state.items = [];
             state.totalQuantity = 0;
             state.pricing = null;
+        },
+        addLocalItem(state, action: import("@reduxjs/toolkit").PayloadAction<CartItem>) {
+            const newItem = action.payload;
+            const idx = state.items.findIndex(
+                (i) => i.product_id === newItem.product_id && i.variant_id === newItem.variant_id
+            );
+
+            if (idx !== -1) {
+                const existingQty = Number(state.items[idx].quantity) || 0;
+                const newQty = Number(newItem.quantity) || 1;
+                state.items[idx] = {
+                    ...newItem,
+                    quantity: String(existingQty + newQty)
+                };
+            } else {
+                state.items.push(newItem);
+            }
+
+            // Sync total quantity
+            state.totalQuantity = state.items.reduce(
+                (total, item) => total + Number(item.quantity),
+                0
+            );
+
+            // Sync pricing
+            if (state.pricing) {
+                state.pricing.subtotal = state.items.reduce((acc, curr) => {
+                    const unitPrice = parsePrice(curr.price?.selling_price);
+                    const itemTotal = Number(curr.quantity) * unitPrice;
+                    return acc + itemTotal;
+                }, 0);
+                state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
+            } else {
+                // Initialize pricing if null
+                const subtotal = state.items.reduce((acc, curr) => {
+                    const unitPrice = parsePrice(curr.price?.selling_price);
+                    return acc + (Number(curr.quantity) * unitPrice);
+                }, 0);
+                state.pricing = {
+                    subtotal,
+                    delivery_charge: 0,
+                    discount: 0,
+                    tax: 0,
+                    grand_total: subtotal
+                };
+            }
         }
     },
     extraReducers: (builder) => {
@@ -160,11 +209,20 @@ const cartSlice = createSlice({
                     state.items.push(newItem);
                 }
 
-                // ✅ IMPORTANT: total quantity update karo
+                // ✅ IMPORTANT: total quantity aur pricing update karo
                 state.totalQuantity = state.items.reduce(
                     (total, item) => total + Number(item.quantity),
                     0
                 );
+
+                if (state.pricing) {
+                    state.pricing.subtotal = state.items.reduce((acc, curr) => {
+                        const unitPrice = parsePrice(curr.price?.selling_price);
+                        const itemTotal = Number(curr.quantity) * unitPrice;
+                        return acc + itemTotal;
+                    }, 0);
+                    state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
+                }
 
                 state.successMessage = payload.message || "Item added to cart";
             })
@@ -191,7 +249,7 @@ const cartSlice = createSlice({
 
                 if (state.pricing) {
                     state.pricing.subtotal = state.items.reduce(
-                        (acc, curr) => acc + curr.item_total,
+                        (acc, curr) => acc + (curr.item_total || 0),
                         0
                     );
                     state.pricing.grand_total =
@@ -210,5 +268,5 @@ const cartSlice = createSlice({
     },
 });
 
-export const { clearCartMessage, updateItemQuantity, removeItem, clearCart } = cartSlice.actions;
+export const { clearCartMessage, updateItemQuantity, removeItem, clearCart, addLocalItem } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -16,7 +16,7 @@ import ForgotPasswordModal from './ForgotPasswordModal';
 import VerifyOTPResetPasswordModal from './VerifyOTPResetPasswordModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
-import { logout, verifyOtpUser } from '@/redux/features/authSlice';
+import { logout, verifyOtpUser, openLoginModal, closeLoginModal, clearRedirectPath } from '@/redux/features/authSlice';
 import { fetchCartSummary } from '@/redux/features/cartSlice';
 import { RootState } from "@/redux/store";
 import { FaCartShopping, FaUser } from 'react-icons/fa6';
@@ -27,14 +27,14 @@ import { useRouter } from 'next/navigation';
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
+  // const [authOpen, setAuthOpen] = useState(false);
   const [otpOpen, setOtpOpen] = useState(false);
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [verifyResetPasswordOpen, setVerifyResetPasswordOpen] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
-  const { user, token } = useSelector((state: RootState) => state.auth);
+  const { user, token, isLoginModalOpen, redirectPath } = useSelector((state: RootState) => state.auth);
   const { totalQuantity } = useSelector((state: RootState) => state.cart);
   // console.log(user?.name);
   const router = useRouter();
@@ -121,7 +121,7 @@ const Navbar = () => {
                 </div>
                 // <button className="logout-btn" onClick={handleLogout}>Logout</button>
               ) : (
-                <button className="login-btn" onClick={() => setAuthOpen(true)}>
+                <button className="login-btn" onClick={() => dispatch(openLoginModal())}>
                   Login
                 </button>
               )
@@ -169,7 +169,7 @@ const Navbar = () => {
                   <button className="logout-btns" onClick={handleLogout}>Logout</button>
                 ) : (
                   <button className="login-btns" onClick={() => {
-                    setAuthOpen(true);
+                    dispatch(openLoginModal());
                     setMenuOpen(false);
                   }}
                   >
@@ -185,15 +185,15 @@ const Navbar = () => {
         )}
       </div>
       <AuthModal
-        isOpen={authOpen}
-        onClose={() => setAuthOpen(false)}
+        isOpen={isLoginModalOpen}
+        onClose={() => dispatch(closeLoginModal())}
         openOtp={(id) => {
           setUserId(id);
-          setAuthOpen(false);
+          dispatch(closeLoginModal());
           setOtpOpen(true);
         }}
         openForgotPassword={() => {
-          setAuthOpen(false);
+          dispatch(closeLoginModal());
           setForgotPasswordOpen(true);
         }}
       />
@@ -207,7 +207,7 @@ const Navbar = () => {
         }}
         openLogin={() => {
           setForgotPasswordOpen(false);
-          setAuthOpen(true);
+          dispatch(openLoginModal());
         }}
       />
       <VerifyOTPResetPasswordModal
@@ -216,7 +216,7 @@ const Navbar = () => {
         userId={userId}
         openLogin={() => {
           setVerifyResetPasswordOpen(false);
-          setAuthOpen(true);
+          dispatch(openLoginModal());
         }}
       />
       <OtpModal
@@ -229,6 +229,12 @@ const Navbar = () => {
               .then(() => {
                 setOtpOpen(false);
                 alert("Login Successfull!");
+
+                // Handle redirect if exists
+                if (redirectPath) {
+                  router.push(redirectPath);
+                  dispatch(clearRedirectPath());
+                }
               })
               .catch((err: any) => {
                 alert(err || "Invalid OTP");
