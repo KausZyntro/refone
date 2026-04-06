@@ -7,6 +7,7 @@ import { placeOrder, createPaymentStatus } from "@/redux/features/orderSlice";
 import { clearCart } from "@/redux/features/cartSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 const CheckoutSummary: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -46,7 +47,7 @@ const CheckoutSummary: React.FC = () => {
         const res = await loadRazorpay();
 
         if (!res) {
-            alert("Razorpay SDK failed to load. Are you online?");
+            toast.error("Razorpay SDK failed to load. Are you online?");
             return;
         }
 
@@ -85,11 +86,11 @@ const CheckoutSummary: React.FC = () => {
                         })
                     ).unwrap();
 
-                    alert("Order placed successfully!");
+                    toast.success("Order placed successfully!");
                     dispatch(clearCart());
-                    router.push("/");
+                    router.push("/order-success");
                 } catch (error: any) {
-                    alert(error || "Payment or Order failed. Please try again.");
+                    toast.error(error || "Payment or Order failed. Please try again.");
                 }
             },
             prefill: {

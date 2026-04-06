@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { FiArrowRight, FiShield, FiTag } from "react-icons/fi";
 
 const CartSummary: React.FC = () => {
@@ -25,7 +26,7 @@ const CartSummary: React.FC = () => {
         if (promoCode.trim()) {
             setAppliedPromo(true);
             setPromoCode("");
-            alert(`Promo code applied successfully!`);
+            toast.success(`Promo code applied successfully!`);
         }
     };
 

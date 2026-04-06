@@ -23,6 +23,7 @@ import { FaCartShopping, FaUser } from 'react-icons/fa6';
 import { LiaShoppingCartSolid } from 'react-icons/lia';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -109,7 +110,7 @@ const Navbar = () => {
                   </div>
                   {
                     profileOpen && (
-                      <div className="profile-dropdown">
+                      <div className="profile-dropdown" onClick={() => setProfileOpen(false)}>
                         <div className="dropdown-item">Orders</div>
                         <Link href={'/my-account'}><div className="dropdown-item">My Account</div></Link>
                         <div className="dropdown-item" onClick={handleLogout}>
@@ -228,7 +229,7 @@ const Navbar = () => {
               .unwrap()
               .then(() => {
                 setOtpOpen(false);
-                alert("Login Successfull!");
+                toast.success("Login Successful!");
 
                 // Handle redirect if exists
                 if (redirectPath) {
@@ -237,10 +238,10 @@ const Navbar = () => {
                 }
               })
               .catch((err: any) => {
-                alert(err || "Invalid OTP");
+                toast.error(err || "Invalid OTP");
               });
           } else {
-            alert("User ID missing, please try logging in again.");
+            toast.error("User ID missing, please try logging in again.");
           }
         }}
       />

@@ -9,6 +9,7 @@ import '../../styles/AddressManagement.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { addAddress, deleteAddress, fetchAddresses, updateAddress } from '@/redux/features/addressSlice';
+import { toast } from 'react-toastify';
 // import { RootState } from '@reduxjs/toolkit/query';
 
 
@@ -49,16 +50,17 @@ const AddressList = () => {
         if (confirmDelete) {
             try {
                 await dispatch(deleteAddress(id)).unwrap();
+                toast.success("Address deleted successfully");
             } catch (err: any) {
                 console.error("Delete Address Error:", err);
-                alert(err || "Failed to delete address.");
+                toast.error(err || "Failed to delete address.");
             }
         }
     };
 
     const handleSave = async (addressData: Omit<Address, 'id' | 'userId'>) => {
         if (!userId || !user) {
-            alert("User session not found. Please login again.");
+            toast.error("User session not found. Please login again.");
             return;
         }
 
@@ -80,12 +82,13 @@ const AddressList = () => {
             } else {
                 await dispatch(addAddress(finalPayload)).unwrap();
             }
+            toast.success("Address saved successfully");
             setIsModalOpen(false);
             setEditingAddress(null);
             dispatch(fetchAddresses(userId));
         } catch (err: any) {
             console.error("Save Address Error:", err);
-            alert(err || "Failed to save address.");
+            toast.error(err || "Failed to save address.");
         }
     };
 

@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useRef } from "react";
-import "@/styles/AuthModal.css";
+import { FaTimes } from 'react-icons/fa';
+import styles from './OtpModal.module.css';
+import { toast } from 'react-toastify';
 import Lottie from "lottie-react";
 import animationData from "../../../public/lottie/shopping-cart.json";
 
@@ -42,7 +44,7 @@ const OtpModal = ({
     const otpCode = otp.join("");
 
     if (otpCode.length !== 6) {
-      alert("Enter valid 6 digit OTP");
+      toast.error("Enter valid 6 digit OTP");
       return;
     }
 

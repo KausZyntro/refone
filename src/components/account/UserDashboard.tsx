@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "@/styles/UserDashboard.css";
+import { toast } from 'react-toastify';
 import {
     FiUser,
     FiShoppingBag,
@@ -82,7 +83,7 @@ const UserDashboard = () => {
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         // Here you would typically send the update API request
-        alert("Profile update would trigger here!");
+        toast.info("Profile update would trigger here!");
     };
 
     const handleLogout = () => {
@@ -134,7 +135,7 @@ const UserDashboard = () => {
                             <FiCreditCard className="sidebar-icon" />
                             Payment Method
                         </li>
-                       
+
                         <li
                             className="sidebar-item"
                             onClick={handleLogout}

@@ -6,6 +6,7 @@ import animationData from "../../../public/lottie/shopping-cart.json";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, registerUser, clearError } from "@/redux/features/authSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+import { toast } from "react-toastify";
 
 const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: boolean; onClose: () => void; openOtp: (userId: number) => void; openForgotPassword?: () => void }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -27,7 +28,7 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
 
   useEffect(() => {
     if (registerSuccess) {
-      alert("Registration Successful! Please login.");
+      toast.success("Registration Successful! Please login.");
       setIsLogin(true);
     }
   }, [registerSuccess]);
@@ -48,7 +49,7 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isLogin) {
-      if (!email || email.length !== 10) return alert("Please enter a valid 10-digit phone number");
+      if (!email || email.length !== 10) return toast.error("Please enter a valid 10-digit phone number");
 
       dispatch(loginUser({ email }))
         .unwrap()
@@ -62,8 +63,8 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
           }
         });
     } else {
-      if (!name || !email || !password || !phone) return alert("Please fill all required fields");
-      if (password !== confirmPassword) return alert("Passwords do not match");
+      if (!name || !email || !password || !phone) return toast.error("Please fill all required fields");
+      if (password !== confirmPassword) return toast.error("Passwords do not match");
       dispatch(registerUser({ name, email, password, phone, role_id: 3 }));
     }
   };

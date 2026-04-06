@@ -6,6 +6,7 @@ import { CiBank } from "react-icons/ci";
 import { FaRegCreditCard, FaRupeeSign, FaTruck } from "react-icons/fa6";
 import { MdPayment } from "react-icons/md";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
+import { toast } from "react-toastify";
 import { AppDispatch, RootState } from "@/redux/store";
 import { addToCart, clearCartMessage, fetchCartSummary } from "@/redux/features/cartSlice";
 import Toast from "@/components/ui/Toast";
@@ -124,7 +125,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   // };
   const handleAddToCart = async () => {
     if (!userId) {
-      alert("Login required");
+      toast.error("Login required");
       return;
     }
     const priceId = pricing?.id;

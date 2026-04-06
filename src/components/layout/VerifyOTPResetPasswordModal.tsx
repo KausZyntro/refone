@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import "@/styles/AuthModal.css";
+import { toast } from "react-toastify";
 import Lottie from "lottie-react";
 import animationData from "../../../public/lottie/shopping-cart.json";
 import { authAPI } from "@/services/api";
@@ -25,14 +26,14 @@ const VerifyOTPResetPasswordModal = ({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!otp || !newPassword) return alert("Please fill all fields");
-        if (!userId) return alert("User ID is missing. Please restart the process.");
+        if (!otp || !newPassword) return toast.error("Please fill all fields");
+        if (!userId) return toast.error("User ID is missing. Please restart the process.");
 
         setIsLoading(true);
         setError(null);
         try {
             await authAPI.resetPassword(userId, otp, newPassword);
-            alert("Password reset successful! Please login with your new password.");
+            toast.success("Password reset successful! Please login with your new password.");
             onClose();
             openLogin();
         } catch (err: any) {

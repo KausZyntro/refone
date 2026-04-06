@@ -11,6 +11,7 @@ import { openLoginModal, setRedirectPath } from "@/redux/features/authSlice";
 import { createPaymentStatus, placeOrder } from "@/redux/features/orderSlice";
 import { useRouter } from "next/navigation";
 import { parsePrice } from "@/utils/format";
+import { toast } from "react-toastify";
 
 interface AddToCartSectionProps {
     product: ProductTest | null;
@@ -48,7 +49,7 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
 
     const handleAddToCart = async () => {
         if (!product || !selectedVariant) {
-            alert("Please select a variant first.");
+            toast.error("Please select a variant first.");
             return;
         }
 
@@ -78,7 +79,7 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
                 }
             }));
             setAddedToCart(true);
-            alert("Item added to cart (Guest)!");
+            toast.success("Item added to cart (Guest)!");
             return;
         }
 
@@ -91,16 +92,16 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
                 quantity: 1,
             })).unwrap();
             setAddedToCart(true);
-            alert("Item added to cart!");
+            toast.success("Item added to cart!");
         } catch (error: any) {
-            alert(error || "Failed to add to cart");
+            toast.error(error || "Failed to add to cart");
         }
         setIsLoading(false);
     };
 
     const handleDirectBuy = async () => {
         if (!product || !selectedVariant) {
-            alert("Please select a variant first.");
+            toast.error("Please select a variant first.");
             return;
         }
 
@@ -151,7 +152,7 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
             }
             router.push("/checkout");
         } catch (error: any) {
-            alert(error || "Failed to proceed to checkout");
+            toast.error(error || "Failed to proceed to checkout");
         } finally {
             setIsLoading(false);
         }

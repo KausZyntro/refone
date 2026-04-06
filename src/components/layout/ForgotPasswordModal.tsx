@@ -4,6 +4,7 @@ import "@/styles/AuthModal.css";
 import Lottie from "lottie-react";
 import animationData from "../../../public/lottie/shopping-cart.json";
 import { authAPI } from "@/services/api";
+import { toast } from "react-toastify";
 
 const ForgotPasswordModal = ({
     isOpen,
@@ -24,7 +25,7 @@ const ForgotPasswordModal = ({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email) return alert("Please enter your email");
+        if (!email) return toast.error("Please enter your email");
 
         setIsLoading(true);
         setError(null);
@@ -32,7 +33,7 @@ const ForgotPasswordModal = ({
             const response = await authAPI.forgotPassword(email);
             // Expected response structure has data.userId
             const uid = response?.data?.userId;
-            alert(response?.message || "OTP has been sent to your registered email address.");
+            toast.success(response?.message || "OTP has been sent to your registered email address.");
             if (uid) {
                 onClose();
                 openOtp(uid);
