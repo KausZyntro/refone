@@ -40,7 +40,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     product={product}
                     selectedVariant={selectedVariant}
                     showWishlist={false}
-                    showBuyNow={true}
+                    showBuyNow={false}
                 />
             </div>
         </div>

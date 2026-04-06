@@ -138,11 +138,13 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                             <AddToCartSectiontest
                                 product={product}
                                 selectedVariant={selectedVariant}
+                                showWishlist={false}
+                                showBuyNow={true}
                             />
-                            <div  className={styles.specsSection}>
-                                <ProductSpecstest product={product}  selectedVariant={selectedVariant} />                     
+                            <div className={styles.specsSection}>
+                                <ProductSpecstest product={product} selectedVariant={selectedVariant} />
                             </div>
-                            
+
                         </div>
                     </div>
 

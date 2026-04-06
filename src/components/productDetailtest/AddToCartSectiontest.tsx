@@ -20,7 +20,7 @@ interface AddToCartSectionProps {
 }
 
 const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, selectedVariant, showWishlist = true,
-    showBuyNow = true }) => {
+    showBuyNow = false }) => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const [addedToCart, setAddedToCart] = useState(false);
@@ -179,14 +179,24 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
                             : "Add to Cart"}
                 </button>
 
-                <button
-                    className={styles.buyNowBtn}
-                    onClick={handleDirectBuy}
-                    disabled={isLoading}
-                >
-                    <FaBolt /> Buy Now
-                </button>
+                {showBuyNow && (
+                    <button
+                        className={styles.buyNowBtn}
+                        onClick={handleDirectBuy}
+                        disabled={isLoading}
+                    >
+                        <FaBolt /> Buy Now
+                    </button>
+                )}
             </div>
+
+            {showWishlist && (
+                <div className={styles.wishlistRow}>
+                    <button className={styles.wishlistBtn}>
+                        <FaHeart /> Add to Wishlist
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
