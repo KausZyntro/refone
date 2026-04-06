@@ -65,7 +65,7 @@ const initialState: ProductState = {
     pagination: null,
     filters: null,
     isLoading: false,
-    isProductsLoading: false,
+    isProductsLoading: true,
     error: null,
 };
 

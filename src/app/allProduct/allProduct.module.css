@@ -1,10 +1,30 @@
 .pageContainer {
     max-width: 1400px;
     /* margin: 0 auto; */
-    margin: 176px auto 32px;
+    margin: 91px auto 32px;
     padding: 20px;
     font-family: 'Inter', sans-serif;
     color: #333;
+}
+
+.skeletonBox {
+    background: linear-gradient(90deg,
+            #e5e7eb 25%,
+            #f3f4f6 37%,
+            #e5e7eb 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+    border-radius: 6px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
 }
 
 .breadcrumbs {
@@ -424,13 +444,83 @@
         grid-template-columns: 1fr;
     }
 
-    .sidebar {
+    .mainLayout>.sidebar {
         display: none;
+    }
+
+    .pageContainer {
+        margin: 152px auto 16px;
     }
 }
 
 @media (max-width: 480px) {
     .productGrid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile Filter Button */
+.mobileFilterBtn {
+    display: none;
+    padding: 8px 16px;
+    border: 1px solid #006ab0;
+    background: white;
+    color: #006ab0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    align-items: center;
+    gap: 8px;
+}
+
+
+
+@keyframes slideIn {
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Overlay */
+.mobileFilterOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 99999;
+}
+
+/* Drawer */
+.mobileFilterDrawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    max-width: 320px;
+    height: 100%;
+    background: white;
+    padding: 15px;
+    overflow-y: auto;
+    z-index: 100000;
+    transform: translateX(-100%);
+    animation: slideIn 0.3s ease forwards;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.mobileFilterHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* SHOW BUTTON ONLY ON MOBILE */
+@media (max-width: 768px) {
+    .mobileFilterBtn {
+        display: flex;
     }
 }

@@ -67,10 +67,10 @@ const Navbar = () => {
               {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </div>
 
-            <div className="logo">
+            <Link href="/" className="logo">
               <Image src={"/logo.png"} alt='logo' height={50} width={120} />
 
-            </div>
+            </Link>
           </div>
 
           <div className="search-box">
@@ -130,14 +130,14 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="nav-bottom">
+        {/* <div className="nav-bottom">
           <div className="menu-item">All <FiChevronDown size={14} /></div>
           <div className="menu-item">Sell Phone <FiChevronDown size={14} /></div>
           <div className="menu-item">Sell Gadgets <FiChevronDown size={14} /></div>
           <div className="menu-item">Buy Refurbished Devices <FiChevronDown size={14} /></div>
           <div className="menu-item">Buy Laptop <FiChevronDown size={14} /></div>
           <div className="menu-item">More <FiChevronDown size={14} /></div>
-        </div>
+        </div> */}
 
         {menuOpen && (
           <div className="mobile-menu">

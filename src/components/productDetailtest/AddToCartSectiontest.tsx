@@ -98,145 +98,96 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
         setIsLoading(false);
     };
 
-    const handleBuyNow = async () => {
-        if (!user?.id) {
-            alert("Please login to proceed.");
-            return;
-        }
-
-        if (!selectedVariant) {
+    const handleDirectBuy = async () => {
+        if (!product || !selectedVariant) {
             alert("Please select a variant first.");
             return;
         }
 
-        if (!selectedAddressId) {
-            alert("Please select a delivery address in your profile/checkout first.");
-            // Optionally redirect to a checkout/address page
-            // router.push("/checkout"); 
+        if (!user?.id) {
+            dispatch(setRedirectPath("/checkout"));
+            dispatch(openLoginModal());
+
+            // Still add locally so it's in the cart when they log in
+            if (!addedToCart) {
+                dispatch(addLocalItem({
+                    id: Date.now(),
+                    product_id: product.id,
+                    variant_id: selectedVariant.id,
+                    quantity: 1,
+                    item_total: parsePrice(selectedVariant.pricing.selling_price),
+                    product: {
+                        name: product.name,
+                        image: selectedVariant.images[0]?.image_url || ""
+                    },
+                    variant: [{
+                        storage: selectedVariant.storage,
+                        color: selectedVariant.color,
+                        images: selectedVariant.images.map(img => ({
+                            id: img.id,
+                            variant_id: img.variant_id,
+                            image_url: img.image_url
+                        }))
+                    }],
+                    price: {
+                        selling_price: selectedVariant.pricing.selling_price
+                    }
+                }));
+                setAddedToCart(true);
+            }
             return;
         }
 
-        const res = await loadRazorpay();
-        if (!res) {
-            alert("Razorpay SDK failed to load. Are you online?");
-            return;
+        try {
+            setIsLoading(true);
+            if (!addedToCart) {
+                await dispatch(addToCart({
+                    user_id: Number(user.id),
+                    product_id: product.id,
+                    variant_id: selectedVariant.id,
+                    quantity: 1,
+                })).unwrap();
+                setAddedToCart(true);
+            }
+            router.push("/checkout");
+        } catch (error: any) {
+            alert(error || "Failed to proceed to checkout");
+        } finally {
+            setIsLoading(false);
         }
-
-        const amount = parsePrice(selectedVariant.pricing.selling_price);
-
-        const options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_mock_123",
-            amount: Math.round(amount * 100),
-            currency: "INR",
-            name: "Refone",
-            description: `Payment for ${product?.name}`,
-            handler: async function (response: any) {
-                try {
-                    // 1. Create Payment Status
-                    const pmtRes = await dispatch(
-                        createPaymentStatus({
-                            pmt_order_id: response.razorpay_order_id || "mock_order_id_" + Date.now(),
-                            payment_status: "success",
-                            payment_method: "online",
-                            amount: amount,
-                        })
-                    ).unwrap();
-
-                    const pymt_id = pmtRes.id;
-
-                    // 2. Place Order
-                    await dispatch(
-                        placeOrder({
-                            customer_id: Number(user.id),
-                            variant_id: Number(selectedVariant.id),
-                            product_id: Number(product?.id),
-                            quantity: 1,
-                            address_id: selectedAddressId,
-                            order_id: response.razorpay_order_id || "mock_order_id_" + Date.now(),
-                            pymt_id: pymt_id,
-                        })
-                    ).unwrap();
-
-                    alert("Order placed successfully!");
-                    router.push("/order-success"); // Or wherever appropriate
-                } catch (error: any) {
-                    alert(error || "Payment or Order failed. Please try again.");
-                }
-            },
-            prefill: {
-                name: user?.name,
-                email: user?.email,
-                contact: user?.phone,
-            },
-            theme: {
-                color: "#2C2C2C",
-            },
-        };
-
-        const paymentObject = new (window as any).Razorpay(options);
-        paymentObject.open();
     };
 
     return (
         <div className={styles.addToCart}>
-            {showBuyNow && (
-                <div className={styles.buttonRow}>
-                    <button
-                        className={styles.cartBtn}
-                        // onClick={handleAddToCart}
-                        // onClick={addedToCart ? () => router.push("/cart"):handleAddToCart}
-                        onClick={() => {
-                            if (addedToCart) {
-                                if (!user?.id) {
-                                    dispatch(setRedirectPath("/cart"));
-                                    dispatch(openLoginModal());
-                                    return;
-                                }
-                                router.push("/cart");
-                            } else {
-                                handleAddToCart();
-                            }
-                        }}
-                        // disabled={isMounted ? isCartLoading : false}
-                        disabled={isLoading}
-                    >
-                        <FaShoppingCart />
-                        {/* {
-                    isCartLoading ? "Adding..."
-                        : addedToCart
-                        ? "Go to Cart"
-                        : "Add to Cart"} */}
-                        {isLoading
-                            ? "Adding..."
-                            : addedToCart
-                                ? "Go to Cart"
-                                : "Add to Cart"}
-                    </button>
-
-                    {/* <button
-                    className={styles.buyNowBtn}
-                    onClick={addedToCart ? () => router.push("/cart") : handleAddToCart}
-                    disabled={isProcessingPayment || isPlacingOrder}
+            <div className={styles.buttonRow}>
+                <button
+                    className={styles.cartBtn}
+                    onClick={() => {
+                        if (addedToCart) {
+                            router.push("/cart");
+                        } else {
+                            handleAddToCart();
+                        }
+                    }}
+                    disabled={isLoading}
                 >
-                    <FaBolt /> {isProcessingPayment || isPlacingOrder ? "Adding..."
+                    <FaShoppingCart />
+                    {isLoading
+                        ? "Adding..."
                         : addedToCart
-                        ? "Go to Cart"
-                        : "Add to Cart"}
-                </button> */}
-                </div>
-            )}
+                            ? "Go to Cart"
+                            : "Add to Cart"}
+                </button>
 
-            {showWishlist && (
-                <div className={styles.wishlistRow}>
-                    <button className={styles.wishlistBtn}>
-                        <FaHeart /> Add to Wishlist
-                    </button>
-                </div>
-            )}
-
-
+                <button
+                    className={styles.buyNowBtn}
+                    onClick={handleDirectBuy}
+                    disabled={isLoading}
+                >
+                    <FaBolt /> Buy Now
+                </button>
+            </div>
         </div>
-
     );
 };
 

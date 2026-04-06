@@ -14,6 +14,30 @@ interface ProductInfoTestProps {
 const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVariant, setSelectedVariant }) => {
   // console.log(product)
 
+  if (!selectedVariant) {
+  return (
+    <div className={styles.productInfo}>
+      <div className={styles.skeleton} style={{ height: 24, width: "60%" }} />
+
+      <div className={styles.skeleton} style={{ height: 16, width: "40%", marginTop: 10 }} />
+
+      <div className={styles.skeleton} style={{ height: 28, width: "30%", marginTop: 15 }} />
+
+      <div className={styles.skeleton} style={{ height: 16, width: "50%", marginTop: 10 }} />
+
+      <div style={{ display: "flex", gap: 10, marginTop: 15 }}>
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className={styles.skeleton}
+            style={{ width: 32, height: 32, borderRadius: "50%" }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
   return (
     <div className={styles.productInfo}>
       <h1 className={styles.title}>

@@ -1,25 +1,20 @@
 .addToCart {
     margin-top: 24px;
-        display: flex;
-    align-items: self-start;
-    /* justify-content: space-between; */
-    justify-content: space-around;
 }
 
 .buttonRow {
     /* display: flex;
     gap: 12px;
     margin-bottom: 12px; */
-        display: flex;
+    display: flex;
     gap: 12px;
     margin-bottom: 12px;
     flex-direction: row;
-    
+
 }
 
 .cartBtn,
-.buyNowBtn,
-.wishlistBtn {
+.buyNowBtn {
     flex: 1;
     display: inline-flex;
     align-items: center;
@@ -35,6 +30,7 @@
     line-height: 1;
     border: 1px solid transparent;
 }
+
 .cartBtn,
 .buyNowBtn {
     flex: 1;
@@ -44,7 +40,7 @@
     background-color: #006ab0;
     color: #ffffff;
     padding: 15px 29px;
-    
+
 }
 
 .cartBtn:hover {
@@ -67,23 +63,7 @@
     cursor: not-allowed;
 }
 
-.wishlistRow {
-    margin-bottom: 24px;
-}
 
-.wishlistBtn {
-    background-color: #ffffff;
-    color: rgb(252, 84, 84);
-    border-color: rgb(252, 84, 84);
-    width: 100%;
-    font-weight: 500;
-}
-
-.wishlistBtn:hover {
-    background-color: #f9f9f9;
-    border-color: #ccc;
-    color: #222;
-}
 
 .shippingInfo {
     display: flex;

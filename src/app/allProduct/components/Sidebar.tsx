@@ -9,13 +9,15 @@ interface SidebarProps {
     selectedFilters: FilterState;
     onFilterChange: (key: keyof FilterState, value: any) => void;
     onClearAll: () => void;
+    onClose?: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
     availableFilters,
     selectedFilters,
     onFilterChange,
-    onClearAll
+    onClearAll,
+    onClose
 }) => {
     if (!availableFilters) return null;
 
@@ -28,6 +30,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         } else {
             onFilterChange(key, [...current, value]);
         }
+        if (onClose) onClose();
+    };
+
+    const handleSingleSelect = (key: keyof FilterState, value: any) => {
+        onFilterChange(key, value);
+        if (onClose) onClose();
     };
 
     return (
@@ -47,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <div className={styles.filterHeader}>Brand</div>
                     <ul className={styles.filterList}>
                         {availableFilters.brands.map((brand: any) => (
-                            <li key={brand.id} className={styles.filterItem} onClick={() => onFilterChange('brand_id', selectedFilters.brand_id === brand.id ? null : brand.id)}>
+                            <li key={brand.id} className={styles.filterItem} onClick={() => handleSingleSelect('brand_id', selectedFilters.brand_id === brand.id ? null : brand.id)}>
                                 <input
                                     type="radio"
                                     checked={selectedFilters.brand_id === brand.id}
@@ -65,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <div className={styles.filterHeader}>Campaign</div>
                     <ul className={styles.filterList}>
                         {availableFilters.campaign.map((campaign: any) => (
-                            <li key={campaign.id} className={styles.filterItem} onClick={() => onFilterChange('campaign_id', selectedFilters.campaign_id === campaign.id ? null : campaign.id)}>
+                            <li key={campaign.id} className={styles.filterItem} onClick={() => handleSingleSelect('campaign_id', selectedFilters.campaign_id === campaign.id ? null : campaign.id)}>
                                 <input
                                     type="radio"
                                     checked={selectedFilters.campaign_id === campaign.id}
@@ -106,7 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <div className={styles.filterHeader}>Availability</div>
                     <ul className={styles.filterList}>
                         {availableFilters.availability.map((avail: any) => (
-                            <li key={avail.key} className={styles.filterItem} onClick={() => onFilterChange('in_stock', selectedFilters.in_stock === (avail.key === 'in_stock') ? null : (avail.key === 'in_stock'))}>
+                            <li key={avail.key} className={styles.filterItem} onClick={() => handleSingleSelect('in_stock', selectedFilters.in_stock === (avail.key === 'in_stock') ? null : (avail.key === 'in_stock'))}>
                                 <input
                                     type="checkbox"
                                     checked={avail.key === 'in_stock' ? !!selectedFilters.in_stock : selectedFilters.in_stock === false}
