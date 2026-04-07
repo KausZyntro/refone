@@ -313,7 +313,9 @@ const Navbar = () => {
                   {
                     profileOpen && (
                       <div className="profile-dropdown" onClick={() => setProfileOpen(false)}>
-                        <div className="dropdown-item">Orders</div>
+                        <Link href={'/my-orders'}>
+                          <div className="dropdown-item">My Orders</div>
+                        </Link>
                         <Link href={'/my-account'}><div className="dropdown-item">My Account</div></Link>
                         <div className="dropdown-item" onClick={handleLogout}>
                           Logout
@@ -322,7 +324,6 @@ const Navbar = () => {
                     )
                   }
                 </div>
-                // <button className="logout-btn" onClick={handleLogout}>Logout</button>
               ) : (
                 <button className="login-btn" onClick={() => dispatch(openLoginModal())}>
                   Login
@@ -333,18 +334,11 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* <div className="nav-bottom">
-          <div className="menu-item">All <FiChevronDown size={14} /></div>
-          <div className="menu-item">Sell Phone <FiChevronDown size={14} /></div>
-          <div className="menu-item">Sell Gadgets <FiChevronDown size={14} /></div>
-          <div className="menu-item">Buy Refurbished Devices <FiChevronDown size={14} /></div>
-          <div className="menu-item">Buy Laptop <FiChevronDown size={14} /></div>
-          <div className="menu-item">More <FiChevronDown size={14} /></div>
-        </div> */}
-
         {menuOpen && (
           <div className="mobile-menu">
-            <div className="mobile-item">Orders</div>
+            <Link href={'/my-orders'}>
+              <div className="mobile-item" onClick={() => setMenuOpen(false)}>Orders</div>
+            </Link>
             <div className="mobile-item">Sell Phone</div>
             <div className="mobile-item">Sell Gadgets</div>
             <div className="mobile-item">Buy Refurbished Devices</div>
@@ -358,15 +352,6 @@ const Navbar = () => {
               </div>
             </div>
             <div className="mobile-item-btn">
-              {/* <button
-                className="login-btns"
-                onClick={() => {
-                  setAuthOpen(true);
-                  setMenuOpen(false);
-                }}
-              >
-                Login
-              </button> */}
               {
                 mounted && token ? (
                   <button className="logout-btns" onClick={handleLogout}>Logout</button>
@@ -381,10 +366,7 @@ const Navbar = () => {
                 )
               }
             </div>
-
-
           </div>
-
         )}
       </div>
       <AuthModal
@@ -452,6 +434,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
