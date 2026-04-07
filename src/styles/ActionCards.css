@@ -6,17 +6,23 @@
   width: 90%;
   z-index: 3;
 }
+
 .action-container {
   display: flex;
   gap: 20px;
   justify-content: center;
   align-items: stretch;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
 .action-icon-gradient {
   color: linear-gradient(135deg, #000000, #006ab0);
   -webkit-text-fill-color: transparent;
 }
+
 .action-icon {
   color: #006ab0;
   font-size: 32px;
@@ -25,13 +31,16 @@
 
 /* Card */
 .action-card {
+  text-decoration: none;
   display: flex;
   align-items: center;
   gap: 15px;
   background: #d0cece;
   border-radius: 16px;
-  padding: 20px 24px;
-  width: 320px;
+  padding: 15px 20px;
+  flex: 1;
+  min-width: 0;
+  max-width: 320px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -66,38 +75,81 @@
 }
 
 /* 🔥 Responsive */
-@media (max-width: 1024px) {
-  .action-card {
-    width: 280px;
-  }
-}
-
 @media (max-width: 768px) {
+  .action-cards-hero {
+    bottom: 40px;
+    width: 95%;
+  }
+
   .action-container {
-    flex-direction: column;
-    align-items: center;
+    gap: 10px;
   }
 
   .action-card {
-    width: 100%;
-    max-width: 400px;
-  }
-}
-
-@media (max-width: 480px) {
-  .action-card {
-    padding: 16px;
+    padding: 12px;
+    gap: 10px;
+    border-radius: 12px;
   }
 
-  .icon {
-    font-size: 30px;
+  .action-icon {
+    font-size: 24px;
   }
 
   .content h3 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .content p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 580px) {
+  .action-cards-hero {
+    bottom: 20px;
+  }
+
+  .action-container {
+    gap: 8px;
+  }
+
+  .action-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 10px;
+    gap: 5px;
+  }
+
+  .icon {
+    font-size: 24px;
+  }
+
+  .action-icon {
+    font-size: 20px;
+  }
+
+  .content h3 {
     font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .content p {
+    display: none;
+    /* Hide subtitle on very small screens to save space */
+  }
+}
+
+@media (max-width: 380px) {
+  .action-container {
+    gap: 5px;
+  }
+
+  .action-card {
+    padding: 8px 4px;
+  }
+
+  .content h3 {
+    font-size: 11px;
   }
 }

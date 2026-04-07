@@ -52,10 +52,11 @@
 .hero-content p {
   font-size: clamp(12px, 1.5vw, 20px);
 }
-.cta-section{
-    display: flex;
-    width: 40%;
-    justify-content: space-around;
+
+.cta-section {
+  display: flex;
+  width: 40%;
+  justify-content: space-around;
 }
 
 .cta-btn-buy {
@@ -70,6 +71,7 @@
   font-size: 14px;
   transition: 0.3s ease;
 }
+
 .cta-btn-sell {
   background: #9b9b9b;
   color: white;
@@ -105,20 +107,22 @@
   justify-content: center;
   transition: 0.3s ease;
 }
-.swiper-navigation-icon{
-   width: 10px !important;
+
+.swiper-navigation-icon {
+  width: 10px !important;
 }
 
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
   background: #006aaf;
 }
-.swiper-button-prev{
-    margin-left: 25px !important;
+
+.swiper-button-prev {
+  margin-left: 25px !important;
 }
 
-.swiper-button-next{
-    margin-right: 25px;
+.swiper-button-next {
+  margin-right: 25px;
 }
 
 
@@ -133,11 +137,11 @@
     border-radius: 20px;
   }
 
-.swiper-button-next,
-.swiper-button-prev {
-  width: 35px;
-  height: 35px;
-}
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 
@@ -147,6 +151,7 @@
   }
 
   .hero-content {
+    top: 30%;
     left: 6%;
     max-width: 90%;
   }
@@ -160,20 +165,24 @@
   .slide::after {
     border-radius: 14px;
   }
-  .cta-btn-buy{
+
+  .cta-btn-buy {
     padding: 8px 16px;
     font-size: 15px;
     border-radius: 7px;
   }
-  .cta-btn-sell{
+
+  .cta-btn-sell {
     padding: 8px 16px;
     font-size: 15px;
     border-radius: 7px;
   }
-  .swiper-button-next{
+
+  .swiper-button-next {
     margin-right: 0px;
   }
-  .swiper-button-prev{
+
+  .swiper-button-prev {
     margin-left: 0px !important;
   }
 }
@@ -182,28 +191,34 @@
 /* Small Mobile */
 @media (max-width: 480px) {
   .heroSwiper {
-    height: 200px;
+    height: 280px;
+    /* Increased from 200px to accommodate action cards */
   }
 
   .slide img,
   .slide::after {
     border-radius: 10px;
   }
-  .cta-section{
+
+  .cta-section {
     display: flex;
     width: 33%;
     justify-content: space-around;
-}
-  .cta-btn-buy{
+  }
+
+  .cta-btn-buy {
     padding: 5px 7px;
   }
-  .cta-btn-sell{
+
+  .cta-btn-sell {
     padding: 5px 7px;
   }
-  .swiper-button-next{
+
+  .swiper-button-next {
     margin-right: 0px;
   }
-  .swiper-button-prev{
+
+  .swiper-button-prev {
     margin-left: 0px !important;
   }
 

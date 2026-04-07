@@ -97,6 +97,9 @@ a {
   .swiper-button-prev{
     margin-left: 0px !important;
   }
+  .container-hero{
+    margin: 170px auto 32px;
+  }
 }
 
 /* ========================= */
