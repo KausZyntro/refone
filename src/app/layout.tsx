@@ -6,6 +6,7 @@ import ReduxProvider from "@/redux/ReduxProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Refone",
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          <Navbar />
+          <Suspense fallback={null}>
+            <Navbar />
+          </Suspense>
           {children}
           <Footer />
           <ToastContainer position="top-right" autoClose={3000} />

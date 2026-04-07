@@ -101,8 +101,8 @@ export const productAPI = {
         const response = await api.get("/filter-list");
         return response.data;
     },
-    getProducts: async (params: string = "") => {
-        const response = await api.get(`/product-list${params ? `?${params}` : ""}`);
+    getProducts: async (params: string = "", config: any = {}) => {
+        const response = await api.get(`/product-list${params ? `?${params}` : ""}`, config);
         return response.data;
     },
 }

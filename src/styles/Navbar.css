@@ -352,6 +352,43 @@ body {
   font-size: 14px;
 }
 
+.recent-searches {
+  padding: 8px 0;
+}
+
+.dropdown-title {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #444;
+  font-size: 14px;
+}
+
+.recent-item:hover {
+  background: #f8f9fa;
+  color: #006aaf;
+}
+
+.recent-item svg {
+  color: #aaa;
+}
+
+.recent-item:hover svg {
+  color: #006aaf;
+}
+
 @media (max-width: 990px) {
   .search-results-dropdown {
     width: calc(100vw - 40px);

@@ -27,6 +27,9 @@ import { toast } from 'react-toastify';
 import { productAPI } from '@/services/api';
 import { debounce } from '@/utils/debounce';
 
+const SEARCH_HISTORY_KEY = 'recent_searches';
+const MAX_HISTORY = 5;
+
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -47,6 +50,9 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [searchCache, setSearchCache] = useState<Record<string, any[]>>({});
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const abortControllerRef = React.useRef<AbortController | null>(null);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -59,6 +65,28 @@ const Navbar = () => {
     }
   }, [user?.id, dispatch]);
 
+  // Load search history
+  useEffect(() => {
+    const history = localStorage.getItem(SEARCH_HISTORY_KEY);
+    if (history) {
+      try {
+        setRecentSearches(JSON.parse(history));
+      } catch (e) {
+        console.error("Error parsing search history", e);
+      }
+    }
+  }, []);
+
+  const saveToHistory = useCallback((query: string) => {
+    if (!query.trim() || query.length < 3) return;
+    setRecentSearches(prev => {
+      const filtered = prev.filter(item => item.toLowerCase() !== query.toLowerCase());
+      const updated = [query, ...filtered].slice(0, MAX_HISTORY);
+      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
   // Sync search state with URL if on allProduct page
   useEffect(() => {
     if (pathname === '/allProduct') {
@@ -69,8 +97,17 @@ const Navbar = () => {
 
   const performSearch = useCallback(
     debounce(async (query: string) => {
-      if (!query.trim()) {
+      const trimmedQuery = query.trim().toLowerCase();
+
+      if (trimmedQuery.length < 3) {
         setSearchResults([]);
+        setIsSearching(false);
+        return;
+      }
+
+      // Check cache
+      if (searchCache[trimmedQuery]) {
+        setSearchResults(searchCache[trimmedQuery]);
         setIsSearching(false);
         return;
       }
@@ -84,25 +121,57 @@ const Navbar = () => {
         return;
       }
 
+      // Cancel previous request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      abortControllerRef.current = new AbortController();
+
       setIsSearching(true);
       try {
-        const response = await productAPI.getProducts(`search=${query}&limit=5`);
-        // The API returns { status, code, data: { data: [...] } }
-        setSearchResults(response?.data?.data || []);
-      } catch (error) {
-        console.error("Search error:", error);
+        const response = await productAPI.getProducts(`search=${query}&limit=5`, {
+          signal: abortControllerRef.current.signal
+        });
+
+        if (abortControllerRef.current.signal.aborted) return;
+
+        const results = response?.data?.data || [];
+        setSearchResults(results);
+
+        // Update cache
+        setSearchCache(prev => ({ ...prev, [trimmedQuery]: results }));
+
+        if (results.length > 0) {
+          saveToHistory(query);
+        }
+      } catch (error: any) {
+        if (error.name === 'AbortError' || error.name === 'CanceledError') {
+          console.log("Search aborted");
+        } else {
+          console.error("Search error:", error);
+        }
       } finally {
         setIsSearching(false);
       }
     }, 500),
-    [pathname, router, searchParams]
+    [pathname, router, searchParams, searchCache, saveToHistory]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
-    setShowDropdown(true);
-    performSearch(value);
+
+    if (value.trim().length >= 3) {
+      setShowDropdown(true);
+      performSearch(value);
+    } else {
+      setSearchResults([]);
+      if (value.trim().length === 0) {
+        setShowDropdown(true); // Keep dropdown open to show recent searches
+      } else {
+        setShowDropdown(false);
+      }
+    }
   };
 
   // Close dropdown on click outside
@@ -154,18 +223,38 @@ const Navbar = () => {
               }}
             />
 
-            {showDropdown && (search.trim() || isSearching) && pathname !== '/allProduct' && (
+            {showDropdown && pathname !== '/allProduct' && (
               <div className="search-results-dropdown">
                 {isSearching ? (
                   <div className="search-loading">Searching...</div>
-                ) : searchResults.length > 0 ? (
+                ) : search.trim().length === 0 && recentSearches.length > 0 ? (
+                  <div className="recent-searches">
+                    <div className="dropdown-title">Recent Searches</div>
+                    {recentSearches.map((item, index) => (
+                      <div
+                        key={index}
+                        className="recent-item"
+                        onClick={() => {
+                          setSearch(item);
+                          performSearch(item);
+                        }}
+                      >
+                        <FiSearch size={14} />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : search.trim().length >= 3 && searchResults.length > 0 ? (
                   <>
                     {searchResults.map((product) => (
                       <Link
                         key={product.id}
                         href={`/product/${product.id}`}
                         className="search-result-item"
-                        onClick={() => setShowDropdown(false)}
+                        onClick={() => {
+                          setShowDropdown(false);
+                          saveToHistory(search);
+                        }}
                       >
                         <img
                           src={product.variants?.[0]?.images?.[0]?.image_url || '/placeholder.png'}
@@ -180,14 +269,17 @@ const Navbar = () => {
                     <Link
                       href={`/allProduct?search=${search}`}
                       className="view-all-results"
-                      onClick={() => setShowDropdown(false)}
+                      onClick={() => {
+                        setShowDropdown(false);
+                        saveToHistory(search);
+                      }}
                     >
                       View all results for "{search}"
                     </Link>
                   </>
-                ) : (
+                ) : search.trim().length >= 3 ? (
                   <div className="no-results">No products found</div>
-                )}
+                ) : null}
               </div>
             )}
           </div>
