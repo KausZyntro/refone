@@ -128,13 +128,13 @@ const UserDashboard = () => {
                             <FiMapPin className="sidebar-icon" />
                             Manage Address
                         </li>
-                        <li
+                        {/* <li
                             className={`sidebar-item ${activeTab === 'payment' ? 'active' : ''}`}
                             onClick={() => setActiveTab('payment')}
                         >
                             <FiCreditCard className="sidebar-icon" />
                             Payment Method
-                        </li>
+                        </li> */}
 
                         <li
                             className="sidebar-item"

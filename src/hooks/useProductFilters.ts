@@ -20,6 +20,7 @@ export interface FilterState {
     sim_slot: string[];
     in_stock: boolean | null;
     page: number;
+    search: string;
 }
 
 const initialState: FilterState = {
@@ -36,6 +37,7 @@ const initialState: FilterState = {
     sim_slot: [],
     in_stock: null,
     page: 1,
+    search: "",
 };
 
 const parseParams = (params: URLSearchParams): FilterState => {
@@ -45,6 +47,8 @@ const parseParams = (params: URLSearchParams): FilterState => {
             (newFilters as any)[key] = Number(value);
         } else if (key === "in_stock") {
             newFilters.in_stock = value === "true";
+        } else if (key === "search") {
+            newFilters.search = value;
         } else if (Array.isArray((initialState as any)[key])) {
             (newFilters as any)[key] = value.split(",");
         } else {

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import "@/styles/Navbar.css";
 
 import {
@@ -22,8 +22,10 @@ import { RootState } from "@/redux/store";
 import { FaCartShopping, FaUser } from 'react-icons/fa6';
 import { LiaShoppingCartSolid } from 'react-icons/lia';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { productAPI } from '@/services/api';
+import { debounce } from '@/utils/debounce';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -39,18 +41,80 @@ const Navbar = () => {
   const { totalQuantity } = useSelector((state: RootState) => state.cart);
   // console.log(user?.name);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const [mounted, setMounted] = useState(false);
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (user?.id) {
       dispatch(fetchCartSummary(user.id));
     }
   }, [user?.id, dispatch]);
 
+  // Sync search state with URL if on allProduct page
+  useEffect(() => {
+    if (pathname === '/allProduct') {
+      const querySearch = searchParams.get('search') || '';
+      setSearch(querySearch);
+    }
+  }, [pathname, searchParams]);
+
+  const performSearch = useCallback(
+    debounce(async (query: string) => {
+      if (!query.trim()) {
+        setSearchResults([]);
+        setIsSearching(false);
+        return;
+      }
+
+      if (pathname === '/allProduct') {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('search', query);
+        params.set('page', '1');
+        router.push(`/allProduct?${params.toString()}`, { scroll: false });
+        setIsSearching(false);
+        return;
+      }
+
+      setIsSearching(true);
+      try {
+        const response = await productAPI.getProducts(`search=${query}&limit=5`);
+        // The API returns { status, code, data: { data: [...] } }
+        setSearchResults(response?.data?.data || []);
+      } catch (error) {
+        console.error("Search error:", error);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 500),
+    [pathname, router, searchParams]
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearch(value);
+    setShowDropdown(true);
+    performSearch(value);
+  };
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!(event.target as HTMLElement).closest('.search-box')) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
   // console.log(token)
   const handleLogout = () => {
     router.replace("/");
@@ -79,7 +143,53 @@ const Navbar = () => {
             <input
               type="text"
               placeholder="Search for mobiles, accessories & More"
+              value={search}
+              onChange={handleChange}
+              onFocus={() => setShowDropdown(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setShowDropdown(false);
+                  router.push(`/allProduct?search=${search}`);
+                }
+              }}
             />
+
+            {showDropdown && (search.trim() || isSearching) && pathname !== '/allProduct' && (
+              <div className="search-results-dropdown">
+                {isSearching ? (
+                  <div className="search-loading">Searching...</div>
+                ) : searchResults.length > 0 ? (
+                  <>
+                    {searchResults.map((product) => (
+                      <Link
+                        key={product.id}
+                        href={`/product/${product.id}`}
+                        className="search-result-item"
+                        onClick={() => setShowDropdown(false)}
+                      >
+                        <img
+                          src={product.variants?.[0]?.images?.[0]?.image_url || '/placeholder.png'}
+                          alt={product.name}
+                        />
+                        <div className="result-info">
+                          <span className="result-name">{product.name}</span>
+                          <span className="result-price">₹{Number(product.variants?.[0]?.pricing?.selling_price || 0).toLocaleString('en-IN')}</span>
+                        </div>
+                      </Link>
+                    ))}
+                    <Link
+                      href={`/allProduct?search=${search}`}
+                      className="view-all-results"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      View all results for "{search}"
+                    </Link>
+                  </>
+                ) : (
+                  <div className="no-results">No products found</div>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="nav-actions">
