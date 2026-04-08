@@ -52,6 +52,7 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchCache, setSearchCache] = useState<Record<string, any[]>>({});
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+    const [city, setCity] = useState("Loading...");
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
   const [mounted, setMounted] = useState(false);
@@ -94,6 +95,45 @@ const Navbar = () => {
       setSearch(querySearch);
     }
   }, [pathname, searchParams]);
+
+
+
+useEffect(() => {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+
+          const data = await response.json();
+          console.log(data)
+
+          const cityName =
+            data.address.city ||
+            data.address.town ||
+            data.address.village ||
+            data.address.state_district ||
+            "Unknown Location";
+
+          setCity(cityName);
+        } catch (error) {
+          console.error("Error fetching city:", error);
+          setCity("Location Error");
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        setCity("Permission Denied");
+      }
+    );
+  } else {
+    setCity("Not Supported");
+  }
+}, []);
 
   const performSearch = useCallback(
     debounce(async (query: string) => {
@@ -287,7 +327,8 @@ const Navbar = () => {
           <div className="nav-actions">
             <div className="location">
               <FiMapPin />
-              <span>Rameswaram</span>
+              {/* <span>Rameswaram</span> */}
+              <span>{city}</span>
               <FiChevronDown size={14} />
             </div>
             {mounted && token ? (
@@ -348,6 +389,7 @@ const Navbar = () => {
               <div className="locations">
                 <FiMapPin />
                 <span>Rameswaram</span>
+                <span>{city}</span>
                 <FiChevronDown size={14} />
               </div>
             </div>

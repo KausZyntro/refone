@@ -155,7 +155,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <div
                                 key={color.color}
                                 className={styles.colorSwatchWrapper}
-                                onClick={() => handleMultiSelect('color', color.color)}
+                                onClick={() => handleSingleSelect('color', color.color)}
                                 title={color.color}
                             >
                                 <div
