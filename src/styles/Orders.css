@@ -485,10 +485,17 @@
     transition: background 0.3s ease;
 }
 
+@media (max-width: 990px) {
+    .orders-page {
+        padding-top: 177px;
+    }
+
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .orders-page {
-        padding-top: 140px;
+        padding-top: 177px;
     }
 
     .summary-grid {
@@ -542,7 +549,7 @@
 
 @media (max-width: 480px) {
     .orders-page {
-        padding-top: 130px;
+        padding-top: 177px;
     }
 
     .summary-grid {

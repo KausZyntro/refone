@@ -236,7 +236,7 @@ useEffect(() => {
       <div className="navbar">
         <div className="nav-top">
 
-          <div className="nav-left">
+          {/* <div className="nav-left">
             <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </div>
@@ -245,7 +245,57 @@ useEffect(() => {
               <Image src={"/logo.png"} alt='logo' height={50} width={120} />
 
             </Link>
+             <div className="mobileCart">
+              {mounted && token ? (
+              <div className="cart" onClick={() => router.push("/cart")}>
+                <LiaShoppingCartSolid size={30} />
+
+                {totalQuantity > 0 && (
+                  <span className="cart-badge">
+                    {totalQuantity > 99 ? "99+" : totalQuantity}
+                  </span>
+                )}
+              </div>
+            ) : null}
+            </div>
+           
+          </div> */}
+
+          <div className="nav-left">
+  <div className="leftSection">
+    <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+      {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+    </div>
+
+    <Link href="/" className="logo">
+      <Image src={"/logo.png"} alt="logo" height={50} width={120} />
+    </Link>
+  </div>
+
+  <div className="mobileRightIcons">
+    {mounted && token && (
+      <>
+      <Link href="/my-account" >
+        <div className="mobileProfile" onClick={() => setProfileOpen(!profileOpen)}>
+          <FaUser size={18} />
+        </div>
+        </Link>
+
+        <div className="mobileCart">
+          <div className="cart" onClick={() => router.push("/cart")}>
+            <LiaShoppingCartSolid size={28} />
+
+            {totalQuantity > 0 && (
+              <span className="cart-badge">
+                {totalQuantity > 99 ? "99+" : totalQuantity}
+              </span>
+            )}
           </div>
+        </div>
+      </>
+    )}
+  </div>
+</div>
 
           <div className="search-box">
             <FiSearch className="search-icon" />
@@ -329,7 +379,7 @@ useEffect(() => {
               <FiMapPin />
               {/* <span>Rameswaram</span> */}
               <span>{city}</span>
-              <FiChevronDown size={14} />
+              {/* <FiChevronDown size={14} /> */}
             </div>
             {mounted && token ? (
               <div className="cart" onClick={() => router.push("/cart")}>
@@ -378,19 +428,21 @@ useEffect(() => {
         {menuOpen && (
           <div className="mobile-menu">
             <Link href={'/my-orders'}>
-              <div className="mobile-item" onClick={() => setMenuOpen(false)}>Orders</div>
+              <div className="mobile-item" onClick={() => setMenuOpen(false)}>My Orders</div>
             </Link>
-            <div className="mobile-item">Sell Phone</div>
-            <div className="mobile-item">Sell Gadgets</div>
+            <Link href={'/my-account'}>
+              <div className="mobile-item" onClick={() => setMenuOpen(false)}>My Account</div>
+            </Link>
+            {/* <div className="mobile-item">Sell Gadgets</div>
             <div className="mobile-item">Buy Refurbished Devices</div>
             <div className="mobile-item">Buy Laptop</div>
-            <div className="mobile-item">More</div>
+            <div className="mobile-item">More</div> */}
             <div className="mobile-item">
               <div className="locations">
                 <FiMapPin />
-                <span>Rameswaram</span>
+                {/* <span>Rameswaram</span> */}
                 <span>{city}</span>
-                <FiChevronDown size={14} />
+                {/* <FiChevronDown size={14} /> */}
               </div>
             </div>
             <div className="mobile-item-btn">
