@@ -572,6 +572,7 @@
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+
 @keyframes pulse {
 
     0%,
@@ -605,4 +606,9 @@ input[type="number"].no-spinners::-webkit-outer-spin-button {
 input[type="number"].no-spinners {
     -moz-appearance: textfield;
     appearance: textfield;
+}
+@media (max-width: 990px) {
+    .cart-container{
+        margin: 149px auto 32px;
+    }
 }

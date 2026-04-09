@@ -16,6 +16,7 @@ import { logout } from '@/redux/features/authSlice';
 import { AppDispatch } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import AddressList from '../address/AddressList';
+import Link from 'next/link';
 
 interface UserProfile {
     id: number;
@@ -114,13 +115,18 @@ const UserDashboard = () => {
                             <FiUser className="sidebar-icon" />
                             Personal Information
                         </li>
-                        <li
+                        {/* <li
                             className={`sidebar-item ${activeTab === 'orders' ? 'active' : ''}`}
                             onClick={() => setActiveTab('orders')}
                         >
-                            <FiShoppingBag className="sidebar-icon" />
-                            My Orders
-                        </li>
+                            <Link href={"/my-orders"}
+                                className="sidebar-link"
+                                onClick={() => setActiveTab('orders')}
+                            >
+                                <FiShoppingBag className="sidebar-icon" />
+                                    My Orders
+                            </Link>
+                        </li> */}
                         <li
                             className={`sidebar-item ${activeTab === 'address' ? 'active' : ''}`}
                             onClick={() => setActiveTab('address')}
@@ -139,7 +145,7 @@ const UserDashboard = () => {
                         <li
                             className="sidebar-item"
                             onClick={handleLogout}
-                            style={{ marginTop: '20px', color: '#e74c3c' }}
+                            style={{ color: '#e74c3c' }}
                         >
                             <FiLogOut className="sidebar-icon" />
                             Logout
