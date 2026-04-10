@@ -1,8 +1,10 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "@/styles/Footer.css";
 import Image from "next/image";
+import Link from "next/link";
 import { FaFacebook, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import axios from "axios";
 
 const FooterSection = ({ title, links }) => {
   const [open, setOpen] = useState(false);
@@ -13,14 +15,14 @@ const FooterSection = ({ title, links }) => {
         className="footer-section-header"
         onClick={() => setOpen(!open)}
       >
-        <h4>{title}</h4>
+        <h4 style={{ textTransform: 'capitalize' }}>{title}</h4>
         <span className={`arrow ${open ? "rotate" : ""}`}>⌄</span>
       </div>
 
       <ul className={`footer-links ${open ? "open" : ""}`}>
-        {links.map((link:any, index:any) => (
-          <li key={index}>
-            <a href={link.href}>{link.label}</a>
+        {links.map((link: any) => (
+          <li key={link.id}>
+            <Link href={`/${link.page_key}`}>{link.title}</Link>
           </li>
         ))}
       </ul>
@@ -29,6 +31,50 @@ const FooterSection = ({ title, links }) => {
 };
 
 const Footer = () => {
+  const [footerData, setFooterData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFooterLinks = async () => {
+      try {
+        const response = await axios.get("https://refones.com/api-auth_v1/api/footer-links");
+        if (response.data.status === "success") {
+          setFooterData(response.data.data);
+        } else {
+          setError("Failed to fetch footer links");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching footer links");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFooterLinks();
+  }, []);
+
+  if (loading) {
+    return (
+      <footer className="footer">
+        <div className="footer-wrapper">
+          <div className="loading-skeleton">Loading footer...</div>
+        </div>
+      </footer>
+    );
+  }
+
+  if (error) {
+    return (
+      <footer className="footer">
+        <div className="footer-wrapper">
+          <div className="error-message">{error}</div>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer className="footer">
       <div className="footer-wrapper">
@@ -38,54 +84,27 @@ const Footer = () => {
 
           <div className="footer-brand">
             <h2 className="logo">
-                <Image src={"/logo.png"} alt='logo' height={50} width={120}/>
+              <Link href="/">
+                <Image src={"/logo.png"} alt='logo' height={50} width={120} />
+              </Link>
             </h2>
             <p className="follow-text">Follow us on</p>
             <div className="social-icons">
-              <a href="#"><FaXTwitter/></a>
-              <a href="#"><FaFacebook/></a>
-              <a href="#"><FaInstagram/></a>
-              <a href="#"><FaYoutube/></a>
+              <a href="#" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
             </div>
           </div>
 
           <div className="footer-sections">
-            <FooterSection
-              title="Services"
-              links={[
-                { label: "Sell Phone", href: "#" },
-                { label: "Repair Phone", href: "#" },
-                { label: "Buy Gadgets", href: "#" },
-                { label: "Recycle Phone", href: "#" },
-              ]}
-            />
-
-            <FooterSection
-              title="Company"
-              links={[
-                { label: "About Us", href: "#" },
-                { label: "Careers", href: "#" },
-                { label: "Press Releases", href: "#" },
-              ]}
-            />
-
-            <FooterSection
-              title="Help & Support"
-              links={[
-                { label: "FAQ", href: "#" },
-                { label: "Contact Us", href: "#" },
-                { label: "Refund Policy", href: "#" },
-              ]}
-            />
-
-            <FooterSection
-              title="More Info"
-              links={[
-                { label: "Terms & Conditions", href: "#" },
-                { label: "Privacy Policy", href: "#" },
-                { label: "Cookie Policy", href: "#" },
-              ]}
-            />
+            {footerData && Object.keys(footerData).map((sectionKey) => (
+              <FooterSection
+                key={sectionKey}
+                title={sectionKey}
+                links={footerData[sectionKey]}
+              />
+            ))}
           </div>
         </div>
 

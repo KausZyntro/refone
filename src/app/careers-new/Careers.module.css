@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.careersPage {
+    font-family: 'Inter', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    min-height: 100vh;
+    padding-bottom: 100px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Floating Shapes */
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: 0;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.shape1 {
+    width: 300px;
+    height: 300px;
+    background: #006aaf;
+    top: -100px;
+    right: -100px;
+}
+
+.shape2 {
+    width: 200px;
+    height: 200px;
+    background: #ccc;
+    bottom: 20%;
+    left: -50px;
+}
+
+/* Hero Section */
+.hero {
+    padding: 160px 0 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    position: relative;
+    z-index: 1;
+}
+
+.heroContent {
+    flex: 1;
+}
+
+.heroContent h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.brandName {
+    color: #006aaf;
+    display: block;
+}
+
+.heroSubtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+.btnPrimary {
+    background-color: #006aaf;
+    color: white;
+    padding: 16px 36px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 106, 175, 0.3);
+}
+
+.btnPrimary:hover {
+    background-color: #005691;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 106, 175, 0.4);
+}
+
+.heroImage {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.heroImage img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    /* box-shadow: 0 20px 40px rgba(0,0,0,0.1); */
+}
+
+/* Benefits Section */
+.benefits {
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.benefitsContainer {
+    display: flex;
+    gap: 80px;
+}
+
+.benefitsLeft {
+    flex: 1.2;
+}
+
+.benefitsRight {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.benefitCard {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.benefitCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.iconWrapper {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 106, 175, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #006aaf;
+    font-size: 1.5rem;
+}
+
+.benefitCard h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+}
+
+.benefitCard p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+.sectionTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 34px;
+    line-height: 1.2;
+}
+
+.highlight {
+    color: #006aaf;
+}
+
+.cultureText {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.btnSecondary {
+    align-self: flex-start;
+    padding: 14px 32px;
+    border: 2px solid #006aaf;
+    color: #006aaf;
+    border-radius: 50px;
+    font-weight: 600;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btnSecondary:hover {
+    background: #006aaf;
+    color: white;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 120px 0 60px;
+        gap: 40px;
+    }
+
+    .heroContent h1 {
+        font-size: 2.8rem;
+    }
+
+    .heroSubtitle {
+        margin: 0 auto 30px;
+    }
+
+    .benefitsContainer {
+        flex-direction: column-reverse;
+        gap: 40px;
+    }
+
+    .benefitsRight {
+        text-align: center;
+        align-items: center;
+    }
+
+    .btnSecondary {
+        align-self: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .cardGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .heroContent h1 {
+        font-size: 2.2rem;
+    }
+
+    .sectionTitle {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .careersPage {
+        padding-top: 100px;
+    }
+}
