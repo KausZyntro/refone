@@ -1,15 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { FiArrowRight, FiShield, FiTag } from "react-icons/fi";
+import { openLoginModal, setRedirectPath } from "@/redux/features/authSlice";
 
 const CartSummary: React.FC = () => {
     const router = useRouter();
+    const dispatch = useDispatch<AppDispatch>();
     const { pricing, totalQuantity } = useSelector((state: RootState) => state.cart);
+    const { token } = useSelector((state: RootState) => state.auth);
     const [promoCode, setPromoCode] = useState("");
     const [appliedPromo, setAppliedPromo] = useState(false);
 
@@ -28,6 +31,16 @@ const CartSummary: React.FC = () => {
             setPromoCode("");
             toast.success(`Promo code applied successfully!`);
         }
+    };
+
+    const handleCheckout = () => {
+        if (!token) {
+            dispatch(setRedirectPath("/checkout"));
+            dispatch(openLoginModal());
+            toast.info("Please login to proceed to checkout");
+            return;
+        }
+        router.push("/checkout");
     };
 
     const formatPrice = (amount: number) => {
@@ -96,7 +109,7 @@ const CartSummary: React.FC = () => {
 
                 <div className="cart-summary-actions">
                     <button
-                        onClick={() => router.push("/checkout")}
+                        onClick={handleCheckout}
                         disabled={totalQuantity === 0}
                         className="btn-checkout"
                     >

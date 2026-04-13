@@ -246,7 +246,7 @@ useEffect(() => {
 
             </Link>
              <div className="mobileCart">
-              {mounted && token ? (
+              {mounted ? (
               <div className="cart" onClick={() => router.push("/cart")}>
                 <LiaShoppingCartSolid size={30} />
 
@@ -273,13 +273,15 @@ useEffect(() => {
   </div>
 
   <div className="mobileRightIcons">
-    {mounted && token && (
+    {mounted && (
       <>
-      <Link href="/my-account" >
-        <div className="mobileProfile" onClick={() => setProfileOpen(!profileOpen)}>
-          <FaUser size={18} />
-        </div>
+      {token && (
+        <Link href="/my-account" >
+          <div className="mobileProfile" onClick={() => setProfileOpen(!profileOpen)}>
+            <FaUser size={18} />
+          </div>
         </Link>
+      )}
 
         <div className="mobileCart">
           <div className="cart" onClick={() => router.push("/cart")}>
@@ -381,7 +383,7 @@ useEffect(() => {
               <span>{city}</span>
               {/* <FiChevronDown size={14} /> */}
             </div>
-            {mounted && token ? (
+            {mounted ? (
               <div className="cart" onClick={() => router.push("/cart")}>
                 <LiaShoppingCartSolid size={30} />
 

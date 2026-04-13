@@ -22,7 +22,7 @@
 }
 
 .logo {
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
   display: inline-block;
   transition: transform 0.3s ease;
 }

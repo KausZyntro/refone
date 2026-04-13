@@ -52,7 +52,7 @@ const AboutUsPage = () => {
         };
 
         fetchPageData();
-    }, []);
+    }, []); 
 
     return (
         <div className={styles.container}>

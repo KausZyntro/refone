@@ -52,11 +52,37 @@ export const removeFromCart = createAsyncThunk(
 );
 
 
+// ── Local Storage Helpers ─────────────────────────────────────────────────────
+const GUEST_CART_KEY = "guest_cart";
+
+const getSavedCart = () => {
+    if (typeof window === "undefined") return { items: [], totalQuantity: 0, pricing: null };
+    const saved = localStorage.getItem(GUEST_CART_KEY);
+    if (!saved) return { items: [], totalQuantity: 0, pricing: null };
+    try {
+        return JSON.parse(saved);
+    } catch (e) {
+        console.error("Error parsing saved cart", e);
+        return { items: [], totalQuantity: 0, pricing: null };
+    }
+};
+
+const saveCart = (state: CartState) => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem(GUEST_CART_KEY, JSON.stringify({
+        items: state.items,
+        totalQuantity: state.totalQuantity,
+        pricing: state.pricing
+    }));
+};
+
 // ── Initial state ─────────────────────────────────────────────────────────────
+const savedCart = getSavedCart();
+
 const initialState: CartState = {
-    items: [],
-    pricing: null,
-    totalQuantity: 0,
+    items: savedCart.items,
+    pricing: savedCart.pricing,
+    totalQuantity: savedCart.totalQuantity,
     isLoading: false,
     error: null,
     successMessage: null,
@@ -86,6 +112,7 @@ const cartSlice = createSlice({
                     state.pricing.subtotal = state.items.reduce((acc, curr) => acc + (curr.item_total || 0), 0);
                     state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
                 }
+                saveCart(state);
             }
         },
         removeItem(state, action: import("@reduxjs/toolkit").PayloadAction<{ id: number }>) {
@@ -99,12 +126,16 @@ const cartSlice = createSlice({
                     state.pricing.subtotal = state.items.reduce((acc, curr) => acc + (curr.item_total || 0), 0);
                     state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
                 }
+                saveCart(state);
             }
         },
         clearCart(state) {
             state.items = [];
             state.totalQuantity = 0;
             state.pricing = null;
+            if (typeof window !== "undefined") {
+                localStorage.removeItem(GUEST_CART_KEY);
+            }
         },
         addLocalItem(state, action: import("@reduxjs/toolkit").PayloadAction<CartItem>) {
             const newItem = action.payload;
@@ -151,6 +182,7 @@ const cartSlice = createSlice({
                     grand_total: subtotal
                 };
             }
+            saveCart(state);
         }
     },
     extraReducers: (builder) => {
@@ -168,6 +200,10 @@ const cartSlice = createSlice({
                     (total, item) => total + Number(item.quantity),
                     0
                 );
+                // After fetching authenticated cart, we can clear guest cart
+                if (typeof window !== "undefined") {
+                    localStorage.removeItem(GUEST_CART_KEY);
+                }
             })
             .addCase(fetchCartSummary.rejected, (state, { payload }) => {
                 state.isLoading = false;
