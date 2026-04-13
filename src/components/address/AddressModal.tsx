@@ -7,16 +7,14 @@ import { RootState } from '@/redux/store';
 interface AddressModalProps {
     isOpen: boolean;
     onClose: () => void;
-    // onSave: (address: Address) => void;
     onSave: (address: Omit<Address, 'id' | 'userId'>) => void;
     initialData?: Address | null;
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({ isOpen, onClose, onSave, initialData }) => {
 
-    const { user } = useSelector((state: RootState) => state.auth);
-
     const [formData, setFormData] = useState<Omit<Address, 'id' | 'userId'>>({
+        name: '',
         address_line1: '',
         city: '',
         state: '',
@@ -28,10 +26,20 @@ const AddressModal: React.FC<AddressModalProps> = ({ isOpen, onClose, onSave, in
 
     useEffect(() => {
         if (initialData) {
-            const { id, userId, ...rest } = initialData;
-            setFormData(rest);
+            const { id, userId, name, ...rest } = initialData;
+            setFormData({
+                name: name || '',
+                address_line1: rest.address_line1 || '',
+                city: rest.city || '',
+                state: rest.state || '',
+                pincode: rest.pincode || '',
+                phone: rest.phone || '',
+                country: rest.country || 'India',
+                isDefault: rest.isDefault || false,
+            });
         } else {
             setFormData({
+                name: '',
                 address_line1: '',
                 city: '',
                 state: '',
@@ -65,18 +73,29 @@ const AddressModal: React.FC<AddressModalProps> = ({ isOpen, onClose, onSave, in
                     <h2 className="modal-title">
                         {initialData ? 'Edit Address' : 'Add New Address'}
                     </h2>
-                    <button type='button' onClick={onClose} className="modal-close">
+                    <button type="button" onClick={onClose} className="modal-close">
                         <MdClose size={24} />
                     </button>
                 </div>
 
                 <div className="modal-body">
-                    <button type="button" className="btn-location">
+                    {/* <button type="button" className="btn-location">
                         <MdMyLocation size={20} />
                         Use my current location
-                    </button>
+                    </button> */}
 
                     <form onSubmit={handleSubmit}>
+                        <div className="form-group-addr">
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Full Name *"
+                                required
+                                className="form-input-addr"
+                            />
+                        </div>
                         <div className="form-group-addr">
                             <input
                                 type="text"
@@ -138,50 +157,22 @@ const AddressModal: React.FC<AddressModalProps> = ({ isOpen, onClose, onSave, in
                             />
                         </div>
 
-                        {/* <div className="form-group-addr">
+                        <div className="checkbox-group-addr" style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <input
-                                type="text"
-                                name="landmark"
-                                value=""
-                                onChange={handleChange}
-                                placeholder="Landmark (optional)"
-                                className="form-input-addr"
+                                type="checkbox"
+                                id="isDefault"
+                                name="isDefault"
+                                checked={formData.isDefault}
+                                onChange={(e) => setFormData(prev => ({ ...prev, isDefault: e.target.checked }))}
+                                style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                             />
-                        </div> */}
-
-                        {/* <div className="form-group-addr">
-                            <input
-                                type="text"
-                                name="altPhone"
-                                value={formData.altPhone}
-                                onChange={handleChange}
-                                placeholder="Alternate number (optional)"
-                                className="form-input-addr"
-                            />
-                        </div> */}
-
-                        {/* <div className="save-as-section">
-                            <span className="save-as-label">Save As</span>
-                            <div className="radio-group">
-                                {['Home', 'Office', 'Other'].map((type) => (
-                                    <label key={type} className="radio-label">
-                                        <input
-                                            type="radio"
-                                            name="type"
-                                            value={type}
-                                            checked={formData.type === type}
-                                            onChange={handleChange}
-                                        />
-                                        <div className="radio-box">
-                                            {type}
-                                        </div>
-                                    </label>
-                                ))}
-                            </div>
-                        </div> */}
+                            <label htmlFor="isDefault" style={{ fontSize: '14px', color: '#555', cursor: 'pointer', fontWeight: 500 }}>
+                                Set as default address
+                            </label>
+                        </div>
 
                         <button type="submit" className="btn-submit">
-                            Continue
+                            {initialData ? 'Update Address' : 'Save Address'}
                         </button>
                     </form>
                 </div>

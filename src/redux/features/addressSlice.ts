@@ -22,7 +22,7 @@ export const addAddress = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch addresses",
+        error.response?.data?.message || "Failed to add address",
       );
     }
   },
@@ -103,15 +103,19 @@ const addressSlice = createSlice({
       );
     });
     builder.addCase(addAddress.fulfilled, (state, action) => {
-      state.addresses.push(action.payload);
+      const newAddr = action.payload?.data || action.payload;
+      if (newAddr && typeof newAddr === 'object') {
+        state.addresses.push(newAddr);
+      }
     });
     builder.addCase(updateAddress.fulfilled, (state, action) => {
+      const updatedAddr = action.payload?.data || action.payload;
       const index = state.addresses.findIndex(
-        (addr) => addr.id === action.payload.id,
+        (addr) => addr.id === updatedAddr.id,
       );
 
       if (index !== -1) {
-        state.addresses[index] = action.payload;
+        state.addresses[index] = updatedAddr;
       }
     });
   },

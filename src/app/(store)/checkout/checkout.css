@@ -17,28 +17,33 @@
     padding-bottom: 4rem;
     animation: fadeIn 0.4s ease-out forwards;
 }
+
 .productCard {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 320px; /* 🔥 important */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 320px;
+    /* 🔥 important */
 }
+
 .productImageWrapper {
-  width: 100%;
-  aspect-ratio: 1 / 1; /* 🔥 perfect square */
-  background-color: #f5f5f5;
-  overflow: hidden;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* 🔥 perfect square */
+    background-color: #f5f5f5;
+    overflow: hidden;
 }
+
 .skeletonBox {
-  background: #e5e7eb;
-  border-radius: 6px;
-  width: 100%;
-  animation: pulse 1.5s infinite ease-in-out;
+    background: #e5e7eb;
+    border-radius: 6px;
+    width: 100%;
+    animation: pulse 1.5s infinite ease-in-out;
 }
 
 .checkout-container {
     max-width: 80rem;
-    margin: 176px auto 32px;
+    margin: 120px auto 32px;
     padding: 0 1rem;
 }
 
@@ -66,10 +71,11 @@
     font-size: 0.875rem;
     font-weight: 600;
 }
+
 .productGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
 }
 
 .checkout-layout {
@@ -83,9 +89,10 @@
         flex-direction: row;
         align-items: flex-start;
     }
+
     .productGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
 .checkout-left {
@@ -164,9 +171,10 @@
     .address-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .productGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .address-card {
@@ -218,6 +226,54 @@
     font-size: 0.875rem;
     color: var(--checkout-text-dark);
     font-weight: 500;
+}
+
+/* Mini actions for address cards */
+.address-actions-mini {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.address-card:hover .address-actions-mini {
+    opacity: 1;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--checkout-border);
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-action.edit {
+    color: var(--checkout-primary);
+}
+
+.btn-action.edit:hover {
+    background: var(--checkout-primary);
+    color: white;
+    border-color: var(--checkout-primary);
+}
+
+.btn-action.delete {
+    color: var(--checkout-danger);
+}
+
+.btn-action.delete:hover {
+    background: var(--checkout-danger);
+    color: white;
+    border-color: var(--checkout-danger);
 }
 
 .address-empty {

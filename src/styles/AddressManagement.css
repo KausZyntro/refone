@@ -231,10 +231,11 @@
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     z-index: 9999;
-    padding: 20px;
+    padding: 80px 20px;
+    margin-top: -42px;
 }
 
 .modal-content {

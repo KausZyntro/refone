@@ -85,7 +85,7 @@ const CartSummary: React.FC = () => {
                     <span className="total-val">{formatPrice(p.grand_total)}</span>
                 </div>
 
-                <form onSubmit={handleApplyPromo} className="promo-form">
+                {/* <form onSubmit={handleApplyPromo} className="promo-form">
                     <label htmlFor="promo">
                         <FiTag />
                         Have a promo code?
@@ -105,7 +105,7 @@ const CartSummary: React.FC = () => {
                     {appliedPromo && (
                         <p className="promo-success">✨ Promo code applied successfully.</p>
                     )}
-                </form>
+                </form> */}
 
                 <div className="cart-summary-actions">
                     <button

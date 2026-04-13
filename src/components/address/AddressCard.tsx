@@ -24,7 +24,7 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
     //             return <MdLocationOn size={20} />;
     //     }
     // };
-
+    console.log(address.name)
     return (
         <div className="address-card">
             {/* <div className="card-header">
@@ -35,6 +35,7 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
             </div> */}
 
             <div className="card-body">
+                <p>{address.name}</p>
                 <p className="city-state">
                     {address.city}, {address.state}
                 </p>
