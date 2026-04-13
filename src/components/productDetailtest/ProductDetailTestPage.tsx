@@ -6,7 +6,7 @@ import ProductInfotest from "@/components/productDetailtest/ProductInfotest";
 import AddToCartSectiontest from "@/components/productDetailtest/AddToCartSectiontest";
 import ProductSpecstest from "@/components/productDetailtest/ProductSpecstest";
 import RelatedProductstest from "@/components/productDetailtest/RelatedProductstest";
-import { ProductTest, RelatedProductTest, VariantTest } from "@/types/producttest";
+import { ProductTest, VariantTest } from "@/types/producttest";
 // import styles from "./page.module.css";
 import styles from "./ProductDetailTestPage.module.css";
 import ProductSlider from "../home/ProductSlider";
@@ -15,46 +15,10 @@ import ReviewsSection from "../product/ReviewSection";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { clearProduct, fetchProductById } from "@/redux/features/productSlice";
+import { productAPI } from "@/services/api";
+import { useRouter } from "next/navigation";
 
 
-const mockRelatedProducts: RelatedProductTest[] = [
-    {
-        id: 2,
-        title: "iPhone 13 Pro",
-        subtitle: '6.7" BLEED, A15',
-        price: 999,
-        image: "/images/img20.png",
-    },
-    {
-        id: 3,
-        title: "Google Pixel 6",
-        subtitle: '6.7" BLEED, 50MP',
-        price: 899,
-        image: "/images/img20.png",
-    },
-    {
-        id: 4,
-        title: "OnePlus 9 Pro",
-        subtitle: '6.7" KUBI AWOLED',
-        price: 849,
-        image: "/images/img20.png",
-    },
-    {
-        id: 5,
-        title: "OnePlus 9 Pro",
-        subtitle: '6.7" KUBI AWOLED',
-        price: 849,
-        image: "/images/img20.png",
-    },
-    {
-        id: 6,
-        title: "OnePlus 9 Pro",
-        subtitle: '6.7" KUBI AWOLED',
-        price: 849,
-        image: "/images/img20.png",
-    },
-
-];
 
 
 // const mockSpecs: ProductSpecTest[] = [
@@ -84,10 +48,26 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
 
     // export default function ProductDetailTestPage() {
     const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter();
     const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(null);
     const { product, isLoading, error } = useSelector(
         (state: RootState) => state.product,
     );
+    const [relatedProducts, setRelatedProducts] = React.useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchRelated = async () => {
+            if (product?.brand_id) {
+                try {
+                    const response = await productAPI.getProducts(`brand_id=${product.brand_id}&limit=5`);
+                    setRelatedProducts(response?.data?.data || response?.data || []);
+                } catch (err) {
+                    console.error("Failed to fetch related products", err);
+                }
+            }
+        };
+        fetchRelated();
+    }, [product?.brand_id]);
 
     useEffect(() => {
         dispatch(fetchProductById(productId));
@@ -153,7 +133,10 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
 
                 {/* Right Sidebar */}
                 <div className={styles.relatedSidebar}>
-                    <RelatedProductstest products={mockRelatedProducts} />
+                    <RelatedProductstest 
+                        products={relatedProducts.filter(p => p.id !== product?.id).slice(0, 5)} 
+                        onProductSelect={(p) => router.push(`/product/${p.id}`)}
+                    />
                 </div>
             </div>
             {/* <ProductSlider /> */}
