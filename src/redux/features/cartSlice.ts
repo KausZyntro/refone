@@ -51,6 +51,20 @@ export const removeFromCart = createAsyncThunk(
     }
 );
 
+export const updateCartQuantityThunk = createAsyncThunk(
+    "cart/updateCartQuantity",
+    async ({ cart_id, action }: { cart_id: number; action: "increase" | "decrease" }, { rejectWithValue }) => {
+        try {
+            const response = await cartAPI.updateCartQuantity(cart_id, action);
+            return { cart_id, action, response };
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to update quantity"
+            );
+        }
+    }
+);
+
 
 // ── Local Storage Helpers ─────────────────────────────────────────────────────
 const GUEST_CART_KEY = "guest_cart";
@@ -183,6 +197,42 @@ const cartSlice = createSlice({
                 };
             }
             saveCart(state);
+        },
+        increaseQuantity(state, action: import("@reduxjs/toolkit").PayloadAction<{ id: number }>) {
+            const item = state.items.find(i => Number(i.id) === Number(action.payload.id));
+            if (item) {
+                const currentQty = Number(item.quantity) || 1;
+                const newQty = currentQty + 1;
+                item.quantity = newQty;
+
+                const unitPrice = parsePrice(item.price?.selling_price);
+                item.item_total = newQty * unitPrice;
+                state.totalQuantity += 1;
+
+                if (state.pricing) {
+                    state.pricing.subtotal = state.items.reduce((acc, curr) => acc + (curr.item_total || 0), 0);
+                    state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
+                }
+                saveCart(state);
+            }
+        },
+        decreaseQuantity(state, action: import("@reduxjs/toolkit").PayloadAction<{ id: number }>) {
+            const item = state.items.find(i => Number(i.id) === Number(action.payload.id));
+            if (item && Number(item.quantity) > 1) {
+                const currentQty = Number(item.quantity) || 1;
+                const newQty = currentQty - 1;
+                item.quantity = newQty;
+
+                const unitPrice = parsePrice(item.price?.selling_price);
+                item.item_total = newQty * unitPrice;
+                state.totalQuantity -= 1;
+
+                if (state.pricing) {
+                    state.pricing.subtotal = state.items.reduce((acc, curr) => acc + (curr.item_total || 0), 0);
+                    state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
+                }
+                saveCart(state);
+            }
         }
     },
     extraReducers: (builder) => {
@@ -300,9 +350,43 @@ const cartSlice = createSlice({
             .addCase(removeFromCart.rejected, (state, { payload }) => {
                 state.isLoading = false;
                 state.error = payload as string;
+            })
+            .addCase(updateCartQuantityThunk.pending, (state, { meta }) => {
+                state.isLoading = true;
+                state.error = null;
+                
+                // Optimistic Update
+                const { cart_id, action } = meta.arg;
+                const item = state.items.find((i) => Number(i.id) === Number(cart_id));
+                if (item) {
+                    const currentQty = Number(item.quantity) || 1;
+                    const newQty = action === "increase" ? currentQty + 1 : (currentQty > 1 ? currentQty - 1 : currentQty);
+                    
+                    if (newQty !== currentQty) {
+                        item.quantity = newQty;
+                        const unitPrice = parsePrice(item.price?.selling_price);
+                        item.item_total = newQty * unitPrice;
+                        state.totalQuantity += (action === "increase" ? 1 : -1);
+
+                        if (state.pricing) {
+                            state.pricing.subtotal = state.items.reduce((acc, curr) => acc + (curr.item_total || 0), 0);
+                            state.pricing.grand_total = state.pricing.subtotal + state.pricing.delivery_charge + state.pricing.tax - state.pricing.discount;
+                        }
+                    }
+                }
+            })
+            .addCase(updateCartQuantityThunk.fulfilled, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(updateCartQuantityThunk.rejected, (state, { payload, meta }) => {
+                state.isLoading = false;
+                state.error = payload as string;
+                
+                // Rollback or Re-fetch? For now, we logic to revert could be complex.
+                // It's better to re-fetch cart summary on error to ensure sync.
             });
     },
 });
 
-export const { clearCartMessage, updateItemQuantity, removeItem, clearCart, addLocalItem } = cartSlice.actions;
+export const { clearCartMessage, updateItemQuantity, removeItem, clearCart, addLocalItem, increaseQuantity, decreaseQuantity } = cartSlice.actions;
 export default cartSlice.reducer;

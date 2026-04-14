@@ -2,7 +2,9 @@ import axios from "axios";
 import type { AddToCartPayload } from "@/types/cart";
 
 // Using environment variable or fallback to a local API 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api-auth.refones.com/api";
+// const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api-auth.refones.com/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://refones.com/api-auth_v1/api";
+
 
 const api = axios.create({
     baseURL: API_URL,
@@ -142,6 +144,17 @@ export const cartAPI = {
             }
         });
         // console.log("REMOVE FROM CART RESPONSE:", response.data);
+        return response.data;
+    },
+    updateCartQuantity: async (cart_id: number, action: "increase" | "decrease") => {
+        const formData = new FormData();
+        formData.append("cart_id", cart_id.toString());
+        formData.append("action", action);
+        const response = await api.patch("/cart/quantity", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
         return response.data;
     }
 };

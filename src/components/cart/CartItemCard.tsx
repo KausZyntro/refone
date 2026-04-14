@@ -3,11 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import { FiTrash2 } from "react-icons/fi";
-import { useDispatch } from "react-redux";
-import { updateItemQuantity, removeItem, removeFromCart } from "@/redux/features/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { updateItemQuantity, removeItem, removeFromCart, updateCartQuantityThunk, increaseQuantity, decreaseQuantity } from "@/redux/features/cartSlice";
 import type { CartItem } from "@/types/cart";
 import QuantityControl from "./QuantityControl";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import { formatPrice, parsePrice } from "@/utils/format";
 
 interface CartItemCardProps {
@@ -16,6 +16,7 @@ interface CartItemCardProps {
 
 const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
     const dispatch = useDispatch<AppDispatch>();
+    const { user } = useSelector((state: RootState) => state.auth);
     const quantity = Number(item.quantity) || 1;
 
     // Resilient variant extraction
@@ -25,12 +26,20 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
     const variantDetails = [storageInfo, colorInfo].filter(Boolean).join(" | ");
 
     const handleIncrease = () => {
-        dispatch(updateItemQuantity({ id: item.id, quantity: quantity + 1 }));
+        if (user?.id) {
+            dispatch(updateCartQuantityThunk({ cart_id: item.id, action: "increase" }));
+        } else {
+            dispatch(increaseQuantity({ id: item.id }));
+        }
     };
 
     const handleDecrease = () => {
         if (quantity > 1) {
-            dispatch(updateItemQuantity({ id: item.id, quantity: quantity - 1 }));
+            if (user?.id) {
+                dispatch(updateCartQuantityThunk({ cart_id: item.id, action: "decrease" }));
+            } else {
+                dispatch(decreaseQuantity({ id: item.id }));
+            }
         }
     };
     console.log(item.id);

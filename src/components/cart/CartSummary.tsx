@@ -42,9 +42,9 @@ const CartSummary: React.FC = () => {
         }
         router.push("/checkout");
     };
-    const handleTrafficPage = () => {
-         router.push("/server-busy");
-    }
+    // const handleTrafficPage = () => {
+    //      router.push("/server-busy");
+    // }
 
     const formatPrice = (amount: number) => {
         return `₹ ${amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -112,8 +112,8 @@ const CartSummary: React.FC = () => {
 
                 <div className="cart-summary-actions">
                     <button
-                        // onClick={handleCheckout}
-                        onClick={handleTrafficPage}
+                        onClick={handleCheckout}
+                        // onClick={handleTrafficPage}
                         disabled={totalQuantity === 0}
                         className="btn-checkout"
                     >

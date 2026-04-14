@@ -126,8 +126,8 @@ useEffect(() => {
         }
       },
       (error) => {
-        console.error("Geolocation error:", error);
-        setCity("Permission Denied");
+        // console.warn("Geolocation error:", error.message);
+        setCity("Select Location");
       }
     );
   } else {
