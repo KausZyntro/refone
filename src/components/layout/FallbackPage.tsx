@@ -34,10 +34,8 @@ export default function FallbackPage() {
         setCharIndex(charIndex - 1);
       }, 40);
     } else if (!isDeleting && charIndex === currentText.length) {
-      // Pause before deleting
       timeout = setTimeout(() => setIsDeleting(true), 2000);
     } else if (isDeleting && charIndex === 0) {
-      // Next word
       setIsDeleting(false);
       setTextIndex((prev) => (prev + 1) % texts.length);
     }
