@@ -1,64 +1,92 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Lottie from "lottie-react";
 import animationData from "../../../public/lottie/Network.json";
 import "@/styles/FallbackPage.css";
 
 export default function FallbackPage() {
-  const texts = [
-    "System Overload...",
-    "Too many users detected ⚡",
-    "Stabilizing experience...",
-  ];
+  const texts = useMemo(() => [
+    "System Overload",
+    "Massive Demand Surge",
+    "Users Are Buying Fast",
+    "You're Almost In... ",
+  ], []);
 
   const [displayText, setDisplayText] = useState("");
   const [textIndex, setTextIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (charIndex < texts[textIndex].length) {
-        setDisplayText((prev) => prev + texts[textIndex][charIndex]);
+    const currentText = texts[textIndex];
+    let timeout: NodeJS.Timeout;
+
+    if (!isDeleting && charIndex < currentText.length) {
+      // Typing
+      timeout = setTimeout(() => {
+        setDisplayText((prev) => prev + currentText[charIndex]);
         setCharIndex(charIndex + 1);
-      } else {
-        setTimeout(() => {
-          setDisplayText("");
-          setCharIndex(0);
-          setTextIndex((prev) => (prev + 1) % texts.length);
-        }, 1500);
-      }
-    }, 50);
+      }, 70);
+    } else if (isDeleting && charIndex > 0) {
+      // Deleting
+      timeout = setTimeout(() => {
+        setDisplayText((prev) => prev.slice(0, -1));
+        setCharIndex(charIndex - 1);
+      }, 40);
+    } else if (!isDeleting && charIndex === currentText.length) {
+      // Pause before deleting
+      timeout = setTimeout(() => setIsDeleting(true), 2000);
+    } else if (isDeleting && charIndex === 0) {
+      // Next word
+      setIsDeleting(false);
+      setTextIndex((prev) => (prev + 1) % texts.length);
+    }
 
     return () => clearTimeout(timeout);
-  }, [charIndex, textIndex, texts]);
+  }, [charIndex, textIndex, isDeleting, texts]);
 
   return (
-    <div className="container">
-      <div className="card">
-        <div className="animation">
-          <Lottie animationData={animationData} loop={true} />
+    <div className="fallback-container">
+      <div className="fallback-card">
+        <div className="fallback-animation">
+          <Lottie 
+            animationData={animationData} 
+            loop={true} 
+            style={{ width: '100%', height: '100%' }}
+          />
         </div>
 
-        <h1 className="typewriter">{displayText}</h1>
+        <h1 className="fallback-typewriter">{displayText}<span className="cursor">|</span></h1>
 
-        <p className="subtext">
-          Our servers are currently handling a massive surge in traffic.
-          We\'re working hard to keep everything running smoothly.
+        <p className="fallback-subtext">
+          We’re currently experiencing traffic far beyond our expectations as an overwhelming number of users are actively making purchases.
         </p>
 
-        <p className="secondary">
-          Please hold on while we optimize your experience.
+        <p className="fallback-secondary">
+          Estimated wait time: less than a minute.
         </p>
 
-        <p className="fun">Even robots need a moment to reboot 🤖</p>
+        <p className="fallback-fun">We're adding more hamsters to the wheels 🐹</p>
 
         <button
-          className="retry"
+          className="fallback-retry"
           onClick={() => window.location.reload()}
         >
-          Try Again
+          Refresh Connection
         </button>
       </div>
+      
+      <style jsx>{`
+        .cursor {
+          display: inline-block;
+          margin-left: 2px;
+          animation: blink 1s step-end infinite;
+          color: #0369a1;
+        }
+        @keyframes blink {
+          50% { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }
