@@ -86,6 +86,10 @@ export const userAPI = {
         const response = await api.get("/user-profile");
         // console.log(response?.data);
         return response.data;
+    },
+    updateProfile: async (data: { name: string; email: string; phone: string }) => {
+        const response = await api.put("/profile/update", data);
+        return response.data;
     }
 };
 

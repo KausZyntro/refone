@@ -12,8 +12,9 @@ import {
 } from "react-icons/fi";
 import { userAPI } from '@/services/api';
 import { useDispatch } from 'react-redux';
-import { logout } from '@/redux/features/authSlice';
-import { AppDispatch } from '@/redux/store';
+import { logout, updateProfileThunk } from '@/redux/features/authSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import AddressList from '../address/AddressList';
 import Link from 'next/link';
@@ -39,6 +40,7 @@ const UserDashboard = () => {
         phone: '',
         gender: ''
     });
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
@@ -81,10 +83,29 @@ const UserDashboard = () => {
         });
     };
 
-    const handleUpdate = (e: React.FormEvent) => {
+    const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would typically send the update API request
-        toast.info("Profile update would trigger here!");
+        
+        setIsUpdating(true);
+        try {
+            const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+            const resultAction = await dispatch(updateProfileThunk({
+                name: fullName,
+                email: formData.email,
+                phone: formData.phone
+            }));
+
+            if (updateProfileThunk.fulfilled.match(resultAction)) {
+                toast.success("Profile updated successfully!");
+                setProfile(resultAction.payload);
+            } else {
+                toast.error(resultAction.payload as string || "Failed to update profile");
+            }
+        } catch (error) {
+            toast.error("An error occurred while updating profile");
+        } finally {
+            setIsUpdating(false);
+        }
     };
 
     const handleLogout = () => {
@@ -207,7 +228,6 @@ const UserDashboard = () => {
                                                 value={formData.email}
                                                 onChange={handleChange}
                                                 placeholder="Enter email address"
-                                                readOnly // Usually email shouldn't be mutable directly without verification
                                             />
                                         </div>
                                         <div className="form-group">
@@ -237,8 +257,12 @@ const UserDashboard = () => {
                                         </div> */}
 
                                         <div className="update-btn-wrapper full-width">
-                                            <button type="submit" className="update-btn">
-                                                Update Changes
+                                            <button 
+                                                type="submit" 
+                                                className="update-btn" 
+                                                disabled={isUpdating}
+                                            >
+                                                {isUpdating ? "Updating..." : "Update Changes"}
                                             </button>
                                         </div>
                                     </div>

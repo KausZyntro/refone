@@ -15,14 +15,14 @@ export default function FallbackPage() {
   const [displayText, setDisplayText] = useState("");
   const [textIndex, setTextIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false); 
 
   useEffect(() => {
     const currentText = texts[textIndex];
     let timeout: NodeJS.Timeout;
 
     if (!isDeleting && charIndex < currentText.length) {
-      // Typing
+      // Typingghthkkkkkkjjjcjkkhj
       timeout = setTimeout(() => {
         setDisplayText((prev) => prev + currentText[charIndex]);
         setCharIndex(charIndex + 1);

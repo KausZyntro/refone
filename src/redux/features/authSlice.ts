@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authAPI } from "@/services/api";
+import { authAPI, userAPI } from "@/services/api";
 import { parse } from "path";
 
 /* ---------------- TOKEN HELPER ---------------- */
@@ -102,6 +102,36 @@ export const verifyOtpUser = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "OTP Verification failed"
+      );
+    }
+  }
+);
+
+/* ---------------- UPDATE PROFILE ---------------- */
+
+export const updateProfileThunk = createAsyncThunk(
+  "auth/update-profile",
+  async (userData: { name: string; email: string; phone: string }, { rejectWithValue }) => {
+    try {
+      const response = await userAPI.updateProfile(userData);
+      if (response.status === "SUCCESS") {
+        const auth = localStorage.getItem("auth");
+        if (auth) {
+          const parsedAuth = JSON.parse(auth);
+          localStorage.setItem(
+            "auth",
+            JSON.stringify({
+              ...parsedAuth,
+              user: response.data,
+            })
+          );
+        }
+        return response.data;
+      }
+      return rejectWithValue(response.message || "Update failed");
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Profile update failed"
       );
     }
   }
@@ -219,6 +249,23 @@ const authSlice = createSlice({
     });
 
     builder.addCase(verifyOtpUser.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload as string;
+    });
+
+    /* UPDATE PROFILE */
+
+    builder.addCase(updateProfileThunk.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+
+    builder.addCase(updateProfileThunk.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.user = payload;
+    });
+
+    builder.addCase(updateProfileThunk.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.error = payload as string;
     });
