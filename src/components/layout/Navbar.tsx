@@ -507,12 +507,18 @@ useEffect(() => {
           if (userId) {
             dispatch(verifyOtpUser({ user_id: userId, otp }))
               .unwrap()
-              .then(() => {
+              .then((res: any) => {
                 setOtpOpen(false);
                 toast.success("Login Successful!");
 
-                // Handle redirect if exists
-                if (redirectPath) {
+                const userObj = res?.user || res?.data?.user || res;
+                // Check if it's a new user or missing profile details (name/email empty)
+                const isNewUser = res?.is_new_user || res?.data?.is_new_user || !userObj?.name || userObj?.name.trim() === '' || !userObj?.email || userObj?.email.trim() === '';
+
+                if (isNewUser) {
+                  toast.info("Please fill your profile details.");
+                  router.push('/my-account');
+                } else if (redirectPath) {
                   router.push(redirectPath);
                   dispatch(clearRedirectPath());
                 }

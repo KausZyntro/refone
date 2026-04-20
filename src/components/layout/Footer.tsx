@@ -30,50 +30,58 @@ const FooterSection = ({ title, links }) => {
   );
 };
 
+const defaultFooterData = {
+  "About Refone": [
+    { id: 1, title: "About Us", page_key: "about-us-new" },
+    { id: 2, title: "Careers", page_key: "careers-new" },
+    { id: 3, title: "Contact Us", page_key: "contact-us" }
+  ],
+  "Help & Support": [
+    { id: 4, title: "FAQ", page_key: "privacy-policy" },
+    { id: 5, title: "Return Policy", page_key: "terms-conditions" },
+    { id: 6, title: "Contact Us", page_key: "return-policy" },
+    { id: 7, title: "Shipping Policy", page_key: "shipping-policy" }
+  ],
+  "More_Info": [
+    { id: 8, title: "Privacy Policy", page_key: "privacy-policy" },
+    { id: 9, title: "Warrenty Info", page_key: "warrenty-info" },
+    { id: 10, title: "Terms & Conditions", page_key: "terms-conditions" },
+    { id: 7, title: "Shipping Policy", page_key: "shipping-policy" }
+  ]
+};
+
 const Footer = () => {
-  const [footerData, setFooterData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [footerData, setFooterData] = useState<any>(null);
+  // const [loading, setLoading] = useState(true);
+  const [footerData, setFooterData] = useState<any>(defaultFooterData);
 
-  useEffect(() => {
-    const fetchFooterLinks = async () => {
-      try {
-        const response = await axios.get("https://refones.com/api-auth_v1/api/footer-links");
-        if (response.data.status === "success") {
-          setFooterData(response.data.data);
-        } else {
-          setError("Failed to fetch footer links");
-        }
-      } catch (err) {
-        setError("An error occurred while fetching footer links");
-        console.error(err);
-      } finally {
-        setLoading(false);
+ useEffect(() => {
+  const fetchFooterLinks = async () => {
+    try {
+      const response = await axios.get(
+        "https://refones.com/api-auth_v1/api/footer-links"
+      );
+
+      if (response.data.status === "success" && response.data.data) {
+        setFooterData(response.data.data);
       }
-    };
+    } catch (err) {
+      console.error("API failed, static footer will remain.", err);
+    }
+  };
 
-    fetchFooterLinks();
-  }, []);
+  fetchFooterLinks();
+}, []);
 
-  if (loading) {
-    return (
-      <footer className="footer">
-        <div className="footer-wrapper">
-          <div className="loading-skeleton">Loading footer...</div>
-        </div>
-      </footer>
-    );
-  }
-
-  if (error) {
-    return (
-      <footer className="footer">
-        <div className="footer-wrapper">
-          <div className="error-message">{error}</div>
-        </div>
-      </footer>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <footer className="footer">
+  //       <div className="footer-wrapper">
+  //         <div className="loading-skeleton">Loading footer...</div>
+  //       </div>
+  //     </footer>
+  //   );
+  // }
 
   return (
     <footer className="footer">

@@ -239,6 +239,7 @@ const UserDashboard = () => {
                                                 value={formData.phone}
                                                 onChange={handleChange}
                                                 placeholder="Enter phone number"
+                                                disabled
                                             />
                                         </div>
                                         {/* <div className="form-group">
