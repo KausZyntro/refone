@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "./ProductSpecstest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
-// import { ProductSpecTest } from "@/types/producttest";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 interface ProductSpecsTestProps {
     product: ProductTest;
@@ -11,6 +11,8 @@ interface ProductSpecsTestProps {
 }
 
 const ProductSpecstest: React.FC<ProductSpecsTestProps> = ({ product, selectedVariant }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
     const specs = [
         { label: "Brand", value: product?.brand?.name },
         { label: "Model", value: product?.name },
@@ -28,19 +30,27 @@ const ProductSpecstest: React.FC<ProductSpecsTestProps> = ({ product, selectedVa
 
     return (
         <div className={styles.specsSection}>
-            <h3 className={styles.specsTitle}>Specifications</h3>
-            <table className={styles.specsTable}>
-                <tbody>
-                    {specs.map((spec, index) => (
-                        spec.value && (
-                            <tr key={index}>
-                                <td className={styles.labelCell}>{spec.label}</td>
-                                <td className={styles.valueCell}>{spec.value}</td>
-                            </tr>
-                        )
-                    ))}
-                </tbody>
-            </table>
+            <div className={styles.specsHeader} onClick={() => setIsOpen(!isOpen)}>
+                <h3 className={styles.specsTitle}>Specifications</h3>
+                <div className={styles.iconWrapper}>
+                    {isOpen ? <FiChevronUp className={styles.icon} /> : <FiChevronDown className={styles.icon} />}
+                </div>
+            </div>
+            
+            <div className={`${styles.tableContainer} ${isOpen ? styles.open : styles.closed}`}>
+                <table className={styles.specsTable}>
+                    <tbody>
+                        {specs.map((spec, index) => (
+                            spec.value && (
+                                <tr key={index}>
+                                    <td className={styles.labelCell}>{spec.label}</td>
+                                    <td className={styles.valueCell}>{spec.value}</td>
+                                </tr>
+                            )
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

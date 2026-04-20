@@ -4,14 +4,38 @@
     padding-top: 16px;
 }
 
+.specsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+    padding: 10px 0;
+    user-select: none;
+}
+
 .specsTitle {
     font-size: 18px;
     font-weight: 700;
     color: #222;
+    margin: 0;
     margin-bottom: 12px;
     padding-bottom: 8px;
     border-bottom: 2px solid #006ab0;
     display: inline-block;
+}
+
+.iconWrapper {
+    display: none;
+}
+
+.icon {
+    font-size: 20px;
+    color: #555;
+}
+
+.tableContainer {
+    display: block !important;
+    margin-top: 12px;
 }
 
 .specsTable {
@@ -44,23 +68,35 @@
     vertical-align: top;
 }
 
-@media (max-width: 480px) {
-    .specsTable tr {
-        display: flex;
-        flex-direction: column;
+@media (max-width: 768px) {
+    .specsHeader {
+        cursor: pointer;
     }
-
-    .labelCell {
-        width: 100%;
+    .specsTitle {
+        margin: 0;
+        padding: 0;
+        border-bottom: none;
+    }
+    .iconWrapper {
         display: block;
-        border-right: none;
-        border-bottom: 1px solid #e8e8e8;
-        background-color: #f5f5f5;
+    }
+    .tableContainer.closed {
+        display: none !important;
+    }
+    .tableContainer.open {
+        display: block !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .labelCell {
+        width: 100px;
+        padding: 8px 10px;
+        font-size: 12px;
     }
 
     .valueCell {
-        width: 100%;
-        display: block;
-        padding: 8px 12px;
+        padding: 8px 10px;
+        font-size: 12px;
     }
 }
