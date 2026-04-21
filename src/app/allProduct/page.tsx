@@ -128,7 +128,7 @@ export default function AllProductPage() {
                             </p>
                         </div>
 
-                        <div className={styles.contentActions}>
+                        {/* <div className={styles.contentActions}>
                             <div className={styles.sortBy}>
                                 <button
                                     className={styles.mobileFilterBtn}
@@ -147,7 +147,7 @@ export default function AllProductPage() {
                                     <option value="newest">Newest Arrivals</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Product Grid */}

@@ -70,7 +70,7 @@
 .footer-sections {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 9px;
 }
 
 .footer-section {
@@ -149,13 +149,13 @@
 }
 
 .footer-bottom {
-  margin-top: 60px;
+  /* margin-top: 60px; */
   padding-top: 30px;
   font-size: 14px;
   display: flex;
   flex-direction: column;
   gap: 25px;
-  border-top: 1px solid #eee;
+  /* border-top: 1px solid #eee; */
   color: #666;
 }
 

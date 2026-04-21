@@ -455,7 +455,39 @@
 
 @media (max-width: 480px) {
     .productGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .productCard {
+        padding: 10px;
+    }
+
+    .productImageWrapper {
+        height: 140px;
+        margin-bottom: 10px;
+    }
+
+    .productName {
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .productSpecs {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    .productPrice {
+        font-size: 16px;
+    }
+
+    .addToCartBtn {
+        padding: 8px;
+        font-size: 12px;
+        margin-top: 10px;
     }
 }
 
