@@ -19,16 +19,19 @@ const HeroSlider = () => {
       icon: <FaMobileAlt className="action-icon"/>,
       title: "Sell Phone",
       subtitle: "Get Best Price",
+      link: "/exchange-phone",
     },
     {
       icon: <FaShoppingCart className="action-icon"/>,
       title: "Buy Refurbished",
       subtitle: "Shop Like New",
+      link: "/allProduct",
     },
     {
       icon: <MdAttachMoney className="action-icon"/>,
       title: "Check Price",
       subtitle: "Find Value",
+      link: "/allProduct",
     },
   ];
   return (

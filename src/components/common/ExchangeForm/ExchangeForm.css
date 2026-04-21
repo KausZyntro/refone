@@ -1,0 +1,197 @@
+.exchangeWrapper {
+  display: flex;
+  max-width: 1100px;
+  margin: 154px auto; /* user requested margin */
+  gap: 3rem;
+  align-items: center;
+  padding: 0 1.5rem;
+}
+
+.lottieSection {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lottieAnimation {
+  width: 100%;
+  max-width: 500px;
+}
+
+.exchangeFormContainer {
+  flex: 1;
+  max-width: 550px;
+  width: 100%;
+  padding: 2.5rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* Soft, premium shadow */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+.exchangeFormTitle {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.exchangeFormSubtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.exchangeForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.formRow {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  color: #111827;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: #9ca3af;
+}
+
+.input:hover,
+.select:hover {
+  border-color: #d1d5db;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #006ab0;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(0, 106, 176, 0.1);
+}
+
+.input.error,
+.select.error {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.input.error:focus,
+.select.error:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+}
+
+.errorText {
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: 0.125rem;
+  font-weight: 500;
+}
+
+.submitBtn {
+  margin-top: 1rem;
+  padding: 0.875rem;
+  background-color: #006ab0;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  width: 100%;
+  font-family: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.submitBtn:hover {
+  background-color: #005690;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 106, 176, 0.25);
+}
+
+.submitBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0, 106, 176, 0.2);
+}
+
+.successMessage {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 800px) {
+  .exchangeWrapper {
+    flex-direction: column;
+    margin: 100px auto 50px auto;
+    gap: 1.5rem;
+  }
+  
+  .lottieSection {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .formRow {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  .exchangeFormContainer {
+    margin: 0;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+  }
+}
