@@ -14,21 +14,21 @@ import { FaMobileAlt, FaShoppingCart } from "react-icons/fa";
 import { MdAttachMoney } from "react-icons/md";
 
 const HeroSlider = () => {
-    const actions = [
+  const actions = [
     {
-      icon: <FaMobileAlt className="action-icon"/>,
+      icon: <FaMobileAlt className="action-icon" />,
       title: "Sell Phone",
       subtitle: "Get Best Price",
       link: "/exchange-phone",
     },
     {
-      icon: <FaShoppingCart className="action-icon"/>,
+      icon: <FaShoppingCart className="action-icon" />,
       title: "Buy Refurbished",
       subtitle: "Shop Like New",
       link: "/allProduct",
     },
     {
-      icon: <MdAttachMoney className="action-icon"/>,
+      icon: <MdAttachMoney className="action-icon" />,
       title: "Check Price",
       subtitle: "Find Value",
       link: "/allProduct",
@@ -56,11 +56,11 @@ const HeroSlider = () => {
               <div className="cta-section">
                 {/* <button className="cta-btn-buy">Buy</button>
                 <button className="cta-btn-sell">Sell</button> */}
-               
+
               </div>
-             
+
             </div>
-             <div className="action-cards-hero">
+            <div className="action-cards-hero">
               <ActionCards items={actions} />
             </div>
           </div>
@@ -78,10 +78,10 @@ const HeroSlider = () => {
               <div className="cta-section">
                 {/* <button className="cta-btn-buy">Buy</button>
                 <button className="cta-btn-sell">Sell</button> */}
-                
+
               </div>
             </div>
-             <div className="action-cards-hero">
+            <div className="action-cards-hero">
               <ActionCards items={actions} />
             </div>
           </div>
@@ -90,7 +90,7 @@ const HeroSlider = () => {
         <SwiperSlide>
           <div className="slide">
             <img
-            src="https://www.apple.com/newsroom/images/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/tile/Apple-iPhone-16-Pro-hero-geo-240909-lp.jpg.landing-big_2x.jpg"
+              src="https://www.apple.com/newsroom/images/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/tile/Apple-iPhone-16-Pro-hero-geo-240909-lp.jpg.landing-big_2x.jpg"
               alt="Slide 3"
             />
             <div className="hero-content">
@@ -101,7 +101,7 @@ const HeroSlider = () => {
                 <button className="cta-btn-sell">Sell</button> */}
               </div>
             </div>
-             <div className="action-cards-hero">
+            <div className="action-cards-hero">
               <ActionCards items={actions} />
             </div>
           </div>
