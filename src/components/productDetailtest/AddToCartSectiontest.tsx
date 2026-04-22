@@ -33,6 +33,9 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
     const [isMounted, setIsMounted] = useState(false);
     const { isProcessingPayment, isLoading: isPlacingOrder } = useSelector((state: RootState) => state.order);
 
+    const stock = selectedVariant?.inventory?.total_stock ?? 0;
+    const isInStock = stock > 0;
+
     useEffect(() => {
         setIsMounted(true);
     }, []);
@@ -162,18 +165,21 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
         <div className={styles.addToCart}>
             <div className={styles.buttonRow}>
                 <button
-                    className={styles.cartBtn}
+                    className={`${styles.cartBtn} ${!isInStock ? styles.outOfStockBtn : ""}`}
                     onClick={() => {
+                        if (!isInStock) return;
                         if (addedToCart) {
                             router.push("/cart");
                         } else {
                             handleAddToCart();
                         }
                     }}
-                    disabled={isLoading}
+                    disabled={isLoading || !isInStock}
                 >
                     <FaShoppingCart />
-                    {isLoading
+                    {!isInStock
+                        ? "Out of Stock"
+                        :isLoading
                         ? "Adding..."
                         : addedToCart
                             ? "Go to Cart"
@@ -183,8 +189,11 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
                 {showBuyNow && (
                     <button
                         className={styles.buyNowBtn}
-                        onClick={handleDirectBuy}
-                        disabled={isLoading}
+                        onClick={() => {
+                            if (!isInStock) return;
+                            handleDirectBuy();
+                            }}
+                        disabled={isLoading || !isInStock}
                     >
                         <FaBolt /> Buy Now
                     </button>

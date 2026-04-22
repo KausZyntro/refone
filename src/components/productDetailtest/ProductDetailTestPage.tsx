@@ -54,6 +54,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         (state: RootState) => state.product,
     );
     const [relatedProducts, setRelatedProducts] = React.useState<any[]>([]);
+    
 
     useEffect(() => {
         const fetchRelated = async () => {
@@ -135,6 +136,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                 <div className={styles.relatedSidebar}>
                     <RelatedProductstest 
                         products={relatedProducts.filter(p => p.id !== product?.id).slice(0, 5)} 
+                        selectedVariant={selectedVariant}
                         onProductSelect={(p) => router.push(`/product/${p.id}`)}
                     />
                 </div>

@@ -8,17 +8,21 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { addToCart, addLocalItem } from "@/redux/features/cartSlice";
 import { parsePrice } from "@/utils/format";
 import { toast } from "react-toastify";
+import {  VariantTest } from "@/types/producttest";
 import { useRouter } from "next/navigation";
 
 interface RelatedProductsTestProps {
     products: any[];
     onProductSelect?: (product: any) => void;
+    selectedVariant: VariantTest | null;
 }
 
-const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, onProductSelect }) => {
+const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, selectedVariant,onProductSelect }) => {
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useSelector((state: RootState) => state.auth);
     const [loadingProductId, setLoadingProductId] = useState<number | null>(null);
+    const stock = selectedVariant?.inventory?.total_stock ?? 0;
+    const isInStock = stock > 0;
 
     if (!products || products.length === 0) return null;
 
@@ -82,6 +86,8 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, onP
             <div className={styles.productsContainer}>
                 {products.map((product) => {
                     const variant = product.variants?.[0];
+                    const stock = variant?.inventory?.total_stock ?? 0;
+                    const isInStock = stock > 0;
                     // console.log(variant)
                     return (
                         <div 
@@ -108,11 +114,15 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, onP
                                     <span className={styles.cardPrice}>₹{Number(variant.pricing.selling_price).toLocaleString("en-IN")}</span>
                                 )}
                                 <button 
-                                    className={styles.cardBtn}
-                                    onClick={(e) => handleAddToCart(product, e)}
-                                    disabled={loadingProductId === product.id}
+                                className={`${styles.cardBtn} ${!isInStock ? styles.outOfStockBtn : ""}`}
+                                onClick={(e) => handleAddToCart(product, e)}
+                                disabled={loadingProductId === product.id || !isInStock}
                                 >
-                                    {loadingProductId === product.id ? "..." : "Add to Cart"}
+                                {loadingProductId === product.id 
+                                    ? "..." 
+                                    : !isInStock
+                                    ? "Out of Stock"
+                                    : "Add to Cart"}
                                 </button>
                             </div>
                         </div>

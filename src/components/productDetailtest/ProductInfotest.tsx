@@ -14,6 +14,7 @@ interface ProductInfoTestProps {
 const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVariant, setSelectedVariant }) => {
   // console.log(product)
 
+
   if (!selectedVariant) {
   return (
     <div className={styles.productInfo}>

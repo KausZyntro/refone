@@ -61,6 +61,20 @@
 .buyNowBtn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    background-color: #d1d5db !important;
+    color: #9ca3af !important;
+    border-color: #d1d5db !important;
+}
+
+.cartBtn.outOfStockBtn {
+  background-color: #e53935 !important;
+  color: #ffffff !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}
+
+.cartBtn.outOfStockBtn:hover {
+  background-color: #e53935 !important;
 }
 
 .wishlistRow {

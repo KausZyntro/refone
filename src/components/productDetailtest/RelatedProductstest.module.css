@@ -60,6 +60,16 @@
     color: #222;
     line-height: 1.3;
 }
+.cardBtn.outOfStockBtn {
+  background-color: #e53935 !important;
+  color: #fff !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}
+
+.cardBtn.outOfStockBtn:hover {
+  background-color: #e53935 !important;
+}
 
 .cardSubtitle {
     font-size: 11px;

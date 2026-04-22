@@ -39,7 +39,7 @@ const defaultFooterData = {
   "Help & Support": [
     { id: 4, title: "FAQ", page_key: "privacy-policy" },
     { id: 5, title: "Return Policy", page_key: "terms-conditions" },
-    { id: 6, title: "Contact Us", page_key: "return-policy" },
+    { id: 6, title: "Contact Us", page_key: "contact-us" },
     { id: 7, title: "Shipping Policy", page_key: "shipping-policy" }
   ],
   "More_Info": [

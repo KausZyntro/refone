@@ -182,4 +182,15 @@ export const orderAPI = {
     }
 };
 
+export const ExchangeAPI = {
+    submitExchange: async (payload: any) => {
+        const response = await api.post("/exchange", payload, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return response.data;
+    },
+};
+
 export default api;
