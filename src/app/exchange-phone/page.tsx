@@ -3,9 +3,9 @@ import React from 'react'
 
 const exchange = () => {
   return (
-    <>
-    <ExchangeForm />
-    </>
+    <div style={{ marginTop: '154px' }}>
+      <ExchangeForm />
+    </div>
   )
 }
 

@@ -110,9 +110,13 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, sel
                                 <span className={styles.cardSubtitle}>
                                     {variant ? `${variant.storage || ''} | ${variant.color || ''}` : "View product"}
                                 </span>
-                                {variant?.pricing?.selling_price && (
+                                {/* {variant?.pricing?.selling_price && (
                                     <span className={styles.cardPrice}>₹{Number(variant.pricing.selling_price).toLocaleString("en-IN")}</span>
-                                )}
+                                )} */}
+                                {/* correct price display */}
+                                 <span className={styles.sellingPrice}>
+                                    ₹XXXX
+                                    </span>
                                 <button 
                                 className={`${styles.cardBtn} ${!isInStock ? styles.outOfStockBtn : ""}`}
                                 onClick={(e) => handleAddToCart(product, e)}
