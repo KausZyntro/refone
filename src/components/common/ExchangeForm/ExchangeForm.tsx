@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { submitExchangeRequest } from '@/redux/features/exchangeSlice';
+import { toast } from 'react-toastify';
 import './ExchangeForm.css';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
@@ -37,6 +41,9 @@ export default function ExchangeForm() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading: isSubmitting } = useSelector((state: RootState) => state.exchange);
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
@@ -89,14 +96,14 @@ export default function ExchangeForm() {
     if (isSuccess) setIsSuccess(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: FormErrors = {};
     let isValid = true;
 
     // Validate all fields on submit
     (Object.keys(formData) as Array<keyof FormData>).forEach((key) => {
-      const errorMsg = validateField(key, formData[key]);
+      const errorMsg = validateField(key, formData[key] as string);
       if (errorMsg) {
         newErrors[key] = errorMsg;
         isValid = false;
@@ -106,13 +113,30 @@ export default function ExchangeForm() {
     setErrors(newErrors);
 
     if (isValid) {
-      console.log('Form data submitted successfully:', formData);
-      setIsSuccess(true);
-      // Optional: clear form
-      setFormData({
-        name: '', phone: '', email: '', brand: '', model: '',
-        variant: '', color: '', purchaseYear: ''
-      });
+      try {
+        const payload = {
+          full_name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          brand: formData.brand,
+          model: formData.model,
+          variant: formData.variant,
+          color: formData.color,
+          purchase_year: Number(formData.purchaseYear)
+        };
+
+        const response = await dispatch(submitExchangeRequest(payload)).unwrap();
+        
+        setIsSuccess(true);
+        toast.success(response.message || "Exchange request submitted successfully");
+        setFormData({
+          name: '', phone: '', email: '', brand: '', model: '',
+          variant: '', color: '', purchaseYear: ''
+        });
+      } catch (error: any) {
+        console.error("Exchange submission error:", error);
+        toast.error(error || "An error occurred while submitting. Please try again.");
+      }
     }
   };
 
@@ -252,8 +276,8 @@ export default function ExchangeForm() {
           {errors.purchaseYear && <span className="errorText">{errors.purchaseYear}</span>}
         </div>
 
-        <button type="submit" className="submitBtn">
-          Submit
+        <button type="submit" className="submitBtn" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </button>
 
         {isSuccess && (
