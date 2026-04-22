@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 import Lottie from 'lottie-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { submitSupportRequest } from '@/redux/features/supportSlice';
+import { toast } from 'react-toastify';
 import '@/styles/ContactSection.css';
 
 // Using a placeholder JSON for demonstration. 
@@ -35,8 +39,10 @@ const ContactSection = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading: isSubmitting } = useSelector((state: RootState) => state.support);
 
   // Validation Logic
   const validate = (): boolean => {
@@ -94,12 +100,20 @@ const ContactSection = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    setIsSubmitting(true);
-
-    // Simulate API call
+    // Redux API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        subject: formData.subject,
+        message: formData.message,
+      };
+
+      const response = await dispatch(submitSupportRequest(payload)).unwrap();
+      
       setIsSuccess(true);
+      // toast.success(response.message || "Support ticket submitted successfully");
       setFormData({
         name: '',
         email: '',
@@ -107,10 +121,10 @@ const ContactSection = () => {
         subject: '',
         message: '',
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting form', error);
+      toast.error(error || "An error occurred while submitting. Please try again.");
     } finally {
-      setIsSubmitting(false);
       // Optional: Hide success message after a few seconds
       setTimeout(() => setIsSuccess(false), 5000);
     }

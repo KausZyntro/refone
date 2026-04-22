@@ -128,7 +128,7 @@ export default function ExchangeForm() {
         const response = await dispatch(submitExchangeRequest(payload)).unwrap();
         
         setIsSuccess(true);
-        toast.success(response.message || "Exchange request submitted successfully");
+        // toast.success(response.message || "Exchange request submitted successfully");
         setFormData({
           name: '', phone: '', email: '', brand: '', model: '',
           variant: '', color: '', purchaseYear: ''

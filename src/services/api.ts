@@ -189,4 +189,11 @@ export const exchangeAPI = {
     },
 };
 
+export const supportAPI = {
+    submitSupportTicket: async (payload: any) => {
+        const response = await api.post("/support/submit", payload);
+        return response.data;
+    },
+};
+
 export default api;

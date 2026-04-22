@@ -406,9 +406,9 @@ useEffect(() => {
                   {
                     profileOpen && (
                       <div className="profile-dropdown" onClick={() => setProfileOpen(false)}>
-                        <Link href={'/my-orders'}>
+                        {/* <Link href={'/my-orders'}>
                           <div className="dropdown-item">My Orders</div>
-                        </Link>
+                        </Link> */}
                         <Link href={'/my-account'}><div className="dropdown-item">My Account</div></Link>
                         <div className="dropdown-item" onClick={handleLogout}>
                           Logout
@@ -429,9 +429,9 @@ useEffect(() => {
 
         {menuOpen && (
           <div className="mobile-menu">
-            <Link href={'/my-orders'}>
+            {/* <Link href={'/my-orders'}>
               <div className="mobile-item" onClick={() => setMenuOpen(false)}>My Orders</div>
-            </Link>
+            </Link> */}
             <Link href={'/my-account'}>
               <div className="mobile-item" onClick={() => setMenuOpen(false)}>My Account</div>
             </Link>
