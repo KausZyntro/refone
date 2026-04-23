@@ -187,6 +187,10 @@ export const exchangeAPI = {
         const response = await api.post("/exchange/submit", payload);
         return response.data;
     },
+    getProductList: async () => {
+        const response = await api.get("/exchange/products");
+        return response.data;
+    }
 };
 
 export const supportAPI = {

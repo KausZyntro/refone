@@ -17,13 +17,38 @@ export const submitExchangeRequest = createAsyncThunk(
     }
 );
 
+export const fetchExchangeProducts = createAsyncThunk(
+  "exchange/fetchProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await exchangeAPI.getProductList();
+
+      if (response.status === "success") {
+        return response.data;
+      } else {
+        return rejectWithValue(
+          response.message || "Failed to fetch products"
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong"
+      );
+    }
+  }
+);
+
 interface ExchangeState {
+    products: any[];
     isLoading: boolean;
     error: string | null;
     successData: any | null;
 }
 
 const initialState: ExchangeState = {
+    products: [],
     isLoading: false,
     error: null,
     successData: null,
@@ -55,6 +80,19 @@ const exchangeSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload as string;
                 state.successData = null;
+            })
+            .addCase(fetchExchangeProducts.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(fetchExchangeProducts.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.products = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchExchangeProducts.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
             });
     },
 });

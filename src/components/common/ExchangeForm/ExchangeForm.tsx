@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { submitExchangeRequest } from '@/redux/features/exchangeSlice';
+import { submitExchangeRequest, fetchExchangeProducts } from '@/redux/features/exchangeSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
 
@@ -20,6 +20,7 @@ interface FormData {
   variant: string;
   color: string;
   purchaseYear: string;
+  new_product_id: string;
 }
 
 interface FormErrors {
@@ -37,13 +38,18 @@ export default function ExchangeForm() {
     variant: '',
     color: '',
     purchaseYear: '',
+    new_product_id: '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSuccess, setIsSuccess] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading: isSubmitting } = useSelector((state: RootState) => state.exchange);
+  const { isLoading: isSubmitting, products } = useSelector((state: RootState) => state.exchange);
+
+  React.useEffect(() => {
+    dispatch(fetchExchangeProducts());
+  }, [dispatch]);
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
@@ -72,6 +78,8 @@ export default function ExchangeForm() {
           return `Year must be between 2000 and ${currentYear}`;
         }
         return '';
+      case 'new_product_id':
+        return value === '' ? 'Please select a product to exchange' : '';
       default:
         return '';
     }
@@ -122,7 +130,8 @@ export default function ExchangeForm() {
           model: formData.model,
           variant: formData.variant,
           color: formData.color,
-          purchase_year: Number(formData.purchaseYear)
+          purchase_year: Number(formData.purchaseYear),
+          new_product_id: Number(formData.new_product_id),
         };
 
         const response = await dispatch(submitExchangeRequest(payload)).unwrap();
@@ -131,7 +140,7 @@ export default function ExchangeForm() {
         // toast.success(response.message || "Exchange request submitted successfully");
         setFormData({
           name: '', phone: '', email: '', brand: '', model: '',
-          variant: '', color: '', purchaseYear: ''
+          variant: '', color: '', purchaseYear: '', new_product_id: ''
         });
       } catch (error: any) {
         console.error("Exchange submission error:", error);
@@ -274,6 +283,23 @@ export default function ExchangeForm() {
             ))}
           </select>
           {errors.purchaseYear && <span className="errorText">{errors.purchaseYear}</span>}
+        </div>
+
+        <div className="formGroup">
+          <label htmlFor="new_product_id" className="label">Select Product to Exchange With</label>
+          <select
+            id="new_product_id"
+            name="new_product_id"
+            value={formData.new_product_id}
+            onChange={handleChange}
+            className={`select ${errors.new_product_id ? 'error' : ''}`}
+          >
+            <option value="">Select a product</option>
+            {products && products.map((product: any) => (
+              <option key={product.id} value={product.id}>{product.name}</option>
+            ))}
+          </select>
+          {errors.new_product_id && <span className="errorText">{errors.new_product_id}</span>}
         </div>
 
         <button type="submit" className="submitBtn" disabled={isSubmitting}>
