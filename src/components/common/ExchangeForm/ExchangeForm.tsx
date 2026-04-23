@@ -286,7 +286,7 @@ export default function ExchangeForm() {
         </div>
 
         <div className="formGroup">
-          <label htmlFor="new_product_id" className="label">Select Product to Exchange With</label>
+          <label htmlFor="new_product_id" className="label">Wanna Upgrade</label>
           <select
             id="new_product_id"
             name="new_product_id"
