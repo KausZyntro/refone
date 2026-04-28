@@ -175,10 +175,21 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 // }, []);
 
 
-const getLocation = () => {
+const getLocation = async () => {
   if (!navigator.geolocation) {
     setCity("Not Supported");
     return;
+  }
+
+  if ("permissions" in navigator) {
+    const permission = await navigator.permissions.query({
+      name: "geolocation" as PermissionName,
+    });
+
+    if (permission.state === "denied") {
+      setCity("Enable Location in Settings");
+      return;
+    }
   }
 
   setCity("Fetching...");
