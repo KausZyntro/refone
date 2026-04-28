@@ -97,9 +97,48 @@ const Navbar = () => {
   }, [pathname, searchParams]);
 
 
+  const CITY_KEY = "user_city";
+const CITY_TS_KEY = "user_city_ts";
+const ONE_DAY = 24 * 60 * 60 * 1000;
 
 useEffect(() => {
-  if ("geolocation" in navigator) {
+  const savedCity = localStorage.getItem(CITY_KEY);
+  const savedTime = localStorage.getItem(CITY_TS_KEY);
+
+  // ✅ If cached and not expired → use it
+  if (savedCity && savedTime) {
+    const age = Date.now() - Number(savedTime);
+    if (age < ONE_DAY) {
+      setCity(savedCity);
+      return;
+    }
+  }
+
+  // ✅ Optional: check permission BEFORE triggering popup
+  if ("permissions" in navigator) {
+    navigator.permissions
+      .query({ name: "geolocation" as PermissionName })
+      .then((result) => {
+        if (result.state === "denied") {
+          setCity("Select Location");
+          return;
+        }
+
+        if (result.state === "granted" || result.state === "prompt") {
+          getLocation();
+        }
+      })
+      .catch(() => getLocation());
+  } else {
+    getLocation();
+  }
+
+  async function getLocation() {
+    if (!("geolocation" in navigator)) {
+      setCity("Not Supported");
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
@@ -110,7 +149,6 @@ useEffect(() => {
           );
 
           const data = await response.json();
-          console.log(data)
 
           const cityName =
             data.address.city ||
@@ -120,18 +158,19 @@ useEffect(() => {
             "Unknown Location";
 
           setCity(cityName);
+
+          // ✅ SAVE to cache
+          localStorage.setItem(CITY_KEY, cityName);
+          localStorage.setItem(CITY_TS_KEY, Date.now().toString());
         } catch (error) {
-          console.error("Error fetching city:", error);
           setCity("Location Error");
         }
       },
-      (error) => {
-        // console.warn("Geolocation error:", error.message);
+      () => {
         setCity("Select Location");
-      }
+      },
+      { timeout: 10000 }
     );
-  } else {
-    setCity("Not Supported");
   }
 }, []);
 
