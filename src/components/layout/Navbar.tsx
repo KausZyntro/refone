@@ -101,79 +101,147 @@ const Navbar = () => {
 const CITY_TS_KEY = "user_city_ts";
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
+// useEffect(() => {
+//   const savedCity = localStorage.getItem(CITY_KEY);
+//   const savedTime = localStorage.getItem(CITY_TS_KEY);
+
+//   // ✅ If cached and not expired → use it
+//   if (savedCity && savedTime) {
+//     const age = Date.now() - Number(savedTime);
+//     if (age < ONE_DAY) {
+//       setCity(savedCity);
+//       return;
+//     }
+//   }
+
+//   // ✅ Optional: check permission BEFORE triggering popup
+//   if ("permissions" in navigator) {
+//     navigator.permissions
+//       .query({ name: "geolocation" as PermissionName })
+//       .then((result) => {
+//         if (result.state === "denied") {
+//           setCity("Select Location");
+//           return;
+//         }
+
+//         if (result.state === "granted" || result.state === "prompt") {
+//           getLocation();
+//         }
+//       })
+//       .catch(() => getLocation());
+//   } else {
+//     getLocation();
+//   }
+
+//   async function getLocation() {
+//     if (!("geolocation" in navigator)) {
+//       setCity("Not Supported");
+//       return;
+//     }
+
+//     navigator.geolocation.getCurrentPosition(
+//       async (position) => {
+//         const { latitude, longitude } = position.coords;
+
+//         try {
+//           const response = await fetch(
+//             `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+//           );
+
+//           const data = await response.json();
+
+//           const cityName =
+//             data.address.city ||
+//             data.address.town ||
+//             data.address.village ||
+//             data.address.state_district ||
+//             "Unknown Location";
+
+//           setCity(cityName);
+
+//           // ✅ SAVE to cache
+//           localStorage.setItem(CITY_KEY, cityName);
+//           localStorage.setItem(CITY_TS_KEY, Date.now().toString());
+//         } catch (error) {
+//           setCity("Location Error");
+//         }
+//       },
+//       () => {
+//         setCity("Select Location");
+//       },
+//       { timeout: 10000 }
+//     );
+//   }
+// }, []);
+
+
+const getLocation = () => {
+  if (!navigator.geolocation) {
+    setCity("Not Supported");
+    return;
+  }
+
+  setCity("Fetching...");
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+        );
+
+        const data = await response.json();
+
+        const cityName =
+          data.address.city ||
+          data.address.town ||
+          data.address.village ||
+          data.address.state_district ||
+          "Unknown Location";
+
+        setCity(cityName);
+
+        // ✅ save in localStorage
+        localStorage.setItem("user_city", cityName);
+        localStorage.setItem("user_city_ts", Date.now().toString());
+
+      } catch (err) {
+        console.error(err);
+        setCity("Location Error");
+      }
+    },
+    (error) => {
+      console.error("Geolocation error:", error.message);
+
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      setCity("Permission Denied");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      setCity("Location Unavailable");
+      break;
+    case error.TIMEOUT:
+      setCity("Request Timeout");
+      break;
+    default:
+      setCity("Select Location");
+  }
+      // setCity("Select Location");
+    },
+    { timeout: 10000 }
+  );
+};
 useEffect(() => {
-  const savedCity = localStorage.getItem(CITY_KEY);
-  const savedTime = localStorage.getItem(CITY_TS_KEY);
+  const savedCity = localStorage.getItem("user_city");
 
-  // ✅ If cached and not expired → use it
-  if (savedCity && savedTime) {
-    const age = Date.now() - Number(savedTime);
-    if (age < ONE_DAY) {
-      setCity(savedCity);
-      return;
-    }
-  }
-
-  // ✅ Optional: check permission BEFORE triggering popup
-  if ("permissions" in navigator) {
-    navigator.permissions
-      .query({ name: "geolocation" as PermissionName })
-      .then((result) => {
-        if (result.state === "denied") {
-          setCity("Select Location");
-          return;
-        }
-
-        if (result.state === "granted" || result.state === "prompt") {
-          getLocation();
-        }
-      })
-      .catch(() => getLocation());
+  if (savedCity) {
+    setCity(savedCity);
   } else {
-    getLocation();
-  }
-
-  async function getLocation() {
-    if (!("geolocation" in navigator)) {
-      setCity("Not Supported");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-          );
-
-          const data = await response.json();
-
-          const cityName =
-            data.address.city ||
-            data.address.town ||
-            data.address.village ||
-            data.address.state_district ||
-            "Unknown Location";
-
-          setCity(cityName);
-
-          // ✅ SAVE to cache
-          localStorage.setItem(CITY_KEY, cityName);
-          localStorage.setItem(CITY_TS_KEY, Date.now().toString());
-        } catch (error) {
-          setCity("Location Error");
-        }
-      },
-      () => {
-        setCity("Select Location");
-      },
-      { timeout: 10000 }
-    );
+    setCity("Select Location");
   }
 }, []);
-
   const performSearch = useCallback(
     debounce(async (query: string) => {
       const trimmedQuery = query.trim().toLowerCase();
@@ -416,7 +484,7 @@ useEffect(() => {
           </div>
 
           <div className="nav-actions">
-            <div className="location">
+            <div className="location" onClick={getLocation}> 
               <FiMapPin />
               {/* <span>Rameswaram</span> */}
               <span>{city}</span>
