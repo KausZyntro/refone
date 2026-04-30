@@ -36,10 +36,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <p className={styles.productSpecs}>{displaySpecs}</p>
 
                 {/* price display correct */}
-                {/* <p className={styles.productPrice}>₹{Number(displayPrice).toLocaleString('en-IN')}</p> */}
-                 <span className={styles.sellingPrice}>
+                <p className={styles.productPrice}>₹{Number(displayPrice).toLocaleString('en-IN')}</p>
+                 {/* <span className={styles.sellingPrice}>
                     ₹XXXX
-                    </span>
+                    </span> */}
 
                 <AddToCartSectiontest
                     product={product}

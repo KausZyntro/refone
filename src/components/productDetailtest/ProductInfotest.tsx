@@ -51,14 +51,14 @@ const showMRP = false;
       </div>
 
       <div className={styles.priceRow}>
-        {/* <span className={styles.sellingPrice}>₹{Number(selectedVariant?.pricing?.selling_price).toLocaleString("en-IN")}</span> */}
-        {/* {selectedVariant?.pricing?.mrp && (
+        <span className={styles.sellingPrice}>₹{Number(selectedVariant?.pricing?.selling_price).toLocaleString("en-IN")}</span>
+        {selectedVariant?.pricing?.mrp && (
           <span className={styles.mrp}>₹{Number(selectedVariant?.pricing?.mrp).toLocaleString("en-IN")}</span>
-        )} */}
+        )}
         {/* correct price display */}
-        <span className={styles.sellingPrice}>
+        {/* <span className={styles.sellingPrice}>
           ₹XXXX
-        </span>
+        </span> */}
       </div>
 
       <div className={styles.stockBadge}>

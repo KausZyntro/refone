@@ -36,7 +36,6 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, sel
         }
 
         if (!user?.id) {
-            // Guest mode: add locally
             dispatch(addLocalItem({
                 id: Date.now(),
                 product_id: product.id,
@@ -88,7 +87,10 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, sel
                     const variant = product.variants?.[0];
                     const stock = variant?.inventory?.total_stock ?? 0;
                     const isInStock = stock > 0;
+
                     // console.log(variant)
+                    console.log(variant?.pricing?.selling_price
+)
                     return (
                         <div 
                             key={product.id} 
@@ -110,13 +112,13 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, sel
                                 <span className={styles.cardSubtitle}>
                                     {variant ? `${variant.storage || ''} | ${variant.color || ''}` : "View product"}
                                 </span>
-                                {/* {variant?.pricing?.selling_price && (
+                                {variant?.pricing?.selling_price && (
                                     <span className={styles.cardPrice}>₹{Number(variant.pricing.selling_price).toLocaleString("en-IN")}</span>
-                                )} */}
+                                )}
                                 {/* correct price display */}
-                                 <span className={styles.sellingPrice}>
+                                 {/* <span className={styles.sellingPrice}>
                                     ₹XXXX
-                                    </span>
+                                    </span> */}
                                 <button 
                                 className={`${styles.cardBtn} ${!isInStock ? styles.outOfStockBtn : ""}`}
                                 onClick={(e) => handleAddToCart(product, e)}
