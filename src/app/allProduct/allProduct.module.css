@@ -556,3 +556,108 @@
         display: flex;
     }
 }
+
+/* New ProductCard Styles */
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.bestsellerBadge {
+    background: #e6f6ec;
+    color: #0f766e;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.wishlistIconBtn {
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.wishlistIconBtn:hover {
+    color: #ef4444;
+}
+
+.ratingRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.ratingScore {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f59e0b;
+}
+
+.ratingCount {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.priceRow {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.productPrice {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.mrpPrice {
+    font-size: 13px;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+.discountBadge {
+    font-size: 12px;
+    font-weight: 700;
+    color: #10b981;
+}
+
+.emiText {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0 0 16px 0;
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.warrantyBadge {
+    background: #f3f4f6;
+    color: #374151;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 4px;
+}

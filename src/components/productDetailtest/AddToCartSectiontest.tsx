@@ -18,10 +18,11 @@ interface AddToCartSectionProps {
     selectedVariant: VariantTest | null;
     showWishlist?: boolean;
     showBuyNow?: boolean;
+    isIconOnly?: boolean;
 }
 
 const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, selectedVariant, showWishlist = true,
-    showBuyNow = false }) => {
+    showBuyNow = false, isIconOnly = false }) => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const [addedToCart, setAddedToCart] = useState(false);
@@ -34,7 +35,9 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
     const { isProcessingPayment, isLoading: isPlacingOrder } = useSelector((state: RootState) => state.order);
 
     const stock = selectedVariant?.inventory?.total_stock ?? 0;
-    const isInStock = stock > 0;
+    const inboundStock = selectedVariant?.inventory?.inbound_stock ?? 0;
+    const isActive = selectedVariant?.inventory?.is_active === 1;
+    const isInStock = stock > 0 || inboundStock > 0 || isActive;
 
     useEffect(() => {
         setIsMounted(true);
@@ -160,6 +163,28 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
             setIsLoading(false);
         }
     };
+
+    if (isIconOnly) {
+        return (
+            <button
+                className={`${styles.cartIconBtn} ${!isInStock ? styles.outOfStockBtn : ""} ${addedToCart ? styles.addedBtn : ""}`}
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!isInStock) return;
+                    if (addedToCart) {
+                        router.push("/cart");
+                    } else {
+                        handleAddToCart();
+                    }
+                }}
+                disabled={isLoading || !isInStock}
+                title={!isInStock ? "Out of Stock" : addedToCart ? "Go to Cart" : "Add to Cart"}
+            >
+                <FaShoppingCart />
+            </button>
+        );
+    }
 
     return (
         <div className={styles.addToCart}>

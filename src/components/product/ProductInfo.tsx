@@ -21,7 +21,7 @@ interface Pricing {
 interface Variant {
   id: number;
   pricing: Pricing;
-  inventory: { total_stock: number };
+  inventory: { total_stock: number; inbound_stock?: number; is_active?: number };
   images: { id: number; image_url: string }[];
 }
 
@@ -97,7 +97,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   const price = pricing ? parseFloat(pricing.selling_price) : 0;
   const discount = mrp && price ? Math.round(((mrp - price) / mrp) * 100) : 0;
   const stock = selectedVariant?.inventory?.total_stock ?? 0;
-  const isOutOfStock = stock <= 0;
+  const inboundStock = selectedVariant?.inventory?.inbound_stock ?? 0;
+  const isActive = selectedVariant?.inventory?.is_active === 1;
+  const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
 
   // const handleAddToCart = async () => {
   //   // Guard: user must be logged in

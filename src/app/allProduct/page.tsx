@@ -82,6 +82,19 @@ export default function AllProductPage() {
             </div>
         ))
     );
+    const sortedProducts = React.useMemo(() => {
+    return [...products].sort((a, b) => {
+        const stockA = a.variants?.[0]?.inventory?.available_stock || 0;
+        const stockB = b.variants?.[0]?.inventory?.available_stock || 0;
+
+        // In-stock first
+        if (stockA > 0 && stockB === 0) return -1;
+        if (stockA === 0 && stockB > 0) return 1;
+
+        return 0;
+    });
+}, [products]);
+console.log(sortedProducts)
 
     return (
         <div className={styles.pageContainer}>
@@ -155,7 +168,7 @@ export default function AllProductPage() {
                         {isProductsLoading ? (
                             renderSkeletons()
                         ) : products.length > 0 ? (
-                            products.map((product: any) => (
+                            sortedProducts.map((product: any) => (
                                 <ProductCard key={product.id} product={product} />
                             ))
                         ) : (

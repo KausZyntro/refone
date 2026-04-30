@@ -63,8 +63,8 @@ const showMRP = false;
 
       <div className={styles.stockBadge}>
         <span className={styles.stockDot}></span>
-        {selectedVariant?.inventory?.total_stock && selectedVariant.inventory.total_stock > 0
-          ? `In stock (${selectedVariant.inventory.total_stock} units)`
+        {(selectedVariant?.inventory?.total_stock ?? 0) > 0 || (selectedVariant?.inventory?.inbound_stock ?? 0) > 0 || selectedVariant?.inventory?.is_active === 1
+          ? `In stock`
           : "Out of stock"}
       </div>
 

@@ -38,6 +38,8 @@ export interface VariantTest {
     id: number;
     variant_id: number;
     total_stock: number;
+    inbound_stock?: number;
+    is_active?: number;
   };
   images: ProductImage[];
   product_warranty: any[];
