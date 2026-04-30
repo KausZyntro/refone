@@ -87,7 +87,7 @@ export default function AllProductPage() {
         const stockA = a.variants?.[0]?.inventory?.available_stock || 0;
         const stockB = b.variants?.[0]?.inventory?.available_stock || 0;
 
-        // In-stock first
+
         if (stockA > 0 && stockB === 0) return -1;
         if (stockA === 0 && stockB > 0) return 1;
 
