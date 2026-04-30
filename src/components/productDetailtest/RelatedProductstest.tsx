@@ -27,7 +27,7 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, sel
     if (!products || products.length === 0) return null;
 
     const handleAddToCart = async (product: any, e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent navigation
+        e.stopPropagation(); 
         
         const firstVariant = product.variants?.[0];
         if (!firstVariant) {
