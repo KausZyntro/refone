@@ -11,6 +11,7 @@ import Testimonials from "@/components/home/Testimonial";
 import FAQSection from "@/components/home/FaqSection";
 import ProductSlider from "@/components/home/ProductSlider";
 import ExchangePopup from "@/components/common/ExchangeForm/ExchangePopup";
+import FeaturesBanner from "@/components/home/FeaturesBanner";
 
 export default function Home() {
   return (
@@ -18,9 +19,12 @@ export default function Home() {
       <HeroSlider />
       <PhoneDetail />
       {/* <ProductSlider products={products} /> */}
-      {/* <ProductSlider/> */}
+      <ProductSlider/>
       {/* <Testimonials /> */}
       {/* <FAQSection /> */}
+      <FeaturesBanner/>
+      <FAQSection /> 
+      <Testimonials />
       <HeroAbout />
       <ExchangePopup />
     </div>

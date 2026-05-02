@@ -1,19 +1,28 @@
 "use client";
+import React, { useEffect, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import ProductCard from "@/components/ui/ProductCard";
+import RefoneProductCard from "@/components/ui/RefoneProductCard";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { fetchDashboardCampaigns } from "@/redux/features/dashboardCampaign";
 import { AppDispatch, RootState } from "@/redux/store";
 
 // const ProductSlider = ({ products }) => {
 const ProductSlider = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    setMobile(window.innerWidth < 768);
+    const handleResize = () => setMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const { products, campaigns, isLoading } = useSelector(
     (state: RootState) => state.campaign,
   );
@@ -21,79 +30,74 @@ const ProductSlider = () => {
     dispatch(fetchDashboardCampaigns());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log("Campaigns 👉", campaigns);
-    // console.log("products 👉", products); 
-  }, [campaigns, products]);
   return (
-    // <div className="container">
-    //   <header className="product-card-header">
-    //     <h1>Trending</h1>
-    //     {/* <h1>{campaigns.length}</h1> */}
-    //   </header>
-    //   <Swiper
-    //     modules={[Navigation]}
-    //     spaceBetween={20}
-    //     navigation
-    //     breakpoints={{
-    //       320: { slidesPerView: 1.1, spaceBetween: 12 },
-    //       480: { slidesPerView: 2, spaceBetween: 15 },
-    //       768: { slidesPerView: 2.5, spaceBetween: 20 },
-    //       1024: { slidesPerView: 3.5, spaceBetween: 25 },
-    //       1280: { slidesPerView: 4, spaceBetween: 30 },
-    //       1440: { slidesPerView: 4.5, spaceBetween: 30 },
-    //     }}
-    //   >
-    //     {products.map((product) => (
-    //       <SwiperSlide key={product.id}>
-    //         <ProductCard product={product} />
-    //       </SwiperSlide>
-    //     ))}
-    //   </Swiper>
-    // </div>
-
-    <div className="container">
-      {campaigns.map((campaign: any) => (
+    <div className="container" style={{ marginTop: '32px' }}>
+      {campaigns
+        .filter((c: any) => c.campaign_name === "Apple Fest 2025")
+        .map((campaign: any) => (
         <div key={campaign.campaign_id}>
-          <header className="product-card-header">
-            <h2>{campaign.campaign_name}</h2>
+          <header className="product-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '700' }}>{campaign.campaign_name}</h2>
+            <a href="/allProduct" style={{ color: '#006aaf', fontWeight: 600, fontSize: '14px' }}>View All</a>
           </header>
-          <Swiper
-            modules={[Navigation]}
-            spaceBetween={20}
-            navigation
-            breakpoints={{
-              320: { slidesPerView: 1.1, spaceBetween: 12 },
-              480: { slidesPerView: 2, spaceBetween: 15 },
-              768: { slidesPerView: 2.5, spaceBetween: 20 },
-              1024: { slidesPerView: 3.5, spaceBetween: 25 },
-              1280: { slidesPerView: 4, spaceBetween: 30 },
-              1440: { slidesPerView: 4.5, spaceBetween: 30 },
-            }}
-          >
-            {campaign.products.map((product: any, index: number) => {
-              // Flatten nested variant/pricing/image — raw API doesn't have flat price/image
-              const variant = product.variants?.[0];
-              const formattedProduct = {
-                id: product.id,
-                name: product.name,
-                brand: product.brand?.name,
-                slug: product.slug,
-                rating: product.rating,
-                price: variant?.pricing?.selling_price,
-                mrp: variant?.pricing?.mrp,
-                image: variant?.images?.[0]?.image_url,
-              };
+          
+          {mobile ? (
+            <div className="mobile-product-list" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {campaign.products.map((product: any, index: number) => {
+                const variant = product.variants?.[0];
+                const formattedProduct = {
+                  id: product.id,
+                  name: product.name,
+                  brand: product.brand?.name,
+                  slug: product.slug,
+                  rating: product.rating,
+                  price: variant?.pricing?.selling_price,
+                  mrp: variant?.pricing?.mrp,
+                  image: variant?.images?.[0]?.image_url,
+                  storage: variant?.attributes?.storage,
+                  color: variant?.attributes?.color,
+                  condition: product.condition || "Excellent",
+                };
+                return <RefoneProductCard key={`${product.id}-${index}`} product={formattedProduct} />;
+              })}
+            </div>
+          ) : (
+            <Swiper
+              modules={[Navigation]}
+              spaceBetween={20}
+              navigation
+              className="refone-product-swiper"
+              style={{ padding: '10px 0 20px 0' }}
+              breakpoints={{
+                768: { slidesPerView: 1.8, spaceBetween: 20 },
+                1024: { slidesPerView: 3.2, spaceBetween: 25 },
+                1280: { slidesPerView: 4, spaceBetween: 30 },
+              }}
+            >
+              {campaign.products.map((product: any, index: number) => {
+                const variant = product.variants?.[0];
+                const formattedProduct = {
+                  id: product.id,
+                  name: product.name,
+                  brand: product.brand?.name,
+                  slug: product.slug,
+                  rating: product.rating,
+                  price: variant?.pricing?.selling_price,
+                  mrp: variant?.pricing?.mrp,
+                  image: variant?.images?.[0]?.image_url,
+                  storage: variant?.attributes?.storage,
+                  color: variant?.attributes?.color,
+                  condition: product.condition || "Excellent",
+                };
 
-              return (
-                <SwiperSlide
-                  key={`${campaign.campaign_id}-${product.id}-${index}`}
-                >
-                  <ProductCard product={formattedProduct} />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+                return (
+                  <SwiperSlide key={`${campaign.campaign_id}-${product.id}-${index}`}>
+                    <RefoneProductCard product={formattedProduct} />
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          )}
         </div>
       ))}
     </div>

@@ -9,6 +9,7 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+
 import Link from 'next/link';
 
 // Fetch function integrated directly into the page
@@ -32,16 +33,44 @@ async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
   }
 }
 
+// export async function generateMetadata({ params }: Props): Promise<Metadata> {
+//   const { slug } = await params;
+//   const blog = await getBlogBySlug(slug);
+//   console.log(blog);
+//   if (!blog) {
+//     return { title: 'Blog Not Found | Refone' };
+//   }
+//   return {
+//     title: `${blog.title} | Refone Blog`,
+//     description: blog.excerpt,
+//   };
+// }
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const {slug} = await params; 
+  console.log('Slug:', slug);
+
   const blog = await getBlogBySlug(slug);
+   console.log('Blog Data:', blog);
+
   if (!blog) {
-    return { title: 'Blog Not Found | Refone' };
+    return {
+      title: 'Blog | Refone',
+      description: 'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+    };
   }
+
   return {
-    title: `${blog.title} | Refone Blog`,
-    description: blog.excerpt,
+    title: `${slug} | Refone`,
+    alternates: {
+      canonical: `https://refone.co.in/blog/${slug}`,
+    },
+    description:
+      blog?.excerpt?.rendered ||
+      blog?.excerpt ||
+      'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
   };
+  
 }
 
 export default async function BlogDetailPage({ params }: Props) {

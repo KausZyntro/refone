@@ -26,7 +26,7 @@ const testimonials = [
   {
     name: "Satheesh Kumaram",
     location: "Bengaluru",
-    text: "It was a wonderful experience with Cashify. I got a reasonable price for my product and their response was very quick! Good to see such a service available",
+    text: "It was a wonderful experience with Refone. I got a reasonable price for my product and their response was very quick! Good to see such a service available",
     image:
       "https://s3bg.cashify.in/gpro/uploads/2019/09/13044450/image-2-min-2.jpeg",
   },

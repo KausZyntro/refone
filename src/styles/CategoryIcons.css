@@ -1,0 +1,138 @@
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.category-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.view-all-link {
+  color: #006aaf;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.category-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.category-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  scroll-behavior: smooth;
+  padding: 10px 0;
+  list-style: none;
+  scrollbar-width: none; /* Firefox */
+}
+
+.category-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.category-item {
+  flex: 0 0 auto;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 130px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 106, 175, 0.1);
+  border-color: #006aaf;
+}
+
+.category-img-wrapper {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.category-img-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.category-emoji {
+  font-size: 32px;
+}
+
+.category-card p {
+  font-size: 13px;
+  color: #444;
+  font-weight: 500;
+  text-align: center;
+}
+
+.nav-btn-cat {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  z-index: 10;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.nav-btn-cat:hover {
+  background: #006aaf;
+  color: #fff;
+  border-color: #006aaf;
+}
+
+.nav-btn-cat.left {
+  left: -18px;
+}
+
+.nav-btn-cat.right {
+  right: -18px;
+}
+
+@media (max-width: 768px) {
+  .nav-btn-cat {
+    display: none; /* Hide scroll buttons on mobile, let users swipe */
+  }
+  .category-card {
+    width: 100px;
+    height: 110px;
+  }
+  .category-img-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+  .category-card p {
+    font-size: 12px;
+  }
+}
