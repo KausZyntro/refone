@@ -32,7 +32,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* object-fit: cover; */
+  /* object-fit: cover;
+  object-position: top; */
 }
 
 .content {
@@ -72,7 +74,7 @@
 }
 
 .author {
-  color: #0070f3; /* Same blue as category */
+  color: #0070f3;
   font-weight: 500;
 }
 

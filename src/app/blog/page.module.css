@@ -1,7 +1,8 @@
 .pageWrapper {
   background-color: #f4f6f8;
   min-height: 100vh;
-  padding: 40px 0;
+  /* padding: 40px 0; */
+  padding: 121px 0;
 }
 
 .container {
