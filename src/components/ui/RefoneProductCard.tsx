@@ -8,6 +8,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
     product.mrp && product.price
       ? Math.round(((product.mrp - product.price) / product.mrp) * 100)
       : null;
+      // console.log(product)
 
   return (
     <Link href={`/product/${product.id || product.slug || ""}`}>
@@ -15,7 +16,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
         <div className="card-left">
           <div className="product-image-container">
             <img
-              src={product.image || "https://s3n.cashify.in/cashify/product/img/xhdpi/c94b5952-32a2.jpg"}
+              src={product.image}
               alt={product.name}
               className="card-image"
             />
@@ -31,7 +32,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
           </div>
           
           <p className="card-specs">
-            {product.storage || "128GB"} • {product.color || "Starlight"}
+            {product.storage || "128GB"} • {product.color}
           </p>
           
           <div className="condition-tag">

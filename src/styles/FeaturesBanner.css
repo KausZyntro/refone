@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f8fcfb;
+  background-color: #f0f7ff; /* Very light blue background matching #006aaf theme */
   border-radius: 20px;
   padding: 24px 32px;
   gap: 20px;
@@ -11,7 +11,7 @@
 
 .feature-item {
   display: flex;
-  align-items: center; /* Horizontal layout for big screen */
+  align-items: center;
   gap: 16px;
   flex: 1;
 }
@@ -20,8 +20,8 @@
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  background-color: #e6f7ef;
-  color: #006b54;
+  background-color: rgba(0, 106, 175, 0.15); /* Light blue icon background */
+  color: #006aaf; /* Theme color */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,9 +38,9 @@
 
 .feature-text p {
   font-size: 12px;
-  color: #666;
+  color: #555;
   line-height: 1.4;
-  display: block; /* Show description on big screen */
+  display: block;
 }
 
 /* Small screen adjustments */
@@ -49,10 +49,11 @@
     padding: 15px 10px;
     gap: 8px;
     justify-content: space-around;
+    background-color: #f0f7ff;
   }
   
   .feature-item {
-    flex-direction: column; /* Vertical layout for small screen */
+    flex-direction: column;
     text-align: center;
     gap: 8px;
   }
@@ -67,9 +68,10 @@
     font-size: 10px;
     max-width: 60px;
     margin: 0 auto;
+    color: #006aaf; /* Make title blue on mobile for more theme emphasis */
   }
   
   .feature-text p {
-    display: none; /* Hide description on small screen to save space */
+    display: none;
   }
 }
