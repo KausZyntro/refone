@@ -47,7 +47,6 @@ const MyOrdersPage = () => {
     return (
         <main className="orders-page">
             <div className="orders-container">
-                {/* Breadcrumb & Header */}
                 <div className="orders-header">
                     <div className="breadcrumb">
                         <Link href="/">Home</Link> / My Orders
