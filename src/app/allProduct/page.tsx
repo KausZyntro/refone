@@ -143,17 +143,12 @@ console.log(sortedProducts)
 
                         {/* <div className={styles.contentActions}>
                             <div className={styles.sortBy}>
-                                <button
-                                    className={styles.mobileFilterBtn}
-                                    onClick={() => setShowMobileFilters(true)}
-                                >
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                                    </svg>
-                                    Filters
-                                </button>
                                 <span>Sort by:</span>
-                                <select className={styles.sortBySelect} defaultValue="popularity">
+                                <select 
+                                    className={styles.sortBySelect} 
+                                    value={filters.sort || 'popularity'}
+                                    onChange={(e) => handleFilterChange('sort', e.target.value)}
+                                >
                                     <option value="popularity">Popularity</option>
                                     <option value="price-low">Price: Low to High</option>
                                     <option value="price-high">Price: High to Low</option>
@@ -200,18 +195,41 @@ console.log(sortedProducts)
                     )}
                 </div>
             </div>
+            {/* Sticky Bottom Bar for Mobile */}
+            <div className={styles.stickyBottomBar}>
+                <button className={styles.stickyBarBtn} onClick={() => setShowMobileFilters(true)}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="4" y1="21" x2="4" y2="14"></line>
+                        <line x1="4" y1="10" x2="4" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12" y2="3"></line>
+                        <line x1="20" y1="21" x2="20" y2="16"></line>
+                        <line x1="20" y1="12" x2="20" y2="3"></line>
+                        <line x1="1" y1="14" x2="7" y2="14"></line>
+                        <line x1="9" y1="8" x2="15" y2="8"></line>
+                        <line x1="17" y1="16" x2="23" y2="16"></line>
+                    </svg>
+                    Filters
+                </button>
+            </div>
+
             {showMobileFilters && (
                 <div
                     className={styles.mobileFilterOverlay}
-                    onClick={() => setShowMobileFilters(false)} // overlay click = close
+                    onClick={() => setShowMobileFilters(false)}
                 >
                     <div
                         className={styles.mobileFilterDrawer}
-                        onClick={(e) => e.stopPropagation()} // drawer click = close na ho
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <div className={styles.mobileFilterHeader}>
-                            <h3>Filters</h3>
-                            <button onClick={() => setShowMobileFilters(false)}>✕</button>
+                            <h3 style={{ fontSize: '18px', fontWeight: 600 }}>Filters</h3>
+                            <button 
+                                onClick={() => setShowMobileFilters(false)}
+                                style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer' }}
+                            >
+                                ✕
+                            </button>
                         </div>
 
                         <Sidebar

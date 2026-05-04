@@ -255,10 +255,40 @@
 .contentHeader {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 20px;
-    margin-bottom: 25px;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 480px) {
+    .contentHeader {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 10px;
+        padding-bottom: 10px;
+    }
+    .titleArea {
+        flex: 1;
+    }
+    .contentTitle {
+        font-size: 20px;
+        margin-bottom: 4px;
+    }
+    .contentSubtitle {
+        font-size: 13px;
+    }
+    .contentActions {
+        margin-top: 0;
+    }
+    .sortBy {
+        font-size: 12px;
+    }
+    .sortBySelect {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
 }
 
 .titleArea {
@@ -457,38 +487,82 @@
 @media (max-width: 480px) {
     .productGrid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        gap: 8px;
     }
 
     .productCard {
         padding: 10px;
+        border-radius: 8px;
     }
 
     .productImageWrapper {
-        height: 140px;
-        margin-bottom: 10px;
+        height: 120px;
+        margin-bottom: 8px;
+        padding: 8px;
     }
 
     .productName {
-        font-size: 14px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 13px;
+        margin-bottom: 2px;
+        line-height: 1.2;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+        height: 32px;
     }
 
     .productSpecs {
-        font-size: 11px;
+        font-size: 10px;
+        margin-bottom: 6px;
+        color: #9ca3af;
+    }
+
+    .ratingRow {
+        gap: 4px;
         margin-bottom: 8px;
     }
 
+    .ratingScore {
+        font-size: 11px;
+    }
+
+    .ratingCount {
+        font-size: 10px;
+    }
+
+    .priceRow {
+        gap: 4px;
+        margin-bottom: 4px;
+    }
+
     .productPrice {
-        font-size: 16px;
+        font-size: 14px;
+    }
+
+    .mrpPrice {
+        font-size: 11px;
+    }
+
+    .discountBadge {
+        font-size: 10px;
+    }
+
+    .emiText {
+        font-size: 10px;
+        margin-bottom: 10px;
+    }
+
+    .warrantyBadge {
+        font-size: 8px;
+        padding: 3px 5px;
+        white-space: nowrap;
     }
 
     .addToCartBtn {
-        padding: 8px;
-        font-size: 12px;
-        margin-top: 10px;
+        padding: 6px;
+        font-size: 11px;
+        margin-top: 8px;
     }
 }
 
@@ -530,17 +604,66 @@
 .mobileFilterDrawer {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 80%;
-    max-width: 320px;
+    right: 0;
+    width: 90%;
+    max-width: 360px;
     height: 100%;
     background: white;
-    padding: 15px;
+    padding: 20px;
     overflow-y: auto;
     z-index: 100000;
-    transform: translateX(-100%);
-    animation: slideIn 0.3s ease forwards;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%);
+    animation: slideInRight 0.3s ease forwards;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideInRight {
+    to {
+        transform: translateX(0);
+    }
+}
+
+.stickyBottomBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: none;
+    grid-template-columns: 1fr;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+}
+
+.stickyBarBtn {
+    padding: 14px;
+    background: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+}
+
+.stickyBarBtn svg {
+    color: #006ab0;
+}
+
+@media (max-width: 768px) {
+    .stickyBottomBar {
+        display: grid;
+    }
+    .pageContainer {
+        padding-bottom: 80px;
+        margin: 80px auto 16px;
+    }
 }
 
 /* Header */
