@@ -13,18 +13,15 @@ interface BlogCardProps {
 const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   const [imgError, setImgError] = useState(false);
 
-  // Safely parse WordPress REST API data structures or fallback to normal objects
   const title = blog?.title?.rendered || blog?.title || 'Untitled';
   const slug = blog?.slug || '';
   
-  // Try to find WordPress featured image from various possible locations
   const coverImage = blog?._embedded?.['wp:featuredmedia']?.[0]?.source_url 
                   || blog?.yoast_head_json?.og_image?.[0]?.url 
                   || blog?.jetpack_featured_media_url 
                   || blog?.coverImage 
                   || '';
 
-  // Parse WordPress categories if embedded
   let category = 'Blog';
   if (blog?._embedded?.['wp:term']?.[0]?.[0]?.name) {
     category = blog._embedded['wp:term'][0][0].name;

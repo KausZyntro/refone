@@ -25,29 +25,61 @@ export const metadata: Metadata = {
 //     return [];
 //   }
 // }
-async function getBlogs(): Promise<BlogPost[]> {
-  const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'http://refones.com/blogs/wp-json/wp/v2/posts';
+// async function getBlogs(): Promise<BlogPost[]> {
+//   const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'https://refones.com/blogs/wp-json/wp/v2/posts';
 
+//   try {
+//     // Append _embed to get featured images and authors from WP
+//     const url = baseUrl.includes('?') ? `${baseUrl}&_embed` : `${baseUrl}?_embed`;
+//     console.log("Fetching blogs from:", url);
+
+//     const response = await fetch(url, {
+//       next: { revalidate: 60 },
+//     });
+
+//     // console.log("Response status:", response.status);
+//     // console.log("Response ok:", response.ok);
+
+//     const rawData = await response.json();
+//     // console.log("API Response:", rawData);
+
+//     if (!response.ok) return [];
+
+//     return Array.isArray(rawData) ? rawData : (rawData.data || []);
+//   } catch (error) {
+//     console.error("Error fetching blogs:", error);
+//     return [];
+//   }
+// }
+
+async function getBlogs(): Promise<BlogPost[]> {
   try {
-    // Append _embed to get featured images and authors from WP
-    const url = baseUrl.includes('?') ? `${baseUrl}&_embed` : `${baseUrl}?_embed`;
-    console.log("Fetching blogs from:", url);
+    const url = "https://refones.com/blogs/wp-json/wp/v2/posts?_embed";
 
     const response = await fetch(url, {
       next: { revalidate: 60 },
     });
 
-    // console.log("Response status:", response.status);
-    // console.log("Response ok:", response.ok);
+    // ❗ Check BEFORE parsing JSON
+    if (!response.ok) {
+      console.error("API failed:", response.status);
+      return [];
+    }
 
-    const rawData = await response.json();
-    // console.log("API Response:", rawData);
+    const text = await response.text();
 
-    if (!response.ok) return [];
+    // ❗ Prevent crash if not JSON
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error("Invalid JSON:", text);
+      return [];
+    }
 
-    return Array.isArray(rawData) ? rawData : (rawData.data || []);
+    return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error("Error fetching blogs:", error);
+    console.error("Blog fetch error:", error);
     return [];
   }
 }
