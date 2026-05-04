@@ -26,7 +26,7 @@ export default function Home() {
       <FAQSection /> 
       <Testimonials />
       <HeroAbout />
-      <ExchangePopup />
+      {/* <ExchangePopup /> */}
     </div>
   );
 }
