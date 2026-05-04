@@ -50,16 +50,25 @@ const showMRP = false;
         <RatingStarstest rating={4.5} reviewCount={128} />
       </div>
 
-      <div className={styles.priceRow}>
-        <span className={styles.sellingPrice}>₹{Number(selectedVariant?.pricing?.selling_price).toLocaleString("en-IN")}</span>
-        {selectedVariant?.pricing?.mrp && (
-          <span className={styles.mrp}>₹{Number(selectedVariant?.pricing?.mrp).toLocaleString("en-IN")}</span>
-        )}
-        {/* correct price display */}
-        {/* <span className={styles.sellingPrice}>
-          ₹XXXX
-        </span> */}
-      </div>
+      {(() => {
+        const stock = selectedVariant?.inventory?.total_stock ?? 0;
+        const inboundStock = selectedVariant?.inventory?.inbound_stock ?? 0;
+        const isActive = selectedVariant?.inventory?.is_active === 1;
+        const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
+
+        return isOutOfStock ? (
+          <div className={styles.priceRow}>
+            <span className={styles.sellingPrice} style={{ color: '#d32f2f', fontSize: '1.2rem' }}>Updating soon</span>
+          </div>
+        ) : (
+          <div className={styles.priceRow}>
+            <span className={styles.sellingPrice}>₹{Number(selectedVariant?.pricing?.selling_price).toLocaleString("en-IN")}</span>
+            {selectedVariant?.pricing?.mrp && (
+              <span className={styles.mrp}>₹{Number(selectedVariant?.pricing?.mrp).toLocaleString("en-IN")}</span>
+            )}
+          </div>
+        );
+      })()}
 
       <div className={styles.stockBadge}>
         <span className={styles.stockDot}></span>

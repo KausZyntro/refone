@@ -8,7 +8,11 @@ const RefoneProductCard = ({ product }: { product: any }) => {
     product.mrp && product.price
       ? Math.round(((product.mrp - product.price) / product.mrp) * 100)
       : null;
-      // console.log(product)
+
+  const stock = product.total_stock ?? 0;
+  const inboundStock = product.inbound_stock ?? 0;
+  const isActive = product.is_active === 1;
+  const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
 
   return (
     <Link href={`/product/${product.id || product.slug || ""}`}>
@@ -39,15 +43,21 @@ const RefoneProductCard = ({ product }: { product: any }) => {
             <span>{product.condition || "Excellent"}</span>
           </div>
 
-          <div className="price-row">
-            <span className="current-price">₹{product.price?.toLocaleString()}</span>
-            {product.mrp && (
-              <span className="mrp-price">₹{product.mrp?.toLocaleString()}</span>
-            )}
-            {discount && (
-              <span className="discount-tag">{discount}% OFF</span>
-            )}
-          </div>
+          {isOutOfStock ? (
+            <div className="price-row">
+              <span className="current-price" style={{ color: '#d32f2f', fontSize: '0.9rem' }}>Updating soon</span>
+            </div>
+          ) : (
+            <div className="price-row">
+              <span className="current-price">₹{product.price?.toLocaleString()}</span>
+              {product.mrp && (
+                <span className="mrp-price">₹{product.mrp?.toLocaleString()}</span>
+              )}
+              {discount && (
+                <span className="discount-tag">{discount}% OFF</span>
+              )}
+            </div>
+          )}
 
           <div className="card-footer-row">
             <span className="emi-text">EMI from ₹{Math.round(product.price / 12).toLocaleString()}/m</span>

@@ -61,15 +61,30 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     <span className={styles.ratingCount}>(12,458)</span>
                 </div>
 
-                <div className={styles.priceRow}>
-                    <span className={styles.productPrice}>₹{sellingPrice.toLocaleString('en-IN')}</span>
-                    {discount > 0 && (
-                        <>
-                            <span className={styles.mrpPrice}>₹{mrp.toLocaleString('en-IN')}</span>
-                            <span className={styles.discountBadge}>{discount}% OFF</span>
-                        </>
-                    )}
-                </div>
+                {(() => {
+                    const stock = firstVariant?.inventory?.total_stock ?? 0;
+                    const inboundStock = firstVariant?.inventory?.inbound_stock ?? 0;
+                    const isActive = firstVariant?.inventory?.is_active === 1;
+                    const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
+
+                    return (
+                        <div className={styles.priceRow}>
+                            {isOutOfStock ? (
+                                <span className={styles.productPrice} style={{ color: '#d32f2f', fontSize: '1rem' }}>Updating soon</span>
+                            ) : (
+                                <>
+                                    <span className={styles.productPrice}>₹{sellingPrice.toLocaleString('en-IN')}</span>
+                                    {discount > 0 && (
+                                        <>
+                                            <span className={styles.mrpPrice}>₹{mrp.toLocaleString('en-IN')}</span>
+                                            <span className={styles.discountBadge}>{discount}% OFF</span>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    );
+                })()}
 
                 <p className={styles.emiText}>EMI from ₹1,028/m</p>
 

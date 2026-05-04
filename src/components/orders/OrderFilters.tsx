@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { FiSearch, FiChevronDown } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi';
 
 interface OrderFiltersProps {
     activeTab: string;
@@ -10,7 +10,17 @@ interface OrderFiltersProps {
 }
 
 const OrderFilters: React.FC<OrderFiltersProps> = ({ activeTab, onTabChange, onSearch, onSort }) => {
-    const tabs = ['All Orders', 'Pending', 'Shipped', 'Delivered', 'Cancelled'];
+    const tabs = ['All Orders', 'placed', 'processing', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+
+    const tabLabels: Record<string, string> = {
+        'All Orders': 'All Orders',
+        placed: 'Placed',
+        processing: 'Processing',
+        confirmed: 'Confirmed',
+        shipped: 'Shipped',
+        delivered: 'Delivered',
+        cancelled: 'Cancelled',
+    };
 
     return (
         <div className="orders-filters-container">
@@ -21,7 +31,7 @@ const OrderFilters: React.FC<OrderFiltersProps> = ({ activeTab, onTabChange, onS
                         className={`filter-tab ${activeTab === tab ? 'active' : ''}`}
                         onClick={() => onTabChange(tab)}
                     >
-                        {tab}
+                        {tabLabels[tab] || tab}
                     </button>
                 ))}
             </div>
@@ -31,7 +41,7 @@ const OrderFilters: React.FC<OrderFiltersProps> = ({ activeTab, onTabChange, onS
                     <FiSearch />
                     <input
                         type="text"
-                        placeholder="Search by Order ID"
+                        placeholder="Search by product name or order ID"
                         onChange={(e) => onSearch(e.target.value)}
                     />
                 </div>

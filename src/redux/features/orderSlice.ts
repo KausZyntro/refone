@@ -62,12 +62,27 @@ export const placeOrder = createAsyncThunk(
     }
 );
 
-const initialState: OrderState & { isProcessingPayment: boolean } = {
+export const fetchOrderList = createAsyncThunk(
+    "order/fetchOrderList",
+    async (customer_id: number, { rejectWithValue }) => {
+        try {
+            const response = await orderAPI.fetchOrderList(customer_id);
+            return response.data; // The array of orders
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to fetch orders"
+            );
+        }
+    }
+);
+
+const initialState: OrderState & { isProcessingPayment: boolean; orders: any[] } = {
     isLoading: false,
     isProcessingPayment: false,
     error: null,
     success: false,
     currentOrderId: null,
+    orders: [],
 };
 
 const orderSlice = createSlice({
@@ -111,6 +126,18 @@ const orderSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload as string;
                 state.success = false;
+            })
+            .addCase(fetchOrderList.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(fetchOrderList.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.orders = action.payload || [];
+            })
+            .addCase(fetchOrderList.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
             });
     }
 });

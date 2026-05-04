@@ -180,15 +180,21 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
 
       {/* Price row + rating side by side */}
       <div className="pi-price-rating-row">
-        <div className="price-row">
-          {mrp > price && (
-            <span className="old-price">₹{mrp.toLocaleString("en-IN")}</span>
-          )}
-          <span className="new-price">₹{price.toLocaleString("en-IN")}</span>
-          {discount > 0 && (
-            <span className="discount-badge">{discount}% off</span>
-          )}
-        </div>
+        {isOutOfStock ? (
+          <div className="price-row">
+            <span className="new-price" style={{ color: '#d32f2f', fontSize: '1.2rem' }}>Updating soon</span>
+          </div>
+        ) : (
+          <div className="price-row">
+            {mrp > price && (
+              <span className="old-price">₹{mrp.toLocaleString("en-IN")}</span>
+            )}
+            <span className="new-price">₹{price.toLocaleString("en-IN")}</span>
+            {discount > 0 && (
+              <span className="discount-badge">{discount}% off</span>
+            )}
+          </div>
+        )}
         <StarRating rating={4.2} count={289} />
       </div>
 

@@ -179,6 +179,10 @@ export const orderAPI = {
             },
         });
         return response.data;
+    },
+    fetchOrderList: async (customer_id: number) => {
+        const response = await api.post("/order/list", { customer_id });
+        return response.data;
     }
 };
 

@@ -472,7 +472,19 @@ useEffect(() => {
                         />
                         <div className="result-info">
                           <span className="result-name">{product.name}</span>
-                          <span className="result-price">₹{Number(product.variants?.[0]?.pricing?.selling_price || 0).toLocaleString('en-IN')}</span>
+                          {(() => {
+                            const firstVariant = product.variants?.[0];
+                            const stock = firstVariant?.inventory?.total_stock ?? 0;
+                            const inboundStock = firstVariant?.inventory?.inbound_stock ?? 0;
+                            const isActive = firstVariant?.inventory?.is_active === 1;
+                            const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
+
+                            return isOutOfStock ? (
+                              <span className="result-price" style={{ color: '#d32f2f', fontSize: '0.8rem' }}>Updating soon</span>
+                            ) : (
+                              <span className="result-price">₹{Number(firstVariant?.pricing?.selling_price || 0).toLocaleString('en-IN')}</span>
+                            );
+                          })()}
                         </div>
                       </Link>
                     ))}
@@ -524,9 +536,9 @@ useEffect(() => {
                   {
                     profileOpen && (
                       <div className="profile-dropdown" onClick={() => setProfileOpen(false)}>
-                        {/* <Link href={'/my-orders'}>
+                        <Link href={'/my-orders'}>
                           <div className="dropdown-item">My Orders</div>
-                        </Link> */}
+                        </Link>
                         <Link href={'/my-account'}><div className="dropdown-item">My Account</div></Link>
                         <div className="dropdown-item" onClick={handleLogout}>
                           Logout

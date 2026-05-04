@@ -1,45 +1,85 @@
 "use client"
 import React from 'react';
-import OrderStatusBadge, { OrderStatus } from './OrderStatusBadge';
+import OrderStatusBadge from './OrderStatusBadge';
 import OrdersTimeline from './OrdersTimeline';
 
-export interface OrderItem {
-    id: string;
-    productName: string;
-    shortDescription: string;
-    price: number;
+// Interface matching the API response shape
+export interface OrderItemAPI {
+    order_item_id: number;
+    order_id: number;
+    status: string;
+    order_date: string;
+    product_id: number;
+    variant_id: number;
+    product: {
+        id: number;
+        name: string;
+        images: {
+            id: number;
+            variant_id: number;
+            image_url: string;
+            thumbnail_url: string;
+            is_primary: number;
+            created_at: string;
+        }[];
+    };
+    variant: {
+        id: number;
+        storage: string;
+        color: string;
+        sku: string;
+    };
     quantity: number;
-    status: OrderStatus;
-    paymentMethod: string;
-    orderDate: string;
-    estimatedDelivery: string;
-    image: string;
+    price: string;
+    total: string;
 }
 
 interface OrderCardProps {
-    order: OrderItem;
+    order: OrderItemAPI;
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
+    const primaryImage = order.product?.images?.find(img => img.is_primary === 1);
+    const imageUrl = primaryImage?.image_url || order.product?.images?.[0]?.image_url || '';
+
+    const formatPrice = (price: string | number) => {
+        const num = typeof price === 'string' ? parseFloat(price) : price;
+        return `₹${num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    };
+
+    const formatDate = (dateStr: string) => {
+        return new Date(dateStr).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    };
+
     return (
         <div className="order-card">
             <div className="order-card-header">
                 <div className="order-meta">
-                    <span className="order-id">Order {order.id}</span>
-                    <span className="order-date">Placed on {new Date(order.orderDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                    <span className="order-id">Order #{order.order_id}</span>
+                    <span className="order-date">Placed on {formatDate(order.order_date)}</span>
                 </div>
                 <OrderStatusBadge status={order.status} />
             </div>
 
             <div className="order-body">
-                <img src={order.image} alt={order.productName} className="product-img" />
+                {imageUrl ? (
+                    <img src={imageUrl} alt={order.product?.name} className="product-img" />
+                ) : (
+                    <div className="product-img" style={{ background: '#f0f0f0' }} />
+                )}
                 <div className="product-details">
-                    <h3>{order.productName}</h3>
-                    <p className="product-description">{order.shortDescription}</p>
+                    <h3>{order.product?.name}</h3>
+                    <p className="product-description">
+                        {order.variant?.storage}, {order.variant?.color}
+                    </p>
                     <div className="order-specs">
                         <span>Qty: <strong>{order.quantity}</strong></span>
-                        <span>Price: <strong>₹{order.price.toLocaleString('en-IN')}</strong></span>
-                        <span>Payment: <strong>{order.paymentMethod}</strong></span>
+                        <span>Price: <strong>{formatPrice(order.price)}</strong></span>
+                        <span>Total: <strong>{formatPrice(order.total)}</strong></span>
                     </div>
                 </div>
             </div>
@@ -47,16 +87,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
             <OrdersTimeline status={order.status} />
 
             <div className="order-actions">
-                <button className="btn-order btn-secondary">View Details</button>
-                <button className="btn-order btn-outline">Track Order</button>
-                <button className="btn-order btn-secondary">Download Invoice</button>
-
-                {order.status === 'Pending' && (
-                    <button className="btn-order btn-danger">Cancel Order</button>
-                )}
-
-                {order.status === 'Delivered' && (
+                {order.status === 'delivered' && (
                     <button className="btn-order btn-primary">Buy Again</button>
+                )}
+                {(order.status === 'placed' || order.status === 'processing') && (
+                    <button className="btn-order btn-danger">Cancel Order</button>
                 )}
             </div>
         </div>

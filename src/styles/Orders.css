@@ -434,6 +434,36 @@
     border: 1px solid #ffcdd2;
 }
 
+.status-placed {
+    background: #e8f0fe;
+    color: #1a73e8;
+    border: 1px solid #c6dafc;
+}
+
+.status-processing {
+    background: #fff5e6;
+    color: #ff9800;
+    border: 1px solid #ffe8cc;
+}
+
+/* Skeleton Order Card */
+.skeleton-order-card {
+    padding: 24px;
+    animation: shimmer 1.5s infinite ease-in-out;
+}
+
+.skeleton-line {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite ease-in-out;
+    border-radius: 6px;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
 /* Actions */
 .order-actions {
     display: flex;

@@ -57,6 +57,9 @@ const ProductSlider = () => {
                   storage: variant?.attributes?.storage,
                   color: variant?.attributes?.color,
                   condition: product.condition || "Excellent",
+                  total_stock: variant?.inventory?.total_stock,
+                  inbound_stock: variant?.inventory?.inbound_stock,
+                  is_active: variant?.inventory?.is_active,
                 };
                 return <RefoneProductCard key={`${product.id}-${index}`} product={formattedProduct} />;
               })}
@@ -88,6 +91,9 @@ const ProductSlider = () => {
                   storage: variant?.attributes?.storage,
                   color: variant?.attributes?.color,
                   condition: product.condition || "Excellent",
+                  total_stock: variant?.inventory?.total_stock,
+                  inbound_stock: variant?.inventory?.inbound_stock,
+                  is_active: variant?.inventory?.is_active,
                 };
 
                 return (

@@ -86,7 +86,9 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, sel
                 {products.map((product) => {
                     const variant = product.variants?.[0];
                     const stock = variant?.inventory?.total_stock ?? 0;
-                    const isInStock = stock > 0;
+                    const inboundStock = variant?.inventory?.inbound_stock ?? 0;
+                    const isActive = variant?.inventory?.is_active === 1;
+                    const isInStock = stock > 0 || inboundStock > 0 || isActive;
 
                     // console.log(variant)
                     console.log(variant?.pricing?.selling_price
@@ -113,7 +115,11 @@ const RelatedProductstest: React.FC<RelatedProductsTestProps> = ({ products, sel
                                     {variant ? `${variant.storage || ''} | ${variant.color || ''}` : "View product"}
                                 </span>
                                 {variant?.pricing?.selling_price && (
-                                    <span className={styles.cardPrice}>₹{Number(variant.pricing.selling_price).toLocaleString("en-IN")}</span>
+                                    isInStock ? (
+                                        <span className={styles.cardPrice}>₹{Number(variant.pricing.selling_price).toLocaleString("en-IN")}</span>
+                                    ) : (
+                                        <span className={styles.cardPrice} style={{ color: '#d32f2f', fontSize: '0.8rem' }}>Updating soon</span>
+                                    )
                                 )}
                                 {/* correct price display */}
                                  {/* <span className={styles.sellingPrice}>
