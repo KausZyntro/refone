@@ -98,10 +98,10 @@ const Footer = () => {
             </h2>
             <p className="follow-text">Follow us on</p>
             <div className="social-icons">
-              <a href="#" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
-              <a href="#" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
-              <a href="#" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-              <a href="#" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
+              <a href="https://x.com/RefoneIndia" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
+              <a href="https://www.facebook.com/profile.php?id=61575393901517" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
+              <a href=" https://www.instagram.com/refoneindia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+              <a href="https://www.youtube.com/@RefoneIndia" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
             </div>
           </div>
 
@@ -121,9 +121,9 @@ const Footer = () => {
           <div className="footer-address">
             <strong>Registered Office:</strong>
             <p>
-              Bhadohi,
-              Uttar Pradesh,– 221005, India
+              S-2/1A-81-R-I/101, Tagore Town Colony, Orderly Bazar Varanasi-221002
             </p>
+            <p>5/1 Ranglal Street, Watgunge,, Kolkata-700023, West Bengal</p>
           </div>
 
           <div className="footer-copy">

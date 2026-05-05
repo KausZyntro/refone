@@ -791,3 +791,91 @@
     padding: 6px 10px;
     border-radius: 4px;
 }
+
+@media (max-width: 400px) {
+    .pageContainer {
+        padding: 6px;
+        margin: 130px auto 10px;
+    }
+
+    .productGrid {
+        grid-template-columns: repeat(2, 1fr); /* force 2 columns */
+        gap: 6px;
+    }
+
+    .productCard {
+        padding: 8px 6px;
+        border-radius: 6px;
+    }
+
+    .productImageWrapper {
+        height: 90px;
+        padding: 6px;
+        margin-bottom: 6px;
+    }
+
+    .productName {
+        font-size: 11.5px;
+        line-height: 1.2;
+        height: 28px;
+    }
+
+    .productSpecs {
+        font-size: 9px;
+        margin-bottom: 4px;
+    }
+
+    .ratingRow {
+        gap: 3px;
+        margin-bottom: 6px;
+    }
+
+    .ratingScore {
+        font-size: 10px;
+    }
+
+    .ratingCount {
+        font-size: 9px;
+    }
+
+    .priceRow {
+        gap: 4px;
+        margin-bottom: 2px;
+    }
+
+    .productPrice {
+        font-size: 13px;
+    }
+
+    .mrpPrice {
+        font-size: 9px;
+    }
+
+    .discountBadge {
+        font-size: 9px;
+    }
+
+    .emiText {
+        font-size: 9px;
+        margin-bottom: 6px;
+    }
+
+    .addToCartBtn {
+        padding: 5px;
+        font-size: 10px;
+        margin-top: 6px;
+    }
+
+    .warrantyBadge {
+        font-size: 8px;
+        padding: 2px 5px;
+    }
+
+    .contentTitle {
+        font-size: 18px;
+    }
+
+    .contentSubtitle {
+        font-size: 12px;
+    }
+}

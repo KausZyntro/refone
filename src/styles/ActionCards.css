@@ -131,8 +131,8 @@
   }
 
   .content h3 {
-    font-size: 13px;
-    line-height: 1.2;
+    font-size: 10px;
+    line-height: 0.8;
   }
 
   .content p {
@@ -151,6 +151,6 @@
   }
 
   .content h3 {
-    font-size: 11px;
+    font-size: 8px;
   }
 }
