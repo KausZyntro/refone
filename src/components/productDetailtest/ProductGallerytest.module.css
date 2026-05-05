@@ -155,19 +155,18 @@
 }
 
 .thumbSlide {
-    opacity: 0.5;
     cursor: pointer;
-    transition: opacity 0.3s;
+    transition: all 0.3s;
 }
 
-.thumbSlide :global(.swiper-slide-thumb-active) {
-    opacity: 1;
-}
-
-/* Override Swiper built-in active state if needed */
 :global(.swiper-slide-thumb-active) .thumbWrap {
-    border-color: #006ab0;
-    background: #f0f7ff;
+    border-color: #006ab0 !important;
+    background: #f0f7ff !important;
+    opacity: 1 !important;
+}
+
+.thumbSlide:not(:global(.swiper-slide-thumb-active)) {
+    opacity: 0.7;
 }
 
 .thumbWrap {
@@ -179,7 +178,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f9f9f9;
+    background: #fff;
 }
 
 .thumbImg {

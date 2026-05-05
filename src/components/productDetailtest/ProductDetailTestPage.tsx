@@ -24,8 +24,9 @@ import {
     FiCreditCard,
     FiChevronDown,
     FiChevronUp,
+    FiRepeat,
 } from "react-icons/fi";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaCreditCard, FaShoppingCart } from "react-icons/fa";
 
 interface ProductDetailTestPageProps {
     productId: string;
@@ -153,7 +154,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     const PricingBlock = () => (
         <div className={styles.pricingBlock}>
             {isOutOfStock ? (
-                <p className={styles.sidebarOutOfStock}>Updating soon</p>
+                <p className={styles.sidebarOutOfStock}>Price Updating soon</p>
             ) : (
                 <>
                     <div className={styles.sidebarPriceRow}>
@@ -337,6 +338,20 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                         <div className={styles.serviceCardBody}>
                                             <span className={styles.serviceCardTitle}>12 Months Warranty</span>
                                             <span className={styles.serviceCardDesc}>Worry-free coverage</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.serviceCard}>
+                                        <div className={styles.serviceCardIconWrap}><FiRepeat /></div>
+                                        <div className={styles.serviceCardBody}>
+                                            <span className={styles.serviceCardTitle}>7 Days Replacement</span>
+                                            <span className={styles.serviceCardDesc}>Not satisfied? Replace within 7 days</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.serviceCard}>
+                                        <div className={styles.serviceCardIconWrap}><FaCreditCard /></div>
+                                        <div className={styles.serviceCardBody}>
+                                            <span className={styles.serviceCardTitle}>Secure Payment</span>
+                                            <span className={styles.serviceCardDesc}>100% Safe and Secure</span>
                                         </div>
                                     </div>
                                 </div>

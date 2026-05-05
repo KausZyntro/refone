@@ -78,40 +78,25 @@
     font-weight: 600;
 }
 
-@media (max-width: 600px) {
-    .specsTable {
-        display: block;
-    }
-    .specsTable tbody, .specsTable tr {
-        display: block;
-        width: 100%;
-    }
-    .specsTable tr {
-        margin-bottom: 10px;
-        border: 1px solid #eee;
-        border-radius: 6px;
-        overflow: hidden;
-    }
-    .labelCell, .valueCell {
-        display: block;
-        width: 100%;
-        padding: 8px 12px;
-    }
+/* ── Mobile View: Keep side-by-side ── */
+@media (max-width: 768px) {
     .labelCell {
-        background-color: #f5f7f9;
-        font-weight: 700;
-        border-bottom: 1px solid #eee;
+        padding: 10px 12px;
+        width: 45%;
+        font-size: 12px;
     }
-}
-
-@media (max-width: 600px) {
-    .specsTable,
-    .specsTable tbody,
-    .specsTable tr,
-    .labelCell,
     .valueCell {
-        display: block !important;
-        width: 100% !important;
+        padding: 10px 12px;
+        font-size: 12px;
     }
 }
 
+@media (max-width: 480px) {
+    .labelCell {
+        width: 42%;
+        padding: 8px 10px;
+    }
+    .valueCell {
+        padding: 8px 10px;
+    }
+}
