@@ -1,150 +1,266 @@
+/* ================================================================
+   PHONE DETAIL PAGE — matches Cashify reference image exactly
+   ================================================================ */
+
 .pageWrapper {
-    max-width: 1250px;
-    margin: 91px auto 32px;
-    padding: 16px 20px;
-    /* margin-top: 100px; */
+    max-width: 1380px;
+    margin: 80px auto 60px;
+    padding: 0 20px;
     min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    /* background-color: #f8f9fa; */
 }
 
+/* ── Breadcrumb ── */
 .breadcrumb {
     font-size: 13px;
-    color: #666;
-    margin-bottom: 20px;
+    color: #555;
+    margin-bottom: 18px;
     display: flex;
     align-items: center;
     gap: 6px;
+    padding-top: 24px;
 }
 
-.breadcrumbSep {
-    color: #999;
-    font-size: 11px;
-}
+.breadcrumbLink { color: #555; cursor: pointer; text-decoration: none; }
+.breadcrumbLink:hover { color: #006ab0; }
+.breadcrumbSep { color: #bbb; font-size: 12px; }
+.breadcrumbActive { color: #222; font-weight: 500; }
 
-.breadcrumbActive {
-    color: #333;
-    font-weight: 500;
-}
-
+/* ── Main Layout ── */
 .mainLayout {
     display: flex;
-    gap: 20px;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 24px;
 }
 
-.centerContent {
-    flex: 1;
-    min-width: 0;
+/* ── Top Section (White Card) ── */
+.topSection {
+    display: grid;
+    /* grid-template-columns: minmax(400px, 1.2fr) 2fr minmax(280px, 1fr); */
+    grid-template-columns: minmax(479px, 1.2fr) 2fr minmax(257px, 1fr);
+    gap: 30px;
+    align-items: flex-start;
     background: #fff;
-    padding: 30px 21px
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
 }
 
-.productRow {
-    display: flex;
-    gap: 80px;
-    align-items: flex-start;
-}
-
-.mainImageWrapper {
-    order: 1;
-}
-
-.infoColumn {
-    flex: 1;
-    min-width: 0;
-}
-
-.infoColumn {
-    order: 2;
-}
-
-/* ===== Responsive ===== */
-
-@media (max-width: 1200px) {
-    .mainLayout {
-        gap: 16px;
+@media (max-width: 1280px) {
+    .topSection {
+        grid-template-columns: minmax(350px, 1.1fr) 2fr;
+        gap: 20px;
     }
-
-    .productRow {
-        gap: 30px;
-    }
-}
-
-@media (max-width: 1024px) {
-    .pageWrapper {
-        margin-top: 100px;
-        padding: 16px 15px;
-    }
-
-    .mainLayout {
-        flex-direction: column;
-        gap: 24px;
-    }
-
-    .centerContent {
-        order: 1;
-        width: 100%;
+    .cartSidebar {
+        grid-column: span 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        background: #f9f9f9;
         padding: 20px;
-        margin-top: 60px;
-    }
-
-    .relatedSidebar {
-        order: 2;
-        width: 100%;
-    }
-
-    .productRow {
-        gap: 40px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        margin-top: 10px;
     }
 }
 
-@media (max-width: 768px) {
-    .pageWrapper {
-        margin-top: 80px;
-        padding: 12px 10px;
-    }
-
-    .productRow {
-        flex-direction: column;
-        gap: 0;
-        /* Remove gap between gallery components and info column */
-    }
-
-    .centerContent {
-        padding: 15px;
-        width: 100%;
-    }
-
-    .infoColumn {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        width: 100%;
-    }
-
-    .breadcrumb {
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-    }
-
-    /* Ensure specific spacing for sections now that row gap is removed */
-    .specsSection {
-        margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
-    }
+.infoColumn {
+    padding: 0 20px;
+    border-left: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
 }
 
-@media (max-width: 480px) {
-    .pageWrapper {
-        margin-top: 60px;
-    }
+.cartSidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
 
-    .breadcrumb {
-        font-size: 11px;
-        gap: 4px;
-    }
+/* ── Shared Sidebar/Mobile Flow Components ── */
+.viewersRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 12px;
+}
 
-    .centerContent {
-        padding: 12px;
+.viewerIcon { color: #006ab0; font-size: 15px; }
+
+.sidebarConditionBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #e6f3fa;
+    color: #006ab0;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid #c5dfef;
+    margin-bottom: 14px;
+    width: fit-content;
+}
+
+.sidebarPriceRow {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.sidebarSellingPrice { font-size: 26px; font-weight: 700; color: #1a1a1a; }
+.sidebarMrp { font-size: 14px; text-decoration: line-through; color: #999; }
+.sidebarDiscount { font-size: 14px; font-weight: 700; color: #006ab0; }
+.sidebarTaxNote { font-size: 11px; color: #888; margin-bottom: 14px; }
+
+.prepaidBox {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: #f0f7ff;
+    border: 1px solid #c5dfef;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+}
+
+.prepaidIcon { color: #006ab0; font-size: 16px; margin-top: 1px; }
+.prepaidText { font-size: 12px; color: #1a1a1a; font-weight: 600; }
+.prepaidNote { font-size: 11px; color: #555; display: block; margin-top: 2px; }
+
+.sidebarCartBtn {
+    width: 100%;
+    padding: 14px;
+    background: #006ab0;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.sidebarBuyNowBtn {
+    width: 100%;
+    padding: 13px;
+    background: #fff;
+    color: #006ab0;
+    border: 1.5px solid #006ab0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 18px;
+}
+
+.deliveryTitle { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.pincodeRow { display: flex; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.pincodeInput { flex: 1; border: none; padding: 10px; font-size: 13px; outline: none; }
+.pincodeBtn { background: transparent; color: #006ab0; border: none; border-left: 1px solid #ddd; font-weight: 700; padding: 0 14px; cursor: pointer; }
+.deliveryInfo { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #006ab0; }
+.deliveryCheckIcon { font-size: 14px; }
+
+/* ── Desktop Tabs ── */
+.desktopTabs {
+    background: #fff;
+    border-radius: 12px;
+    padding: 0 24px;
+    border: 1px solid #e8e8e8;
+}
+
+.tabsWrapper { display: flex; border-bottom: 2px solid #f0f0f0; }
+.tabBtn { padding: 16px 20px; border: none; background: transparent; cursor: pointer; border-bottom: 2px solid transparent; font-weight: 500; }
+.activeTab { color: #006ab0; border-bottom-color: #006ab0; font-weight: 700; }
+.tabContent { padding: 24px 0; }
+
+.tabContentGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.highlightsList { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.highlightItem { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.highlightIcon { color: #006ab0; }
+
+.serviceCardsGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.serviceCard { display: flex; gap: 12px; padding: 16px; border: 1px solid #eee; border-radius: 8px; }
+.serviceCardIconWrap { width: 36px; height: 36px; background: #f0f7ff; color: #006ab0; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.serviceCardTitle { display: block; font-size: 13px; font-weight: 700; }
+.serviceCardDesc { font-size: 11px; color: #666; }
+
+/* ── Mobile Accordions ── */
+.mobileAccordions { display: none; }
+.accordionItem { border-bottom: 1px solid #f0f0f0; background: #fff; }
+.accordionHeader { 
+    padding: 16px 18px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 14px; 
+    font-weight: 600; 
+    color: #1a1a1a; 
+    cursor: pointer;
+}
+.accordionHeader svg { color: #888; font-size: 16px; }
+.accordionBody { 
+    padding: 0 18px 20px; 
+    font-size: 13px; 
+    color: #555; 
+    background: #fff;
+    border-top: none;
+}
+
+/* ── Mobile Flow Extras ── */
+.mobileOnlyFlow { display: none; }
+.serviceIconsStrip {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+}
+.serviceIconItem { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.serviceIconWrap { font-size: 20px; color: #006ab0; }
+.serviceIconLabel { font-size: 11px; font-weight: 600; color: #444; }
+
+/* ── Mobile Sticky Bottom Bar ── */
+.mobileBottomBar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: #fff; border-top: 1px solid #eee; padding: 10px 16px;
+    display: none; align-items: center; gap: 12px;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+}
+.mobilePriceWrap { flex: 1; display: flex; flex-direction: column; }
+.mobilePriceMain { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+.mobilePriceSubRow { display: flex; align-items: center; gap: 6px; margin-top: -2px; }
+.mobilePriceMrp { font-size: 11px; color: #999; text-decoration: line-through; }
+.mobilePriceDiscount { font-size: 11px; font-weight: 700; color: #006ab0; }
+.mobileAddCartBtn { flex: 1; background: #006ab0; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .topSection { 
+        grid-template-columns: 1fr; 
+        padding: 0; 
+        border: none; 
+        background: transparent; 
+        box-shadow: none; 
+        display: block;
     }
+    .galleryColumn { background: #fff; padding: 16px; margin-bottom: 12px; border-radius: 8px; margin-top: 83px;}
+    .infoColumn { background: #fff; border: none; padding: 20px; border-radius: 8px; }
+    .cartSidebar { display: none; }
+    .desktopTabs { display: none; }
+    .mobileAccordions { display: block; margin-top: 16px; margin-bottom: 80px; }
+    .mobileOnlyFlow { display: block; margin-top: 20px; }
+    .mobileBottomBar { display: flex; }
+    .pageWrapper { margin: 0; padding: 0; padding-top: 60px; background: #f4f7f9; }
+    .breadcrumb { display: none; }
+}
+
+@media (min-width: 1025px) {
+    .mobileOnlyFlow { display: none; }
 }

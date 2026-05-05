@@ -1,27 +1,33 @@
 .ratingContainer {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
+}
+
+.ratingNumber {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
 }
 
 .stars {
     display: flex;
     align-items: center;
-    gap: 1px;
+    gap: 2px;
 }
 
 .starFilled {
     color: #f5a623;
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .starEmpty {
-    color: #ccc;
-    font-size: 16px;
+    color: #ddd;
+    font-size: 13px;
 }
 
 .reviewCount {
-    font-size: 14px;
-    color: #006ab0;
-    margin-left: 6px;
+    font-size: 12px;
+    color: #666;
+    margin-left: 2px;
 }

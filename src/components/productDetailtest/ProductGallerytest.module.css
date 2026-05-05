@@ -1,161 +1,216 @@
-.gallery {
-    width: 363px;
-    min-width: 320px;
-    background-color: #ffffff;
-    padding: 20px;
-    height: fit-content;
+.galleryRoot {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
-.mainImageWrapper {
-    width: 100%;
-    margin-bottom: 20px;
+.galleryContainer {
+    display: flex;
+    flex-direction: row-reverse; /* Thumbs on left, main on right */
+    gap: 16px;
+    align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+    .galleryContainer {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* ── Main Slider ── */
+.mainSliderArea {
+    flex: 1;
+    position: relative;
+    background: #fff;
+    border: 1px solid #f0f0f0;
     border-radius: 8px;
     overflow: hidden;
-    background-color: #f9f9f9;
-}
-
-.mainImage {
     width: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
 }
 
-.thumbnails {
+.mainSwiper {
+    width: 100%;
+    height: 450px;
+}
+
+@media (max-width: 480px) {
+    .mainSwiper { height: 320px; }
+}
+
+.slide {
     display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
-    overflow-x: auto;
-    padding-bottom: 8px;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
 }
 
-.thumbnailWrapper {
-    width: 64px;
-    height: 64px;
-    border: 1px solid #eee;
-    border-radius: 4px;
+.imageWrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.mainImg {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* Wishlist */
+.wishlistBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    overflow: hidden;
+    color: #888;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.wishlistBtn:hover {
+    color: #e53935;
+    border-color: #e53935;
+}
+
+/* Navigation Arrows */
+.navBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    color: #333;
+    transition: all 0.2s;
+}
+
+.navBtn:hover { background: #fff; color: #006ab0; border-color: #006ab0; }
+.navBtnPrev { left: 10px; }
+.navBtnNext { right: 10px; }
+
+@media (max-width: 768px) {
+    .navBtn { display: none; }
+}
+
+/* Pagination Dots */
+.bullet {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #ddd;
+    margin: 0 4px !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bulletActive {
+    background: #006ab0;
+    width: 24px;
+    border-radius: 4px;
+}
+
+/* ── Thumbs Slider ── */
+.thumbsArea {
+    width: 80px;
     flex-shrink: 0;
-    transition: all 0.2s ease;
 }
 
-.thumbnailWrapper:hover {
-    border-color: #ccc;
+@media (max-width: 768px) {
+    .thumbsArea {
+        width: 100%;
+        order: 2; /* Put thumbs below main on mobile */
+    }
 }
 
-.thumbnailWrapper.activeThumb {
-    border-color: #000;
-    box-shadow: 0 0 0 1px #000;
+.thumbSwiper {
+    height: 450px;
+    width: 100%;
 }
 
-.thumbnail {
+@media (max-width: 768px) {
+    .thumbSwiper {
+        height: 80px;
+    }
+}
+
+.thumbSlide {
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.thumbSlide :global(.swiper-slide-thumb-active) {
+    opacity: 1;
+}
+
+/* Override Swiper built-in active state if needed */
+:global(.swiper-slide-thumb-active) .thumbWrap {
+    border-color: #006ab0;
+    background: #f0f7ff;
+}
+
+.thumbWrap {
+    width: 100%;
+    height: 100%;
+    border: 1.5px solid #eee;
+    border-radius: 6px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+}
+
+.thumbImg {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-.specList {
-    color: #333;
-    font-size: 12px;
-    line-height: 1.6;
-    background: #f7f6f6;
-    padding: 20px;
-}
-
-.specItem {
-    margin-bottom: 12px;
+/* ── Trust strip ── */
+.trustStrip {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
 }
 
-.specLabel {
-    font-weight: 700;
-    color: #222;
-    display: block;
-    margin-bottom: 2px;
-}
-
-.specValue {
-    color: #555;
-    display: block;
-}
-
-.storageList {
-    margin-top: 4px;
-    padding-left: 16px;
-    font-size: 12px;
-    color: #555;
-    list-style: disc;
-}
-
-.socialIcons {
+.trustItem {
     display: flex;
-    gap: 8px;
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid #e0e0e0;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+    padding: 0 10px;
 }
 
-.socialIcon {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    color: #ffffff;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
+.trustIcon { font-size: 20px; margin-top: 2px; }
+.trustTitle { display: block; font-size: 13px; font-weight: 700; color: #222; }
+.trustDesc { display: block; font-size: 11px; color: #666; margin-top: 2px; }
+.trustDivider { width: 1px; background: #e8e8e8; align-self: stretch; }
 
-.socialIcon:hover {
-    opacity: 0.8;
-}
-
-.facebook {
-    background-color: #3b5998;
-}
-
-.linkedin {
-    background-color: #006ab0;
-}
-
-.twitter {
-    background-color: #1da1f2;
-}
-
-.youtube {
-    background-color: #ff0000;
-}
-
-.email {
-    background-color: #666;
-}
-
-@media (max-width: 768px) {
-    .gallery {
-        width: 100%;
-        min-width: unset;
-        padding: 0;
-        /* Let parent handle padding */
-    }
-
-    .specList,
-    .socialIcons {
-        display: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .mainImageWrapper {
-        margin-bottom: 12px;
-    }
-
-    .thumbnailWrapper {
-        width: 50px;
-        height: 50px;
-    }
+@media (max-width: 1024px) {
+    .trustStrip { display: none; }
 }

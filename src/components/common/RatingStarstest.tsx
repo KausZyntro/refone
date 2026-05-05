@@ -12,6 +12,7 @@ interface RatingStarsTestProps {
 const RatingStarstest: React.FC<RatingStarsTestProps> = ({ rating, reviewCount }) => {
     return (
         <div className={styles.ratingContainer}>
+            <span className={styles.ratingNumber}>{rating.toFixed(1)}</span>
             <div className={styles.stars}>
                 {[1, 2, 3, 4, 5].map((star) =>
                     star <= Math.round(rating) ? (
@@ -21,7 +22,7 @@ const RatingStarstest: React.FC<RatingStarsTestProps> = ({ rating, reviewCount }
                     )
                 )}
             </div>
-            <span className={styles.reviewCount}>({reviewCount} reviews)</span>
+            <span className={styles.reviewCount}>({reviewCount.toLocaleString("en-IN")} Ratings)</span>
         </div>
     );
 };

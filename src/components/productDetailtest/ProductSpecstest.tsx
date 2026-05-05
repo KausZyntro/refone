@@ -11,7 +11,7 @@ interface ProductSpecsTestProps {
 }
 
 const ProductSpecstest: React.FC<ProductSpecsTestProps> = ({ product, selectedVariant }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const specs = [
         { label: "Brand", value: product?.brand?.name },
@@ -31,10 +31,10 @@ const ProductSpecstest: React.FC<ProductSpecsTestProps> = ({ product, selectedVa
     return (
         <div className={styles.specsSection}>
             <div className={styles.specsHeader} onClick={() => setIsOpen(!isOpen)}>
-                <h3 className={styles.specsTitle}>Specifications</h3>
-                <div className={styles.iconWrapper}>
+                {/* <h3 className={styles.specsTitle}>Specifications</h3> */}
+                {/* <div className={styles.iconWrapper}>
                     {isOpen ? <FiChevronUp className={styles.icon} /> : <FiChevronDown className={styles.icon} />}
-                </div>
+                </div> */}
             </div>
             
             <div className={`${styles.tableContainer} ${isOpen ? styles.open : styles.closed}`}>

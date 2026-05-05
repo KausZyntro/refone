@@ -1,51 +1,61 @@
 .specsSection {
-    margin-top: 24px;
-    border-top: 1px solid #e0e0e0;
-    padding-top: 16px;
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 8px;
 }
 
 .specsHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    cursor: default;
-    padding: 10px 0;
-    user-select: none;
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+/* Hide header on desktop if being used inside a tab */
+@media (min-width: 1025px) {
+    .specsHeader {
+        display: none;
+    }
 }
 
 .specsTitle {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: #222;
     margin: 0;
-    margin-bottom: 12px;
     padding-bottom: 8px;
     border-bottom: 2px solid #006ab0;
     display: inline-block;
 }
 
 .iconWrapper {
-    display: none;
-}
-
-.icon {
-    font-size: 20px;
-    color: #555;
+    color: #666;
 }
 
 .tableContainer {
-    display: block !important;
-    margin-top: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.open {
+    max-height: 2000px;
+    opacity: 1;
+}
+
+.closed {
+    max-height: 0;
+    opacity: 0;
 }
 
 .specsTable {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    margin-top: 10px;
 }
 
 .specsTable tr {
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .specsTable tr:last-child {
@@ -53,50 +63,55 @@
 }
 
 .labelCell {
-    padding: 10px 12px;
-    font-weight: 700;
-    color: #333;
-    width: 120px;
-    vertical-align: top;
-    background-color: #f9f9f9;
-    border-right: 1px solid #e8e8e8;
+    padding: 12px 16px;
+    width: 40%;
+    color: #666;
+    font-size: 13px;
+    font-weight: 500;
+    background-color: #fcfcfc;
 }
 
 .valueCell {
-    padding: 10px 12px;
-    color: #555;
-    vertical-align: top;
+    padding: 12px 16px;
+    color: #222;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-@media (max-width: 768px) {
-    .specsHeader {
-        cursor: pointer;
-    }
-    .specsTitle {
-        margin: 0;
-        padding: 0;
-        border-bottom: none;
-    }
-    .iconWrapper {
+@media (max-width: 600px) {
+    .specsTable {
         display: block;
     }
-    .tableContainer.closed {
-        display: none !important;
+    .specsTable tbody, .specsTable tr {
+        display: block;
+        width: 100%;
     }
-    .tableContainer.open {
-        display: block !important;
+    .specsTable tr {
+        margin-bottom: 10px;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        overflow: hidden;
     }
-}
-
-@media (max-width: 480px) {
+    .labelCell, .valueCell {
+        display: block;
+        width: 100%;
+        padding: 8px 12px;
+    }
     .labelCell {
-        width: 100px;
-        padding: 8px 10px;
-        font-size: 12px;
-    }
-
-    .valueCell {
-        padding: 8px 10px;
-        font-size: 12px;
+        background-color: #f5f7f9;
+        font-weight: 700;
+        border-bottom: 1px solid #eee;
     }
 }
+
+@media (max-width: 600px) {
+    .specsTable,
+    .specsTable tbody,
+    .specsTable tr,
+    .labelCell,
+    .valueCell {
+        display: block !important;
+        width: 100% !important;
+    }
+}
+

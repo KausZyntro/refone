@@ -1,10 +1,23 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { FaFacebookF, FaLinkedinIn, FaTwitter, FaYoutube, FaEnvelope } from "react-icons/fa";
 import styles from "./ProductGallerytest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
+import { FiHeart, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation, Thumbs, FreeMode } from "swiper/modules";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import "swiper/css/free-mode";
+import { IoIosRefresh } from "react-icons/io";
+import { LuRefreshCcw } from "react-icons/lu";
+import { FaTruckFast } from "react-icons/fa6";
+import { FaCreditCard } from "react-icons/fa";
 
 interface ProductGalleryTestProps {
     product: ProductTest;
@@ -12,91 +25,123 @@ interface ProductGalleryTestProps {
 }
 
 const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, selectedVariant }) => {
-    const [activeImageIndex, setActiveImageIndex] = React.useState(0);
+    const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
-    // Reset image index when variant changes
-    React.useEffect(() => {
-        setActiveImageIndex(0);
-    }, [selectedVariant]);
-
-    const activeImage = selectedVariant?.images?.[activeImageIndex]?.image_url || "/fallback.png";
+    const images = selectedVariant?.images ?? [];
 
     return (
-        <div className={styles.gallery}>
-            <div className={styles.mainImageWrapper}>
-                <Image
-                    src={activeImage}
-                    alt={product?.name || "Product Image"}
-                    width={400}
-                    height={480}
-                    className={styles.mainImage}
-                    priority
-                />
+        <div className={styles.galleryRoot}>
+            <div className={styles.galleryContainer}>
+                {/* Main Slider */}
+                <div className={styles.mainSliderArea}>
+                    <button className={styles.wishlistBtn} aria-label="Add to wishlist">
+                        <FiHeart size={18} />
+                    </button>
+                    
+                    <Swiper
+                        modules={[Pagination, Navigation, Thumbs]}
+                        pagination={{ clickable: true, bulletClass: styles.bullet, bulletActiveClass: styles.bulletActive }}
+                        navigation={{
+                            prevEl: `.${styles.navBtnPrev}`,
+                            nextEl: `.${styles.navBtnNext}`,
+                        }}
+                        thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                        className={styles.mainSwiper}
+                        spaceBetween={10}
+                    >
+                        {images.length > 0 ? (
+                            images.map((img, i) => (
+                                <SwiperSlide key={img.id} className={styles.slide}>
+                                    <div className={styles.imageWrap}>
+                                        <Image
+                                            src={img.image_url || "/fallback.png"}
+                                            alt={`${product?.name || "Product"} view ${i + 1}`}
+                                            width={500}
+                                            height={500}
+                                            className={styles.mainImg}
+                                            priority={i === 0}
+                                        />
+                                    </div>
+                                </SwiperSlide>
+                            ))
+                        ) : (
+                            <SwiperSlide className={styles.slide}>
+                                <div className={styles.imageWrap}>
+                                    <Image
+                                        src="/fallback.png"
+                                        alt="Product fallback"
+                                        width={500}
+                                        height={500}
+                                        className={styles.mainImg}
+                                    />
+                                </div>
+                            </SwiperSlide>
+                        )}
+
+                        {/* Navigation Arrows (Optional, usually better for desktop) */}
+                        <div className={`${styles.navBtn} ${styles.navBtnPrev}`}><FiChevronLeft /></div>
+                        <div className={`${styles.navBtn} ${styles.navBtnNext}`}><FiChevronRight /></div>
+                    </Swiper>
+                </div>
+
+                {/* Thumbnails Slider */}
+                <div className={styles.thumbsArea}>
+                    <Swiper
+                        onSwiper={setThumbsSwiper}
+                        spaceBetween={8}
+                        slidesPerView={5}
+                        freeMode={true}
+                        watchSlidesProgress={true}
+                        modules={[FreeMode, Navigation, Thumbs]}
+                        className={styles.thumbSwiper}
+                        direction="vertical"
+                        breakpoints={{
+                            0: { direction: 'horizontal', slidesPerView: 4 },
+                            769: { direction: 'vertical', slidesPerView: 5 }
+                        }}
+                    >
+                        {images.map((img) => (
+                            <SwiperSlide key={img.id} className={styles.thumbSlide}>
+                                <div className={styles.thumbWrap}>
+                                    <Image
+                                        src={img.image_url || "/fallback.png"}
+                                        alt="thumbnail"
+                                        width={70}
+                                        height={70}
+                                        className={styles.thumbImg}
+                                    />
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
             </div>
 
-            {selectedVariant?.images && selectedVariant.images.length > 0 && (
-                <div className={styles.thumbnails}>
-                    {selectedVariant.images.map((img, index) => (
-                        <div
-                            key={img.id}
-                            className={`${styles.thumbnailWrapper} ${activeImageIndex === index ? styles.activeThumb : ""}`}
-                            onClick={() => setActiveImageIndex(index)}
-                        >
-                            <Image
-                                src={ img?.image_url || "/fallback.png"}
-                                alt={`Thumbnail ${index + 1}`}
-                                width={60}
-                                height={60}
-                                className={styles.thumbnail}
-                            />
-                        </div>
-                    ))}
+            {/* Trust strip (Visible only on Desktop in this component) */}
+            <div className={styles.trustStrip}>
+                <div className={styles.trustItem}>
+                    <span className={styles.trustIcon}><LuRefreshCcw/></span>
+                    <div>
+                        <span className={styles.trustTitle}>7 Days Return</span>
+                        <span className={styles.trustDesc}>Not satisfied? Return it easily</span>
+                    </div>
                 </div>
-            )}
-
-            <div className={styles.specList}>
-                <div className={styles.specItem}>
-                    <span className={styles.specLabel}>Brand: </span>
-                    <span className={styles.specValue}>{product?.brand?.name}</span>
+                <div className={styles.trustDivider} />
+                <div className={styles.trustItem}>
+                    <span className={styles.trustIcon}><FaTruckFast /></span>
+                    <div>
+                        <span className={styles.trustTitle}>Free Delivery</span>
+                        <span className={styles.trustDesc}>Fast & secure delivery</span>
+                    </div>
                 </div>
-
-                <div className={styles.specItem}>
-                    <span className={styles.specLabel}>Display:</span>
-                    <span className={styles.specValue}>{product?.screen_size}</span>
+                <div className={styles.trustDivider} />
+                <div className={styles.trustItem}>
+                    <span className={styles.trustIcon}><FaCreditCard /></span>
+                    <div>
+                        <span className={styles.trustTitle}>Pay on Delivery</span>
+                        <span className={styles.trustDesc}>COD available</span>
+                    </div>
                 </div>
-
-                <div className={styles.specItem}>
-                    <span className={styles.specLabel}>Processor:</span>
-                    <span className={styles.specValue}>{product?.battery_capacity}</span>
-                </div>
-
-                <div className={styles.specItem}>
-                    <span className={styles.specLabel}>Front Camera:</span>
-                    <span className={styles.specValue}>{product?.front_camera}</span>
-                </div>
-
-                <div className={styles.specItem}>
-                    <span className={styles.specLabel}>Network Support</span>
-                    <span className={styles.specValue}>{product?.network_support}</span>
-                </div>
-            </div>
-
-            <div className={styles.socialIcons}>
-                <span className={`${styles.socialIcon} ${styles.facebook}`}>
-                    <FaFacebookF />
-                </span>
-                <span className={`${styles.socialIcon} ${styles.linkedin}`}>
-                    <FaLinkedinIn />
-                </span>
-                <span className={`${styles.socialIcon} ${styles.twitter}`}>
-                    <FaTwitter />
-                </span>
-                <span className={`${styles.socialIcon} ${styles.youtube}`}>
-                    <FaYoutube />
-                </span>
-                <span className={`${styles.socialIcon} ${styles.email}`}>
-                    <FaEnvelope />
-                </span>
             </div>
         </div>
     );

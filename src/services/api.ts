@@ -3,13 +3,14 @@ import type { AddToCartPayload } from "@/types/cart";
 
 // Using environment variable or fallback to a local API 
 // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api-auth.refones.com/api";
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://refones.com/api-auth_v1/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_AUTH_BASE_URL || "https://refones.com/api-auth_v1/api";
 
 
 const api = axios.create({
     baseURL: API_URL,
     headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
     }
 });
 
@@ -52,7 +53,7 @@ export const authAPI = {
     },
     register: async (data: { name: string; email: string; password: string; phone: string; role_id?: number }) => {
         const payload = { ...data, role_id: data.role_id || 3 };
-        const response = await api.post("register", payload);
+        const response = await api.post("/register", payload);
         // console.log("FULL RESPONSE:", response);
         return response.data;
     },

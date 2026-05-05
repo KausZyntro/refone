@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaHeart, FaShoppingCart, FaTruck, FaShieldAlt, FaBolt } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
+import { FiShield } from "react-icons/fi";
 import styles from "./AddToCartSectiontest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { addToCart, addLocalItem } from "@/redux/features/cartSlice";
 import { openLoginModal, setRedirectPath } from "@/redux/features/authSlice";
-import { createPaymentStatus, placeOrder } from "@/redux/features/orderSlice";
 import { useRouter } from "next/navigation";
 import { parsePrice } from "@/utils/format";
 import { toast } from "react-toastify";
@@ -21,28 +21,37 @@ interface AddToCartSectionProps {
     isIconOnly?: boolean;
 }
 
-const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, selectedVariant, showWishlist = true,
-    showBuyNow = false, isIconOnly = false }) => {
+const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({
+    product,
+    selectedVariant,
+    showWishlist = true,
+    showBuyNow = false,
+    isIconOnly = false,
+}) => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const [addedToCart, setAddedToCart] = useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isMounted, setIsMounted] = useState(false);
 
     const { user } = useSelector((state: RootState) => state.auth);
-    const { selectedAddressId } = useSelector((state: RootState) => state.address);
     const { isLoading: isCartLoading } = useSelector((state: RootState) => state.cart);
-    const [isMounted, setIsMounted] = useState(false);
-    const { isProcessingPayment, isLoading: isPlacingOrder } = useSelector((state: RootState) => state.order);
 
     const stock = selectedVariant?.inventory?.total_stock ?? 0;
     const inboundStock = selectedVariant?.inventory?.inbound_stock ?? 0;
     const isActive = selectedVariant?.inventory?.is_active === 1;
     const isInStock = stock > 0 || inboundStock > 0 || isActive;
+    const isOutOfStock = !isInStock;
+
+    const sellingPrice = Number(selectedVariant?.pricing?.selling_price ?? 0);
+    const mrp = Number(selectedVariant?.pricing?.mrp ?? 0);
+    const discountPct = mrp > 0 && sellingPrice > 0 ? Math.round(((mrp - sellingPrice) / mrp) * 100) : 0;
+    // "Buy for as low as" price (5% more savings simulation)
+    const prepaidPrice = sellingPrice > 0 ? Math.round(sellingPrice * 0.95) : 0;
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
-
 
     const handleAddToCart = async () => {
         if (!product || !selectedVariant) {
@@ -51,9 +60,8 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
         }
 
         if (!user?.id) {
-            // Guest mode: add locally
             dispatch(addLocalItem({
-                id: Date.now(), // Temporary ID for guest item
+                id: Date.now(),
                 product_id: product.id,
                 variant_id: selectedVariant.id,
                 quantity: 1,
@@ -105,8 +113,6 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
         if (!user?.id) {
             dispatch(setRedirectPath("/checkout"));
             dispatch(openLoginModal());
-
-            // Still add locally so it's in the cart when they log in
             if (!addedToCart) {
                 dispatch(addLocalItem({
                     id: Date.now(),
@@ -155,6 +161,7 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
         }
     };
 
+    // Icon-only mode (for cards)
     if (isIconOnly) {
         return (
             <button
@@ -177,11 +184,61 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
         );
     }
 
+    // Skeleton
+    if (!selectedVariant) {
+        return (
+            <div className={styles.addToCart}>
+                <div className={styles.skeletonPrice} />
+                <div className={styles.skeletonBtn} />
+                <div className={styles.skeletonBtn} style={{ marginTop: 10 }} />
+            </div>
+        );
+    }
+
     return (
         <div className={styles.addToCart}>
+            {/* Price Section */}
+            <div className={styles.priceSection}>
+                {isOutOfStock ? (
+                    <span className={styles.outOfStockText}>Updating soon</span>
+                ) : (
+                    <>
+                        <div className={styles.priceRow}>
+                            <span className={styles.sellingPrice}>
+                                ₹{sellingPrice.toLocaleString("en-IN")}
+                            </span>
+                            {mrp > 0 && sellingPrice < mrp && (
+                                <>
+                                    <span className={styles.mrp}>₹{mrp.toLocaleString("en-IN")}</span>
+                                    {discountPct > 0 && (
+                                        <span className={styles.discountTag}>{discountPct}% OFF</span>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                        <p className={styles.taxNote}>Inclusive of all taxes</p>
+
+                        {/* Buy for as low as */}
+                        {prepaidPrice > 0 && (
+                            <div className={styles.prepaidRow}>
+                                <FiShield className={styles.prepaidIcon} />
+                                <div>
+                                    <span className={styles.prepaidText}>
+                                        Buy for as low as <strong>₹{prepaidPrice.toLocaleString("en-IN")}</strong>
+                                    </span>
+                                    <span className={styles.prepaidNote}>Get extra ₹1,500 off on prepaid orders</span>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+
+            {/* Buttons */}
             <div className={styles.buttonRow}>
                 <button
-                    className={`${styles.cartBtn} ${!isInStock ? styles.outOfStockBtn : ""}`}
+                    id="add-to-cart-btn"
+                    className={`${styles.cartBtn} ${!isInStock ? styles.disabledBtn : ""} ${addedToCart ? styles.goToCartBtn : ""}`}
                     onClick={() => {
                         if (!isInStock) return;
                         if (addedToCart) {
@@ -192,37 +249,30 @@ const AddToCartSectiontest: React.FC<AddToCartSectionProps> = ({ product, select
                     }}
                     disabled={isLoading || !isInStock}
                 >
-                    <FaShoppingCart />
+                    <FaShoppingCart className={styles.btnIcon} />
                     {!isInStock
                         ? "Out of Stock"
-                        :isLoading
-                        ? "Adding..."
-                        : addedToCart
-                            ? "Go to Cart"
-                            : "Add to Cart"}
+                        : isLoading
+                            ? "Adding..."
+                            : addedToCart
+                                ? "Go to Cart"
+                                : "Add to Cart"}
                 </button>
 
                 {showBuyNow && (
                     <button
-                        className={styles.buyNowBtn}
+                        id="buy-now-btn"
+                        className={`${styles.buyNowBtn} ${!isInStock ? styles.disabledBtn : ""}`}
                         onClick={() => {
                             if (!isInStock) return;
                             handleDirectBuy();
-                            }}
+                        }}
                         disabled={isLoading || !isInStock}
                     >
-                        <FaBolt /> Buy Now
+                        Buy Now
                     </button>
                 )}
             </div>
-
-            {showWishlist && (
-                <div className={styles.wishlistRow}>
-                    <button className={styles.wishlistBtn}>
-                        <FaHeart /> Add to Wishlist
-                    </button>
-                </div>
-            )}
         </div>
     );
 };
