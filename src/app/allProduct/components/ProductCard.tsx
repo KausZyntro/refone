@@ -17,6 +17,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const displayPrice = firstVariant?.pricing?.selling_price || '0';
     const displayMrp = firstVariant?.pricing?.mrp || '0';
     
+    
     // Calculate discount
     const mrp = Number(displayMrp);
     const sellingPrice = Number(displayPrice);
@@ -62,31 +63,35 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </div>
 
                 {(() => {
-                    const stock = firstVariant?.inventory?.total_stock ?? 0;
-                    const inboundStock = firstVariant?.inventory?.inbound_stock ?? 0;
-                    const isActive = firstVariant?.inventory?.is_active === 1;
-                    const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
-
+                    // const stock = firstVariant?.inventory?.total_stock ?? 0;
+                    // const inboundStock = firstVariant?.inventory?.inbound_stock ?? 0;
+                    // const isActive = firstVariant?.inventory?.is_active === 1;
+                    // const isOutOfStock = firstVariant?.inventory?.available_stock <= 0;
+                    const stock = firstVariant?.inventory?.available_stock ?? 0;
+                    const isOutOfStock = stock <= 0;
+                    // console.log(firstVariant?.inventory?.available_stock);
+                    // console.log(isOutOfStock);
                     return (
-                        <div className={styles.priceRow}>
-                            {isOutOfStock ? (
-                                <span className={styles.productPrice} style={{ color: '#d32f2f', fontSize: '1rem' }}>Updating soon</span>
-                            ) : (
-                                <>
-                                    <span className={styles.productPrice}>₹{sellingPrice.toLocaleString('en-IN')}</span>
-                                    {discount > 0 && (
-                                        <>
-                                            <span className={styles.mrpPrice}>₹{mrp.toLocaleString('en-IN')}</span>
-                                            <span className={styles.discountBadge}>{discount}% OFF</span>
-                                        </>
-                                    )}
-                                </>
-                            )}
-                        </div>
+                        <>
+                            <div className={styles.priceRow}>
+                                {isOutOfStock ? (
+                                    <span className={styles.productPrice} style={{ color: '#d32f2f', fontSize: '14px', fontWeight: '700' }}>Price updating soon</span>
+                                ) : (
+                                    <>
+                                        <span className={styles.productPrice}>₹{sellingPrice.toLocaleString('en-IN')}</span>
+                                        {discount > 0 && (
+                                            <>
+                                                <span className={styles.mrpPrice}>₹{mrp.toLocaleString('en-IN')}</span>
+                                                <span className={styles.discountBadge}>{discount}% OFF</span>
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                            {!isOutOfStock && <p className={styles.emiText}>EMI from ₹1,028/m</p>}
+                        </>
                     );
                 })()}
-
-                <p className={styles.emiText}>EMI from ₹1,028/m</p>
 
                 <div className={styles.cardFooter}>
                     <span className={styles.warrantyBadge}>12 Months Warranty</span>

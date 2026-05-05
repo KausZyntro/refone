@@ -13,6 +13,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
   const inboundStock = product.inbound_stock ?? 0;
   const isActive = product.is_active === 1;
   const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
+  console.log(isOutOfStock)
 
   return (
     <Link href={`/product/${product.id || product.slug || ""}`}>
@@ -45,7 +46,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
 
           {isOutOfStock ? (
             <div className="price-row">
-              <span className="current-price" style={{ color: '#d32f2f', fontSize: '0.9rem' }}>Updating soon</span>
+              <span className="current-price" style={{ color: '#d32f2f', fontSize: '0.9rem', fontWeight: '700' }}>Price updating soon</span>
             </div>
           ) : (
             <div className="price-row">
@@ -60,7 +61,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
           )}
 
           <div className="card-footer-row">
-            <span className="emi-text">EMI from ₹{Math.round(product.price / 12).toLocaleString()}/m</span>
+            {!isOutOfStock && <span className="emi-text">EMI from ₹{Math.round(product.price / 12).toLocaleString()}/m</span>}
             <span className="warranty-text">12 Months Warranty</span>
           </div>
         </div>
