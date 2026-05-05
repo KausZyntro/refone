@@ -19,7 +19,7 @@ const ProductCard = ({ product }: { product: any }) => {
       <div className={styles.productCard}>
             <div className={styles.productImageWrapper}>
                 <img
-                    src={product.image}
+                    src={product.image || '/placeholder.png'}
                     alt={product.name}
                     className={styles.productImage}
                 />

@@ -54,7 +54,7 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                                 <SwiperSlide key={img.id} className={styles.slide}>
                                     <div className={styles.imageWrap}>
                                         <Image
-                                            src={img.image_url || "/fallback.png"}
+                                            src={img.image_url || "/placeholder.png"}
                                             alt={`${product?.name || "Product"} view ${i + 1}`}
                                             width={500}
                                             height={500}
@@ -68,7 +68,7 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                             <SwiperSlide className={styles.slide}>
                                 <div className={styles.imageWrap}>
                                     <Image
-                                        src="/fallback.png"
+                                        src="/placeholder.png"
                                         alt="Product fallback"
                                         width={500}
                                         height={500}
@@ -104,7 +104,7 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                             <SwiperSlide key={img.id} className={styles.thumbSlide}>
                                 <div className={styles.thumbWrap}>
                                     <Image
-                                        src={img.image_url || "/fallback.png"}
+                                        src={img.image_url || "/placeholder.png"}
                                         alt="thumbnail"
                                         width={70}
                                         height={70}

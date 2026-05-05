@@ -66,11 +66,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
             </div>
 
             <div className="order-body">
-                {imageUrl ? (
-                    <img src={imageUrl} alt={order.product?.name} className="product-img" />
-                ) : (
-                    <div className="product-img" style={{ background: '#f0f0f0' }} />
-                )}
+                <img 
+                    src={imageUrl || '/placeholder.png'} 
+                    alt={order.product?.name} 
+                    className="product-img" 
+                />
                 <div className="product-details">
                     <h3>{order.product?.name}</h3>
                     <p className="product-description">

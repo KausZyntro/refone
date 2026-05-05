@@ -58,17 +58,12 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
     return (
         <div className="cart-item-card">
             <div className="cart-item-image-wrapper">
-                {imageUrl ? (
-                    <img
-                        src={imageUrl}
-                        alt={item.product.name}
-                        // fill
-                        className="cart-item-image"
-                        sizes="(max-width: 768px) 96px, 112px"
-                    />
-                ) : (
-                    <div className="cart-item-no-image">No Image</div>
-                )}
+                <img
+                    src={imageUrl || '/placeholder.png'}
+                    alt={item.product?.name}
+                    className="cart-item-image"
+                    sizes="(max-width: 768px) 96px, 112px"
+                />
             </div>
 
             <div className="cart-item-content">

@@ -8,7 +8,7 @@ interface ProductGalleryProps {
 }
 
 const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
-  const [activeImage, setActiveImage] = useState(images?.[0] || "");
+  const [activeImage, setActiveImage] = useState(images?.[0] || "/placeholder.png");
   const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
   const [isZooming, setIsZooming] = useState(false);
 

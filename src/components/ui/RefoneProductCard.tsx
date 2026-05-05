@@ -21,7 +21,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
         <div className="card-left">
           <div className="product-image-container">
             <img
-              src={product.image}
+              src={product.image || '/placeholder.png'}
               alt={product.name}
               className="card-image"
             />
