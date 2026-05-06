@@ -16,7 +16,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
   console.log(isOutOfStock)
 
   return (
-    <Link href={`/product/${product.id || product.slug || ""}`}>
+    <Link href={`/product/${product.id || product.slug || ""}`} style={{ textDecoration: 'none' }}>
       <div className="refone-product-card-horizontal">
         <div className="card-left">
           <div className="product-image-container">
@@ -37,10 +37,10 @@ const RefoneProductCard = ({ product }: { product: any }) => {
           </div>
           
           <p className="card-specs">
-            {product.storage || "128GB"} • {product.color}
+            {product.storage || "128GB"} • {product.color || "Starlight"}
           </p>
           
-          <div className="condition-tag">
+          <div className={`condition-tag ${(product.condition || "Excellent").toLowerCase()}`}>
             <span>{product.condition || "Excellent"}</span>
           </div>
 
@@ -62,6 +62,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
 
           <div className="card-footer-row">
             {!isOutOfStock && <span className="emi-text">EMI from ₹{Math.round(product.price / 12).toLocaleString()}/m</span>}
+            <div className="footer-divider"></div>
             <span className="warranty-text">12 Months Warranty</span>
           </div>
         </div>

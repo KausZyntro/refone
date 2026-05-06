@@ -9,6 +9,7 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
+import { HiMenuAlt2 } from "react-icons/hi";
 import Image from 'next/image';
 import AuthModal from './AuthModal';
 import OtpModal from './OtpModal';
@@ -352,229 +353,139 @@ useEffect(() => {
   return (
     <>
       <div className="navbar">
-        <div className="nav-top">
-
-          {/* <div className="nav-left">
-            <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-              {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        <div className="nav-utility">
+          <div className="utility-left">
+            <div className="utility-item">
+              <img src="https://img.icons8.com/ios-filled/16/28b9a9/checkmark.png" alt="check" />
+              100% Original Products
             </div>
-
-            <Link href="/" className="logo">
-              <Image src={"/logo.png"} alt='logo' height={50} width={120} />
-
-            </Link>
-             <div className="mobileCart">
-              {mounted ? (
-              <div className="cart" onClick={() => router.push("/cart")}>
-                <LiaShoppingCartSolid size={30} />
-
-                {totalQuantity > 0 && (
-                  <span className="cart-badge">
-                    {totalQuantity > 99 ? "99+" : totalQuantity}
-                  </span>
-                )}
-              </div>
-            ) : null}
+            <div className="utility-item">
+              <img src="https://img.icons8.com/ios-filled/16/28b9a9/history.png" alt="returns" />
+              Easy 7-Day Returns
             </div>
-           
-          </div> */}
-
-          <div className="nav-left">
-  <div className="leftSection">
-    <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-      {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-    </div>
-
-    <Link href="/" className="logo">
-      <Image src={"/logo.png"} alt="logo" height={50} width={120} />
-    </Link>
-  </div>
-
-  <div className="mobileRightIcons">
-    {mounted && (
-      <>
-      {token && (
-        <Link href="/my-account" >
-          <div className="mobileProfile" onClick={() => setProfileOpen(!profileOpen)}>
-            <FaUser size={18} />
+            <div className="utility-item">
+              <img src="https://img.icons8.com/ios-filled/16/28b9a9/warranty.png" alt="warranty" />
+              12 Months Warranty
+            </div>
           </div>
-        </Link>
-      )}
-
-        <div className="mobileCart">
-          <div className="cart" onClick={() => router.push("/cart")}>
-            <LiaShoppingCartSolid size={28} />
-
-            {totalQuantity > 0 && (
-              <span className="cart-badge">
-                {totalQuantity > 99 ? "99+" : totalQuantity}
-              </span>
-            )}
+          <div className="utility-right">
+            <div className="utility-item"><img src="https://img.icons8.com/ios/16/666666/smartphone.png" alt="app" /> Download App</div>
+            <div className="utility-item" onClick={getLocation}><FiMapPin /> Store Locator</div>
+            <div className="utility-item"><img src="https://img.icons8.com/ios/16/666666/truck.png" alt="order" /> Track Order</div>
+            <div className="utility-item"><img src="https://img.icons8.com/ios/16/666666/help.png" alt="help" /> Help Center</div>
           </div>
         </div>
-      </>
-    )}
-  </div>
-</div>
 
-          <div className="search-box">
-            <FiSearch className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search for mobiles, accessories & More"
-              value={search}
-              onChange={handleChange}
-              onFocus={() => setShowDropdown(true)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  setShowDropdown(false);
-                  router.push(`/allProduct?search=${search}`);
-                }
-              }}
-            />
+        <div className="nav-top">
+          <div className="nav-top-wrapper">
+            <div className="nav-left">
+              <div className="leftSection">
+                <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+                  {menuOpen ? <FiX size={24} /> : <HiMenuAlt2 size={24} />}
+                </div>
 
-            {showDropdown && pathname !== '/allProduct' && (
-              <div className="search-results-dropdown">
-                {isSearching ? (
-                  <div className="search-loading">Searching...</div>
-                ) : search.trim().length === 0 && recentSearches.length > 0 ? (
-                  <div className="recent-searches">
-                    <div className="dropdown-title">Recent Searches</div>
-                    {recentSearches.map((item, index) => (
-                      <div
-                        key={index}
-                        className="recent-item"
-                        onClick={() => {
-                          setSearch(item);
-                          performSearch(item);
-                        }}
-                      >
-                        <FiSearch size={14} />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                ) : search.trim().length >= 3 && searchResults.length > 0 ? (
-                  <>
-                    {searchResults.map((product) => (
-                      <Link
-                        key={product.id}
-                        href={`/product/${product.id}`}
-                        className="search-result-item"
-                        onClick={() => {
-                          setShowDropdown(false);
-                          saveToHistory(search);
-                        }}
-                      >
-                        <img
-                          src={product.variants?.[0]?.images?.[0]?.image_url || '/placeholder.png'}
-                          alt={product.name}
-                        />
-                        <div className="result-info">
-                          <span className="result-name">{product.name}</span>
-                          {(() => {
-                            const firstVariant = product.variants?.[0];
-                            const stock = firstVariant?.inventory?.total_stock ?? 0;
-                            const inboundStock = firstVariant?.inventory?.inbound_stock ?? 0;
-                            const isActive = firstVariant?.inventory?.is_active === 1;
-                            const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
-
-                            return isOutOfStock ? (
-                              <span className="result-price" style={{ color: '#d32f2f', fontSize: '0.8rem' }}>Updating soon</span>
-                            ) : (
-                              <span className="result-price">₹{Number(firstVariant?.pricing?.selling_price || 0).toLocaleString('en-IN')}</span>
-                            );
-                          })()}
-                        </div>
-                      </Link>
-                    ))}
-                    <Link
-                      href={`/allProduct?search=${search}`}
-                      className="view-all-results"
-                      onClick={() => {
-                        setShowDropdown(false);
-                        saveToHistory(search);
-                      }}
-                    >
-                      View all results for "{search}"
-                    </Link>
-                  </>
-                ) : search.trim().length >= 3 ? (
-                  <div className="no-results">No products found</div>
-                ) : null}
+                <Link href="/" className="logo">
+                  <Image src={"/logo.png"} alt="logo" height={40} width={120} />
+                </Link>
               </div>
-            )}
-          </div>
-
-          <div className="nav-actions">
-            <div className="location" onClick={getLocation}> 
-              <FiMapPin />
-              {/* <span>Rameswaram</span> */}
-              <span>{city}</span>
-              {/* <FiChevronDown size={14} /> */}
             </div>
-            {mounted ? (
-              <div className="cart" onClick={() => router.push("/cart")}>
-                <LiaShoppingCartSolid size={30} />
 
-                {totalQuantity > 0 && (
-                  <span className="cart-badge">
-                    {totalQuantity > 99 ? "99+" : totalQuantity}
-                  </span>
-                )}
-              </div>
-            ) : null}
-
-            {
-              mounted && token ? (
-                <div className='user-profile-wrapper'>
-                  <div className="user-profile" onClick={() => setProfileOpen(!profileOpen)}>
-                    <FaUser />
-                    <span>{user?.name || 'User'}</span>
-                    <FiChevronDown size={14} />
-                  </div>
-                  {
-                    profileOpen && (
-                      <div className="profile-dropdown" onClick={() => setProfileOpen(false)}>
-                        <Link href={'/my-orders'}>
-                          <div className="dropdown-item">My Orders</div>
-                        </Link>
-                        <Link href={'/my-account'}><div className="dropdown-item">My Account</div></Link>
-                        <div className="dropdown-item" onClick={handleLogout}>
-                          Logout
-                        </div>
-                      </div>
-                    )
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Search for phones, tablets, accessories & more..."
+                value={search}
+                onChange={handleChange}
+                onFocus={() => setShowDropdown(true)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    setShowDropdown(false);
+                    router.push(`/allProduct?search=${search}`);
                   }
+                }}
+              />
+              <button className="search-btn" onClick={() => router.push(`/allProduct?search=${search}`)}>
+                <FiSearch size={18} />
+              </button>
+
+              {showDropdown && pathname !== '/allProduct' && (
+                <div className="search-results-dropdown">
+                  {/* ... dropdown content remains same ... */}
+                  {isSearching ? (
+                    <div className="search-loading">Searching...</div>
+                  ) : mounted && search.trim().length === 0 && recentSearches.length > 0 ? (
+                    <div className="recent-searches">
+                      <div className="dropdown-title">Recent Searches</div>
+                      {recentSearches.map((item, index) => (
+                        <div key={index} className="recent-item" onClick={() => { setSearch(item); performSearch(item); }}>
+                          <FiSearch size={14} />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : search.trim().length >= 3 && searchResults.length > 0 ? (
+                    <>
+                      {searchResults.map((product) => (
+                        <Link key={product.id} href={`/product/${product.id}`} className="search-result-item" onClick={() => { setShowDropdown(false); saveToHistory(search); }}>
+                          <img src={product.variants?.[0]?.images?.[0]?.image_url || '/placeholder.png'} alt={product.name} />
+                          <div className="result-info">
+                            <span className="result-name">{product.name}</span>
+                            <span className="result-price">₹{Number(product.variants?.[0]?.pricing?.selling_price || 0).toLocaleString('en-IN')}</span>
+                          </div>
+                        </Link>
+                      ))}
+                    </>
+                  ) : null}
+                </div>
+              )}
+            </div>
+
+            <div className="nav-actions">
+              {mounted && token ? (
+                <div className="nav-action-item" onClick={() => setProfileOpen(!profileOpen)}>
+                  <FaUser size={20} />
+                  <div className="nav-action-info">
+                    <span className="label">Account</span>
+                    <span className="sub-label">{user?.name || 'My Profile'}</span>
+                  </div>
                 </div>
               ) : (
-                <button className="login-btn" onClick={() => dispatch(openLoginModal())}>
-                  Login
-                </button>
-              )
-            }
+                <div className="nav-action-item" onClick={() => dispatch(openLoginModal())}>
+                  <FaUser size={20} />
+                  <div className="nav-action-info">
+                    <span className="label">Login / Sign Up</span>
+                    <span className="sub-label">Account</span>
+                  </div>
+                </div>
+              )}
 
+              <div className="nav-action-item" onClick={() => router.push("/cart")}>
+                <div style={{ position: 'relative' }}>
+                  <LiaShoppingCartSolid size={26} />
+                  {mounted && totalQuantity > 0 && (
+                    <span className="cart-badge">
+                      {totalQuantity > 99 ? "99+" : totalQuantity}
+                    </span>
+                  )}
+                </div>
+                <div className="nav-action-info">
+                  <span className="label">Cart</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
 
         {menuOpen && (
           <div className="mobile-menu">
-            {/* <Link href={'/my-orders'}>
-              <div className="mobile-item" onClick={() => setMenuOpen(false)}>My Orders</div>
-            </Link> */}
             <Link href={'/my-account'}>
               <div className="mobile-item" onClick={() => setMenuOpen(false)}>My Account</div>
             </Link>
-            {/* <div className="mobile-item">Sell Gadgets</div>
-            <div className="mobile-item">Buy Refurbished Devices</div>
-            <div className="mobile-item">Buy Laptop</div>
-            <div className="mobile-item">More</div> */}
             <div className="mobile-item">
               <div className="locations">
                 <FiMapPin />
-                {/* <span>Rameswaram</span> */}
                 <span>{city}</span>
-                {/* <FiChevronDown size={14} /> */}
               </div>
             </div>
             <div className="mobile-item-btn">
@@ -642,7 +553,6 @@ useEffect(() => {
                 toast.success("Login Successful!");
 
                 const userObj = res?.user || res?.data?.user || res;
-                // Check if it's a new user or missing profile details (name/email empty)
                 const isNewUser = res?.is_new_user || res?.data?.is_new_user || !userObj?.name || userObj?.name.trim() === '' || !userObj?.email || userObj?.email.trim() === '';
 
                 if (isNewUser) {

@@ -1,190 +1,121 @@
-.phone-hero-section {
-  width: 100%;
-  background: #ededed;
-  padding: 40px 0 65px;
-  box-sizing: border-box;
-}
-
-.phone-hero-header {
-  text-align: start;
-  margin-bottom: 30px;
-  /* padding-left: 63px; */
-}
-
-.phone-hero-header h1 {
-  font-size: 39px;
-  font-weight: 600;
-  letter-spacing: -1px;
-  color: #1d1d1f;
-}
-
-.chapter-nav {
-  /* position: relative;
-  max-width: 1000px;
-  margin: auto;
-  display: flex;
-  align-items: center; */
-  align-items: center;
-    width: 100%;
-    /* margin: auto; */
-    display: flex;
-    position: relative;
-}
-
-.product-list {
-  display: flex;
-  gap: 64px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  list-style: none;
+.category-section {
+  max-width: 1350px;
+  margin: 40px auto;
   padding: 0 20px;
-  margin: 0;
 }
 
-.product-list::-webkit-scrollbar {
-  display: none;
-}
-.product-list {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.product-item {
-  flex: 0 0 auto;
-  text-align: center;
-}
-
-.product-item a {
-  text-decoration: none;
-  color: #1d1d1f;
-  font-size: 14px;
-  transition: transform 0.3s ease;
-}
-
-.product-item img {
-  width: 70px;
-  height: 85px;
-  margin-bottom: 8px;
-  transition: transform 0.3s ease;
-}
-
-.product-item:hover img {
-  transform: scale(1.1);
-}
-
-.nav-btn {
-  background: #f5f5f7;
-  border: none;
-  font-size: 24px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  color: #333;
-  transition: background 0.3s ease;
-  display: none;
-}
-
-.nav-btn:hover {
-  background: #e0e0e0;
-}
-
-.nav-btn.left {
-  margin-right: 10px;
-}
-
-.nav-btn.right {
-  margin-left: 10px;
-}
-
-/* Common badge */
-.stock-badge {
-  display: inline-flex;
+.category-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  width: fit-content;
+  margin-bottom: 24px;
 }
 
-/* Icon */
-.stock-icon {
-  font-size: 12px;
+.category-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.category-header a {
+  color: #006aaf;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 20px;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s;
+}
+
+.category-item:hover {
+  transform: translateY(-5px);
+}
+
+.category-icon-wrapper {
+  width: 100px;
+  height: 100px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 10px;
+  transition: border-color 0.2s;
 }
 
-/* In Stock (Green) */
-.in-stock {
-  background-color: #e6f9ec;
-  color: #1a7f37;
+.category-item:hover .category-icon-wrapper {
+  border-color: #006aaf;
 }
 
-/* Out of Stock (Red) */
-.out-of-stock {
-  background-color: #fdecea;
-  color: #d93025;
-}
-button.disabled {
-  background-color: #ccc !important;
-  cursor: not-allowed;
-  opacity: 0.7;
+.category-icon-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-/* Optional: hover disable */
-button.disabled:hover {
-  background-color: #ccc;
+.category-name {
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
 }
 
-
-@media (min-width: 1024px) {
-  .phone-hero-header h1 {
-    /* font-size: 64px; */
-  }
-
-  .nav-btn {
-    display: block;
-  }
-
-  .product-list {
-    overflow: hidden;
-  }
+.all-categories-icon {
+  width: 100px;
+  height: 51px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-@media (max-width: 1023px) {
-  .phone-hero-header h1 {
-    font-size: 48px;
-  }
-
-  .product-list {
-    gap: 30px;
-  }
-
-  .product-item img {
-    width: 60px;
-    height: 68px;
+@media (max-width: 1200px) {
+  .category-grid {
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
-@media (max-width: 600px) {
-  .phone-hero-header h1 {
-    font-size: 24px;
+@media (max-width: 768px) {
+  .category-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
   }
-
-  .product-list {
-    gap: 20px;
-    padding: 0 10px;
+  
+  .category-icon-wrapper {
+    width: 80px;
+    height: 80px;
   }
+}
 
-  .product-item img {
-    width: 50px;
-    height: 68px;
+@media (max-width: 480px) {
+  .category-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
-
-  .product-item a {
-    font-size: 12px;
+  
+  .category-icon-wrapper {
+    width: 75px;
+    height: 75px;
+  }
+  
+  .category-name {
+    font-size: 11px;
   }
 }

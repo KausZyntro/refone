@@ -1,37 +1,45 @@
 .refone-product-card-horizontal {
-  background: rgb(255, 255, 255);
-  border: 1px solid rgb(238, 238, 238);
+  background: #fff;
+  border: 1px solid #f0f0f0;
   border-radius: 12px;
   width: 100%;
+  min-width: 380px; /* Increased for premium desktop look */
+  min-height: 190px;
   height: 100%;
-    min-height: 191px;
-    /* padding: 11px; */
-    padding: 3px 13px;
-    transition: 0.3s;
-    display: flex;
-    overflow: hidden;
+  padding: 12px;
+  transition: all 0.3s ease;
+  display: flex;
+  gap: 15px;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .refone-product-card-horizontal {
+    min-width: unset; /* Remove min-width on mobile */
+    width: 100%;
+  }
 }
 
 .refone-product-card-horizontal:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   border-color: #006aaf;
 }
 
-/* Left side (Image) */
 .card-left {
-  flex: 0 0 100px; /* More compact image area */
+  flex: 0 0 110px;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* padding: 10px; */
-  padding: 0px;
-  border-right: 1px solid #f5f5f5;
-  background-color: #ffffff;
+  border-right: 1px solid #f8f8f8;
+  padding-right: 10px;
 }
 
 .product-image-container {
   width: 100%;
-  height: 100%;
+  height: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,30 +47,28 @@
 
 .card-image {
   max-width: 100%;
-  max-height: 110px;
+  max-height: 100%;
   object-fit: contain;
 }
 
-/* Right side (Info) */
 .card-right {
   flex: 1;
-  padding: 12px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   min-width: 0;
+  padding-top: 2px;
 }
 
 .card-header-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 5px;
+  margin-bottom: 2px;
 }
 
 .card-title {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #1a1a1a;
   margin: 0;
   white-space: nowrap;
@@ -71,142 +77,178 @@
 }
 
 .wishlist-icon {
-  color: #aeb4be;
-  font-size: 16px;
+  color: #a0aab8;
+  font-size: 18px;
   cursor: pointer;
-  transition: color 0.3s ease;
-  flex-shrink: 0;
+  transition: color 0.2s;
 }
 
 .wishlist-icon:hover {
-  color: #006aaf;
+  color: #ff4d4f;
 }
 
 .card-specs {
-  font-size: 11px;
-  color: #7d848c;
-  margin: 2px 0 6px 0;
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 8px;
 }
 
 .condition-tag {
   display: inline-block;
-  background: #e6f7ef;
-  color: #00a16c;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 4px;
-  margin-bottom: 8px;
-  align-self: flex-start;
+  margin-bottom: 12px;
+  width: fit-content;
+}
+
+.condition-tag.excellent {
+  background: #e6f7f4;
+  color: #009688;
+}
+
+.condition-tag.good {
+  background: #fff4e6;
+  color: #ff9800;
 }
 
 .price-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin-bottom: 15px;
   flex-wrap: wrap;
 }
 
 .current-price {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: #1a1a1a;
 }
 
 .mrp-price {
-  font-size: 11px;
-  color: #99a2ad;
+  font-size: 13px;
+  color: #999;
   text-decoration: line-through;
 }
 
 .discount-tag {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
-  color: #00a16c;
-  background: #f1f8f1;
-  padding: 1px 4px;
-  border-radius: 3px;
+  color: #009688;
 }
 
 .card-footer-row {
   display: flex;
-  justify-content: space-between;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 8px;
-  font-size: 9px;
-  color: #7d848c;
-  gap: 5px;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #f5f5f5;
+  padding-top: 10px;
+  font-size: 11px;
+  color: #888;
+  margin-top: auto;
+}
+
+.footer-divider {
+  width: 1px;
+  height: 12px;
+  background: #eee;
+}
+
+.emi-text {
+  font-weight: 500;
 }
 
 .warranty-text {
-  font-weight: 600;
-}
-
-@media (max-width: 1024px) {
-  .card-left {
-    flex: 0 0 90px;
-  }
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
-  .card-left {
-    flex: 0 0 85px;
-    padding: 8px;
+  .refone-product-card-horizontal {
+    padding: 10px;
+    gap: 12px;
   }
-  
+
+  .card-left {
+    flex: 0 0 90px;
+  }
+
+  .product-image-container {
+    height: 90px;
+  }
+
+  .current-price {
+    font-size: 16px;
+  }
+
   .card-title {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
   .refone-product-card-horizontal {
-    flex-direction: row; /* Keep it horizontal even on mobile as per screenshot style */
-    min-height: auto;
+    margin-bottom: 12px;
   }
-  
+
   .card-left {
-    flex: 0 0 90px;
-    border-right: 1px solid #f0f0f0;
-    border-bottom: none;
+    flex: 0 0 85px;
+  }
+
+  .card-footer-row {
+    font-size: 10px;
   }
 }
 
-@media (min-width: 1024px) {
-  .refone-product-swiper .swiper-slide.swiper-slide-active {
-    width: 344px !important;
-  }
-  .refone-product-swiper .swiper-slide.swiper-slide-next {
-    width: 344px !important;
-  }
-}
-
-@media (max-width: 1023px) {
-  .refone-product-swiper .swiper-slide {
-    width: 100% !important; /* Take full width of slidesPerView on mobile */
-  }
-}
-
-/* Position Navigation Buttons outside */
+/* Slider Overrides for Best Sellers Section */
 .refone-product-swiper {
-  padding-left: 45px !important;
-  padding-right: 50px !important;
+  padding: 10px 0 30px 0 !important;
   overflow: visible !important;
 }
 
-.refone-product-swiper .swiper-button-prev {
-  left: -10px !important;
-  color: #006aaf;
-}
-
+.refone-product-swiper .swiper-button-prev,
 .refone-product-swiper .swiper-button-next {
-  right: -10px !important;
-  color: #006aaf;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  color: #333;
 }
 
 .refone-product-swiper .swiper-button-prev::after,
 .refone-product-swiper .swiper-button-next::after {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.refone-product-swiper .swiper-button-prev {
+  left: -20px !important;
+}
+
+.refone-product-swiper .swiper-button-next {
+  right: -20px !important;
+}
+
+@media (max-width: 768px) {
+  .refone-product-swiper .swiper-button-prev,
+  .refone-product-swiper .swiper-button-next {
+    display: none !important;
+  }
+}
+.view-all-blue {
+  color: #009688;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.view-all-blue:hover {
+  text-decoration: underline;
+}
+
+.refone-product-swiper .swiper-slide {
+  height: auto !important;
+  display: flex !important;
 }
