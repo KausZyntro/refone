@@ -78,9 +78,13 @@ function fixTOCLinks(html) {
   if (!html) return '';
  
   // Replace full WordPress URL with only hash
-  return html.replace(
-    /https:\/\/refones\.com\/blogs\/[^#]+(#.*?)"/g,
-    '$1"'
+  // return html.replace(
+  //   /https:\/\/refones\.com\/blogs\/[^#]+(#.*?)"/g,
+  //   '$1"'
+  // );
+   return html.replace(
+    /<a([^>]+)href="https:\/\/refones\.com\/blogs\/[^"#]+(#.*?)"/g,
+    '<a$1href="$2"'
   );
 }
 
