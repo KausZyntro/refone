@@ -111,9 +111,9 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                                     onClick={() => setSelectedVariant(rep)}
                                 >
                                     <span className={styles.pillStorage}>{storage}</span>
-                                    {price > 0 && (
+                                    {/* {price > 0 && (
                                         <span className={styles.pillPrice}>from ₹{price.toLocaleString("en-IN")}</span>
-                                    )}
+                                    )} */}
                                 </button>
                             );
                         })}
