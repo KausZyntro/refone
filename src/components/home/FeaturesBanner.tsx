@@ -16,8 +16,8 @@ const FeaturesBanner = () => {
     },
     {
       icon: <FaUndoAlt />,
-      title: "7 Days Return",
-      description: "Not satisfied? Return it easily"
+      title: "7 Days Replacement",
+      description: "Not satisfied? Replace it easily"
     },
     {
       icon: <FaCreditCard />,

@@ -60,6 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+
   return {
     title: `${slug} | Refone`,
     alternates: {
@@ -73,7 +74,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
 }
 
+function fixTOCLinks(html) {
+  if (!html) return '';
+ 
+  // Replace full WordPress URL with only hash
+  return html.replace(
+    /https:\/\/refones\.com\/blogs\/[^#]+(#.*?)"/g,
+    '$1"'
+  );
+}
+
 export default async function BlogDetailPage({ params }: Props) {
+  
   const { slug } = await params;
   // Call the dynamic API fetch
   const blog = await getBlogBySlug(slug);
@@ -101,12 +113,19 @@ export default async function BlogDetailPage({ params }: Props) {
     author = blog.author;
   }
 
+  
+
   // Format WordPress date
   const rawDate = blog?.date || blog?.publishedAt;
   const publishedAt = rawDate ? new Date(rawDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
 
   // WordPress HTML content
-  const contentHtml = blog?.content?.rendered || blog?.content || '';
+  // const contentHtml = blog?.content?.rendered || blog?.content || '';
+
+  const rawHtml = blog?.content?.rendered || blog?.content || '';
+const contentHtml = fixTOCLinks(rawHtml);
+
+
 
   return (
     <article className={styles.pageWrapper}>
