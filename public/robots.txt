@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://refone.co.in
+
+# Sitemaps
+Sitemap: https://refone.co.in/sitemap.xml

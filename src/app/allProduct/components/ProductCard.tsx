@@ -12,20 +12,38 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     // Extract first variant for display
-    const firstVariant = product.variants?.[0];
-    const displayImage = firstVariant?.images?.[0]?.image_url || '/placeholder.png';
-    const displayPrice = firstVariant?.pricing?.selling_price || '0';
-    const displayMrp = firstVariant?.pricing?.mrp || '0';
+    // const firstVariant = product.variants?.[0];
+    // const displayImage = firstVariant?.images?.[0]?.image_url || '/placeholder.png';
+    // const displayPrice = firstVariant?.pricing?.selling_price || '0';
+    // const displayMrp = firstVariant?.pricing?.mrp || '0';
+
+    const availableVariant =
+    product.variants?.find(
+        (v: any) => (v.inventory?.available_stock ?? 0) > 0
+    ) || product.variants?.[0];
+
+const displayImage = availableVariant?.images?.[0]?.image_url || '/placeholder.png';
+const displayPrice = availableVariant?.pricing?.selling_price || '0';
+const displayMrp = availableVariant?.pricing?.mrp || '0';
+
     
+        const stocks = product?.variants?.map(v => v.inventory?.available_stock);
+        console.log(stocks);
+        console.log(product)
+    console.log(availableVariant)
     
     // Calculate discount
     const mrp = Number(displayMrp);
     const sellingPrice = Number(displayPrice);
     const discount = mrp > sellingPrice ? Math.round(((mrp - sellingPrice) / mrp) * 100) : 0;
 
-    const displaySpecs = `${firstVariant?.storage || ''} • ${firstVariant?.color || ''} • ${firstVariant?.grade || ''}`;
+    // const displaySpecs = `${firstVariant?.storage || ''} • ${firstVariant?.color || ''} • ${firstVariant?.grade || ''}`;
+    const displaySpecs = `${availableVariant?.storage || ''} • ${availableVariant?.color || ''} • ${availableVariant?.grade || ''}`;
 
-    const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(firstVariant || null);
+    // const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(firstVariant || null);
+    const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(
+    availableVariant || null
+);
 
     return (
         <div className={styles.productCard}>
@@ -74,8 +92,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     // const inboundStock = firstVariant?.inventory?.inbound_stock ?? 0;
                     // const isActive = firstVariant?.inventory?.is_active === 1;
                     // const isOutOfStock = firstVariant?.inventory?.available_stock <= 0;
-                        const stock = firstVariant?.inventory?.available_stock ?? 0;
-                        const isOutOfStock = stock <= 0;
+
+                        // const stock = firstVariant?.inventory?.available_stock ?? 0;
+                        // const isOutOfStock = stock <= 0;
+                                const stock = availableVariant?.inventory?.available_stock ?? 0;
+                                const isOutOfStock = stock <= 0;
+                        
+                        // console.log(firstVariant)
                         return (
                             <>
                                 <div className={styles.priceRow}>
