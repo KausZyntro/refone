@@ -340,6 +340,9 @@ useEffect(() => {
       if (!(event.target as HTMLElement).closest('.search-box')) {
         setShowDropdown(false);
       }
+      if (!(event.target as HTMLElement).closest('.account-nav-item')) {
+        setProfileOpen(false);
+      }
     };
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
@@ -382,9 +385,9 @@ useEffect(() => {
           <div className="nav-top-wrapper">
             <div className="nav-left">
               <div className="leftSection">
-                <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+                {/* <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
                   {menuOpen ? <FiX size={24} /> : <HiMenuAlt2 size={24} />}
-                </div>
+                </div> */}
 
                 <Link href="/" className="logo">
                   <Image src={"/logo.png"} alt="logo" height={40} width={120} />
@@ -444,12 +447,22 @@ useEffect(() => {
 
             <div className="nav-actions">
               {mounted && token ? (
-                <div className="nav-action-item" onClick={() => setProfileOpen(!profileOpen)}>
+                <div className="nav-action-item account-nav-item" onClick={() => setProfileOpen(!profileOpen)}>
                   <FaUser size={20} />
                   <div className="nav-action-info">
                     <span className="label">Account</span>
                     <span className="sub-label">{user?.name || 'My Profile'}</span>
                   </div>
+                  {profileOpen && (
+                    <div className="profile-dropdown">
+                      <div className="dropdown-item" onClick={() => { router.push('/my-account'); setProfileOpen(false); }}>
+                        My Account
+                      </div>
+                      <div className="dropdown-item" onClick={() => { handleLogout(); setProfileOpen(false); }}>
+                        Logout
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="nav-action-item" onClick={() => dispatch(openLoginModal())}>

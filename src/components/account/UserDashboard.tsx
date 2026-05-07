@@ -114,7 +114,7 @@ const UserDashboard = () => {
     };
 
     return (
-        <div className="container-hero">
+        <div className="dashboard-container">
             {/* Header Section */}
             <div className="dashboard-header">
                 <h1 className="dashboard-title">My Account</h1>

@@ -51,12 +51,16 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isLogin) {
-      if (!email || email.length !== 10) return toast.error("Please enter a valid 10-digit phone number");
+      const isEmail = email.includes("@");
+      if (isEmail) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return toast.error("Please enter a valid email");
+      } else {
+        if (email.length !== 10) return toast.error("Please enter a valid 10-digit phone number");
+      }
 
       dispatch(loginUser({ email }))
         .unwrap()
         .then((res: any) => {
-          // API response (thunk unwraps to response.data directly)
           const requiresOtp = res?.otpRequired || res?.data?.otpRequired;
           const uid = res?.userId || res?.data?.userId || res?.user?.id || res?.data?.user?.id;
 
@@ -79,7 +83,7 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
         
         const userObj = res?.user || res?.data?.user || res;
         const isNewUser = res?.is_new_user || res?.data?.is_new_user || !userObj?.name || userObj?.name.trim() === '' || !userObj?.email || userObj?.email.trim() === '';
-
+          console.log(isNewUser)
         if (isNewUser) {
           toast.info("Please fill your profile details.");
           router.push('/my-account');
@@ -131,23 +135,26 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
             )}
 
             <input
-              type={isLogin ? "tel" : "email"}
-              placeholder={isLogin ? "Phone Number" : "Email"}
+              type="text"
+              placeholder={isLogin ? "Phone Number or Email" : "Email"}
               className="auth-input"
               value={email}
               onChange={(e) => {
                 const val = e.target.value;
                 if (isLogin) {
-                  const numericVal = val.replace(/\D/g, "");
-                  if (numericVal.length <= 10) {
-                    setEmail(numericVal);
+                  // If it's pure numbers, limit to 10
+                  if (/^\d*$/.test(val)) {
+                    if (val.length <= 10) {
+                      setEmail(val);
+                    }
+                  } else {
+                    // If it contains any non-digit character (like letters for email), allow it
+                    setEmail(val);
                   }
                 } else {
                   setEmail(val);
                 }
               }}
-              pattern={isLogin ? "[0-9]{10}" : "^[^\s@]+@[^\s@]+\.[^\s@]+$"}
-              maxLength={isLogin ? 10 : undefined}
               required
             />
 
@@ -216,15 +223,16 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
           )}
 
           {/* TOGGLE */}
-          {/* <p className="auth-toggle">
+          <p className="auth-toggle">
             {isLogin ? "Don't have an account?" : "Already have an account?"}
             <span onClick={() => !isLoading && setIsLogin(!isLogin)} style={{ cursor: isLoading ? "not-allowed" : "pointer" }}>
               {isLogin ? " Register" : " Login"}
             </span>
-          </p> */}
+          </p>
         </div>
       </div>
     </div>
+
   );
 };
 
