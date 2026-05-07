@@ -48,6 +48,26 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const googleLoginUser = createAsyncThunk(
+  "auth/googleLogin",
+  async (_, { rejectWithValue }) => {
+    try {
+
+      const response =
+        await authAPI.googleLogin();
+
+      return response.data;
+
+    } catch (error: any) {
+
+      return rejectWithValue(
+        error.response?.data?.message ||
+        "Google login failed"
+      );
+    }
+  }
+);
+
 /* ---------------- REGISTER ---------------- */
 
 export const registerUser = createAsyncThunk(
@@ -147,6 +167,7 @@ interface AuthState {
   registerSuccess: boolean;
   isLoginModalOpen: boolean;
   redirectPath: string | null;
+  isAuthenticated: boolean;
 }
 
 const initialState: AuthState = {
@@ -157,6 +178,7 @@ const initialState: AuthState = {
   registerSuccess: false,
   isLoginModalOpen: false,
   redirectPath: null,
+  isAuthenticated: !!getToken(),
 };
 
 /* ---------------- SLICE ---------------- */
@@ -211,6 +233,42 @@ const authSlice = createSlice({
     });
 
     builder.addCase(loginUser.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload as string;
+    });
+
+    builder.addCase(googleLoginUser.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+
+    builder.addCase(googleLoginUser.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      const user = payload?.user || payload?.data?.user;
+      const token = payload?.token || payload?.data?.token;
+      const refreshTime = payload?.refreshTime || payload?.data?.refreshTime || "24";
+      const hour = parseInt(refreshTime);
+      const maxTimeInSeconds = hour * 60 * 60;
+
+      if (token) {
+        document.cookie = `token=${token}; path=/; max-age=${maxTimeInSeconds}; SameSite=Lax; Secure`;
+        const expiry = Date.now() + maxTimeInSeconds * 1000;
+
+        localStorage.setItem(
+          "auth",
+          JSON.stringify({
+            token,
+            user,
+            expiry,
+          })
+        );
+        state.user = user;
+        state.token = token;
+        state.isAuthenticated = true;
+      }
+    });
+
+    builder.addCase(googleLoginUser.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.error = payload as string;
     });
@@ -270,6 +328,7 @@ const authSlice = createSlice({
       state.error = payload as string;
     });
   },
+  
 });
 
 /* ---------------- EXPORTS ---------------- */

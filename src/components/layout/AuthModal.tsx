@@ -4,14 +4,16 @@ import "@/styles/AuthModal.css";
 import Lottie from "lottie-react";
 import animationData from "../../../public/lottie/shopping-cart.json";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, registerUser, clearError } from "@/redux/features/authSlice";
+import { loginUser, registerUser, clearError, googleLoginUser, clearRedirectPath } from "@/redux/features/authSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: boolean; onClose: () => void; openOtp: (userId: number) => void; openForgotPassword?: () => void }) => {
+const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: boolean; onClose: () => void; openOtp: (userId: number) => void; openForgotPassword?: () => void; }) => {
   const [isLogin, setIsLogin] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, error, token, registerSuccess } = useSelector((state: RootState) => state.auth);
+  const router = useRouter();
+  const { isLoading, error, token, registerSuccess, redirectPath } = useSelector((state: RootState) => state.auth);
 
   // Form states
   const [name, setName] = useState("");
@@ -20,11 +22,11 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
 
-  // useEffect(() => {
-  //   if (token) {
-  //     onClose(); // Close modal on successful auth
-  //   }
-  // }, [token, onClose]);
+  useEffect(() => {
+    if (token) {
+      onClose(); // Close modal on successful auth
+    }
+  }, [token, onClose]);
 
   useEffect(() => {
     if (registerSuccess) {
@@ -67,6 +69,30 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
       if (password !== confirmPassword) return toast.error("Passwords do not match");
       dispatch(registerUser({ name, email, password, phone, role_id: 3 }));
     }
+  };
+
+  const handleGoogleLogin = () => {
+    dispatch(googleLoginUser())
+      .unwrap()
+      .then((res: any) => {
+        toast.success("Logged in successfully with Google!");
+        
+        const userObj = res?.user || res?.data?.user || res;
+        const isNewUser = res?.is_new_user || res?.data?.is_new_user || !userObj?.name || userObj?.name.trim() === '' || !userObj?.email || userObj?.email.trim() === '';
+
+        if (isNewUser) {
+          toast.info("Please fill your profile details.");
+          router.push('/my-account');
+        } else if (redirectPath) {
+          router.push(redirectPath);
+          dispatch(clearRedirectPath());
+        }
+        
+        onClose();
+      })
+      .catch((err: any) => {
+        toast.error(err || "Google Login failed");
+      });
   };
 
   return (
@@ -170,17 +196,37 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
             </button>
           </form>
 
+          {isLogin && (
+            <>
+              <div className="auth-divider">or</div>
+              <button
+                type="button"
+                className="google-btn"
+                onClick={handleGoogleLogin}
+                disabled={isLoading}
+              >
+                <img
+                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                  alt="Google"
+                  className="google-icon"
+                />
+                Continue with Google
+              </button>
+            </>
+          )}
+
           {/* TOGGLE */}
-          <p className="auth-toggle">
+          {/* <p className="auth-toggle">
             {isLogin ? "Don't have an account?" : "Already have an account?"}
             <span onClick={() => !isLoading && setIsLogin(!isLogin)} style={{ cursor: isLoading ? "not-allowed" : "pointer" }}>
               {isLogin ? " Register" : " Login"}
             </span>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
   );
 };
+
 
 export default AuthModal;

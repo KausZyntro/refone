@@ -27,6 +27,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { productAPI } from '@/services/api';
 import { debounce } from '@/utils/debounce';
+import { googleLoginUser } from "@/redux/features/authSlice";
 
 const SEARCH_HISTORY_KEY = 'recent_searches';
 const MAX_HISTORY = 5;
@@ -350,6 +351,7 @@ useEffect(() => {
 
   };
 
+
   return (
     <>
       <div className="navbar">
@@ -518,6 +520,7 @@ useEffect(() => {
           dispatch(closeLoginModal());
           setForgotPasswordOpen(true);
         }}
+
       />
       <ForgotPasswordModal
         isOpen={forgotPasswordOpen}

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import styles from './blogDetail.module.css';
 import { BlogPost } from '@/types/blog';
 import { Metadata } from 'next';
+import Script from 'next/script';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -129,9 +130,25 @@ export default async function BlogDetailPage({ params }: Props) {
   const rawHtml = blog?.content?.rendered || blog?.content || '';
 const contentHtml = fixTOCLinks(rawHtml);
 
-
+const faqData = blog?.yoast_head_json?.schema?.["@graph"]
+  ?.find((item: any) => item["@type"] === "FAQPage");
+ 
+const faqSchema = faqData || null;
 
   return (
+    <>
+
+        {faqSchema && (
+    <Script
+        id="faq-schema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema),
+        }}
+      />
+    )}
+
     <article className={styles.pageWrapper}>
       <div className={styles.container}>
         
@@ -218,5 +235,7 @@ const contentHtml = fixTOCLinks(rawHtml);
 
       </div>
     </article>
+    </>
+
   );
 }

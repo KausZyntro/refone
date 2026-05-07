@@ -1,5 +1,10 @@
 import axios from "axios";
 import type { AddToCartPayload } from "@/types/cart";
+import app, { auth, googleProvider } from "./firebase";
+
+import {
+  signInWithPopup,
+} from "firebase/auth";
 
 // Using environment variable or fallback to a local API 
 // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api-auth.refones.com/api";
@@ -37,6 +42,9 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
+
+// Remove local auth/provider as they are imported from firebase.ts
+
 
 export const authAPI = {
     login: async (identifier: string, password?: string) => {
@@ -78,7 +86,41 @@ export const authAPI = {
             },
         });
         return response.data;
+    },
+    googleLogin: async () => {
+    try {
+
+        // Open Google popup
+        const result = await signInWithPopup(
+            auth,
+            googleProvider
+        );
+
+        const user = result.user;
+
+        // Prepare form-data
+        const formData = new FormData();
+
+        formData.append("email", user.email || "");
+
+        // Backend API call
+        const response = await api.post(
+            "/google-login",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Accept": "application/json",
+                },
+            }
+        );
+
+        return response.data;
+
+    } catch (error: any) {
+        throw error;
     }
+},
 
 };
 
