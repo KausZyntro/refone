@@ -79,7 +79,10 @@ const HeroSlider = () => {
               <button className="cta-btn-new" onClick={() => window.location.href = '/allProduct'}>Shop Phones</button>
             </div>
             <div className="hero-image">
-               <img src="https://s3n.cashify.in/cashify/web/e9915873919b486f9166f272a2e411b3.png" alt="phones" />
+               <img src="../images/iphone_banner.png" alt="phones" />
+            </div>
+            <div className="hero-why-card">
+              <WhyBuyCard />
             </div>
           </div>
         </SwiperSlide>
@@ -106,7 +109,10 @@ const HeroSlider = () => {
               <button className="cta-btn-new" style={{ background: '#ff9800', boxShadow: '0 4px 15px rgba(255, 152, 0, 0.3)' }} onClick={() => window.location.href = '/exchange-phone'}>Sell Now</button>
             </div>
             <div className="hero-image">
-               <img src="https://s3n.cashify.in/cashify/web/83894411132646f990c765050f4a4c51.png" alt="sell" />
+               <img src="../images/iPhone-17-banner2.png" alt="sell" />
+            </div>
+            <div className="hero-why-card">
+              <WhyBuyCard />
             </div>
           </div>
         </SwiperSlide>
@@ -133,12 +139,14 @@ const HeroSlider = () => {
               <button className="cta-btn-new" style={{ background: '#2196f3', boxShadow: '0 4px 15px rgba(33, 150, 243, 0.3)' }} onClick={() => window.location.href = '/allProduct'}>Check Value</button>
             </div>
             <div className="hero-image">
-               <img src="https://s3n.cashify.in/cashify/web/b5f45813359d43618f08139589994f31.png" alt="check" />
+               <img src="../images/iphone_banner.png" alt="check" />
+            </div>
+            <div className="hero-why-card">
+              <WhyBuyCard />
             </div>
           </div>
         </SwiperSlide>
       </Swiper>
-      <WhyBuyCard />
     </div>
   );
 };

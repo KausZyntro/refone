@@ -105,17 +105,34 @@
 }
 
 @media (max-width: 480px) {
+  .category-section {
+    padding: 0 10px;
+    margin: 20px auto;
+  }
+
+  .category-header h2 {
+    font-size: 18px;
+  }
+
   .category-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 8px;
   }
   
   .category-icon-wrapper {
-    width: 75px;
-    height: 75px;
+    width: 100%;
+    max-width: 75px;
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
   
   .category-name {
-    font-size: 11px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
