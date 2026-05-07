@@ -39,11 +39,23 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
     /* ── Derived values ── */
     const selectedStorage = selectedVariant?.storage;
 
+    const isVariantInStock = (v: VariantTest) => {
+        const stock = v?.inventory?.total_stock ?? 0;
+        const inboundStock = v?.inventory?.inbound_stock ?? 0;
+        const isActive = v?.inventory?.is_active === 1;
+        return stock > 0 || inboundStock > 0 || isActive;
+    };
+
     // Group variants by storage for pills
     const storageGroups = (product?.variants ?? []).reduce(
-        (acc: { storage: string; rep: VariantTest }[], v) => {
-            if (!acc.find(g => g.storage === v.storage)) {
-                acc.push({ storage: v.storage, rep: v });
+        (acc: { storage: string; rep: VariantTest; hasStock: boolean }[], v) => {
+            const existing = acc.find(g => g.storage === v.storage);
+            const inStock = isVariantInStock(v);
+            if (!existing) {
+                acc.push({ storage: v.storage, rep: v, hasStock: inStock });
+            } else if (inStock && !existing.hasStock) {
+                existing.hasStock = true;
+                existing.rep = v; // Use an in-stock variant as representative
             }
             return acc;
         },
@@ -101,14 +113,15 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                 <div className={styles.variantSection}>
                     <p className={styles.sectionLabel}>Select Variant</p>
                     <div className={styles.storagePills}>
-                        {storageGroups.map(({ storage, rep }) => {
+                        {storageGroups.map(({ storage, rep, hasStock }) => {
                             const price = minPriceForStorage(storage);
                             const isSelected = selectedStorage === storage;
                             return (
                                 <button
                                     key={storage}
-                                    className={`${styles.storagePill} ${isSelected ? styles.storagePillActive : ""}`}
-                                    onClick={() => setSelectedVariant(rep)}
+                                    className={`${styles.storagePill} ${isSelected ? styles.storagePillActive : ""} ${!hasStock ? styles.outOfStock : ""}`}
+                                    onClick={() => hasStock && setSelectedVariant(rep)}
+                                    disabled={!hasStock}
                                 >
                                     <span className={styles.pillStorage}>{storage}</span>
                                     {/* {price > 0 && (
@@ -126,20 +139,24 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                 <div className={styles.colorSection}>
                     <p className={styles.sectionLabel}>Select Colour</p>
                     <div className={styles.colorOptions}>
-                        {colorVariants.map(v => (
-                            <button
-                                key={v.id}
-                                className={`${styles.colorSwatch} ${selectedVariant?.id === v.id ? styles.colorSwatchActive : ""}`}
-                                onClick={() => setSelectedVariant(v)}
-                                title={v.color}
-                            >
-                                <span
-                                    className={styles.colorCircle}
-                                    style={{ backgroundColor: v.color_code || "#ccc" }}
-                                />
-                                <span className={styles.colorLabel}>{v.color}</span>
-                            </button>
-                        ))}
+                        {colorVariants.map(v => {
+                            const inStock = isVariantInStock(v);
+                            return (
+                                <button
+                                    key={v.id}
+                                    className={`${styles.colorSwatch} ${selectedVariant?.id === v.id ? styles.colorSwatchActive : ""} ${!inStock ? styles.outOfStock : ""}`}
+                                    onClick={() => inStock && setSelectedVariant(v)}
+                                    title={inStock ? v.color : `${v.color} (Out of Stock)`}
+                                    disabled={!inStock}
+                                >
+                                    <span
+                                        className={styles.colorCircle}
+                                        style={{ backgroundColor: v.color_code || "#ccc" }}
+                                    />
+                                    <span className={styles.colorLabel}>{v.color}</span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             )}
@@ -151,18 +168,18 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                     <button className={styles.howItWorksBtn}>How it Works?</button>
                 </div>
                 <div className={styles.conditionOptions}>
-                    <div className={`${styles.conditionBox} ${styles.conditionSelected}`}>
+                    <div className={`${styles.conditionBox} ${styles.conditionSelected} ${!isVariantInStock(selectedVariant) ? styles.outOfStock : ""}`}>
                         <span className={styles.conditionName}>Excellent</span>
                         <span className={styles.conditionDesc}>Like new, no visible signs of wear</span>
                     </div>
-                    <div className={styles.conditionBox}>
+                    {/* <div className={styles.conditionBox}>
                         <span className={styles.conditionName}>Very Good</span>
                         <span className={styles.conditionDesc}>Minor signs of use, rarely visible</span>
                     </div>
                     <div className={styles.conditionBox}>
                         <span className={styles.conditionName}>Good</span>
                         <span className={styles.conditionDesc}>Visible signs of use, fully functional</span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

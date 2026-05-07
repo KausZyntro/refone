@@ -54,7 +54,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     const [isCartLoading, setIsCartLoading] = useState(false);
 
     /* ── redux ── */
-    const { product } = useSelector((state: RootState) => state.product);
+    const { product, isLoading } = useSelector((state: RootState) => state.product);
     const { user } = useSelector((state: RootState) => state.auth);
 
     /* ── effects ── */
@@ -153,7 +153,12 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
 
     const PricingBlock = () => (
         <div className={styles.pricingBlock}>
-            {isOutOfStock ? (
+            {isLoading ? (
+                <>
+                    <div className={`${styles.skeleton} ${styles.priceSkeleton}`} />
+                    <div className={`${styles.skeleton} ${styles.prepaidSkeleton}`} />
+                </>
+            ) : isOutOfStock ? (
                 <p className={styles.sidebarOutOfStock}>Price Updating soon</p>
             ) : (
                 <>
@@ -195,18 +200,18 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
             <button
                 className={styles.sidebarCartBtn}
                 onClick={() => isInStock && (addedToCart ? router.push("/cart") : handleAddToCart())}
-                disabled={isCartLoading || isOutOfStock}
+                disabled={isLoading || isCartLoading || isOutOfStock}
             >
                 <FaShoppingCart />
-                {isOutOfStock ? "Out of Stock" : isCartLoading ? "Adding…" : addedToCart ? "Go to Cart" : "Add to Cart"}
+                {isLoading ? "Loading..." : isOutOfStock ? "Out of Stock" : isCartLoading ? "Adding…" : addedToCart ? "Go to Cart" : "Add to Cart"}
             </button>
 
             <button
                 className={styles.sidebarBuyNowBtn}
                 onClick={() => isInStock && handleBuyNow()}
-                disabled={isCartLoading || isOutOfStock}
+                disabled={isLoading || isCartLoading || isOutOfStock}
             >
-                Buy Now
+                {isLoading ? "..." : "Buy Now"}
             </button>
         </div>
     );
