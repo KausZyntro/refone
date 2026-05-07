@@ -236,11 +236,11 @@
   }
   
   .hero-image {
-    flex: 0 0 55%; /* Increased from 45% */
-    height: 100%; /* Full height */
+    /* flex: 0 0 55%; */
+    height: 100%; 
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Align to the right edge */
+    /* justify-content: flex-end; */
     margin-top: 0;
     overflow: visible;
   }

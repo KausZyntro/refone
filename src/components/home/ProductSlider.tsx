@@ -111,7 +111,7 @@ const ProductSlider = () => {
             </div>
           )}
 
-          <div className="emi-banner" style={{ marginTop: '30px', background: '#f0f7ff', padding: '20px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #e3f2fd' }}>
+          {/* <div className="emi-banner" style={{ marginTop: '30px', background: '#f0f7ff', padding: '20px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #e3f2fd' }}>
              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                 <div style={{ background: '#006aaf', padding: '10px', borderRadius: '50%', color: 'white' }}>
                   <FaCreditCard size={20} />
@@ -122,7 +122,7 @@ const ProductSlider = () => {
                 </div>
              </div>
              <a href="/allProduct" style={{ color: '#006aaf', fontWeight: '700', fontSize: '14px' }}>Check Offers ›</a>
-          </div>
+          </div> */}
         </div>
       ))}
     </div>
