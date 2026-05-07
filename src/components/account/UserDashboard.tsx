@@ -40,6 +40,10 @@ const UserDashboard = () => {
         phone: '',
         gender: ''
     });
+    const [initialData, setInitialData] = useState({
+        email: '',
+        phone: ''
+    });
     const [isUpdating, setIsUpdating] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
@@ -62,8 +66,12 @@ const UserDashboard = () => {
                         firstName: firstName,
                         lastName: lastName,
                         email: data.email || '',
-                        phone: data.mobile || 'Not Provided',
+                        phone: data.mobile || '',
                         gender: data.gender || ''
+                    });
+                    setInitialData({
+                        email: data.email || '',
+                        phone: data.mobile || ''
                     });
                 }
             } catch (error) {
@@ -228,6 +236,8 @@ const UserDashboard = () => {
                                                 value={formData.email}
                                                 onChange={handleChange}
                                                 placeholder="Enter email address"
+                                                disabled={!!initialData.email}
+                                                style={{ cursor: initialData.email ? 'not-allowed' : 'text' }}
                                             />
                                         </div>
                                         <div className="form-group">
@@ -239,7 +249,8 @@ const UserDashboard = () => {
                                                 value={formData.phone}
                                                 onChange={handleChange}
                                                 placeholder="Enter phone number"
-                                                disabled
+                                                disabled={!!initialData.phone}
+                                                style={{ cursor: initialData.phone ? 'not-allowed' : 'text' }}
                                             />
                                         </div>
                                         {/* <div className="form-group">

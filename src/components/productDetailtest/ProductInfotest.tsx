@@ -168,7 +168,7 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                     <button className={styles.howItWorksBtn}>How it Works?</button>
                 </div>
                 <div className={styles.conditionOptions}>
-                    <div className={`${styles.conditionBox} ${styles.conditionSelected} ${!isVariantInStock(selectedVariant) ? styles.outOfStock : ""}`}>
+                    <div className={`${styles.conditionBox} ${styles.conditionSelected}`}>
                         <span className={styles.conditionName}>Excellent</span>
                         <span className={styles.conditionDesc}>Like new, no visible signs of wear</span>
                     </div>
