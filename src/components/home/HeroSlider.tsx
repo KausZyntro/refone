@@ -58,6 +58,29 @@ const HeroSlider = () => {
         className="heroSwiper"
       >
         <SwiperSlide>
+          <div className="slide mothers-day-slide">
+            <div className="hero-content md-content">
+              <span className="md-subtitle">HAPPY</span>
+              <h1 className="md-title">Mother's <br /><span>Day</span></h1>
+              <div className="md-badge-wrapper">
+                <div className="md-offer-badge">
+                  <span>Special for you</span>
+                  <strong>MOM</strong>
+                </div>
+              </div>
+              <p className="md-discount">SPECIAL DISCOUNT <strong>55% OFF</strong> SALE</p>
+              <button className="cta-btn-new md-btn" onClick={() => window.location.href = '/allProduct'}>Shop Now</button>
+            </div>
+            <div className="hero-image">
+               <img src="/images/mothers_day_banner.png" alt="Mother's Day Special" />
+            </div>
+            <div className="hero-why-card">
+              <WhyBuyCard />
+            </div>
+          </div>
+        </SwiperSlide>
+
+        <SwiperSlide>
           <div className="slide">
             <div className="hero-content">
               <h1>Premium Phones.<br /><span style={{ color: '#006aaf' }}>Priced Smarter.</span></h1>

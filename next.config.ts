@@ -1,9 +1,29 @@
 import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
-    domains: ["fdn2.gsmarena.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "fdn2.gsmarena.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups",
+          },
+        ],
+      },
+    ];
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

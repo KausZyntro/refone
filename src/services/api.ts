@@ -101,7 +101,6 @@ export const authAPI = {
 
         // Prepare form-data
         const formData = new FormData();
-
         formData.append("email", user.email || "");
 
         // Backend API call

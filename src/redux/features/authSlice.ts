@@ -53,11 +53,8 @@ export const googleLoginUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
 
-      const response =
-        await authAPI.googleLogin();
-
-      return response.data;
-
+      const response = await authAPI.googleLogin();
+      return response;
     } catch (error: any) {
 
       return rejectWithValue(
