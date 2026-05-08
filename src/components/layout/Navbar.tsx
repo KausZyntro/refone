@@ -27,6 +27,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { productAPI } from '@/services/api';
 import { debounce } from '@/utils/debounce';
+import { FaCheckCircle, FaHistory, FaShieldAlt } from "react-icons/fa";
 import { googleLoginUser } from "@/redux/features/authSlice";
 
 const SEARCH_HISTORY_KEY = 'recent_searches';
@@ -361,15 +362,15 @@ useEffect(() => {
         <div className="nav-utility">
           <div className="utility-left">
             <div className="utility-item">
-              <img src="https://img.icons8.com/ios-filled/16/28b9a9/checkmark.png" alt="check" />
+              <FaCheckCircle color="#006aaf" size={16} />
               100% Original Products
             </div>
             <div className="utility-item">
-              <img src="https://img.icons8.com/ios-filled/16/28b9a9/history.png" alt="returns" />
-              Easy 7-Day Returns
+              <FaHistory color="#006aaf" size={16} />
+              Easy 7-Day Replacement
             </div>
             <div className="utility-item">
-              <img src="https://img.icons8.com/ios-filled/16/28b9a9/warranty.png" alt="warranty" />
+             <FaShieldAlt color="#006aaf" size={16} />
               12 Months Warranty
             </div>
           </div>

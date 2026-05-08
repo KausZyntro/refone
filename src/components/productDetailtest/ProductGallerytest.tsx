@@ -122,15 +122,15 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                 <div className={styles.trustItem}>
                     <span className={styles.trustIcon}><LuRefreshCcw/></span>
                     <div>
-                        <span className={styles.trustTitle}>7 Days Return</span>
-                        <span className={styles.trustDesc}>Not satisfied? Return it easily</span>
+                        <span className={styles.trustTitle}>7 Days Replacement</span>
+                        <span className={styles.trustDesc}>Not satisfied? Replace it easily</span>
                     </div>
                 </div>
                 <div className={styles.trustDivider} />
                 <div className={styles.trustItem}>
                     <span className={styles.trustIcon}><FaTruckFast /></span>
                     <div>
-                        <span className={styles.trustTitle}>Free Delivery</span>
+                        <span className={styles.trustTitle}>Fast Delivery</span>
                         <span className={styles.trustDesc}>Fast & secure delivery</span>
                     </div>
                 </div>
@@ -139,7 +139,7 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                     <span className={styles.trustIcon}><FaCreditCard /></span>
                     <div>
                         <span className={styles.trustTitle}>Pay on Delivery</span>
-                        <span className={styles.trustDesc}>COD available</span>
+                        <span className={styles.trustDesc}>coming soon</span>
                     </div>
                 </div>
             </div>

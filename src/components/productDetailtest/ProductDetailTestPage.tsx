@@ -239,16 +239,16 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         <div className={styles.serviceIconsStrip}>
             <div className={styles.serviceIconItem}>
                 <div className={styles.serviceIconWrap}><FiRefreshCw /></div>
-                <span className={styles.serviceIconLabel}>7 Days Return</span>
+                <span className={styles.serviceIconLabel}>7 Days Replacement</span>
             </div>
             <div className={styles.serviceIconItem}>
                 <div className={styles.serviceIconWrap}><FiTruck /></div>
-                <span className={styles.serviceIconLabel}>Free Delivery</span>
+                <span className={styles.serviceIconLabel}>Fast Delivery</span>
             </div>
-            <div className={styles.serviceIconItem}>
+            {/* <div className={styles.serviceIconItem}>
                 <div className={styles.serviceIconWrap}><FiCreditCard /></div>
                 <span className={styles.serviceIconLabel}>Pay on Delivery</span>
-            </div>
+            </div> */}
         </div>
     );
 

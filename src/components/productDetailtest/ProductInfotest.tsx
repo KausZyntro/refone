@@ -186,7 +186,7 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
             {/* ── EMI row ── */}
             <div className={styles.emiRow}>
                 <FiCreditCard className={styles.emiIcon} />
-                <span className={styles.emiText}>EMI from ₹1,028/month</span>
+                <span className={styles.emiText}>EMI (coming soon)</span>
                 <button className={styles.emiLink}>View Plans →</button>
             </div>
         </div>
