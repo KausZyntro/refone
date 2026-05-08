@@ -10,9 +10,20 @@ import {
 const API_URL_BASE = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_AUTH_BASE_URL || "https://api-auth.refones.com/api";
 const API_URL = API_URL_BASE.endsWith("/") ? API_URL_BASE : `${API_URL_BASE}/`;
 
+const API_URL_BASEE = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_AUTHE_BASE_URL || "https://refones.com/api-auth_v1/api";
+const API_URLE = API_URL_BASEE.endsWith("/") ? API_URL_BASEE : `${API_URL_BASEE}/`;
+
 
 const api = axios.create({
     baseURL: API_URL,
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+});
+
+const apie = axios.create({
+    baseURL: API_URLE,
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -177,7 +188,7 @@ export const addressAPI = {
 
 export const cartAPI = {
     addToCart: async (payload: AddToCartPayload) => {
-        const response = await api.post("cart/add", payload);
+        const response = await apie.post("cart/add", payload);
         return response.data;
     },
     fetchCartSummary: async (userId: number | string) => {

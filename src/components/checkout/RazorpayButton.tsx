@@ -9,14 +9,15 @@ interface RazorpayButtonProps {
     className?: string;
     disabled?: boolean;
     label?: string;
+    amount?: number;
 }
 
-const RazorpayButton: React.FC<RazorpayButtonProps> = ({ className, disabled, label = "Proceed to Payment" }) => {
+const RazorpayButton: React.FC<RazorpayButtonProps> = ({ className, disabled, label = "Proceed to Payment", amount }) => {
     const { items, pricing, totalQuantity } = useSelector((state: RootState) => state.cart);
     const { selectedAddressId } = useSelector((state: RootState) => state.address);
     const { isLoading: isPlacingOrder, isProcessingPayment } = useSelector((state: RootState) => state.order);
 
-    const grandTotal = pricing?.grand_total || 0;
+    const grandTotal = amount !== undefined ? amount : (pricing?.grand_total || 0);
 
     const { initiatePayment } = useRazorpay({
         amount: grandTotal,
