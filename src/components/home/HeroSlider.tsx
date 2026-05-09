@@ -102,7 +102,7 @@ const HeroSlider = () => {
               <button className="cta-btn-new" onClick={() => window.location.href = '/allProduct'}>Shop Phones</button>
             </div>
             <div className="hero-image">
-               <img src="../images/iphone_banner.png" alt="phones" />
+               <img src="../images/iphonebanner.png" alt="phones" />
             </div>
             <div className="hero-why-card">
               <WhyBuyCard />
@@ -162,7 +162,7 @@ const HeroSlider = () => {
               <button className="cta-btn-new" style={{ background: '#2196f3', boxShadow: '0 4px 15px rgba(33, 150, 243, 0.3)' }} onClick={() => window.location.href = '/allProduct'}>Check Value</button>
             </div>
             <div className="hero-image">
-               <img src="../images/iphone_banner.png" alt="check" />
+               <img src="../images/iphonebanner.png" alt="check" />
             </div>
             <div className="hero-why-card">
               <WhyBuyCard />
