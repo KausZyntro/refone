@@ -3,14 +3,14 @@ import React from "react";
 import "@/styles/PhoneDetail.css";
 
 const categories = [
-  { name: "iPhone 17 Pro", img: "https://www.apple.com/in/iphone/home/images/overview/chapternav/nav_iphone_17pro__d60uog2c064i_large_2x.png" },
-  { name: "iPhone Air", img: "https://www.apple.com/v/iphone/home/ci/images/overview/chapternav/nav_iphone_air__bbj6j2c39efm_large_2x.png" },
-  { name: "iPhone 17", img: "https://www.apple.com/in/iphone/home/images/overview/chapternav/nav_iphone_17__ffxyxejeezqm_large_2x.png" },
-  { name: "iPhone 16", img: "https://www.apple.com/in/iphone/home/images/overview/chapternav/nav_iphone_16__kcscr25z9num_large_2x.png" },
-  { name: "iPhone 16e", img: "https://www.apple.com/in/iphone/home/images/overview/chapternav/nav_iphone_16e__3qxl86zrk0yq_large_2x.png" },
-  { name: "iPhone 11 Series", img: "https://www.apple.com/v/iphone/home/ci/images/overview/chapternav/nav_compare__fka067e4fgq6_large_2x.png" },
-  { name: "iPhone SE", img: "https://www.apple.com/v/iphone/home/ci/images/overview/chapternav/nav_accessories__e5zgfl9e0vwy_large_2x.png" },
-  { name: "iPhone X Series", img: "https://www.apple.com/in/iphone/home/images/overview/chapternav/nav_shop_alt__dur38g1c4ii6_large_2x.png" },
+  { name: "iPhone 14",id:"8", img: "/images/iphone-14.jpg" },
+  { name: "iPhone 14 Pro",id:"6", img: "/images/iphone-14-Pro.jpg" },
+  { name: "iPhone 13", id:"9", img: "/images/iphone131.jpg" },
+  { name: "iPhone 15", id:"4", img: "/images/iPhone_15_Pink.webp" },
+  { name: "iPhone 15 Pro", id:"2", img: "/images/iPhone 15 pro.webp" },
+  { name: "iPhone 15 Pro Max", id:"1", img: "/images/iPhone 15 pro max.webp" },
+  { name: "iPhone 15 Plus", id:"3", img: "/images/iPhone 15 plus.jpeg" },
+  { name: "iPhone 14 Pro Max", id:"5", img: "/images/iphone 14 pro max.webp" },
   { name: "All Phones", isAll: true },
 ];
 
@@ -26,7 +26,7 @@ const PhoneDetail = () => {
 
       <div className="category-grid">
         {categories.map((cat, index) => (
-          <a href="/allProduct" key={index} className="category-item">
+          <a href={`/product/${cat.id}`} key={index} className="category-item">
             <div className="category-icon-wrapper">
               {cat.isAll ? (
                 <div className="all-categories-icon">
