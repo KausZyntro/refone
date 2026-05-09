@@ -3,14 +3,14 @@ import React from "react";
 import "@/styles/PhoneDetail.css";
 
 const categories = [
-  { name: "iPhone 14",id:"8", img: "/images/iphone-14.jpg" },
-  { name: "iPhone 14 Pro",id:"6", img: "/images/iphone-14-Pro.jpg" },
+  { name: "iPhone 14",id:"8", img: "/images/iphone14.jpg" },
+  { name: "iPhone 14 Pro",id:"6", img: "/images/iphone14Pro.jpg" },
   { name: "iPhone 13", id:"9", img: "/images/iphone131.jpg" },
-  { name: "iPhone 15", id:"4", img: "/images/iPhone_15_Pink.webp" },
-  { name: "iPhone 15 Pro", id:"2", img: "/images/iPhone 15 pro.webp" },
-  { name: "iPhone 15 Pro Max", id:"1", img: "/images/iPhone 15 pro max.webp" },
-  { name: "iPhone 15 Plus", id:"3", img: "/images/iPhone 15 plus.jpeg" },
-  { name: "iPhone 14 Pro Max", id:"5", img: "/images/iphone 14 pro max.webp" },
+  { name: "iPhone 15", id:"4", img: "/images/iPhone15Pink.webp" },
+  { name: "iPhone 15 Pro", id:"2", img: "/images/iPhone15pro.webp" },
+  { name: "iPhone 15 Pro Max", id:"1", img: "/images/iPhone15promax.webp" },
+  { name: "iPhone 15 Plus", id:"3", img: "/images/iPhone15plus.jpeg" },
+  { name: "iPhone 14 Pro Max", id:"5", img: "/images/iphone14promax.webp" },
   { name: "All Phones", isAll: true },
 ];
 
