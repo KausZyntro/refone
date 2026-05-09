@@ -38,7 +38,7 @@ const ProductSlider = () => {
         .map((campaign: any) => (
         <div key={campaign.campaign_id} className="best-sellers-section">
           <header className="category-header">
-            <h2>Best Sellers</h2>
+            <h2>Mother's Day Special</h2>
             <a href="/allProduct" className="view-all-blue">View All</a>
           </header>
           

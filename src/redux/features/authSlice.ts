@@ -93,29 +93,14 @@ export const verifyOtpUser = createAsyncThunk(
       const response = await authAPI.verifyOTP(user_id, otp, "web");
       // console.log(response?.data?.user);
       const token = response?.data?.token;
-      const maxTime = response?.data?.refreshTime
+      const maxTime = response?.data?.refreshTime || "24";
       const hour = parseInt(maxTime);
-      console.log(hour)
       const maxTimeInSeconds = hour * 60 * 60;
-      console.log(maxTimeInSeconds)
-      if (token) {
-        // const expiry = Date.now() + 24 * 60 * 60 * 1000;
 
-        // Set token in cookies for Next.js middleware (Valid for 24 hours)
-        document.cookie = `token=${token}; path=/; max-age=${maxTimeInSeconds}; SameSite=Lax; Secure`;
-        const expiry = Date.now() + maxTimeInSeconds * 1000;
-
-        localStorage.setItem(
-          "auth",
-          JSON.stringify({
-            token,
-            user: response?.data?.user,
-            expiry,
-          })
-        );
-      }
-
-      return response.data || response;
+      return {
+        ...(response.data || response),
+        maxTimeInSeconds
+      };
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "OTP Verification failed"
@@ -132,17 +117,6 @@ export const updateProfileThunk = createAsyncThunk(
     try {
       const response = await userAPI.updateProfile(userData);
       if (response.status === "SUCCESS") {
-        const auth = localStorage.getItem("auth");
-        if (auth) {
-          const parsedAuth = JSON.parse(auth);
-          localStorage.setItem(
-            "auth",
-            JSON.stringify({
-              ...parsedAuth,
-              user: response.data,
-            })
-          );
-        }
         return response.data;
       }
       return rejectWithValue(response.message || "Update failed");
@@ -225,7 +199,9 @@ const authSlice = createSlice({
 
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      state.user = payload?.data || payload;
+      const rawUser = payload?.data || payload;
+      const normalizedUser = rawUser ? { ...rawUser, id: rawUser.id || rawUser.userId } : null;
+      state.user = normalizedUser;
       state.token = getToken();
     });
 
@@ -241,24 +217,31 @@ const authSlice = createSlice({
 
     builder.addCase(googleLoginUser.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      const user = payload?.user || payload?.data?.user;
+      // Robust extraction of user and token
+      const rawUser = payload?.user || payload?.data?.user || payload?.data || payload;
       const token = payload?.token || payload?.data?.token;
+      
       const refreshTime = payload?.refreshTime || payload?.data?.refreshTime || "24";
       const hour = parseInt(refreshTime);
       const maxTimeInSeconds = hour * 60 * 60;
 
       if (token) {
-        document.cookie = `token=${token}; path=/; max-age=${maxTimeInSeconds}; SameSite=Lax; Secure`;
-        const expiry = Date.now() + maxTimeInSeconds * 1000;
+        // Normalize user ID (ensure .id exists if .userId does) without mutating
+        const user = { ...rawUser, id: rawUser.id || rawUser.userId };
 
-        localStorage.setItem(
-          "auth",
-          JSON.stringify({
-            token,
-            user,
-            expiry,
-          })
-        );
+        if (typeof window !== "undefined") {
+          document.cookie = `token=${token}; path=/; max-age=${maxTimeInSeconds}; SameSite=Lax; Secure`;
+          const expiry = Date.now() + maxTimeInSeconds * 1000;
+
+          localStorage.setItem(
+            "auth",
+            JSON.stringify({
+              token,
+              user,
+              expiry,
+            })
+          );
+        }
         state.user = user;
         state.token = token;
         state.isAuthenticated = true;
@@ -296,11 +279,31 @@ const authSlice = createSlice({
     });
 
     builder.addCase(verifyOtpUser.fulfilled, (state, { payload }) => {
-      console.log("User Payload:", payload?.user);
-
       state.isLoading = false;
-      state.user = payload?.user || null;
-      state.token = getToken();
+      const rawUser = payload?.user || payload?.data?.user || payload;
+      const token = payload?.token || payload?.data?.token;
+      const maxTimeInSeconds = payload?.maxTimeInSeconds || 24 * 60 * 60;
+      
+      if (token) {
+        const user = { ...rawUser, id: rawUser.id || rawUser.userId };
+        
+        if (typeof window !== "undefined") {
+          document.cookie = `token=${token}; path=/; max-age=${maxTimeInSeconds}; SameSite=Lax; Secure`;
+          const expiry = Date.now() + maxTimeInSeconds * 1000;
+
+          localStorage.setItem(
+            "auth",
+            JSON.stringify({
+              token,
+              user,
+              expiry,
+            })
+          );
+        }
+        state.user = user;
+        state.token = token;
+        state.isAuthenticated = true;
+      }
     });
 
     builder.addCase(verifyOtpUser.rejected, (state, { payload }) => {
@@ -317,7 +320,22 @@ const authSlice = createSlice({
 
     builder.addCase(updateProfileThunk.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      state.user = payload;
+      const user = payload ? { ...payload, id: payload.id || payload.userId } : null;
+      
+      if (user && typeof window !== "undefined") {
+        const auth = localStorage.getItem("auth");
+        if (auth) {
+          const parsedAuth = JSON.parse(auth);
+          localStorage.setItem(
+            "auth",
+            JSON.stringify({
+              ...parsedAuth,
+              user,
+            })
+          );
+        }
+      }
+      state.user = user;
     });
 
     builder.addCase(updateProfileThunk.rejected, (state, { payload }) => {
@@ -325,7 +343,7 @@ const authSlice = createSlice({
       state.error = payload as string;
     });
   },
-  
+
 });
 
 /* ---------------- EXPORTS ---------------- */

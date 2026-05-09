@@ -245,7 +245,25 @@ const cartSlice = createSlice({
                 state.isLoading = false;
                 const items = payload.data?.cart_items || [];
                 state.items = items;
-                state.pricing = payload.data?.pricing || null;
+                
+                // Robust pricing fallback: if API returns 0 or null pricing, calculate it on frontend
+                let apiPricing = payload.data?.pricing;
+                if (!apiPricing || parsePrice(apiPricing.subtotal) === 0) {
+                    const subtotal = items.reduce((acc, curr) => {
+                        const unitPrice = parsePrice(curr.price?.selling_price);
+                        return acc + (Number(curr.quantity) * unitPrice);
+                    }, 0);
+                    state.pricing = {
+                        subtotal,
+                        delivery_charge: apiPricing?.delivery_charge || 0,
+                        discount: apiPricing?.discount || 0,
+                        tax: apiPricing?.tax || 0,
+                        grand_total: subtotal + (apiPricing?.delivery_charge || 0) + (apiPricing?.tax || 0) - (apiPricing?.discount || 0)
+                    };
+                } else {
+                    state.pricing = apiPricing;
+                }
+
                 state.totalQuantity = items.reduce(
                     (total, item) => total + Number(item.quantity),
                     0
@@ -354,14 +372,14 @@ const cartSlice = createSlice({
             .addCase(updateCartQuantityThunk.pending, (state, { meta }) => {
                 state.isLoading = true;
                 state.error = null;
-                
+
                 // Optimistic Update
                 const { cart_id, action } = meta.arg;
                 const item = state.items.find((i) => Number(i.id) === Number(cart_id));
                 if (item) {
                     const currentQty = Number(item.quantity) || 1;
                     const newQty = action === "increase" ? currentQty + 1 : (currentQty > 1 ? currentQty - 1 : currentQty);
-                    
+
                     if (newQty !== currentQty) {
                         item.quantity = newQty;
                         const unitPrice = parsePrice(item.price?.selling_price);
@@ -381,7 +399,7 @@ const cartSlice = createSlice({
             .addCase(updateCartQuantityThunk.rejected, (state, { payload, meta }) => {
                 state.isLoading = false;
                 state.error = payload as string;
-                
+
                 // Rollback or Re-fetch? For now, we logic to revert could be complex.
                 // It's better to re-fetch cart summary on error to ensure sync.
             });

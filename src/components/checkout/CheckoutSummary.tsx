@@ -47,19 +47,19 @@ const CheckoutSummary: React.FC = () => {
     } = useMemo(() => {
         const sub = Number(p.subtotal || 0);
         const baseDiscAmount = Number(p.discount || 0);
-        
+
         // baseDiscount as percentage of subtotal
         const baseDiscPercent = sub > 0 ? (baseDiscAmount / sub) * 100 : 0;
-        
+
         // couponDiscount is 5%
         const coupDisc = couponApplied ? couponDiscountPercent : 0;
-        
+
         // totalDiscount = baseDiscount + 5
         const totalDiscPercent = baseDiscPercent + coupDisc;
-        
+
         // extraDiscountAmount = originalPrice * couponDiscount / 100
         const extraDiscAmount = couponApplied ? (sub * couponDiscountPercent / 100) : 0;
-        
+
         // finalPrice = originalPrice - (originalPrice * totalDiscount / 100)
         // Note: p.grand_total already subtracts p.discount. 
         // So finalGrandTotal = p.grand_total - extraDiscAmount
@@ -89,8 +89,19 @@ const CheckoutSummary: React.FC = () => {
                     <p className="text-sm text-gray-500">Your cart is empty.</p>
                 ) : (
                     items.map((item) => {
-                        const price = Number(item.price?.selling_price || 0);
-                        const imageUrl = item.variant?.[0]?.images?.[0]?.image_url;
+                        // Robust price and variant extraction
+                        const unitPrice = item.price?.selling_price 
+                            ? (typeof item.price.selling_price === 'string' 
+                                ? parseFloat(item.price.selling_price.replace(/[^\d.]/g, '')) 
+                                : item.price.selling_price)
+                            : 0;
+                        
+                        const quantity = Number(item.quantity || 0);
+                        const totalPrice = unitPrice * quantity;
+
+                        // API can sometimes return variant as an array or a single object
+                        const variantData = Array.isArray(item.variant) ? item.variant[0] : item.variant;
+                        const imageUrl = variantData?.images?.[0]?.image_url || (variantData as any)?.image_url;
 
                         return (
                             <div key={item.id} className="checkout-item-micro">
@@ -107,11 +118,11 @@ const CheckoutSummary: React.FC = () => {
                                     )}
                                 </div>
                                 <div className="checkout-item-micro-details">
-                                    <p className="micro-title">{item.product?.name}</p>
-                                    <p className="micro-qty">Qty: {item.quantity}</p>
+                                    <p className="micro-title">{item.product?.name || "Product"}</p>
+                                    <p className="micro-qty">Qty: {quantity}</p>
                                 </div>
                                 <div className="checkout-item-micro-price">
-                                    {formatPrice(price * Number(item.quantity))}
+                                    {formatPrice(totalPrice)}
                                 </div>
                             </div>
                         );
@@ -126,16 +137,16 @@ const CheckoutSummary: React.FC = () => {
                 <div className="coupon-input-group">
                     <div className="coupon-input-box">
                         <HiOutlineTicket className="coupon-icon" />
-                        <input 
-                            type="text" 
-                            value={couponCode} 
-                            readOnly 
+                        <input
+                            type="text"
+                            value={couponCode}
+                            readOnly
                             placeholder="Enter Coupon Code"
                             className="coupon-input"
                         />
                         {couponApplied && <span className="coupon-applied-badge">Applied</span>}
                     </div>
-                    <button 
+                    <button
                         className={`coupon-apply-btn ${couponApplied ? 'applied' : ''}`}
                         disabled={couponApplied}
                     >
