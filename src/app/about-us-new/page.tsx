@@ -21,38 +21,38 @@ const AboutUsPage = () => {
     const [pageData, setPageData] = useState<PageDataType | null>(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchPageData = async () => {
-            try {
-                const response = await fetch(
-                    'https://refones.com/api-auth_v1/api/footer-links'
-                );
+    // useEffect(() => {
+    //     const fetchPageData = async () => {
+    //         try {
+    //             const response = await fetch(
+    //                 'https://refones.com/api-auth_v1/api/footer-links'
+    //             );
 
-                const result: FooterLinksResponse = await response.json();
+    //             const result: FooterLinksResponse = await response.json();
 
-                if (result?.data) {
-                    const allPages: PageDataType[] = Object.values(
-                        result.data
-                    ).flat();
+    //             if (result?.data) {
+    //                 const allPages: PageDataType[] = Object.values(
+    //                     result.data
+    //                 ).flat();
 
-                    const aboutPage = allPages.find(
-                        (item: PageDataType) =>
-                            item.page_key === 'about-us'
-                    );
+    //                 const aboutPage = allPages.find(
+    //                     (item: PageDataType) =>
+    //                         item.page_key === 'about-us'
+    //                 );
 
-                    if (aboutPage) {
-                        setPageData(aboutPage);
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching page data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    //                 if (aboutPage) {
+    //                     setPageData(aboutPage);
+    //                 }
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching page data:', error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
 
-        fetchPageData();
-    }, []); 
+    //     fetchPageData();
+    // }, []); 
 
     return (
         <div className={styles.container}>

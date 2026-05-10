@@ -39,6 +39,10 @@ const DynamicFooterPage = () => {
             router.push("/faq-new");
             return;
         }
+        if(pageKey === "faq"){
+            router.push("/privacy-policy");
+            return;
+        }
 
         const fetchPageContent = async () => {
             setLoading(true);
