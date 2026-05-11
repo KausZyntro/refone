@@ -1,21 +1,25 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
+// import Image from 'next/image';
 import styles from './blogDetail.module.css';
 import { BlogPost } from '@/types/blog';
 import { Metadata } from 'next';
 import Script from 'next/script';
+import striptags from 'striptags';
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 };
 
 
 import Link from 'next/link';
 
+export const revalidate = 3600;
+// export const dynamic = 'force-static';
+
 // Fetch function integrated directly into the page
 async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
-  const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'http://refones.com/blogs/wp-json/wp/v2/posts';
+  const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'https://refones.com/blogs/wp-json/wp/v2/posts';
   try {
     // Append slug and _embed for WordPress REST API
     const fetchUrl = baseUrl.includes('?') ? `${baseUrl}&slug=${slug}&_embed` : `${baseUrl}?slug=${slug}&_embed`;
@@ -47,32 +51,120 @@ async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
 //   };
 // }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const {slug} = await params; 
-  console.log('Slug:', slug);
+// export async function generateMetadata({ params }: Props): Promise<Metadata> {
+//   const {slug} = await params; 
+//   console.log('Slug:', slug);
+
+//   const blog = await getBlogBySlug(slug);
+//    console.log('Blog Data:', blog);
+
+//   if (!blog) {
+//     return {
+//       title: 'Blog | Refone',
+//       description: 'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+//     };
+//   }
+
+
+//   return {
+//     title: `${slug} | Refone`,
+//     alternates: {
+//       canonical: `https://refone.co.in/blog/${slug}`,
+//     },
+//     description:
+//       blog?.excerpt?.rendered ||
+//       blog?.excerpt ||
+//       'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+//   };
+  
+// }
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+
+  const { slug } = params;
 
   const blog = await getBlogBySlug(slug);
-   console.log('Blog Data:', blog);
 
   if (!blog) {
     return {
       title: 'Blog | Refone',
-      description: 'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+      description:
+        'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
     };
   }
 
+  const title =
+    blog?.title?.rendered ||
+    blog?.title ||
+    'Refone Blog';
+
+  const description = striptags(
+    blog?.excerpt?.rendered ||
+      blog?.excerpt ||
+      ''
+  ).slice(0, 160);
+
+  const image =
+    blog?._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+    blog?.yoast_head_json?.og_image?.[0]?.url ||
+    '';
 
   return {
-    title: `${slug} | Refone`,
+    title,
+    description,
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+
     alternates: {
       canonical: `https://refone.co.in/blog/${slug}`,
     },
-    description:
-      blog?.excerpt?.rendered ||
-      blog?.excerpt ||
-      'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+
+    openGraph: {
+      title,
+      description,
+      url: `https://refone.co.in/blog/${slug}`,
+      siteName: 'Refone',
+      type: 'article',
+      
+
+      images: image
+        ? [
+            {
+              url: image,
+            },
+          ]
+        : [],
+    },
+
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: image ? [image] : [],
+    },
   };
-  
+}
+export async function generateStaticParams() {
+  try {
+    const res = await fetch(
+      // 'https://refones.com/blogs/wp-json/wp/v2/posts'
+      'https://refones.com/blogs/wp-json/wp/v2/posts?per_page=100'
+    );
+
+    const posts = await res.json();
+
+    return posts.map((post: any) => ({
+      slug: post.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
+  }
 }
 
 function fixTOCLinks(html) {
@@ -91,7 +183,7 @@ function fixTOCLinks(html) {
 
 export default async function BlogDetailPage({ params }: Props) {
   
-  const { slug } = await params;
+  const { slug } = params;
   // Call the dynamic API fetch
   const blog = await getBlogBySlug(slug);
 
@@ -120,6 +212,8 @@ export default async function BlogDetailPage({ params }: Props) {
 
   
 
+  
+
   // Format WordPress date
   const rawDate = blog?.date || blog?.publishedAt;
   const publishedAt = rawDate ? new Date(rawDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
@@ -137,6 +231,39 @@ const faqSchema = faqData || null;
 
   return (
     <>
+
+     <Script
+      id="article-schema"
+      type="application/ld+json"
+      strategy="beforeInteractive"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+
+          headline: title,
+
+          author: {
+            "@type": "Person",
+            name: author,
+          },
+
+          datePublished: rawDate,
+
+          image: coverImage,
+
+          publisher: {
+            "@type": "Organization",
+            name: "Refone",
+
+            logo: {
+              "@type": "ImageObject",
+              url: "https://refone.co.in/logo.png",
+            },
+          },
+        }),
+      }}
+    />
 
         {faqSchema && (
     <Script
