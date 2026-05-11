@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import { HiOutlineTicket } from "react-icons/hi";
 
 import RazorpayButton from "./RazorpayButton";
 
@@ -18,15 +17,7 @@ const CheckoutSummary: React.FC = () => {
     const { selectedAddressId } = useSelector((state: RootState) => state.address);
     const { isLoading: isPlacingOrder, isProcessingPayment } = useSelector((state: RootState) => state.order);
 
-    // Coupon State (Frontend Only)
-    const [couponApplied, setCouponApplied] = useState(false);
-    const [couponCode] = useState("MOTHER5");
-    const [couponDiscountPercent] = useState(5);
 
-    useEffect(() => {
-        // Default Coupon Auto-Apply on page load
-        setCouponApplied(true);
-    }, []);
 
     const p = pricing || {
         subtotal: 0,
@@ -36,44 +27,7 @@ const CheckoutSummary: React.FC = () => {
         grand_total: 0,
     };
 
-    // Discount Calculation Logic
-    const {
-        originalPrice,
-        baseDiscount,
-        couponDiscount,
-        totalDiscount,
-        extraDiscountAmount,
-        finalGrandTotal
-    } = useMemo(() => {
-        const sub = Number(p.subtotal || 0);
-        const baseDiscAmount = Number(p.discount || 0);
-
-        // baseDiscount as percentage of subtotal
-        const baseDiscPercent = sub > 0 ? (baseDiscAmount / sub) * 100 : 0;
-
-        // couponDiscount is 5%
-        const coupDisc = couponApplied ? couponDiscountPercent : 0;
-
-        // totalDiscount = baseDiscount + 5
-        const totalDiscPercent = baseDiscPercent + coupDisc;
-
-        // extraDiscountAmount = originalPrice * couponDiscount / 100
-        const extraDiscAmount = couponApplied ? (sub * couponDiscountPercent / 100) : 0;
-
-        // finalPrice = originalPrice - (originalPrice * totalDiscount / 100)
-        // Note: p.grand_total already subtracts p.discount. 
-        // So finalGrandTotal = p.grand_total - extraDiscAmount
-        const finalTotal = Number(p.grand_total || 0) - extraDiscAmount;
-
-        return {
-            originalPrice: sub,
-            baseDiscount: baseDiscPercent,
-            couponDiscount: coupDisc,
-            totalDiscount: totalDiscPercent,
-            extraDiscountAmount: extraDiscAmount,
-            finalGrandTotal: Math.max(0, finalTotal)
-        };
-    }, [p, couponApplied, couponDiscountPercent]);
+    const finalGrandTotal = Math.max(0, Number(p.grand_total || 0));
 
     const formatPrice = (amount: number) => {
         return `₹ ${amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -132,35 +86,7 @@ const CheckoutSummary: React.FC = () => {
 
             <hr className="summary-divider" />
 
-            {/* Coupon Section */}
-            <div className="checkout-coupon-section">
-                <div className="coupon-input-group">
-                    <div className="coupon-input-box">
-                        <HiOutlineTicket className="coupon-icon" />
-                        <input
-                            type="text"
-                            value={couponCode}
-                            readOnly
-                            placeholder="Enter Coupon Code"
-                            className="coupon-input"
-                        />
-                        {couponApplied && <span className="coupon-applied-badge">Applied</span>}
-                    </div>
-                    <button
-                        className={`coupon-apply-btn ${couponApplied ? 'applied' : ''}`}
-                        disabled={couponApplied}
-                    >
-                        {couponApplied ? "Applied" : "Apply"}
-                    </button>
-                </div>
-                {couponApplied && (
-                    <p className="coupon-success-text">
-                        Extra 5% discount applied with <strong>{couponCode}</strong>
-                    </p>
-                )}
-            </div>
 
-            <hr className="summary-divider" />
 
             {/* Pricing Details */}
             <div className="summary-breakdown">
@@ -186,12 +112,6 @@ const CheckoutSummary: React.FC = () => {
                         <span>-{formatPrice(p.discount)}</span>
                     </div>
                 )}
-                {extraDiscountAmount > 0 && (
-                    <div className="summary-row text-success">
-                        <span>Coupon Discount ({couponDiscountPercent}%):</span>
-                        <span>-{formatPrice(extraDiscountAmount)}</span>
-                    </div>
-                )}
             </div>
 
             <hr className="summary-divider" />
@@ -199,9 +119,6 @@ const CheckoutSummary: React.FC = () => {
             <div className="summary-grand-total">
                 <div className="total-label-box">
                     <span>Order Total:</span>
-                    {/* {couponApplied && (
-                        <span className="total-discount-tag">Total Discount: {totalDiscount.toFixed(1)}%</span>
-                    )} */}
                 </div>
                 <span className="grand-total-val">{formatPrice(finalGrandTotal)}</span>
             </div>

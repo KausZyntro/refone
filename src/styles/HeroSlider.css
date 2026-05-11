@@ -296,7 +296,7 @@
 
 /* Mother's Day Special Slide Styles */
 .mothers-day-slide {
-  background: linear-gradient(135deg, #fff5f7 0%, #ffe0e6 100%) !important;
+  background: linear-gradient(  135deg,  #ff6b00 0%,  #ff9a1f 38%,  #ffd089 72%,  #fff3dc 100%) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
@@ -324,7 +324,8 @@
 }
 
 .mothers-day-slide .hero-image img {
-  height: 100%;
+  /* height: 100%; */
+  height: 117%;
   width: auto;
   max-width: 100%;
   object-fit: contain;
@@ -348,7 +349,7 @@
   display: block;
   font-size: 14px;
   font-weight: 700;
-  color: #ff4d6d;
+  color: #ffebcc;
   letter-spacing: 5px;
   margin-bottom: 5px;
   text-transform: uppercase;
@@ -357,7 +358,7 @@
 .md-title {
   font-family: 'Playball', cursive;
   font-size: 64px !important;
-  color: #ff4d6d !important;
+  color: #ffebcc !important;
   line-height: 0.85 !important;
   margin: 0 0 20px 0 !important;
 }
@@ -427,8 +428,8 @@
 }
 
 .md-btn {
-  background: #ff4d6d !important;
-  color: white !important;
+  background: #ffebcc !important;
+  color: #000 !important;
   padding: 15px 40px !important;
   font-size: 17px !important;
   box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3) !important;
@@ -471,7 +472,8 @@
     justify-content: space-between !important;
     padding: 0 15px !important;
     align-items: center !important;
-    background: #fff5f7 !important;
+    /* background: #fff5f7 !important; */
+    background: linear-gradient(  135deg,  #ff6b00 0%,  #ff9a1f 38%,  #ffd089 72%,  #fff3dc 100%) !important;
   }
   
   .mothers-day-slide .hero-image {
@@ -487,7 +489,7 @@
   .mothers-day-slide .hero-image img {
     height: 90%;
     width: auto;
-    max-width: 150%;
+    max-width: 120%;
     object-fit: contain;
     transform: translateX(-10px);
     animation: none;
@@ -508,7 +510,7 @@
   }
   
   .md-title span {
-    font-size: 32px !important;
+    font-size: 34px !important;
     padding-left: 15px;
   }
   
@@ -565,7 +567,7 @@
     padding-left: 10px;
   }
   .md-subtitle {
-    font-size: 9px;
+    font-size: 11px;
   }
   .mothers-day-slide .hero-image {
     flex: 0 0 42% !important;

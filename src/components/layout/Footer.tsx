@@ -38,7 +38,7 @@ const staticFooterData = {
   "Help_support": [
     { id: 4, title: "FAQ", page_key: "faq" },
     // { id: 5, title: "Shipping Info", page_key: "shipping-policy" },
-    { id: 6, title: "Return Policy", page_key: "return-policy" },
+    { id: 6, title: "Replacement Policy", page_key: "return-policy" },
     { id: 7, title: "Contact Us", page_key: "contact-us" }
   ],
   "More_info": [

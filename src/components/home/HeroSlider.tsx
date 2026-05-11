@@ -60,19 +60,19 @@ const HeroSlider = () => {
         <SwiperSlide>
           <div className="slide mothers-day-slide">
             <div className="hero-content md-content">
-              <span className="md-subtitle">HAPPY</span>
-              <h1 className="md-title">Mother's <br /><span>Day</span></h1>
+              <span className="md-subtitle">Luxury for Less</span>
+              <h1 className="md-title">Upto <br /><span>75% off</span></h1>
               <div className="md-badge-wrapper">
-                <div className="md-offer-badge">
+                {/* <div className="md-offer-badge">
                   <span>Special for you</span>
                   <strong>MOM</strong>
-                </div>
+                </div> */}
               </div>
-              <p className="md-discount">SPECIAL DISCOUNT <strong>55% OFF</strong> SALE</p>
+              {/* <p className="md-discount">SPECIAL DISCOUNT <strong>55% OFF</strong> SALE</p> */}
               <button className="cta-btn-new md-btn" onClick={() => window.location.href = '/allProduct'}>Shop Now</button>
             </div>
             <div className="hero-image">
-               <img src="/images/mothers_day_banner.png" alt="Mother's Day Special" />
+               <img src="/images/discount.png" alt="Upto 75% Off" />
             </div>
             <div className="hero-why-card">
               <WhyBuyCard />
