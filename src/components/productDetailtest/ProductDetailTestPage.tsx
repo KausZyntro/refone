@@ -98,8 +98,10 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                 id: Date.now(), product_id: product.id, variant_id: selectedVariant.id,
                 quantity: 1, item_total: parsePrice(selectedVariant.pricing.selling_price),
                 product: { name: product.name, image: selectedVariant.images[0]?.image_url || "" },
-                variant: [{ storage: selectedVariant.storage, color: selectedVariant.color,
-                    images: selectedVariant.images.map(img => ({ id: img.id, variant_id: img.variant_id, image_url: img.image_url })) }],
+                variant: [{
+                    storage: selectedVariant.storage, color: selectedVariant.color,
+                    images: selectedVariant.images.map(img => ({ id: img.id, variant_id: img.variant_id, image_url: img.image_url }))
+                }],
                 price: { selling_price: selectedVariant.pricing.selling_price }
             }));
             setAddedToCart(true);
@@ -127,8 +129,10 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     id: Date.now(), product_id: product.id, variant_id: selectedVariant.id,
                     quantity: 1, item_total: parsePrice(selectedVariant.pricing.selling_price),
                     product: { name: product.name, image: selectedVariant.images[0]?.image_url || "" },
-                    variant: [{ storage: selectedVariant.storage, color: selectedVariant.color,
-                        images: selectedVariant.images.map(img => ({ id: img.id, variant_id: img.variant_id, image_url: img.image_url })) }],
+                    variant: [{
+                        storage: selectedVariant.storage, color: selectedVariant.color,
+                        images: selectedVariant.images.map(img => ({ id: img.id, variant_id: img.variant_id, image_url: img.image_url }))
+                    }],
                     price: { selling_price: selectedVariant.pricing.selling_price }
                 }));
                 setAddedToCart(true);
@@ -319,7 +323,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     </div>
                     <div className={styles.tabContent}>
                         {activeTab === "highlights" && (
-                             <div className={styles.tabContentGrid}>
+                            <div className={styles.tabContentGrid}>
                                 <div>
                                     <h3 className={styles.highlightsTitle}>Product Highlights</h3>
                                     <ul className={styles.highlightsList}>
@@ -360,7 +364,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                         </div>
                                     </div>
                                 </div>
-                             </div>
+                            </div>
                         )}
                         {activeTab === "specs" && <ProductSpecstest product={product} selectedVariant={selectedVariant} />}
                         {/* ... other tabs ... */}

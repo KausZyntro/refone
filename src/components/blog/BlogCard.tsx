@@ -1,6 +1,6 @@
-// "use client";
+"use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './BlogCard.module.css';
@@ -11,7 +11,7 @@ interface BlogCardProps {
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
-  // const [imgError, setImgError] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const title = blog?.title?.rendered || blog?.title || 'Untitled';
   const slug = blog?.slug || '';
@@ -51,7 +51,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
     <Link href={slug ? `/blog/${slug}` : '#'} className={styles.card}>
       <div className={styles.imageContainer}>
         {/* We use unoptimized for placeholders. In production, remove unoptimized and use valid image domains */}
-        {/* {(!imgError && coverImage) ? (
+        {(!imgError && coverImage) ? (
           <Image
             src={coverImage}
             alt={title}
@@ -64,15 +64,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
           <div className={styles.image} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', backgroundColor: '#e9ecef' }}>
             No Image
           </div>
-        )} */}
-
-        <Image
-          src={coverImage || "/placeholder.jpg"}
-          alt={title}
-          fill
-          className={styles.image}
-          unoptimized
-        />
+        )}
       </div>
       <div className={styles.content}>
         <div className={styles.category}>{category}</div>
@@ -89,3 +81,4 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
 };
 
 export default BlogCard;
+
