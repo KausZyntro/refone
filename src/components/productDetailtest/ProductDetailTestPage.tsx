@@ -401,22 +401,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                 </div>
             </div>
 
-            {/* Sticky Bottom Bar */}
-            <div className={styles.mobileBottomBar}>
-                <div className={styles.mobilePriceWrap}>
-                    <span className={styles.mobilePriceMain}>₹{sellingPrice.toLocaleString("en-IN")}</span>
-                    <div className={styles.mobilePriceSubRow}>
-                        <span className={styles.mobilePriceMrp}>₹{mrp.toLocaleString("en-IN")}</span>
-                        <span className={styles.mobilePriceDiscount}>{discountPct}% OFF</span>
-                    </div>
-                </div>
-                <button
-                    className={styles.mobileAddCartBtn}
-                    onClick={() => isInStock && (addedToCart ? router.push("/cart") : handleAddToCart())}
-                >
-                    <FaShoppingCart /> {addedToCart ? "Go to Cart" : "Add to Cart"}
-                </button>
-            </div>
+
         </div>
     );
 };

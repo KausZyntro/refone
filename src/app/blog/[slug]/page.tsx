@@ -15,7 +15,7 @@ import Link from 'next/link';
 
 // Fetch function integrated directly into the page
 async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
-  const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'http://refones.com/blogs/wp-json/wp/v2/posts';
+  const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'https://refones.com/blogs/wp-json/wp/v2/posts';
   try {
     // Append slug and _embed for WordPress REST API
     const fetchUrl = baseUrl.includes('?') ? `${baseUrl}&slug=${slug}&_embed` : `${baseUrl}?slug=${slug}&_embed`;
@@ -47,12 +47,19 @@ async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
 //   };
 // }
 
+
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const {slug} = await params; 
-  console.log('Slug:', slug);
+  // console.log('Slug:', slug);
 
   const blog = await getBlogBySlug(slug);
-   console.log('Blog Data:', blog);
+  //  console.log('Blog Data:', blog);
+
+   const cleanDescription =
+  (blog?.excerpt?.rendered || '')
+    .replace(/<[^>]*>/g, '')
+    .trim();
 
   if (!blog) {
     return {
@@ -63,14 +70,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 
   return {
-    title: `${slug} | Refone`,
+    // title: `${slug} | Refone`,
+    title: `${blog?.title?.rendered || blog?.title} | Refone`,
     alternates: {
       canonical: `https://refone.co.in/blog/${slug}`,
     },
+    robots: {
+      index: true,
+      follow: true,
+    },
     description:
-      blog?.excerpt?.rendered ||
-      blog?.excerpt ||
-      'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+      // blog?.excerpt?.rendered ||
+      // blog?.excerpt ||
+      // 'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+      cleanDescription
   };
   
 }

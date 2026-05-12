@@ -10,6 +10,7 @@ import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Refone",
+  metadataBase: new URL("https://refone.co.in"),
   description: "",
 };
 export default function RootLayout({

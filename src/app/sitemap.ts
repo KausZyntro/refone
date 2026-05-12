@@ -1,22 +1,53 @@
-export default async function sitemap() {
+import { MetadataRoute } from "next";
 
-  const res = await fetch(
-    "https://refones.com/blogs/wp-json/wp/v2/posts"
-  );
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  try {
+    const response = await fetch(
+      "https://refones.com/blogs/wp-json/wp/v2/posts?_embed&per_page=100",
+      {
+        next: { revalidate: 3600 },
+      }
+    );
 
-  const posts = await res.json();
+    if (!response.ok) {
+      console.error("Failed to fetch posts");
+      return [];
+    }
 
-  const blogs = posts.map((post: any) => ({
-    url: `https://refone.co.in/blog/${post.slug}`,
-    lastModified: new Date(post.modified),
-  }));
+    const posts = await response.json();
 
-  return [
-    {
-      url: "https://refone.co.in",
-      lastModified: new Date(),
-    },
+    const blogUrls = posts.map((post: any) => ({
+      url: `https://refone.co.in/blog/${post.slug}`,
+      lastModified: new Date(post.modified),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
 
-    ...blogs,
-  ];
+    return [
+      {
+        url: "https://refone.co.in",
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 1,
+      },
+
+      {
+        url: "https://refone.co.in/blog",
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.9,
+      },
+
+      ...blogUrls,
+    ];
+  } catch (error) {
+    console.error("Sitemap generation failed:", error);
+
+    return [
+      {
+        url: "https://refone.co.in",
+        lastModified: new Date(),
+      },
+    ];
+  }
 }
