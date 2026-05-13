@@ -13,29 +13,25 @@ const testimonials = [
     name: "Tarun Singh Verma",
     location: "New Delhi",
     text: "Sold off my phone very easily and got the payment on the spot.",
-    image:
-      "https://s3bg.cashify.in/gpro/uploads/2020/02/12192629/Screenshot-1-1-1.jpg",
+    image: "/images/useIcon.png",
   },
   {
     name: "Karan Sharma",
     location: "Delhi NCR",
     text: "Well trained staff. Overall a positive experience.",
-    image:
-      "https://s3bg.cashify.in/gpro/uploads/2020/02/12192435/Person-1-1.jpg",
+    image: "/images/useIcon.png",
   },
   {
     name: "Satheesh Kumaram",
     location: "Bengaluru",
     text: "It was a wonderful experience with Refone. I got a reasonable price for my product and their response was very quick! Good to see such a service available",
-    image:
-      "https://s3bg.cashify.in/gpro/uploads/2019/09/13044450/image-2-min-2.jpeg",
+    image: "/images/useIcon.png"
   },
   {
     name: "Kiran Kumar Balusu",
     location: "Hyderabad",
     text: "Customer support was polite & technician was experienced.",
-    image:
-      "https://s3bg.cashify.in/gpro/uploads/2019/09/13044447/1.2.3-min.jpeg",
+    image: "/images/useIcon.png"
   },
 ];
 

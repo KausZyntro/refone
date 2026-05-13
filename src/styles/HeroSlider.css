@@ -33,7 +33,7 @@
   text-align: left;
 }
 
-.hero-content h1 {
+.hero-content h2 {
   font-size: 44px;
   font-weight: 800;
   color: #1a1a1a;
@@ -173,7 +173,7 @@
   .hero-content {
     flex: 0 0 300px;
   }
-  .hero-content h1 {
+  .hero-content h2 {
     font-size: 34px;
   }
   .hero-why-card {
@@ -218,7 +218,7 @@
     margin-bottom: 0;
   }
   
-  .hero-content h1 {
+  .hero-content h2 {
     font-size: 24px;
     margin-bottom: 10px;
   }
@@ -275,7 +275,7 @@
     height: 300px; /* Increased from 280px */
   }
   
-  .hero-content h1 {
+  .hero-content h2 {
     font-size: 18px;
   }
   

@@ -61,7 +61,7 @@ const HeroSlider = () => {
           <div className="slide mothers-day-slide">
             <div className="hero-content md-content">
               <span className="md-subtitle">Luxury for Less</span>
-              <h1 className="md-title">Upto <br /><span>75% off</span></h1>
+              <p className="md-title">Upto <br /><span>75% off</span></p>
               <div className="md-badge-wrapper">
                 {/* <div className="md-offer-badge">
                   <span>Special for you</span>
@@ -83,7 +83,7 @@ const HeroSlider = () => {
         <SwiperSlide>
           <div className="slide">
             <div className="hero-content">
-              <h1>Premium Phones.<br /><span style={{ color: '#006aaf' }}>Priced Smarter.</span></h1>
+              <h2>Premium Phones.<br /><span style={{ color: '#006aaf' }}>Priced Smarter.</span></h2>
               <p>Refurbished phones that are 100% original and come with warranty.</p>
               <div className="hero-stats-new">
                 <div className="stat-item-new">
@@ -113,7 +113,7 @@ const HeroSlider = () => {
         <SwiperSlide>
           <div className="slide" style={{ background: 'linear-gradient(135deg, #fff3e0 0%, #ffffff 100%)' }}>
             <div className="hero-content">
-              <h1>Sell Your Phone.<br /><span style={{ color: '#ff9800' }}>Best Price. Instantly.</span></h1>
+              <h2>Sell Your Phone.<br /><span style={{ color: '#ff9800' }}>Best Price. Instantly.</span></h2>
               <p>Get the best value for your old smartphone. Free doorstep pickup and instant payment.</p>
               <div className="hero-stats-new">
                 <div className="stat-item-new">
@@ -143,7 +143,7 @@ const HeroSlider = () => {
         <SwiperSlide>
           <div className="slide" style={{ background: 'linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%)' }}>
             <div className="hero-content">
-              <h1>Check Your Phone's<br /><span style={{ color: '#2196f3' }}>Current Market Value.</span></h1>
+              <h2>Check Your Phone's<br /><span style={{ color: '#2196f3' }}>Current Market Value.</span></h2>
               <p>Wondering how much your phone is worth? Check the latest price in just 60 seconds.</p>
               <div className="hero-stats-new">
                 <div className="stat-item-new">
