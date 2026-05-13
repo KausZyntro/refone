@@ -9,10 +9,20 @@ import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Refone",
+  title: "Buy Refurbished iPhones India | Upto 75% Off | Shop Refone",
   metadataBase: new URL("https://refone.co.in"),
-  description: "",
+  keywords: [
+    "buy refurbished iPhone India",
+    "certified refurbished iPhone India",
+    "refurbished iPhone with warranty India",
+    "best refurbished iPhone store India",
+  ],
+  alternates: {
+    canonical: "https://refone.co.in/",
+  },
+  description: "Get refurbished iPhones at up to 75% off—72-point tested, 90%+ battery, 12-month warranty. Limited stock. Shop Refone now!",
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,9 +32,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          <Suspense fallback={null}>
+          {/* <Suspense fallback={null}> */}
             <Navbar />
-          </Suspense>
+          {/* </Suspense> */}
           {children}
           <Footer />
           <ToastContainer position="top-right" autoClose={3000} />

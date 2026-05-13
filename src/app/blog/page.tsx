@@ -52,32 +52,69 @@ export const metadata: Metadata = {
 //   }
 // }
 
+// async function getBlogs(): Promise<BlogPost[]> {
+//   try {
+//     const url = "https://refones.com/blogs/wp-json/wp/v2/posts?_embed";
+
+//     const response = await fetch(url, {
+//       next: { revalidate: 60 },
+//     });
+
+//     if (!response.ok) {
+//       console.error("API failed:", response.status);
+//       return [];
+//     }
+
+//     const text = await response.text();
+
+//     // ❗ Prevent crash if not JSON
+//     let data;
+//     try {
+//       data = JSON.parse(text);
+//     } catch (e) {
+//       console.error("Invalid JSON:", text);
+//       return [];
+//     }
+
+//     return Array.isArray(data) ? data : [];
+//   } catch (error) {
+//     console.error("Blog fetch error:", error);
+//     return [];
+//   }
+// }
+
 async function getBlogs(): Promise<BlogPost[]> {
+  let allPosts: BlogPost[] = [];
+  let page = 1;
+  let totalPages = 1;
+
   try {
-    const url = "https://refones.com/blogs/wp-json/wp/v2/posts?_embed";
+    do {
+      const response = await fetch(
+        `https://refones.com/blogs/wp-json/wp/v2/posts?_embed&per_page=100&page=${page}`,
+        {
+          next: { revalidate: 60 },
+        }
+      );
 
-    const response = await fetch(url, {
-      next: { revalidate: 60 },
-    });
+      if (!response.ok) {
+        console.error("API failed:", response.status);
+        break;
+      }
 
-    // ❗ Check BEFORE parsing JSON
-    if (!response.ok) {
-      console.error("API failed:", response.status);
-      return [];
-    }
+      totalPages = parseInt(
+        response.headers.get("x-wp-totalpages") || "1",
+        10
+      );
 
-    const text = await response.text();
+      const posts = await response.json();
 
-    // ❗ Prevent crash if not JSON
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      console.error("Invalid JSON:", text);
-      return [];
-    }
+      allPosts = [...allPosts, ...posts];
 
-    return Array.isArray(data) ? data : [];
+      page++;
+    } while (page <= totalPages);
+
+    return allPosts;
   } catch (error) {
     console.error("Blog fetch error:", error);
     return [];

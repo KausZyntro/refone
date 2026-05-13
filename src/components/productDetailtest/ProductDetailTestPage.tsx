@@ -64,7 +64,15 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     }, [dispatch, productId]);
 
     useEffect(() => {
-        if (product?.variants?.length) setSelectedVariant(product.variants[0]);
+        if (product?.variants?.length) {
+            const inStockVariant = product.variants.find((v: VariantTest) => {
+                const stock = v?.inventory?.total_stock ?? 0;
+                const inboundStock = v?.inventory?.inbound_stock ?? 0;
+                const isActive = v?.inventory?.is_active === 1;
+                return stock > 0 || inboundStock > 0 || isActive;
+            });
+            setSelectedVariant(inStockVariant || product.variants[0]);
+        }
     }, [product]);
 
     /* ── derived values ── */
