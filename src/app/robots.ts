@@ -5,6 +5,9 @@ export default function robots() {
       allow: "/",
     },
 
-    sitemap: "https://refone.co.in/sitemap.xml",
+    sitemap: [
+      "https://refone.co.in/sitemap.xml",
+      "https://refone.co.in/blog-sitemap.xml"
+    ],
   };
 }
