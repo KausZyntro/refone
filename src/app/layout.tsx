@@ -32,9 +32,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          {/* <Suspense fallback={null}> */}
+          <Suspense fallback={null}>
             <Navbar />
-          {/* </Suspense> */}
+          </Suspense>
           {children}
           <Footer />
           <ToastContainer position="top-right" autoClose={3000} />
