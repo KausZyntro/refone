@@ -7,6 +7,9 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Blog | Refone',
   description: 'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+  alternates: {
+    canonical: '/blog',
+  },
 };
 
 // Fetch function integrated directly into the page

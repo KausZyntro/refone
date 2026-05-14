@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "best refurbished iPhone store India",
   ],
   alternates: {
-    canonical: "https://refone.co.in/",
+    canonical: "/",
   },
   description: "Get refurbished iPhones at up to 75% off—72-point tested, 90%+ battery, 12-month warranty. Limited stock. Shop Refone now!",
 };

@@ -3,6 +3,12 @@ export default function robots() {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: [
+        '/profile',
+        '/my-orders',
+        '/server-busy',
+        '/animate',
+      ],
     },
 
     sitemap: [
