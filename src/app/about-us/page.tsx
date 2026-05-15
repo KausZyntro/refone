@@ -95,28 +95,35 @@ const AboutUsPage = () => {
                             {pageData?.title || 'About RefOne'}
                         </h2>
 
-                        {loading ? (
+                        {/* {loading ? ( */}
                             <div className={styles.paragraphContainer}>
-                                <p>Loading content...</p>
+                                {/* <p>Loading content...</p> */}
+                                <p>India's most trusted destination to buy refurbished iPhones.</p>
+
+                                        <p>At Refone, we sell only Super Quality grade phones — fully tested, certified, and backed by a 12-month warranty.</p>
+
+                                        <p>No Good grade. No Fair grade. Super Quality only — always.</p>
+
+                                        <p>Every phone you see on Refone has cleared a strict 72-point inspection.</p>
                             </div>
-                        ) : (
-                            <div
+                        {/* ) : ( */}
+                            {/* <div
                                 className={styles.paragraphContainer}
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         pageData?.content ||
                                         `
-                                        <p>At RefOne, we believe everyone should have access to premium iPhones without paying premium prices.</p>
+                                        <p>India's most trusted destination to buy refurbished iPhones.</p>
 
-                                        <p>We specialize in certified reborn and second-hand iPhones that are carefully tested for quality, performance, and reliability. Every device goes through detailed inspections, including battery health checks, functionality testing, and cosmetic evaluation, to ensure it meets our standards before reaching our customers.</p>
+                                        <p>At Refone, we sell only Super Quality grade phones — fully tested, certified, and backed by a 12-month warranty.</p>
 
-                                        <p>Our goal is to provide a trusted and affordable way for people to own high-quality iPhones with complete confidence. With warranty support, transparent pricing, and a customer-first approach, RefOne is committed to making your buying experience simple, secure, and stress-free.</p>
+                                        <p>No Good grade. No Fair grade. Super Quality only — always.</p>
 
-                                        <p>Whether you are upgrading your current phone or buying your first iPhone, RefOne is here to help you find the right device at the right price.</p>
+                                        <p>Every phone you see on Refone has cleared a strict 72-point inspection.</p>
                                         `
                                 }}
-                            />
-                        )}
+                            /> */}
+                        {/* )} */}
                     </div>
 
                     <div className={styles.imageSide}>
@@ -204,6 +211,36 @@ const AboutUsPage = () => {
                                 </p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Section 2.5: Super Quality */}
+            <section className={styles.qualitySection}>
+                <div className={styles.qualityContent}>
+                    <h2 className={styles.sectionHeading}>
+                        What Does &apos;Super Quality&apos; Mean at Refone?
+                    </h2>
+                    <p className={styles.qualityIntro}>
+                        Most people wonder about the difference between a used and refurbished iPhone. At Refone, we go a step further — we only accept phones that pass our Super Quality grade standard. Here is what every Refone phone must pass:
+                    </p>
+                    
+                    <ul className={styles.qualityList}>
+                        <li><strong>Body:</strong> Zero scratches, dents, or physical damage — like-new appearance</li>
+                        <li><strong>Screen:</strong> 100% original or Refone-certified replacement — no dead pixels, no cracks, no discolouration</li>
+                        <li><strong>Battery:</strong> Minimum 90% health — comfortably lasts a full day</li>
+                        <li><strong>All functions tested:</strong> Camera, Face ID / Touch ID, speakers, microphone, charging port, Wi-Fi, Bluetooth</li>
+                        <li><strong>IMEI:</strong> Clean and unlocked — not blacklisted, not iCloud locked</li>
+                        <li><strong>Packaging:</strong> Sealed box with Refone QC sticker — zero tampering</li>
+                    </ul>
+
+                    <div className={styles.qualityPromiseBox}>
+                        <span className={styles.promiseIcon}>⚡</span>
+                        <p className={styles.promiseText}>
+                            If a phone fails even one of our 72 checkpoints, it is rejected.<br/>
+                            We do not downgrade it to &apos;Good&apos; or &apos;Fair&apos; and still sell it.<br/>
+                            Rejection is the only outcome. This is the Refone promise.
+                        </p>
                     </div>
                 </div>
             </section>

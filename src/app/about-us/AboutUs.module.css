@@ -166,6 +166,84 @@
     color: #86868b;
 }
 
+/* Super Quality Section */
+.qualitySection {
+    background-color: #f5f5f7;
+    padding: 100px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.qualityContent {
+    max-width: 900px;
+    width: 100%;
+}
+
+.qualityIntro {
+    font-size: 19px;
+    line-height: 1.6;
+    color: #424245;
+    margin-bottom: 40px;
+}
+
+.qualityList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 50px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.qualityList li {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #1d1d1f;
+    padding-left: 30px;
+    position: relative;
+    background: #ffffff;
+    padding: 20px 20px 20px 45px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.qualityList li::before {
+    content: "•";
+    color: #0071e3;
+    font-size: 28px;
+    position: absolute;
+    left: 20px;
+    top: 15px;
+}
+
+.qualityList strong {
+    font-weight: 600;
+}
+
+.qualityPromiseBox {
+    background-color: #ffffff;
+    border-left: 4px solid #0071e3;
+    border-radius: 0 18px 18px 0;
+    padding: 30px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.promiseIcon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.promiseText {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #1d1d1f;
+    font-weight: 500;
+    margin: 0;
+}
+
 /* Section 3: CTA */
 .ctaSection {
     background-color: #1d1d1f;

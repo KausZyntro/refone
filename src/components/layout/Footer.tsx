@@ -31,9 +31,11 @@ const FooterSection = ({ title, links }: { title: string, links: any[] }) => {
 
 const staticFooterData = {
   "Company": [
-    { id: 1, title: "About Us", page_key: "about-us-new" },
+    // { id: 1, title: "About Us", page_key: "about-us-new" },
+    { id: 1, title: "About Us", page_key: "about-us" },
     { id: 2, title: "Our Story", page_key: "our-story" },
-    { id: 3, title: "Careers", page_key: "careers-new" }
+    { id: 3, title: "Careers", page_key: "careers-new" },
+    { id: 11, title: "Blog", page_key: "blog" }
   ],
   "Help_support": [
     { id: 4, title: "FAQ", page_key: "faq" },
