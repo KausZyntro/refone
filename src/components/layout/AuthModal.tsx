@@ -223,12 +223,12 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
           )}
 
           {/* TOGGLE */}
-          <p className="auth-toggle">
+          {/* <p className="auth-toggle">
             {isLogin ? "Don't have an account?" : "Already have an account?"}
             <span onClick={() => !isLoading && setIsLogin(!isLogin)} style={{ cursor: isLoading ? "not-allowed" : "pointer" }}>
               {isLogin ? " Register" : " Login"}
             </span>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

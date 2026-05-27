@@ -70,7 +70,7 @@ const OtpModal = ({
           <h2 className="auth-title">OTP Verification</h2>
 
           <p className="otp-text" style={{ fontSize: '14px', marginBottom: '20px', textAlign: 'center' }}>
-            Enter the 6 digit OTP sent to your email
+            Enter the 6 digit OTP sent to your phone/email
           </p>
 
           <div className="otp-container">

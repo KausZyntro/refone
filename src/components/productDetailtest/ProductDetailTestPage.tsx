@@ -39,7 +39,7 @@ const TABS: { key: TabKey; label: string }[] = [
     { key: "specs", label: "Specifications" },
     { key: "box", label: "What's in the Box" },
     { key: "faq", label: "FAQs" },
-    { key: "reviews", label: "Customer Reviews (12,458)" },
+    { key: "reviews", label: "Customer Reviews" },
 ];
 
 const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId }) => {
@@ -189,7 +189,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     </div>
                     <p className={styles.sidebarTaxNote}>Inclusive of all taxes</p>
 
-                    {prepaidPrice > 0 && (
+                    {/* {prepaidPrice > 0 && (
                         <div className={styles.prepaidBox}>
                             <FiShield className={styles.prepaidIcon} />
                             <div>
@@ -201,7 +201,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                 </span>
                             </div>
                         </div>
-                    )}
+                    )} */}
                 </>
             )}
         </div>
@@ -228,24 +228,24 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         </div>
     );
 
-    const DeliveryBlock = () => (
-        <div className={styles.deliveryBlock}>
-            <p className={styles.deliveryTitle}>Check Delivery Details</p>
-            <div className={styles.pincodeRow}>
-                <input
-                    className={styles.pincodeInput}
-                    type="text"
-                    placeholder="Enter Pincode"
-                    maxLength={6}
-                />
-                <button className={styles.pincodeBtn}>Check</button>
-            </div>
-            <div className={styles.deliveryInfo}>
-                <FiCheckCircle className={styles.deliveryCheckIcon} />
-                <span>Usually delivered in 2-4 days</span>
-            </div>
-        </div>
-    );
+    // const DeliveryBlock = () => (
+    //     <div className={styles.deliveryBlock}>
+    //         <p className={styles.deliveryTitle}>Check Delivery Details</p>
+    //         <div className={styles.pincodeRow}>
+    //             <input
+    //                 className={styles.pincodeInput}
+    //                 type="text"
+    //                 placeholder="Enter Pincode"
+    //                 maxLength={6}
+    //             />
+    //             <button className={styles.pincodeBtn}>Check</button>
+    //         </div>
+    //         <div className={styles.deliveryInfo}>
+    //             <FiCheckCircle className={styles.deliveryCheckIcon} />
+    //             <span>Usually delivered in 2-4 days</span>
+    //         </div>
+    //     </div>
+    // );
 
     const ServiceIconsStrip = () => (
         <div className={styles.serviceIconsStrip}>
@@ -296,7 +296,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         <div className={styles.mobileOnlyFlow}>
                             <PricingBlock />
                             <ActionButtons />
-                            <DeliveryBlock />
+                            {/* <DeliveryBlock /> */}
                             <ServiceIconsStrip />
                         </div>
                     </div>
@@ -312,7 +312,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         </div>
                         <PricingBlock />
                         <ActionButtons />
-                        <DeliveryBlock />
+                        {/* <DeliveryBlock /> */}
                     </div>
                 </div>
 
