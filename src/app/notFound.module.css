@@ -1,0 +1,93 @@
+
+.nfnd-notfound-container {
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+
+.nfnd-notfound-header {
+  width: 100%;
+  padding: 18px 40px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.nfnd-logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #111;
+  text-decoration: none;
+}
+
+/* Main */
+
+.nfnd-notfound-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.nfnd-error-code {
+  font-size: 120px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1;
+}
+
+.nfnd-error-title {
+  margin-top: 20px;
+  font-size: 36px;
+  color: #111;
+}
+
+.nfnd-error-description {
+  margin-top: 16px;
+  max-width: 500px;
+  font-size: 18px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.nfnd-home-button {
+  margin-top: 30px;
+  display: inline-block;
+  padding: 14px 28px;
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.nfnd-home-button:hover {
+  background: #333;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+  .nfnd-error-code {
+    font-size: 80px;
+  }
+
+  .nfnd-error-title {
+    font-size: 28px;
+  }
+
+  .nfnd-error-description {
+    font-size: 16px;
+  }
+
+  .nfnd-notfound-header {
+    padding: 16px 20px;
+  }
+}

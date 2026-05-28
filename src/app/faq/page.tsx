@@ -15,7 +15,7 @@ const FAQPage = () => {
     const faqs = [
         {
             question: "What is Refone's return policy?",
-            answer: "We offer a 7-day hassle-free return policy for most items. The product must be in its original condition and packaging. Some exceptions apply to consumable items.",
+            answer: "We offer a 7-day hassle-free replacement policy for most items. The product must be in its original condition and packaging. Some exceptions apply to consumable items.",
             category: "Returns"
         },
         {
@@ -30,7 +30,7 @@ const FAQPage = () => {
         },
         {
             question: "What payment methods do you accept?",
-            answer: "We accept all major credit/debit cards, UPI, Net Banking, and popular digital wallets. Cash on Delivery (COD) is also available for select pin codes.",
+            answer: "We accept all major credit/debit cards, UPI, Net Banking, and popular digital wallets. Cash on Delivery (COD) is also currently unavailable.",
             category: "Payment"
         },
         {

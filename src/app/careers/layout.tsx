@@ -3,7 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Careers | Refone",
   alternates: {
-    canonical: "/careers-new",
+    canonical: "/careers",
   },
 };
 
