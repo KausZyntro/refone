@@ -116,7 +116,7 @@ const displayMrp = availableVariant?.pricing?.mrp || '0';
                                         </>
                                     )}
                                 </div>
-                                {!isOutOfStock && <p className={styles.emiText}>EMI from ₹1,028/m</p>}
+                                {!isOutOfStock && <p className={styles.emiText}>EMI coming soon</p>}
                             </>
                         );
                     })()}

@@ -67,7 +67,8 @@ const RefoneProductCard = ({ product }: { product: any }) => {
           )}
 
           <div className="card-footer-row">
-            {!isOutOfStock && <span className="emi-text">EMI from ₹{Math.round(product.price / 12).toLocaleString()}/m</span>}
+            {/* {!isOutOfStock && <span className="emi-text">EMI from ₹{Math.round(product.price / 12).toLocaleString()}/m</span>} */}
+            {!isOutOfStock && <span className="emi-text">EMI coming soon.</span>}
             <div className="footer-divider"></div>
             <span className="warranty-text">12 Months Warranty</span>
           </div>

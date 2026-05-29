@@ -28,6 +28,12 @@ export default function CheckoutPage() {
         }
     }, [dispatch, user]);
 
+    useEffect(() => {
+   if (!isLoading && items.length === 0) {
+      router.push("/order-success");
+   }
+}, [isLoading, items, router]);
+
     if (!mounted) {
         return (
             <div className="checkout-page-wrapper loading">
@@ -64,19 +70,20 @@ export default function CheckoutPage() {
         );
     }
 
-    if (!isLoading && items.length === 0) {
-        return (
-            <div className="checkout-page-wrapper empty">
-                <div className="checkout-container text-center">
-                    <h2>Cannot proceed to checkout</h2>
-                    <p>Your cart is empty.</p>
-                    <button onClick={() => router.push("/")} className="btn-return">
-                        Return to Shop
-                    </button>
-                </div>
-            </div>
-        );
-    }
+    // if (!isLoading && items.length === 0) {
+    //     return (
+    //         <div className="checkout-page-wrapper empty">
+    //             <div className="checkout-container text-center">
+    //                 <h2>Cannot proceed to checkout</h2>
+    //                 <p>Your cart is empty.</p>
+    //                 <button onClick={() => router.push("/")} className="btn-return">
+    //                     Return to Shop
+    //                 </button>
+    //             </div>
+    //         </div>
+    //     );
+        
+    // }
 
     return (
         <div className="checkout-page-wrapper">

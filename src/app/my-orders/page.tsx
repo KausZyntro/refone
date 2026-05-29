@@ -9,8 +9,10 @@ import OrderCard from '@/components/orders/OrderCard';
 import type { OrderItemAPI } from '@/components/orders/OrderCard';
 import OrderFilters from '@/components/orders/OrderFilters';
 import EmptyOrdersState from '@/components/orders/EmptyOrdersState';
+import { useRouter } from 'next/navigation';
 
 const MyOrdersPage = () => {
+    const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useSelector((state: RootState) => state.auth);
     const { orders, isLoading, error } = useSelector((state: RootState) => state.order);
@@ -84,13 +86,13 @@ const MyOrdersPage = () => {
                         ))
                     ) : error ? (
                         <div className="empty-orders">
-                            <h2>Something went wrong</h2>
+                            <h2>Look like you havn't made your order yet.</h2>
                             <p>{error}</p>
                             <button
                                 className="btn-shop"
-                                onClick={() => user?.id && dispatch(fetchOrderList(Number(user.id)))}
+                                onClick={() =>  router.push("/allProduct")}
                             >
-                                Try Again
+                                Shop Now
                             </button>
                         </div>
                     ) : filteredOrders.length > 0 ? (

@@ -459,6 +459,9 @@ useEffect(() => {
                       <div className="dropdown-item" onClick={() => { router.push('/my-account'); setProfileOpen(false); }}>
                         My Account
                       </div>
+                      <div className="dropdown-item" onClick={() => { router.push('/my-orders'); setProfileOpen(false); }}>
+                        My Orders
+                      </div>
                       <div className="dropdown-item" onClick={() => { handleLogout(); setProfileOpen(false); }}>
                         Logout
                       </div>
