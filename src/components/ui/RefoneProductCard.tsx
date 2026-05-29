@@ -50,13 +50,19 @@ const RefoneProductCard = ({ product }: { product: any }) => {
             </div>
           ) : (
             <div className="price-row">
-              <span className="current-price">₹{product.price?.toLocaleString()}</span>
+              <span className="current-price">₹{Number(product.price).toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}</span>
               {product.mrp && (
-                <span className="mrp-price">₹{product.mrp?.toLocaleString()}</span>
+                <span className="mrp-price">₹{Number(product.mrp).toLocaleString('en-IN', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}</span>
               )}
-              {discount && (
+              {/* {discount && (
                 <span className="discount-tag">{discount}% OFF</span>
-              )}
+              )} */}
             </div>
           )}
 

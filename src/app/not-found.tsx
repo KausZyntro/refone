@@ -1,6 +1,5 @@
 import Link from "next/link";
 import styles from "./notFound.module.css";
-import animationData from "../../public/lottie/not-found.json";
 
 export const metadata = {
   title: "404 - Page Not Found",
