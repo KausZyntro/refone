@@ -19,6 +19,7 @@ import FAQSection from "@/components/home/FaqSection";
 import ProductSlider from "@/components/home/ProductSlider";
 import ExchangePopup from "@/components/common/ExchangeForm/ExchangePopup";
 import FeaturesBanner from "@/components/home/FeaturesBanner";
+import HomePageSeoData from "@/components/HomePageSeoData/HomePageSeoData";
 
 export default function Home() {
   return (
@@ -33,6 +34,7 @@ export default function Home() {
       <FAQSection /> 
       <Testimonials />
       <HeroAbout />
+      <HomePageSeoData />
       {/* <ExchangePopup /> */}
     </div>
   );
