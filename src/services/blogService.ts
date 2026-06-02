@@ -4,14 +4,14 @@ import { BlogPost } from '@/types/blog';
 const BLOG_BASE_URL = process.env.NEXT_BLOG_BASE_URL || 'https://refones.com';
 
 export const blogService = {
-  /**
-   * Fetch all blog posts
-   */
+  
   async getBlogs(): Promise<BlogPost[]> {
+      let page = 1;
+  let totalPages = 1;
     try {
       // Note: You may need to adjust the '/api/blogs' path to match your exact backend endpoint
       // e.g., '/api/posts' or '/wp-json/wp/v2/posts'
-      const response = await fetch(`${BLOG_BASE_URL}/api/blogs`, {
+      const response = await fetch(`${BLOG_BASE_URL}?_embed&per_page=100&page=${page}`, {
         next: { revalidate: 60 }, // Cache for 60 seconds (adjust as needed)
       });
 
@@ -38,7 +38,7 @@ export const blogService = {
   async getBlogBySlug(slug: string): Promise<BlogPost | null> {
     try {
       // Note: Adjust the '/api/blogs/${slug}' path to match your exact backend endpoint
-      const response = await fetch(`${BLOG_BASE_URL}/api/blogs/${slug}`, {
+      const response = await fetch(`${BLOG_BASE_URL}?slug=${slug}&_embed`, {
         next: { revalidate: 60 },
       });
 

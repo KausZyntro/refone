@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  description: "Get refurbished iPhones at up to 75% off—72-point tested, 90%+ battery, 12-month warranty. Limited stock. Shop Refone now!",
+  description: " Refone sells only SUPER grade certified refurbished iPhones in India. 52-point tested, 90%+ battery, 12-month warranty, 7-day returns. Trusted by 1000+ buyers. Shop now.",
 };
 
 export default function RootLayout({

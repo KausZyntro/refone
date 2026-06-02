@@ -20,8 +20,11 @@ import ProductSlider from "@/components/home/ProductSlider";
 import ExchangePopup from "@/components/common/ExchangeForm/ExchangePopup";
 import FeaturesBanner from "@/components/home/FeaturesBanner";
 import HomePageSeoData from "@/components/HomePageSeoData/HomePageSeoData";
+import HomeBlogSlider from "@/components/blog/HomeBlogSlider";
+import { blogService } from "@/services/blogService";
 
-export default function Home() {
+export default async function Home() {
+   const blogs = await blogService.getBlogs();
   return (
     <div>
       <HeroSlider />
@@ -33,6 +36,7 @@ export default function Home() {
       <FeaturesBanner/>
       <FAQSection /> 
       <Testimonials />
+      <HomeBlogSlider blogs={blogs.slice(0, 6)} />
       <HeroAbout />
       <HomePageSeoData />
       {/* <ExchangePopup /> */}

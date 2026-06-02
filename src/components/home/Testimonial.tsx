@@ -9,30 +9,54 @@ import "swiper/css/pagination";
 import "@/styles/Testimonial.css";
 import Image from "next/image";
 const testimonials = [
-  {
-    name: "Tarun Singh Verma",
-    location: "New Delhi",
-    text: "Sold off my phone very easily and got the payment on the spot.",
-    image: "/images/useIcon.png",
-  },
-  {
-    name: "Karan Sharma",
-    location: "Delhi NCR",
-    text: "Well trained staff. Overall a positive experience.",
-    image: "/images/useIcon.png",
-  },
-  {
-    name: "Satheesh Kumaram",
-    location: "Bengaluru",
-    text: "It was a wonderful experience with Refone. I got a reasonable price for my product and their response was very quick! Good to see such a service available",
-    image: "/images/useIcon.png"
-  },
-  {
-    name: "Kiran Kumar Balusu",
-    location: "Hyderabad",
-    text: "Customer support was polite & technician was experienced.",
-    image: "/images/useIcon.png"
-  },
+{
+  name: "Rohit Kapoor",
+  location: "Mumbai",
+  text: "I purchased a refurbished iPhone 15 and it arrived in excellent condition. The phone looked almost brand new and performance has been flawless so far.",
+  image: "/images/useIcon.png",
+},
+{
+  name: "Ananya Verma",
+  location: "Pune",
+  text: "The ordering process was smooth and delivery was faster than expected. The iPhone was exactly as described on the website.",
+  image: "/images/useIcon.png",
+},
+{
+  name: "Vikram Arora",
+  location: "Gurugram",
+  text: "Battery health was better than I expected and the device had no visible scratches. Great value for the price.",
+  image: "/images/useIcon.png",
+},
+{
+  name: "Sneha Iyer",
+  location: "Chennai",
+  text: "I was initially hesitant about buying a refurbished phone, but the quality exceeded my expectations. Very satisfied with my purchase.",
+  image: "/images/useIcon.png",
+},
+{
+  name: "Aditya Mishra",
+  location: "Lucknow",
+  text: "The iPhone was properly packed and came with all the essentials. Setup was easy and the device works perfectly.",
+  image: "/images/useIcon.png",
+},
+{
+  name: "Neha Gupta",
+  location: "Jaipur",
+  text: "Excellent customer support throughout the purchase process. The phone condition matched the grading mentioned on the product page.",
+  image: "/images/useIcon.png",
+},
+{
+  name: "Kunal Bhatia",
+  location: "New Delhi",
+  text: "Got an iPhone 14 at a great price. The device feels premium and there have been no issues with performance or battery life.",
+  image: "/images/useIcon.png",
+},
+{
+  name: "Priyanka Reddy",
+  location: "Hyderabad",
+  text: "The whole experience was hassle-free. From placing the order to receiving the phone, everything was handled professionally.",
+  image: "/images/useIcon.png",
+}
 ];
 
 const Testimonial = () => {

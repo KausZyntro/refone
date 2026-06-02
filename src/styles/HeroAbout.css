@@ -53,11 +53,18 @@
   height: auto;
   transition: transform 0.3s ease;
 }
+.store-btns img {
+  width: 126px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
 
 .store-btn img:hover {
   transform: scale(1.05);
 }
-
+.store-btns img:hover {
+  transform: scale(1.05);
+}
 .heroAbout-image {
   margin-top: 30px;
   display: flex;

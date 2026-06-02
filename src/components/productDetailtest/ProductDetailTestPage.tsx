@@ -27,12 +27,16 @@ import {
     FiRepeat,
 } from "react-icons/fi";
 import { FaCreditCard, FaShoppingCart } from "react-icons/fa";
+import CustomerReviews from "./CustomerReviews";
+import { productReviews } from "@/data/productReviews";
 
 interface ProductDetailTestPageProps {
     productId: string;
 }
 
+
 type TabKey = "highlights" | "specs" | "box" | "faq" | "reviews";
+
 
 const TABS: { key: TabKey; label: string }[] = [
     { key: "highlights", label: "Product Details" },
@@ -45,6 +49,8 @@ const TABS: { key: TabKey; label: string }[] = [
 const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId }) => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
+
+    const reviewData = productReviews[Number(productId)] || null;
 
     /* ── state ── */
     const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(null);
@@ -376,6 +382,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         )}
                         {activeTab === "specs" && <ProductSpecstest product={product} selectedVariant={selectedVariant} />}
                         {/* ... other tabs ... */}
+                        {activeTab === "reviews" && <CustomerReviews data={reviewData}/>}
                     </div>
                 </div>
 
@@ -401,7 +408,9 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                     {tab.key === "specs" && <ProductSpecstest product={product} selectedVariant={selectedVariant} />}
                                     {tab.key === "box" && <div>Handset, Cable, Guide</div>}
                                     {tab.key === "faq" && <div>FAQ content here</div>}
-                                    {tab.key === "reviews" && <div>Customer reviews content</div>}
+                                     {tab.key === "reviews" && (
+                                        <CustomerReviews data={reviewData} />
+                                        )}
                                 </div>
                             )}
                         </div>

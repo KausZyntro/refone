@@ -13,25 +13,25 @@ const HeroAbout = () => {
 
           <div className="heroAbout-buttons">
             <a
-              href="#"
+              href="https://play.google.com/store/apps/details?id=com.refone.customer"
               target="_blank"
               rel="noopener noreferrer"
               className="store-btn"
             >
               <img
-                src="https://s3ng.cashify.in/cashify/web/images/landing/svgs/google-play.svg"
+                src="/GooglePlay_Badge.svg"
                 alt="Google Play"
               />
             </a>
 
             <a
-              href="#"
+              href="https://apps.apple.com/in/app/refone/id6768933919"
               target="_blank"
               rel="noopener noreferrer"
-              className="store-btn"
+              className="store-btns"
             >
               <img
-                src="https://s3ng.cashify.in/cashify/web/images/landing/svgs/apple-store.svg"
+                src="/App_Store_Badge.svg"
                 alt="Apple Store"
               />
             </a>
