@@ -350,7 +350,7 @@
 }
 
 .form-input-addr:focus {
-    border-color: #00b894;
+    border-color: #006aaf;
     box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.1);
 }
 
@@ -414,5 +414,60 @@
 }
 
 .btn-submit:hover {
-    background: #00a884;
+    background: #006aaf 
+    
+    
+    
+    ;
+}
+
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-box {
+    background: white;
+    padding: 39px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+}
+.modal-box h3{
+    margin-bottom: 10px;
+}
+.modal-box p{
+    margin-bottom: 30px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.btn-cancel {
+    background: gray;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+}
+
+.btn-delete {
+    background: red;
+    color: white;
+    padding: 8px 12px;
+     border: none;
+    border-radius: 4px; 
 }

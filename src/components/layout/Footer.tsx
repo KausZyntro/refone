@@ -4,6 +4,8 @@ import "@/styles/Footer.css";
 import Image from "next/image";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import { FaPhoneAlt } from "react-icons/fa";
+import { FiMapPin } from "react-icons/fi";
 
 const FooterSection = ({ title, links }: { title: string, links: any[] }) => {
   const [open, setOpen] = useState(false);
@@ -59,46 +61,97 @@ const Footer = () => {
         {/* Top Section */}
         <div className="footer-top">
 
-          <div className="footer-brand">
-            <h2 className="logo">
-              <Link href="/">
-                <Image src={"/logo.png"} alt='logo' height={50} width={120} />
-              </Link>
-            </h2>
-            <p className="follow-text">Follow us on</p>
-            <div className="social-icons">
-              <a href="https://x.com/RefoneIndia" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
-              <a href="https://www.facebook.com/profile.php?id=61575393901517" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
-              <a href="https://www.instagram.com/refoneindia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-              <a href="https://www.youtube.com/@RefoneIndia" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
-            </div>
-          </div>
+  {/* Left Side */}
+  <div className="footer-brand">
+    {/* <h2 className="logo">
+      <Link href="/">
+        <Image src="/logo.png" alt="logo" height={50} width={120} />
+      </Link>
+    </h2> */}
 
-          <div className="footer-sections">
-            {Object.keys(staticFooterData).map((sectionKey) => (
-              <FooterSection
-                key={sectionKey}
-                title={sectionKey}
-                links={staticFooterData[sectionKey as keyof typeof staticFooterData]}
-              />
-            ))}
-          </div>
-        </div>
+    <div className="footer-address">
+      <strong>Contact Detail:</strong>
+
+      <p>
+        <FaPhoneAlt /> +91 90444 47828
+      </p>
+
+      <p>
+        <FiMapPin /> S-2/1A-81-R-I/101, Tagore Town Colony, Orderly Bazar,
+        Varanasi-221002
+      </p>
+
+      <p>
+       <FiMapPin /> 5/1 Ranglal Street, Watgunge, Kolkata-700023,
+        West Bengal
+      </p>
+    </div>
+  </div>
+
+  {/* Center Links */}
+  <div className="footer-sections">
+    {Object.keys(staticFooterData).map((sectionKey) => (
+      <FooterSection
+        key={sectionKey}
+        title={sectionKey}
+        links={
+          staticFooterData[
+            sectionKey as keyof typeof staticFooterData
+          ]
+        }
+      />
+    ))}
+  </div>
+
+  {/* Right Side Social */}
+  <div className="footer-social">
+    <p className="follow-text">Follow Us</p>
+
+    <div className="social-icons">
+      <a
+        href="https://x.com/RefoneIndia"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FaXTwitter />
+      </a>
+
+      <a
+        href="https://www.facebook.com/profile.php?id=61575393901517"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FaFacebook />
+      </a>
+
+      <a
+        href="https://www.instagram.com/refoneindia"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FaInstagram />
+      </a>
+
+      <a
+        href="https://www.youtube.com/@RefoneIndia"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FaYoutube />
+      </a>
+    </div>
+  </div>
+
+</div>
 
         {/* Bottom Section */}
-        <div className="footer-bottom">
-          <div className="footer-address">
-            <strong>Registered Office:</strong>
-            <p>
-              S-2/1A-81-R-I/101, Tagore Town Colony, Orderly Bazar Varanasi-221002
-            </p>
-            <p>5/1 Ranglal Street, Watgunge,, Kolkata-700023, West Bengal</p>
-          </div>
+       <div className="footer-bottom">
+  <div className="footer-copy">
+    © 2026 Refone Pvt. Ltd. All rights reserved.
+  </div>
+</div>
 
-          <div className="footer-copy">
-            © 2026 Zyntro Software Solution Pvt. Ltd. All rights reserved.
-          </div>
-        </div>
+       
 
       </div>
     </footer>

@@ -7,6 +7,7 @@ import { fetchAddresses, setSelectedAddress, addAddress, updateAddress, deleteAd
 import { FiPlus, FiCheckCircle, FiEdit2, FiTrash2 } from "react-icons/fi";
 import AddressModal from "../address/AddressModal";
 import "@/styles/AddressManagement.css";
+import { toast } from "react-toastify";
 
 const AddressSelector: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -15,6 +16,8 @@ const AddressSelector: React.FC = () => {
 
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [editingAddress, setEditingAddress] = React.useState<any>(null);
+    const [deleteId, setDeleteId] = React.useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = React.useState(false);
 
     useEffect(() => {
         if (user?.id && addresses.length === 0) {
@@ -22,18 +25,21 @@ const AddressSelector: React.FC = () => {
         }
     }, [dispatch, user?.id, addresses.length]);
 
+
     // Automatically select the first address if none is selected and addresses exist
-    useEffect(() => {
-        if (addresses.length > 0 && !selectedAddressId) {
-            // Find default address first, else pick first
-            const defaultAddr = addresses.find(a => a.isDefault);
-            if (defaultAddr) {
-                dispatch(setSelectedAddress(defaultAddr.id));
-            } else {
-                dispatch(setSelectedAddress(addresses[0].id));
-            }
-        }
-    }, [addresses, selectedAddressId, dispatch]);
+    // useEffect(() => {
+    //     if (addresses.length > 0 && !selectedAddressId) {
+    //         // Find default address first, else pick first
+    //         const defaultAddr = addresses.find(a => a.isDefault);
+    //         if (defaultAddr) {
+    //             dispatch(setSelectedAddress(defaultAddr.id));
+    //         } else {
+    //             dispatch(setSelectedAddress(addresses[0].id));
+    //         }
+    //     }
+    // }, [addresses, selectedAddressId, dispatch]);
+
+    // console.log("selectedAddressId", selectedAddressId);
 
     const handleSelectAddress = (id: number) => {
         dispatch(setSelectedAddress(id));
@@ -50,12 +56,49 @@ const AddressSelector: React.FC = () => {
         setIsModalOpen(true);
     };
 
-    const handleDeleteClick = (e: React.MouseEvent, id: number) => {
+    // const handleDeleteClick = (e: React.MouseEvent, id: number) => {
+    //     e.stopPropagation();
+    //     if (window.confirm("Are you sure you want to delete this address?")) {
+    //         dispatch(deleteAddress(id));
+    //     }
+    // };
+
+        const handleDeleteClick = (e: React.MouseEvent, id: number) => {
         e.stopPropagation();
-        if (window.confirm("Are you sure you want to delete this address?")) {
-            dispatch(deleteAddress(id));
-        }
+        setDeleteId(id);
     };
+
+    const confirmDelete = async () => {
+    if (!deleteId) return;
+     const wasSelected = selectedAddressId === deleteId;
+    setIsDeleting(true);
+
+    try {
+        await dispatch(deleteAddress(deleteId)).unwrap();
+        if (wasSelected) {
+            const remainingAddresses = addresses.filter(
+                (addr) => addr.id !== deleteId
+            );
+
+            if (remainingAddresses.length > 0) {
+                dispatch(setSelectedAddress(remainingAddresses[0].id));
+            } else {
+                dispatch(setSelectedAddress(null));
+            }
+        }
+
+        toast.success("Address deleted successfully");
+    } catch (err) {
+        toast.error("Failed to delete address");
+    } finally {
+        setIsDeleting(false);
+        setDeleteId(null);
+    }
+};
+
+const cancelDelete = () => {
+    setDeleteId(null);
+};
 
     const handleSaveAddress = async (formData: any) => {
         if (!user?.id) return;
@@ -158,8 +201,30 @@ const AddressSelector: React.FC = () => {
                 onSave={handleSaveAddress}
                 initialData={editingAddress}
             />
-        </div>
-    );
+            {deleteId && (
+            <div className="modal-overlay">
+                <div className="modal-box">
+                    <h3>Delete Address?</h3>
+                    <p>This action cannot be undone.</p>
+
+                    <div className="modal-actions">
+                        <button className="btn-cancel" onClick={cancelDelete}>
+                            Cancel
+                        </button>
+
+                       <button 
+                       className="btn-delete" 
+                       onClick={confirmDelete}
+                       disabled={isDeleting}
+                    >
+                            {isDeleting ? "Deleting..." : "Delete"}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+                </div>
+            );
 };
 
 export default AddressSelector;

@@ -52,6 +52,11 @@ export const placeOrder = createAsyncThunk(
             formData.append("order_id", payload.order_id);
             formData.append("pymt_id", payload.pymt_id.toString());
 
+            
+            for (const pair of formData.entries()) {
+  console.log(pair[0], pair[1]);
+}
+
             const response = await orderAPI.placeOrder(formData);
             return response.data; // assuming { success: true, data: { order_id: 123 } }
         } catch (error: any) {

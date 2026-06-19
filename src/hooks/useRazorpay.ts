@@ -22,6 +22,8 @@ export const useRazorpay = ({ amount, items, addressId }: UseRazorpayProps) => {
     const { user } = useSelector((state: RootState) => state.auth);
 
     const initiatePayment = useCallback(async () => {
+
+         let paymentCompleted = false;
         if (!user?.id || !addressId) {
             toast.error("User or address information missing.");
             return;
@@ -51,6 +53,7 @@ export const useRazorpay = ({ amount, items, addressId }: UseRazorpayProps) => {
             amount: Math.round(amount * 100), // Amount in paise
             currency: "INR",
             name: "Refone",
+            image: "https://refone.in/logo.png",
             description: "Order Payment",
             prefill: {
                 name: user.name || "",
@@ -61,6 +64,10 @@ export const useRazorpay = ({ amount, items, addressId }: UseRazorpayProps) => {
                 color: "#006aaf", // Refone branding color
             },
             handler: async (response: RazorpayResponse) => {
+
+    //             console.log("✅ PAYMENT SUCCESS");
+    // console.log(response)
+                paymentCompleted = true;
                 try {
                     // 1. Create Payment Status in Backend
                     // pmt_order_id is usually the razorpay_payment_id or razorpay_order_id
@@ -74,6 +81,7 @@ export const useRazorpay = ({ amount, items, addressId }: UseRazorpayProps) => {
                     ).unwrap();
 
                     const pymt_id = pmtRes.id;
+                    console.log(pymt_id)
 
                     // 2. Place Order(s) in Backend
                     // Loop through all items in the cart to place individual orders if the backend requires it.
@@ -105,13 +113,52 @@ export const useRazorpay = ({ amount, items, addressId }: UseRazorpayProps) => {
                 }
             },
             modal: {
-                ondismiss: () => {
+                 ondismiss: async () => {
+
+        //             console.log("⚠️ PAYMENT POPUP CLOSED");
+        // console.log("paymentCompleted =", paymentCompleted);
+                     if (paymentCompleted) {
+                        return;
+                    }
+                const res = await dispatch(
+                createPaymentStatus({
+                    pmt_order_id: "pmt_" + Date.now(),
+                    payment_status: "pending",
+                    payment_method: "online",
+                    amount,
+                })
+                ).unwrap();
+
+                // console.log("Pending status saved", res);
+
                     toast.info("Payment cancelled.");
                 },
             },
         };
 
-        initializeRazorpay(options);
+        initializeRazorpay(
+  options,
+  async (response) => {
+    try {
+      await dispatch(
+        createPaymentStatus({
+          pmt_order_id:
+            response?.error?.metadata?.order_id ||
+            "pmt_" + Date.now(),
+          payment_status: "failed",
+          payment_method: "online",
+          amount,
+        })
+      ).unwrap();
+
+      toast.error(
+        response?.error?.description || "Payment failed"
+      );
+    } catch (error) {
+      console.error("Failed payment status save error:", error);
+    }
+  }
+);
     }, [user, addressId, amount, items, dispatch, router]);
 
     return { initiatePayment };

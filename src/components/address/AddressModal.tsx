@@ -53,10 +53,57 @@ const AddressModal: React.FC<AddressModalProps> = ({ isOpen, onClose, onSave, in
 
     if (!isOpen) return null;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prev) => ({ ...prev, [name]: value }));
+    // };
+
+    const handleChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+) => {
+    const { name, value } = e.target;
+
+     if (name === "pincode" && value.length < 6) {
+        setFormData((prev) => ({
+            ...prev,
+            pincode: value,
+            city: "",
+            state: "",
+        }));
+        return;
+    }
+
+    setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+    }));
+
+    if (name === "pincode" && value.length === 6) {
+        try {
+            const res = await fetch(
+                `https://api.postalpincode.in/pincode/${value}`
+            );
+
+            const data = await res.json();
+
+            if (
+                data[0]?.Status === "Success" &&
+                data[0]?.PostOffice?.length > 0
+            ) {
+                const office = data[0].PostOffice[0];
+
+                setFormData((prev) => ({
+                    ...prev,
+                    pincode: value,
+                    city: office.District || "",
+                    state: office.State || "",
+                }));
+            }
+        } catch (error) {
+            console.error("Pincode lookup failed:", error);
+        }
+    }
+};
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

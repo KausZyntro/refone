@@ -30,9 +30,15 @@ export const loadRazorpayScript = (): Promise<boolean> => {
     });
 };
 
-export const initializeRazorpay = (options: RazorpayOptions) => {
+export const initializeRazorpay = (options: RazorpayOptions,onPaymentFailed?: (response: any) => void) => {
     if (typeof window !== "undefined" && (window as any).Razorpay) {
         const rzp = new (window as any).Razorpay(options);
+        rzp.on("payment.failed", function (response: any){
+            console.log("Payment Failed:", response);
+            if (onPaymentFailed) {
+                onPaymentFailed(response);
+            }
+        });
         rzp.open();
         return rzp;
     }

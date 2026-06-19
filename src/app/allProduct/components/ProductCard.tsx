@@ -44,10 +44,14 @@ const displayMrp = availableVariant?.pricing?.mrp || '0';
     const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(
     availableVariant || null
 );
+const slug = product.name
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+  .replace(/[^\w-]/g, "");
 
     return (
         <div className={styles.productCard}>
-            <Link href={`/product/${product.id}`} className={styles.cardLinkWrapper}>
+            <Link href={`/product/${product.id}/${slug}`} className={styles.cardLinkWrapper}>
                 <div className={styles.cardHeader}>
                     <span className={styles.bestsellerBadge}>Bestseller</span>
                     <button 
@@ -77,14 +81,14 @@ const displayMrp = availableVariant?.pricing?.mrp || '0';
                     <h3 className={styles.productName}>{product.name}</h3>
                     <p className={styles.productSpecs}>{displaySpecs}</p>
 
-                    <div className={styles.ratingRow}>
+                    {/* <div className={styles.ratingRow}>
                         <span className={styles.stars}>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                         </span>
                         <span className={styles.ratingScore}>4.6</span>
                         <span className={styles.ratingCount}>(12,458)</span>
-                    </div>
+                    </div> */}
 
                     {(() => {
 

@@ -13,10 +13,14 @@ const RefoneProductCard = ({ product }: { product: any }) => {
   const inboundStock = product.inbound_stock ?? 0;
   const isActive = product.is_active === 1;
   const isOutOfStock = stock <= 0 && inboundStock <= 0 && !isActive;
-  console.log(isOutOfStock)
+  // console.log(isOutOfStock)
+  const slug = product.name
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+  .replace(/[^\w-]/g, "");
 
   return (
-    <Link href={`/product/${product.id || product.slug || ""}`} style={{ textDecoration: 'none' }}>
+    <Link href={`/product/${product.id}/${slug}`} style={{ textDecoration: 'none' }}>
       <div className="refone-product-card-horizontal">
         <div className="card-left">
           <div className="product-image-container">
@@ -53,7 +57,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
               <span className="current-price">₹{Number(product.price).toLocaleString('en-IN', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
-              })}</span>
+              })}</span> 
               {product.mrp && (
                 <span className="mrp-price">₹{Number(product.mrp).toLocaleString('en-IN', {
                   minimumFractionDigits: 2,
