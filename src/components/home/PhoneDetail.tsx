@@ -3,18 +3,56 @@ import React from "react";
 import "@/styles/PhoneDetail.css";
 
 const categories = [
-  { name: "iPhone 14",id:"8", img: "/images/iPhone14.jpg" },
-  { name: "iPhone 14 Pro",id:"6", img: "/images/iPhone14Pro.jpg" },
-  { name: "iPhone 13", id:"9", img: "/images/iphone131.jpg" },
-  { name: "iPhone 15", id:"4", img: "/images/iPhone15Pink.webp" },
-  { name: "iPhone 15 Pro", id:"2", img: "/images/iphone15pro.webp" },
-  { name: "iPhone 15 Pro Max", id:"1", img: "/images/iphone15promax.webp" },
-  { name: "iPhone 15 Plus", id:"3", img: "/images/iphone15plus.jpeg" },
-  { name: "iPhone 14 Pro Max", id:"5", img: "/images/iphone14promax.webp" },
-  { name: "All Phones", isAll: true },
+  {
+    name: "iPhone 14",
+    id: "7",
+    slug: "iphone-14",
+    img: "/images/iPhone14.jpg",
+  },
+  {
+    name: "iPhone 14 Pro",
+    id: "6",
+    slug: "iphone-14-pro",
+    img: "/images/iPhone14Pro.jpg",
+  },
+  {
+    name: "iPhone 13",
+    id: "8",
+    slug: "iphone-13",
+    img: "/images/iphone131.jpg",
+  },
+  {
+    name: "iPhone 15",
+    id: "4",
+    slug: "iphone-15",
+    img: "/images/iPhone15Pink.webp",
+  },
+  {
+    name: "iPhone 15 Pro",
+    id: "2",
+    slug: "iphone-15-pro",
+    img: "/images/iphone15pro.webp",
+  },
+  {
+    name: "iPhone 15 Plus",
+    id: "3",
+    slug: "iphone-15-plus",
+    img: "/images/iphone15plus.jpeg",
+  },
+  // {
+  //   name: "iPhone 14 Pro Max",
+  //   id: "5",
+  //   slug: "iphone-14-pro-max",
+  //   img: "/images/iphone14promax.webp",
+  // },
+  {
+    name: "All Phones",
+    slug: "allProduct?page=1",
+    isAll: true,
+  },
 ];
-
-
+ console.log("this is cat")
+ console.log(categories)
 
 const PhoneDetail = () => {
   return (
@@ -26,7 +64,7 @@ const PhoneDetail = () => {
 
       <div className="category-grid">
         {categories.map((cat, index) => (
-          <a href={`/product/${cat.id}`} key={index} className="category-item">
+          <a href= {cat.isAll ? `${cat.slug}` : `/product/${cat.id}/${cat.slug}`} key={index} className="category-item">
             <div className="category-icon-wrapper">
               {cat.isAll ? (
                 <div className="all-categories-icon">
