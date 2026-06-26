@@ -11,7 +11,7 @@ const FooterSection = ({ title, links }: { title: string, links: any[] }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="footer-section">
+    <div className="footer-section"  id="help-center">
       <div
         className="footer-section-header"
         onClick={() => setOpen(!open)}

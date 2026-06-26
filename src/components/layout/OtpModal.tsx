@@ -77,7 +77,10 @@ const OtpModal = ({
             {otp.map((digit, index) => (
               <input
                 key={index}
-                type="text"
+                // type="text"
+                type="tel"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 maxLength={1}
                 className="otp-input"
                 value={digit}

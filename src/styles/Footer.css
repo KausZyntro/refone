@@ -28,7 +28,7 @@
 .logo {
   display: inline-block;
   transition: transform 0.3s ease;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .logo:hover {

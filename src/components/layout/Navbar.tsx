@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import "@/styles/Navbar.css";
 
 import {
@@ -103,6 +103,14 @@ const Navbar = () => {
   const CITY_KEY = "user_city";
 const CITY_TS_KEY = "user_city_ts";
 const ONE_DAY = 24 * 60 * 60 * 1000;
+
+
+const handleClickForDownload = () => {
+  router.push('/#download-app-section');
+};
+const handleClickForHelpCenter = () => {
+  router.push('/#help-center');
+};
 
 // useEffect(() => {
 //   const savedCity = localStorage.getItem(CITY_KEY);
@@ -375,10 +383,10 @@ useEffect(() => {
             </div>
           </div>
           <div className="utility-right">
-            <div className="utility-item"><img src="https://img.icons8.com/ios/16/666666/smartphone.png" alt="app" /> Download App</div>
-            <div className="utility-item" onClick={getLocation}><FiMapPin /> Store Locator</div>
+            <div className="utility-item" onClick={handleClickForDownload}><img src="https://img.icons8.com/ios/16/666666/smartphone.png" alt="app" /> Download App</div>
+            {/* <div className="utility-item" onClick={getLocation}><FiMapPin /> Store Locator</div> */}
             <div className="utility-item"><img src="https://img.icons8.com/ios/16/666666/truck.png" alt="order" /> Track Order</div>
-            <div className="utility-item"><img src="https://img.icons8.com/ios/16/666666/help.png" alt="help" /> Help Center</div>
+            <div className="utility-item" onClick={handleClickForHelpCenter}><img src="https://img.icons8.com/ios/16/666666/help.png" alt="help" /> Help Center</div>
           </div>
         </div>
 

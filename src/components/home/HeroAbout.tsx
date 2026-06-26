@@ -2,8 +2,9 @@ import React from "react";
 import "@/styles/HeroAbout.css";
 
 const HeroAbout = () => {
+
   return (
-    <div className="container">
+    <div className="container"  id="download-app-section">
       <div className="heroAbout-container">
         <div className="heroAbout-content">
           <h2 className="heroAbout-title">Download the App</h2>
