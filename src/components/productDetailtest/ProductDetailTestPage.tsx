@@ -199,7 +199,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
 //     }
 // };
 
-    const getRelatedProducts = async () => {
+   const getRelatedProducts = async () => {
     if (!product?.name) return;
 
     try {
@@ -208,16 +208,14 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         const response = await productAPI.getRelatedProducts(product.name);
 
         if (response.success) {
-            const allVariants = response.pdata
+            const relatedProducts = response.pdata
                 .filter((item: any) => item.id !== product.id)
-                .flatMap((item: any) =>
-                    item.variants.map((variant: any) => ({
-                        ...item,
-                        variants: [variant], // ProductCard ke liye sirf ye variant
-                    }))
-                );
+                .map((item: any) => ({
+                    ...item,
+                    variants: item.variants.length ? [item.variants[0]] : [],
+                }));
 
-            setRelatedProducts(allVariants);
+            setRelatedProducts(relatedProducts);
         }
     } catch (error) {
         console.error("Related products error:", error);
