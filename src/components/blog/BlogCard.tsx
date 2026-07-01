@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './BlogCard.module.css';
 import { BlogPost } from '@/types/blog';
+import { getImageUrl } from '@/app/blog/page';
 
 interface BlogCardProps {
   blog: BlogPost;
@@ -16,11 +17,19 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   const title = blog?.title?.rendered || blog?.title || 'Untitled';
   const slug = blog?.slug || '';
   
-  const coverImage = blog?._embedded?.['wp:featuredmedia']?.[0]?.source_url 
-                  || blog?.yoast_head_json?.og_image?.[0]?.url 
-                  || blog?.jetpack_featured_media_url 
-                  || blog?.coverImage 
-                  || '';
+  // const coverImage = blog?._embedded?.['wp:featuredmedia']?.[0]?.source_url 
+  //                 || blog?.yoast_head_json?.og_image?.[0]?.url 
+  //                 || blog?.jetpack_featured_media_url 
+  //                 || blog?.coverImage 
+  //                 || '';
+
+  const coverImage = getImageUrl(
+  blog?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+  blog?.yoast_head_json?.og_image?.[0]?.url ||
+  blog?.jetpack_featured_media_url ||
+  blog?.coverImage ||
+  ""
+);
 
   let category = 'Blog';
   if (blog?._embedded?.['wp:term']?.[0]?.[0]?.name) {

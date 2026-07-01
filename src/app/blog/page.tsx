@@ -4,14 +4,21 @@ import BlogCard from '@/components/blog/BlogCard';
 import { BlogPost } from '@/types/blog';
 import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Blog | Refone',
-  description: 'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
-  alternates: {
-    canonical: '/blog',
-  },
-};
+// export const metadata: Metadata = {
+//   title: 'Blog | Refone',
+//   description: 'Read the latest updates, tips, and news about refurbished iPhones from Refone.',
+//   alternates: {
+//     canonical: '/blog',
+//   },
+// };
+export const getImageUrl = (url: string) => {
+  if (!url) return "";
 
+  return url.replace(
+    "https://refones.com/blogs/wp-content/uploads/",
+    "/blog-images/"
+  );
+};
 // Fetch function integrated directly into the page
 // async function getBlogs(): Promise<BlogPost[]> {
 //   const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'https://refones.com';

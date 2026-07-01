@@ -141,7 +141,13 @@ export default async function BlogDetailPage({ params }: Props) {
   // const contentHtml = blog?.content?.rendered || blog?.content || '';
 
   const rawHtml = blog?.content?.rendered || blog?.content || '';
-const contentHtml = fixTOCLinks(rawHtml);
+// const contentHtml = fixTOCLinks(rawHtml);
+const contentHtml = fixTOCLinks(
+  rawHtml.replaceAll(
+    "https://refones.com/blogs/wp-content/uploads/",
+    "/blog-images/"
+  )
+);
 
 const faqData = blog?.yoast_head_json?.schema?.["@graph"]
   ?.find((item: any) => item["@type"] === "FAQPage");

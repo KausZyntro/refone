@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Return Policy | Refone",
+  title: " Refone Replacement Policy | Easy Returns & Customer Support",
+  description:" Read Refone replacement policy for certified refurbished iPhones. Learn about returns, refunds, eligibility, and customer protection.",
   alternates: {
-    canonical: "/return-policy",
+    canonical: "https://refone.co.in/return-policy",
   },
 };
 

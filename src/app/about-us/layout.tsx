@@ -2,9 +2,9 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About Us | Refone",
-  description: "Learn more about Refone, our mission, and our premium refurbished iPhones.",
+  description: "Refone sells only Super Quality certified refurbished iPhones — 52-point inspection, 90%+ battery, 12-month warranty. Trusted store based in Varanasi, India.",
   alternates: {
-    canonical: "/about-us-new",
+    canonical: "https://refone.co.in/about-us",
   },
 };
 

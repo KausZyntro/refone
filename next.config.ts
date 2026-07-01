@@ -30,6 +30,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+   async rewrites() {
+    return [
+      {
+        source: "/test-image",
+        destination:
+          "https://refones.com/blogs/wp-content/uploads/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

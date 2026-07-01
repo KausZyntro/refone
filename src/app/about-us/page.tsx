@@ -92,7 +92,7 @@ const AboutUsPage = () => {
                 <div className={styles.contentWrapper}>
                     <div className={styles.textSide}>
                         <h2 className={styles.sectionHeading}>
-                            {pageData?.title || 'About RefOne'}
+                            {pageData?.title || 'About Refone'}
                         </h2>
 
                         {/* {loading ? ( */}
