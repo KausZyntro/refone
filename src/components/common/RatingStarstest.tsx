@@ -22,7 +22,7 @@ const RatingStarstest: React.FC<RatingStarsTestProps> = ({ rating, reviewCount }
                     )
                 )}
             </div>
-            <span className={styles.reviewCount}>({reviewCount.toLocaleString("en-IN")} Ratings)</span>
+            {/* <span className={styles.reviewCount}>({reviewCount.toLocaleString("en-IN")} Ratings)</span> */}
         </div>
     );
 };

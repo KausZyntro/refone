@@ -88,7 +88,7 @@ const HeroSlider = () => {
               <div className="hero-stats-new">
                 <div className="stat-item-new">
                   <div className="stat-icon"><FaCheckCircle /></div>
-                  <span>32+ Quality Checks</span>
+                  <span>52+ Quality Checks</span>
                 </div>
                 <div className="stat-item-new">
                   <div className="stat-icon"><FaShieldAlt /></div>

@@ -94,7 +94,7 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
             <div className={styles.trustChecks}>
                 <div className={styles.trustCheck}>
                     <FiShield className={styles.trustIcon} />
-                    <span>32+ Quality Checks</span>
+                    <span>52+ Quality Checks</span>
                 </div>
                 <div className={styles.trustCheck}>
                     <FiCheckCircle className={styles.trustIcon} />

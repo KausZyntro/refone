@@ -43,11 +43,26 @@ export const fetchFilters = createAsyncThunk(
         }
     },
 );
+export const fetchRelatedProducts = createAsyncThunk(
+    "product/fetchRelatedProducts",
+    async (search: string, { rejectWithValue }) => {
+        try {
+            const response = await productAPI.getRelatedProducts(search);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data?.message ||
+                    "Failed to fetch related products"
+            );
+        }
+    }
+);
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface ProductState {
     product: any | null; // For single product detail
-    products: any[]; // For listing
+    products: any[];
+    relatedProducts: any[]; // For listing
     pagination: {
         current_page: number;
         last_page: number;
@@ -56,16 +71,19 @@ interface ProductState {
     filters: any | null; // Available filter options from API
     isLoading: boolean;
     isProductsLoading: boolean;
+    isRelatedProductsLoading: boolean;
     error: string | null;
 }
 
 const initialState: ProductState = {
     product: null,
     products: [],
+    relatedProducts: [],
     pagination: null,
     filters: null,
     isLoading: false,
     isProductsLoading: true,
+    isRelatedProductsLoading: false,
     error: null,
 };
 

@@ -303,3 +303,81 @@
     gap: 8px;
     margin-bottom: 10px;
 }
+
+
+
+/* ===========================
+   Related Products
+=========================== */
+
+.relatedSection{
+    background:#fff;
+    border:1px solid #e8e8e8;
+    border-radius:12px;
+    padding:24px;
+}
+
+.relatedHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.relatedHeader h2{
+    font-size:22px;
+    font-weight:700;
+    color:#222;
+}
+
+/* Swiper */
+
+.relatedSection :global(.swiper){
+    width:100%;
+    overflow:hidden;
+    padding:6px;
+}
+
+.relatedSection :global(.swiper-wrapper){
+    align-items:stretch;
+}
+
+.relatedSection :global(.swiper-slide){
+    height:auto;
+    display:flex;
+}
+
+.relatedSection :global(.swiper-slide > *) {
+    width:100%;
+}
+
+.relatedProductsSection {
+    width: 100%;
+    max-width: 1380px; /* ya 1400px, jitna page ka container hai */
+    margin: 32px auto;
+    padding: 0 20px;
+}
+
+.relatedTitle {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Swiper ko full width do */
+.relatedProductsSection :global(.swiper) {
+    width: 100%;
+}
+
+.relatedProductsSection :global(.swiper-wrapper) {
+    align-items: stretch;
+}
+
+.relatedProductsSection :global(.swiper-slide) {
+    height: auto;
+    display: flex;
+}
+
+.relatedProductsSection :global(.swiper-slide > *) {
+    width: 100%;
+}

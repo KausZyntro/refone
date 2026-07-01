@@ -6,8 +6,8 @@ const FeaturesBanner = () => {
   const features = [
     {
       icon: <FaCheckCircle />,
-      title: "32+ Quality Checks",
-      description: "Every phone is tested across 32+ points"
+      title: "52+ Quality Checks",
+      description: "Every phone is tested across 52+ points"
     },
     {
       icon: <FaShieldAlt />,

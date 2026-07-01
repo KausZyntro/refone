@@ -29,6 +29,9 @@ import {
 import { FaCreditCard, FaShoppingCart } from "react-icons/fa";
 import CustomerReviews from "./CustomerReviews";
 import { productReviews } from "@/data/productReviews";
+import { Swiper, SwiperSlide } from "swiper/react";
+import ProductCard from "@/app/allProduct/components/ProductCard";
+// import ProductCard from "../ui/ProductCard";
 
 interface ProductDetailTestPageProps {
     productId: string;
@@ -58,6 +61,8 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     const [openAccordion, setOpenAccordion] = useState<TabKey | null>(null);
     const [addedToCart, setAddedToCart] = useState(false);
     const [isCartLoading, setIsCartLoading] = useState(false);
+    const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+    const [relatedLoading, setRelatedLoading] = useState(false);
 
     /* ── redux ── */
     const { product, isLoading } = useSelector((state: RootState) => state.product);
@@ -80,6 +85,11 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
             setSelectedVariant(inStockVariant || product.variants[0]);
         }
     }, [product]);
+    useEffect(() => {
+    if (product?.name) {
+        getRelatedProducts();
+    }
+}, [product]);
 
     /* ── derived values ── */
     const sellingPrice = Number(selectedVariant?.pricing?.selling_price ?? 0);
@@ -164,6 +174,57 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         } catch (err: any) { toast.error(err || "Failed to proceed to checkout"); }
         finally { setIsCartLoading(false); }
     };
+
+//     const getRelatedProducts = async () => {
+//     if (!product?.name) return;
+
+//     try {
+//         setRelatedLoading(true);
+
+//         const response = await productAPI.getRelatedProducts(product.name);
+//         // console.log("Response:", response);
+// // console.log("Response.data:", response?.success);
+
+//         if (response.success) {
+//             const filteredProducts = response.pdata.filter(
+//                 (item: any) => item.id !== product.id
+//             );
+
+//             setRelatedProducts(filteredProducts);
+//         }
+//     } catch (error) {
+//         console.error("Related products error:", error);
+//     } finally {
+//         setRelatedLoading(false);
+//     }
+// };
+
+    const getRelatedProducts = async () => {
+    if (!product?.name) return;
+
+    try {
+        setRelatedLoading(true);
+
+        const response = await productAPI.getRelatedProducts(product.name);
+
+        if (response.success) {
+            const allVariants = response.pdata
+                .filter((item: any) => item.id !== product.id)
+                .flatMap((item: any) =>
+                    item.variants.map((variant: any) => ({
+                        ...item,
+                        variants: [variant], // ProductCard ke liye sirf ye variant
+                    }))
+                );
+
+            setRelatedProducts(allVariants);
+        }
+    } catch (error) {
+        console.error("Related products error:", error);
+    } finally {
+        setRelatedLoading(false);
+    }
+};
 
     const toggleAccordion = (key: TabKey) => {
         setOpenAccordion(openAccordion === key ? null : key);
@@ -352,8 +413,8 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                     <div className={styles.serviceCard}>
                                         <div className={styles.serviceCardIconWrap}><FiRefreshCw /></div>
                                         <div className={styles.serviceCardBody}>
-                                            <span className={styles.serviceCardTitle}>32+ Quality Checks</span>
-                                            <span className={styles.serviceCardDesc}>Tested across 32+ points</span>
+                                            <span className={styles.serviceCardTitle}>52+ Quality Checks</span>
+                                            <span className={styles.serviceCardDesc}>Tested across 52+ points</span>
                                         </div>
                                     </div>
                                     <div className={styles.serviceCard}>
@@ -385,6 +446,38 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         {activeTab === "reviews" && <CustomerReviews data={reviewData}/>}
                     </div>
                 </div>
+
+               <div className={styles.relatedProductsSection}>
+    <h2 className={styles.relatedTitle}>Product you may like</h2>
+
+    <Swiper
+        slidesPerView={2}
+        spaceBetween={16}
+        breakpoints={{
+            768: {
+                slidesPerView: 3,
+            },
+            1024: {
+                slidesPerView: 4,
+                spaceBetween: 16,
+            },
+            1280: {
+                slidesPerView: 5,
+                spaceBetween: 18,
+            },
+            1440: {
+                slidesPerView: 6,
+                spaceBetween: 20,
+            },
+        }}
+    >
+        {relatedProducts.map((product) => (
+            <SwiperSlide  key={`${product.id}-${product.variants[0].id}`}>
+                <ProductCard product={product} />
+            </SwiperSlide>
+        ))}
+    </Swiper>
+</div>
 
                 {/* MOBILE ACCORDIONS */}
                 <div className={styles.mobileAccordions}>

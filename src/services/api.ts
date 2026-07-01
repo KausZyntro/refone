@@ -171,6 +171,13 @@ export const productAPI = {
         const response = await api.get(`product-list${params ? `?${params}` : ""}`, config);
         return response.data;
     },
+    getRelatedProducts: async (search: string) => {
+    const response = await api.get(
+        `/products/products-you-may-like?search=${encodeURIComponent(search)}`
+    );
+
+    return response.data;
+    },
 }
 
 export const addressAPI = {
