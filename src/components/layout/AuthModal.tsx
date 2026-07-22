@@ -136,7 +136,7 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
 
             <input
               type="text"
-              placeholder={isLogin ? "Phone Number or Email" : "Email"}
+              placeholder={isLogin ? "Enter your Email" : "Email"}
               className="auth-input"
               value={email}
               onChange={(e) => {
