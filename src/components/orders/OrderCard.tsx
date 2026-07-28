@@ -11,6 +11,11 @@ export interface OrderItemAPI {
     order_date: string;
     product_id: number;
     variant_id: number;
+    invoice: {
+        invoice_no: string;
+        invoice_url: string;
+        status: string;
+    };
     product: {
         id: number;
         name: string;
@@ -92,6 +97,9 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                 )}
                 {(order.status === 'placed' || order.status === 'processing') && (
                     <button className="btn-order btn-danger">Cancel Order</button>
+                )}
+                {(order.status === 'placed') && (
+                    <button className="btn-order btn-primary" onClick={() => window.open( order?.invoice?.invoice_url, "_blank")}>Download Invoice</button>
                 )}
             </div>
         </div>

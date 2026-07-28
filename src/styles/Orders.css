@@ -523,6 +523,16 @@
     background: #ff3b30;
     color: white;
 }
+.btn-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+    background: transparent;
+}
+
+.btn-primary:hover {
+    background: #0d6efd;
+    color: white;
+}
 
 /* Empty State */
 .empty-orders {
