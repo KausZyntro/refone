@@ -19,8 +19,9 @@ export async function generateMetadata({ params }: { params: Promise<{  id: stri
 
 async function getProduct(id: string) {
   const data = await productAPI.getProducts();
-const product = data.data.find(
-    (item: any) => item.id === Number(id)
+  // console.log(data);
+const product = data?.data?.find(
+    (item: any) => item?.id === Number(id)
   );
 
   // console.log("Selected Product:", product);
@@ -41,22 +42,22 @@ const Page = async ({ params }: { params: Promise<{ id: string; slug: string }> 
   const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
-  name: product.name,
-  description: product.description,
+  name: product?.name,
+  description: product?.description,
   category: "Refurbished Smartphones",
   brand: {
     "@type": "Brand",
-    name: product.brand.name,
+    name: product?.brand.name,
   },
-  hasVariant: product.variants.map((variant: any) => ({
+  hasVariant: product?.variants?.map((variant: any) => ({
     "@type": "Product",
-    sku: variant.sku,
-    color: variant.color,
+    sku: variant?.sku,
+    color: variant?.color,
     additionalProperty: [
       {
         "@type": "PropertyValue",
         name: "Storage",
-        value: variant.storage,
+        value: variant?.storage,
       },
        {
       "@type": "PropertyValue",
@@ -87,10 +88,10 @@ const Page = async ({ params }: { params: Promise<{ id: string; slug: string }> 
     ],
     offers: {
       "@type": "Offer",
-      price: variant.pricing.selling_price,
+      price: variant?.pricing?.selling_price,
       priceCurrency: "INR",
       availability:
-        variant.inventory.total_stock > 0
+        variant?.inventory?.total_stock > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
     },
