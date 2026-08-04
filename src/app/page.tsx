@@ -30,7 +30,7 @@ export default async function Home() {
       <HeroSlider />
       <PhoneDetail />
       {/* <ProductSlider products={products} /> */}
-      <ProductSlider/>
+      {/* <ProductSlider/> */}
       {/* <Testimonials /> */}
       {/* <FAQSection /> */}
       <FeaturesBanner/>

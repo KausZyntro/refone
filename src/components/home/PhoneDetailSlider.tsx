@@ -47,17 +47,17 @@ const categories = [
     name: "iPhone 13 Pro",
     id: "18",
     slug: "iphone-13-pro",
-    img: "/images/iphone-13pro.jpg",
+    img: "/images/iphone15plus.jpeg",
   },
   {
-    name: "iPhone 12",
-    id: "16",
-    slug: "iphone-12",
-    img: "/images/iphone12.webp",
+    name: "iPhone 13",
+    id: "8",
+    slug: "iphone-13",
+    img: "/images/iphone131.jpg",
   },
 ];
 
-const PhoneDetail = () => {
+const PhoneDetailSlider = () => {
   return (
     <section className="category-section">
       <div className="category-header">
@@ -134,4 +134,4 @@ const PhoneDetail = () => {
   );
 };
 
-export default PhoneDetail;
+export default PhoneDetailSlider;
