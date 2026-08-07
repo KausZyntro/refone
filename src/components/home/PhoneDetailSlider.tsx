@@ -62,7 +62,7 @@ const PhoneDetailSlider = () => {
     <section className="category-section">
       <div className="category-header">
         <h2>Shop By Category</h2>
-        <a href="/allProduct" className="view-all-link">View All</a>
+        <a href="/allProduct" className="view-all-link">View All &nbsp;›</a>
       </div>
 
       <div className="category-slider-container">

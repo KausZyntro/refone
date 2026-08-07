@@ -22,6 +22,7 @@ import FeaturesBanner from "@/components/home/FeaturesBanner";
 import HomePageSeoData from "@/components/HomePageSeoData/HomePageSeoData";
 import HomeBlogSlider from "@/components/blog/HomeBlogSlider";
 import { blogService } from "@/services/blogService";
+import ReelsSection from "@/components/home/ReelsSection";
 
 export default async function Home() {
    const blogs = await blogService.getBlogs();
@@ -33,6 +34,7 @@ export default async function Home() {
       {/* <ProductSlider/> */}
       {/* <Testimonials /> */}
       {/* <FAQSection /> */}
+      <ReelsSection />
       <FeaturesBanner/>
       <FAQSection /> 
       <Testimonials />

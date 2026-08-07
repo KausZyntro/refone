@@ -1,0 +1,327 @@
+/* ═══════════════════════════════════════════════
+   ReelsSection.css
+   Instagram Reels Section — Premium Dark Design
+   ═══════════════════════════════════════════════ */
+
+/* ── Section wrapper ─────────────────────────── */
+.reels-section {
+  margin: 0 0 32px;
+  padding: 0;
+}
+
+.reels-section .container {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* ── Section header ──────────────────────────── */
+.reels-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.reels-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.reels-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #fff;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(220, 39, 67, 0.35);
+}
+
+.reels-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 2px;
+  letter-spacing: -0.3px;
+}
+
+.reels-subtitle {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
+.reels-view-all {
+  font-size: 13px;
+  font-weight: 600;
+  color: #006aaf;
+  white-space: nowrap;
+  padding: 8px 16px;
+  border: 1.5px solid #006aaf;
+  border-radius: 20px;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.reels-view-all:hover {
+  background: #006aaf;
+  color: #fff;
+}
+
+/* ── Desktop Grid (≥ 1024px) ─────────────────── */
+.reels-grid-desktop {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+
+.reels-slider-mobile {
+  display: none;
+}
+
+/* ── Reel Card ───────────────────────────────── */
+.reel-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 9 / 16;
+  background: #111;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.28s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.reel-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+}
+
+/* ── Video ───────────────────────────────────── */
+.reel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+}
+
+/* ── Gradient overlay ────────────────────────── */
+.reel-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08) 0%,
+    transparent 30%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Top badge ───────────────────────────────── */
+.reel-top {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+.reel-insta-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f09433, #dc2743, #bc1888);
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Center controls ─────────────────────────── */
+.reel-center-controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.reel-play-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.reel-card:hover .reel-play-btn,
+.reel-play-btn--visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Spinner ─────────────────────────────────── */
+.reel-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: reel-spin 0.8s linear infinite;
+}
+
+@keyframes reel-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── External link (error fallback) ──────────── */
+.reel-external-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 22px;
+  pointer-events: all;
+}
+
+/* ── Bottom meta ─────────────────────────────── */
+.reel-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 14px 12px 14px;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.reel-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.reel-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 4px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.reel-views {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.reel-views-icon {
+  font-size: 9px;
+}
+
+/* ── Mute button ─────────────────────────────── */
+.reel-mute-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 5;
+}
+
+.reel-mute-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+/* ── Responsive: tablet (< 1024px) ──────────── */
+@media (max-width: 1023px) {
+  .reels-grid-desktop {
+    display: none;
+  }
+
+  .reels-slider-mobile {
+    display: block;
+  }
+}
+
+/* ── Responsive: mobile ──────────────────────── */
+@media (max-width: 768px) {
+  .reels-title {
+    font-size: 18px;
+  }
+
+  .reels-subtitle {
+    font-size: 12px;
+  }
+
+  .reels-header-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
+  }
+
+  .reels-view-all {
+    font-size: 12px;
+    padding: 6px 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reels-title {
+    font-size: 16px;
+  }
+
+  .reels-header {
+    margin-bottom: 14px;
+  }
+}

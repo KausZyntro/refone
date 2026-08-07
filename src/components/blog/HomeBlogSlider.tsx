@@ -6,50 +6,130 @@ interface Props {
   blogs: any[];
 }
 
+// Category badge color map
+const CATEGORY_COLORS: Record<string, string> = {
+  smartphones: "#7c3aed",
+  "tips & tricks": "#0ea5e9",
+  "e-waste": "#10b981",
+  "refone updates": "#006aaf",
+  technology: "#f59e0b",
+  default: "#006aaf",
+};
+
+function getCategoryColor(category: string): string {
+  const key = category.toLowerCase();
+  for (const [k, v] of Object.entries(CATEGORY_COLORS)) {
+    if (key.includes(k)) return v;
+  }
+  return CATEGORY_COLORS.default;
+}
+
+function getReadTime(content: string): string {
+  const words = content?.replace(/<[^>]+>/g, "").split(/\s+/).length || 0;
+  const mins = Math.max(1, Math.round(words / 200));
+  return `${mins} min read`;
+}
+
 export default function HomeBlogSlider({ blogs }: Props) {
   return (
     <section className={styles.section}>
-        <div className={styles.container}>
-      <div className={styles.header}>
-        <h2>Latest Blogs</h2>
+      <div className={styles.container}>
+        {/* Header */}
+        <div className={styles.header}>
+          <h2 className={styles.heading}>Recent Articles</h2>
+          <Link href="/blog" className={styles.viewAll}>
+            View All Articles&nbsp;→
+          </Link>
+        </div>
 
-        <Link href="/blog" className={styles.viewMore}>
-          View More →
-        </Link>
-      </div>
+        {/* Cards grid */}
+        <div className={styles.grid}>
+          {blogs.slice(0,4).map((blog) => {
+            const image =
+              blog?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+              blog?.yoast_head_json?.og_image?.[0]?.url ||
+              blog?.jetpack_featured_media_url ||
+              blog?.coverImage ||
+              "";
 
-      <div className={styles.slider}>
-        {blogs.map((blog) => {
-          const image =
-            blog?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
-            blog?.yoast_head_json?.og_image?.[0]?.url ||
-            "";
+            const rawTitle =
+              blog?.title?.rendered || blog?.title || "Untitled";
+            const title = rawTitle.replace(/<[^>]+>/g, "");
 
-          return (
-            <Link
-              key={blog.id}
-              href={`/blog/${blog.slug}`}
-              className={styles.card}
-            >
-              <div className={styles.imageWrapper}>
-                <Image
-                  src={image}
-                  alt={blog.title.rendered}
-                  fill
-                  unoptimized
-                  className={styles.image}
-                />
+            const rawExcerpt =
+              blog?.excerpt?.rendered || blog?.excerpt || "";
+            const excerpt = rawExcerpt.replace(/<[^>]+>/g, "").trim();
 
-                <div className={styles.overlay} />
+            let category = "Blog";
+            if (blog?._embedded?.["wp:term"]?.[0]?.[0]?.name) {
+              category = blog._embedded["wp:term"][0][0].name;
+            } else if (blog?.category) {
+              category = blog.category;
+            }
 
-                <h3 className={styles.title}>
-                  {blog.title.rendered}
-                </h3>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+            const rawDate = blog?.date || blog?.publishedAt || "";
+            const formattedDate = rawDate
+              ? new Date(rawDate).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              : "";
+
+            const readTime = getReadTime(
+              blog?.content?.rendered || blog?.content || ""
+            );
+
+            const badgeColor = getCategoryColor(category);
+
+            return (
+              <Link
+                key={blog.id}
+                href={`/blog/${blog.slug}`}
+                className={styles.card}
+              >
+                {/* Image */}
+                <div className={styles.imageWrapper}>
+                  {image ? (
+                    <Image
+                      src={image}
+                      alt={title}
+                      fill
+                      unoptimized
+                      className={styles.image}
+                    />
+                  ) : (
+                    <div className={styles.imagePlaceholder} />
+                  )}
+                  {/* Category badge */}
+                  <span
+                    className={styles.badge}
+                    style={{ background: badgeColor }}
+                  >
+                    {category}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div className={styles.content}>
+                  <h3 className={styles.title}>{title}</h3>
+                  {excerpt && (
+                    <p className={styles.excerpt}>{excerpt}</p>
+                  )}
+                  <div className={styles.meta}>
+                    {formattedDate && (
+                      <span className={styles.date}>{formattedDate}</span>
+                    )}
+                    {formattedDate && readTime && (
+                      <span className={styles.dot}>·</span>
+                    )}
+                    <span className={styles.readTime}>{readTime}</span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

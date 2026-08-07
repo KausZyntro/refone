@@ -29,6 +29,20 @@
   align-items: center;
   gap: 4px;
 }
+.category-header .view-all-link{
+      color: rgb(0, 106, 175);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    border-width: 1.5px;
+    border-style: solid;
+    border-color: rgb(0, 106, 175);
+    border-image: none;
+    border-radius: 20px;
+    padding: 7px 16px;
+    text-decoration: none;
+    transition: background 0.22s, color 0.22s;
+}
 
 .category-header .view-all-link:hover {
   color: #004d80;
