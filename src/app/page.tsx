@@ -26,6 +26,7 @@ import ReelsSection from "@/components/home/ReelsSection";
 
 export default async function Home() {
    const blogs = await blogService.getBlogs();
+   console.log(blogs.slice(0,4))
   return (
     <div>
       <HeroSlider />

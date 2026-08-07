@@ -70,6 +70,9 @@
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.28s ease;
 }
+.card{
+  display: block;
+}
 
 .card:hover {
   transform: translateY(-5px);
