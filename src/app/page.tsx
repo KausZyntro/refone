@@ -38,7 +38,7 @@ export default async function Home() {
       <FeaturesBanner/>
       <FAQSection /> 
       <Testimonials />
-      <HomeBlogSlider blogs={blogs.slice(0, 6)} />
+      <HomeBlogSlider blogs={blogs.slice(0, 4)} />
       <HeroAbout />
       <HomePageSeoData />
       {/* <ExchangePopup /> */}

@@ -16,6 +16,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   default: "#006aaf",
 };
 
+
 function getCategoryColor(category: string): string {
   const key = category.toLowerCase();
   for (const [k, v] of Object.entries(CATEGORY_COLORS)) {
@@ -44,7 +45,7 @@ export default function HomeBlogSlider({ blogs }: Props) {
 
         {/* Cards grid */}
         <div className={styles.grid}>
-          {blogs.slice(0,4).map((blog) => {
+          {blogs.map((blog) => {
             const image =
               blog?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
               blog?.yoast_head_json?.og_image?.[0]?.url ||
