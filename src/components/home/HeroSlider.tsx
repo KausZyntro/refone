@@ -11,6 +11,7 @@ import ActionCards from "@/components/home/ActionCards";
 
 import "@/styles/HeroSlider.css";
 import { FaMobileAlt, FaShoppingCart, FaCheckCircle, FaShieldAlt, FaUndo, FaTruck, FaClock } from "react-icons/fa";
+import Link from "next/link";
 
 const WhyBuyCard = () => (
   <div className="why-buy-card">
@@ -58,6 +59,14 @@ const HeroSlider = () => {
         className="heroSwiper"
       >
         <SwiperSlide>
+            <Link href="/allProduct" className="discount-banner-slide">
+              <img
+                src="/discount.jpeg"
+                alt="Discount Banner"
+              />
+            </Link>
+          </SwiperSlide>
+        <SwiperSlide>
           <div className="slide mothers-day-slide">
             <div className="hero-content md-content">
               <span className="md-subtitle">Luxury for Less</span>
@@ -79,7 +88,7 @@ const HeroSlider = () => {
             </div>
           </div>
         </SwiperSlide>
-
+{/* 
         <SwiperSlide>
           <div className="slide">
             <div className="hero-content">
@@ -108,11 +117,11 @@ const HeroSlider = () => {
               <WhyBuyCard />
             </div>
           </div>
-        </SwiperSlide>
+        </SwiperSlide> */}
 
         <SwiperSlide>
           <div className="slide" style={{ background: 'linear-gradient(135deg, #fff3e0 0%, #ffffff 100%)' }}>
-            <div className="hero-content">
+            <div className="hero-content md-content">
               <h2>Sell Your Phone.<br /><span style={{ color: '#ff9800' }}>Best Price. Instantly.</span></h2>
               <p>Get the best value for your old smartphone. Free doorstep pickup and instant payment.</p>
               <div className="hero-stats-new">
@@ -140,9 +149,9 @@ const HeroSlider = () => {
           </div>
         </SwiperSlide>
 
-        <SwiperSlide>
+        {/* <SwiperSlide>
           <div className="slide" style={{ background: 'linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%)' }}>
-            <div className="hero-content">
+            <div className="hero-content md-content">
               <h2>Check Your Phone's<br /><span style={{ color: '#2196f3' }}>Current Market Value.</span></h2>
               <p>Wondering how much your phone is worth? Check the latest price in just 60 seconds.</p>
               <div className="hero-stats-new">
@@ -168,7 +177,7 @@ const HeroSlider = () => {
               <WhyBuyCard />
             </div>
           </div>
-        </SwiperSlide>
+        </SwiperSlide> */}
       </Swiper>
     </div>
   );

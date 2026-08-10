@@ -90,6 +90,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 150, 136, 0.3);
+  width: 50% !important;
 }
 
 .cta-btn-new:hover {
@@ -253,6 +254,7 @@
     object-fit: contain;
     transform: translateX(10px); /* Nudge it to the right */
   }
+  
 
   .cta-btn-new {
     padding: 10px 20px;

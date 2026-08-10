@@ -1,5 +1,6 @@
 .footer {
-  background: #ffffff;
+  /* background: #ffffff; */
+  background:linear-gradient(135deg, #0f466f, #006ab0);
   padding: 80px 20px 30px;
   color: #1a1a1a;
   font-family: "Inter", sans-serif;
@@ -44,7 +45,7 @@
 }
 
 .footer-address strong {
-  color: #111;
+  color: #fff;
   display: block;
   margin-bottom: 10px;
   font-size: 18px;
@@ -52,7 +53,7 @@
 
 .footer-address p {
   font-size: 14px;
-  color: #666666;
+  color: #fff;
   margin-bottom: 8px;
 }
 
@@ -74,7 +75,7 @@
   margin-bottom: 15px;
   font-size: 14px;
   font-weight: 600;
-  color: #666;
+  color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -132,7 +133,7 @@
   font-size: 18px;
   font-weight: 700;
   margin: 0;
-  color: #111;
+  color: #fff;
 }
 
 .arrow {
@@ -163,7 +164,7 @@
 
 .footer-links a {
   text-decoration: none;
-  color: #555;
+  color: #fff;
   font-size: 15px;
   transition: all 0.2s ease;
   position: relative;
@@ -203,7 +204,7 @@
 .footer-copy {
   text-align: center;
   font-size: 13px;
-  color: #666;
+  color: #fff;
 }
 
 /* =========================

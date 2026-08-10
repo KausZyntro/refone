@@ -1,6 +1,7 @@
 :root {
   --background: #ededed;
-  --foreground: #ededed;
+  /* --foreground: #ededed; */
+  --foreground: #fff;
 }
 
 
