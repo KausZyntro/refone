@@ -1,3 +1,6 @@
+.feature-section-row{
+  padding-top: 60px;
+}
 .features-banner-wrapper {
   display: flex;
   justify-content: space-between;

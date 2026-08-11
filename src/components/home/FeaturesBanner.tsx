@@ -27,7 +27,7 @@ const FeaturesBanner = () => {
   ];
 
   return (
-    <div className="container" style={{ marginTop: '0', marginBottom: '32px' }}>
+    <div className="container feature-section-row" style={{ marginTop: '0', marginBottom: '32px' }}>
       <div className="features-banner-wrapper">
         {features.map((feature, index) => (
           <div key={index} className="feature-item">

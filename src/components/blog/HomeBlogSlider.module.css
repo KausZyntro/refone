@@ -4,7 +4,8 @@
    ══════════════════════════════════════════════ */
 
 .section {
-  padding: 0 0 48px;
+  /* padding: 0 0 48px; */
+  padding: 60px 20px;
   background: transparent;
 }
 
@@ -24,7 +25,7 @@
 }
 
 .heading {
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 800;
   color: #1a1a2e;
   letter-spacing: -0.3px;
