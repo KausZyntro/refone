@@ -53,7 +53,7 @@ const HeroSlider = () => {
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        autoplay={{ delay: 8000, disableOnInteraction: false }}
         loop={true}
         effect="fade"
         className="heroSwiper"
@@ -66,18 +66,14 @@ const HeroSlider = () => {
               />
             </Link>
           </SwiperSlide>
-        <SwiperSlide>
+        {/* <SwiperSlide>
           <div className="slide mothers-day-slide">
             <div className="hero-content md-content">
               <span className="md-subtitle">Luxury for Less</span>
               <p className="md-title">Upto <br /><span>75% off</span></p>
               <div className="md-badge-wrapper">
-                {/* <div className="md-offer-badge">
-                  <span>Special for you</span>
-                  <strong>MOM</strong>
-                </div> */}
+               
               </div>
-              {/* <p className="md-discount">SPECIAL DISCOUNT <strong>55% OFF</strong> SALE</p> */}
               <button className="cta-btn-new md-btn" onClick={() => window.location.href = '/allProduct'}>Shop Now</button>
             </div>
             <div className="hero-image">
@@ -87,7 +83,7 @@ const HeroSlider = () => {
               <WhyBuyCard />
             </div>
           </div>
-        </SwiperSlide>
+        </SwiperSlide> */}
 {/* 
         <SwiperSlide>
           <div className="slide">
@@ -119,7 +115,7 @@ const HeroSlider = () => {
           </div>
         </SwiperSlide> */}
 
-        <SwiperSlide>
+        {/* <SwiperSlide>
           <div className="slide" style={{ background: 'linear-gradient(135deg, #fff3e0 0%, #ffffff 100%)' }}>
             <div className="hero-content md-content">
               <h2>Sell Your Phone.<br /><span style={{ color: '#ff9800' }}>Best Price. Instantly.</span></h2>
@@ -147,7 +143,7 @@ const HeroSlider = () => {
               <WhyBuyCard />
             </div>
           </div>
-        </SwiperSlide>
+        </SwiperSlide> */}
 
         {/* <SwiperSlide>
           <div className="slide" style={{ background: 'linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%)' }}>
@@ -178,6 +174,14 @@ const HeroSlider = () => {
             </div>
           </div>
         </SwiperSlide> */}
+        <SwiperSlide>
+            <Link href="/exchange-phone" className="sell-banner-slide">
+              <img
+                src="/sell.jpeg"
+                alt="Sell Banner"
+              />
+            </Link>
+          </SwiperSlide>
       </Swiper>
     </div>
   );

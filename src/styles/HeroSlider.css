@@ -11,10 +11,11 @@
 
 .heroSwiper {
   flex: 1;
-  height: 480px;
+  /* height: 480px; */
   border-radius: 20px;
   overflow: hidden;
 }
+
 
 .slide {
   position: relative;
@@ -93,6 +94,7 @@
   width: 50% !important;
 }
 
+
 .cta-btn-new:hover {
   background: #00796b;
   transform: translateY(-3px);
@@ -119,7 +121,18 @@
   display: flex;
   justify-content: flex-end;
 }
-
+.discount-banner-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 15px;
+}
+.sell-banner-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 15px;
+}
 .why-buy-card {
   width: 100%;
   background: #fff;
@@ -198,7 +211,7 @@
   }
   
   .heroSwiper {
-    height: 350px; /* Increased from 320px */
+    /* height: 350px;  */
     border-radius: 12px;
   }
   
@@ -557,6 +570,12 @@
   }
   .mothers-day-slide .hero-why-card {
     display: none !important;
+  }
+  .discount-banner-slide img {
+    content: url("/discount-mobile.jpeg");
+  }
+  .sell-banner-slide img {
+    content: url("/sell-mobile.jpeg");
   }
 }
 
