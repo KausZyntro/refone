@@ -1,0 +1,125 @@
+.applink-section {
+  width: 100%;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  background-color: #f9f9f9;
+}
+
+.applink-container {
+  position: relative;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.applink-image {
+  width: 100%;
+}
+
+.applink-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.desktop-image {
+  display: block;
+}
+
+.mobile-image {
+  display: none;
+}
+
+/* Store buttons */
+.applink-buttons {
+  position: absolute;
+  z-index: 10;
+
+  top: 67%;
+  left: 7%;
+
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.store-btn {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.store-btn:hover {
+  transform: scale(1.05);
+}
+
+.store-btn img {
+  display: block;
+  /* width: clamp(80px, 13vw, 176px); */
+  width: clamp(80px, 10vw, 176px);
+  height: auto;
+}
+
+
+@media (max-width: 768px) {
+
+  .desktop-image {
+    display: none;
+  }
+
+  .mobile-image {
+    display: block;
+  }
+
+  .applink-section {
+    padding: 20px 15px;
+  }
+
+  .applink-buttons {
+    flex-direction: column;
+    gap: clamp(6px, 1.5vw, 10px);
+
+    /* Automatically scales between devices */
+    top: clamp(40%, 43vw, 43.5%);
+    left: 5%;
+  }
+
+  .store-btn img {
+    width: clamp(80px, 23vw, 176px);
+    height: auto;
+  }
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+@media (max-width: 480px) {
+
+  .applink-buttons {
+    top: 43%;
+    left: 5%;
+  }
+
+  .store-btn img {
+    width: clamp(70px, 22vw, 110px);
+  }
+}
+
+
+/* =========================
+   VERY SMALL MOBILE
+========================= */
+@media (max-width: 375px) {
+
+  .applink-buttons {
+    top: 45.45%;
+    left: 6%;
+  }
+
+  .store-btn img {
+    width: 55px;
+  }
+}

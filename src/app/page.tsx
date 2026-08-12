@@ -11,13 +11,10 @@ import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/home/HeroSection";
 import HeroSlider from "@/components/home/HeroSlider";
 import Footer from "@/components/layout/Footer";
-import HeroAbout from "@/components/home/HeroAbout";
+import AppLink from "@/components/home/AppLink";
 import PhoneDetail from "@/components/home/PhoneDetail";
-import ProductCard from "@/components/ui/ProductCard";
 import Testimonials from "@/components/home/Testimonial";
 import FAQSection from "@/components/home/FaqSection";
-import ProductSlider from "@/components/home/ProductSlider";
-import ExchangePopup from "@/components/common/ExchangeForm/ExchangePopup";
 import FeaturesBanner from "@/components/home/FeaturesBanner";
 import HomePageSeoData from "@/components/HomePageSeoData/HomePageSeoData";
 import HomeBlogSlider from "@/components/blog/HomeBlogSlider";
@@ -40,7 +37,7 @@ export default async function Home() {
       <HomeBlogSlider blogs={blogs.slice(0, 4)} />
       <Testimonials />
       <FAQSection /> 
-      <HeroAbout />
+      <AppLink />
       <HomePageSeoData />
       {/* <ExchangePopup /> */}
     </div>

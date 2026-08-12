@@ -102,9 +102,9 @@ export default function HomeBlogSlider({ blogs }: Props) {
                   ) : (
                     <div className={styles.imagePlaceholder} />
                   )}
-                  {/* Category badge */}
+                  {/* Category badge (Desktop) */}
                   <span
-                    className={styles.badge}
+                    className={`${styles.badge} ${styles.badgeDesktop}`}
                     style={{ background: badgeColor }}
                   >
                     {category}
@@ -113,6 +113,13 @@ export default function HomeBlogSlider({ blogs }: Props) {
 
                 {/* Content */}
                 <div className={styles.content}>
+                  {/* Category badge (Mobile) */}
+                  <span
+                    className={`${styles.badge} ${styles.badgeMobile}`}
+                    style={{ background: badgeColor }}
+                  >
+                    {category}
+                  </span>
                   <h3 className={styles.title}>{title}</h3>
                   {excerpt && (
                     <p className={styles.excerpt}>{excerpt}</p>

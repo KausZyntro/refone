@@ -54,7 +54,7 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 16px;
-  box-shadow: none;
+  box-shadow: 0 4px 4px #00000021;
 }
 
 .user-info {

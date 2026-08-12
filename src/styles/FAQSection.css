@@ -63,6 +63,7 @@
   overflow: hidden;
   transition: all 0.3s ease;
   height: max-content;
+  box-shadow: 0 2px 0px #00000021;
 }
 
 .faq-question {
