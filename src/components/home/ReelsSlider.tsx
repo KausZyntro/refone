@@ -41,8 +41,8 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
     } else {
       setIsLoading(true);
       try {
-        video.muted = true; // Ensure muted on first play (browser policy)
-        setIsMuted(true);
+        video.muted = false; // Unmute when user explicitly plays
+        setIsMuted(false);
         await video.play();
         setIsPlaying(true);
       } catch (err) {
@@ -72,7 +72,7 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
   }, []);
 
   const viewCount = reel.play_count ?? reel.like_count ?? 0;
-  console.log("ye rha video",reel.media_url)
+  // console.log("ye rha video",reel.media_url)
 
   return (
     <div className="reel-card" onClick={handlePlayPause}>
@@ -188,15 +188,15 @@ const ReelsSlider: React.FC<ReelsSliderProps> = ({ reels }) => {
           <Swiper
             modules={[Navigation, FreeMode]}
             spaceBetween={12}
-            slidesPerView={1.4}
+            slidesPerView={"auto"}
             centeredSlides={false}
             freeMode
             grabCursor
             breakpoints={{
-              360: { slidesPerView: 1.5, spaceBetween: 12 },
-              480: { slidesPerView: 2.2, spaceBetween: 14 },
-              640: { slidesPerView: 2.8, spaceBetween: 16 },
-              768: { slidesPerView: 3.3, spaceBetween: 16 },
+              360: { spaceBetween: 14 },
+              480: { spaceBetween: 14 },
+              640: { spaceBetween: 14 },
+              768: { spaceBetween: 14 },
             }}
           >
             {reels.map((reel) => (

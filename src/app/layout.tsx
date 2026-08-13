@@ -7,6 +7,9 @@ import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
 import { Suspense } from "react";
+import { Outfit } from "next/font/google";
+
+const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Buy Refurbished iPhones India | Upto 75% Off | Shop Refone",
@@ -30,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={outfit.className}>
         <ReduxProvider>
           <Suspense fallback={null}>
             <Navbar />
