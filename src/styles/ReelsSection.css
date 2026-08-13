@@ -181,10 +181,16 @@
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
-.reel-card:hover .reel-play-btn,
 .reel-play-btn--visible {
   opacity: 1;
   transform: scale(1);
+}
+
+@media (hover: hover) {
+  .reel-card:hover .reel-play-btn {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ── Spinner ─────────────────────────────────── */
