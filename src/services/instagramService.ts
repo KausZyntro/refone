@@ -37,7 +37,7 @@ export const STATIC_REELS: InstagramReel[] = [
   },
   {
     id: "reel_2",
-    title: "How to sell old phone easily?",
+    title: "Check Out The Camera Quality?",
     thumbnail_url: "",
     media_url: "/videos/2.mp4",
     permalink: "https://www.instagram.com/refoneindia/",
@@ -47,7 +47,7 @@ export const STATIC_REELS: InstagramReel[] = [
   },
   {
     id: "reel_3",
-    title: "Top 5 things to check before selling",
+    title: "What is Refone",
     thumbnail_url: "",
     media_url: "/videos/3.mp4",
     permalink: "https://www.instagram.com/refoneindia/",

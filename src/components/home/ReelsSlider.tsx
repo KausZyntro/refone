@@ -35,23 +35,28 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (isPlaying) {
+    if (!video.paused) {
       video.pause();
-      setIsPlaying(false);
     } else {
       setIsLoading(true);
       try {
+        // Pause all other videos on the page
+        document.querySelectorAll("video").forEach((v) => {
+          if (v !== video && !v.paused) {
+            v.pause();
+          }
+        });
+
         video.muted = false; // Unmute when user explicitly plays
         setIsMuted(false);
         await video.play();
-        setIsPlaying(true);
       } catch (err) {
         console.warn("Video play failed:", err);
       } finally {
         setIsLoading(false);
       }
     }
-  }, [isPlaying]);
+  }, []);
 
   const handleMuteToggle = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -86,6 +91,8 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
         playsInline
         muted
         loop={false}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
         onEnded={handleVideoEnd}
         
         // onError={handleError}
@@ -118,7 +125,7 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
             <HiOutlineExternalLink />
           </a>
         ) : isPlaying ? (
-          <div className="reel-play-btn reel-play-btn--visible">
+          <div className="reel-play-btn reel-play-btn--hover">
             <FaPause />
           </div>
         ) : (
