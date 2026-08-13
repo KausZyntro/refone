@@ -139,6 +139,7 @@
 .arrow {
   transition: transform 0.3s ease;
   font-size: 20px;
+  color: #fff;
 }
 
 .arrow.rotate {

@@ -257,18 +257,38 @@
     margin-bottom: 20px;
   }
   .category-icon-wrapper {
-    width: 115px;
-    height: 115px;
-    border-radius: 14px;
-    padding: 10px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    padding: 12px;
+    border: none;
+    box-shadow: none;
+    background: #fff;
+    margin: 0 auto;
+    box-shadow: 0 2px 2px #00000021;
   }
   .category-name {
     font-size: 13px;
     margin-top: 8px;
+    font-weight: 500;
   }
   .category-swiper-button-prev,
   .category-swiper-button-next {
-    display: none !important; /* Hide arrows on small screens, rely on swipe */
+    display: none !important; /* Hide arrows on small screens */
+  }
+
+  /* Override Swiper to be a Grid on Mobile */
+  .category-swiper .swiper-wrapper {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 24px;
+    column-gap: 12px;
+    transform: none !important;
+    width: 100% !important;
+  }
+  .category-swiper .swiper-slide {
+    width: 100% !important;
+    margin-right: 0 !important;
   }
 }
 
@@ -281,17 +301,20 @@
     font-size: 18px;
   }
   .category-header .view-all-link {
-    font-size: 13px;
+    font-size: 12px;
+    padding: 6px 12px;
   }
   .category-icon-wrapper {
-    width: 95px;
-    height: 95px;
-    border-radius: 12px;
-    padding: 8px;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    padding: 10px;
   }
   .category-name {
-    font-size: 11px;
+    font-size: 12px;
     margin-top: 6px;
+    white-space: normal;
+    text-align: center;
   }
 }
 
