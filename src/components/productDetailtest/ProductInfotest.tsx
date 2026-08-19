@@ -5,6 +5,10 @@ import RatingStarstest from "@/components/common/RatingStarstest";
 import styles from "./ProductInfotest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
 import { FiShield, FiCheckCircle, FiCreditCard } from "react-icons/fi";
+import { LuRefreshCcw } from "react-icons/lu";
+import { FaTruckFast } from "react-icons/fa6";
+import { FaCreditCard, FaShieldAlt } from "react-icons/fa";
+import styless from "./ProductGallerytest.module.css";
 
 interface ProductInfoTestProps {
     product: ProductTest;
@@ -14,6 +18,25 @@ interface ProductInfoTestProps {
 
 const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVariant, setSelectedVariant }) => {
 
+        const DeliveryBlock = () => (
+        <div className={styles.deliveryBlock}>
+            <p className={styles.deliveryTitle}>Check Estimated Delivery Date</p>
+            <div className={styles.pincodeRow}>
+                <input
+                    className={styles.pincodeInput}
+                    type="text"
+                    placeholder="Enter Pincode"
+                    maxLength={6}
+                />
+                <button className={styles.pincodeBtn}>Check</button>
+            </div>
+            <div className={styles.deliveryInfo}>
+                <FiCheckCircle className={styles.deliveryCheckIcon} />
+                <span>Usually delivered in 2-4 days</span>
+            </div>
+        </div>
+    );
+    
     /* ── Loading skeleton ── */
     if (!selectedVariant) {
         return (
@@ -74,6 +97,38 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
         return prices.length ? Math.min(...prices) : 0;
     };
 
+    /* ── Derived pricing values ── */
+    const sellingPrice = Number(selectedVariant?.pricing?.selling_price ?? 0);
+    const mrp = Number(selectedVariant?.pricing?.mrp ?? 0);
+    const discountPct = mrp > 0 && sellingPrice > 0
+        ? Math.round(((mrp - sellingPrice) / mrp) * 100) : 0;
+    const isOutOfStock = !isVariantInStock(selectedVariant);
+
+    const PricingBlock = () => (
+        <div className={styles.pricingBlock}>
+            {isOutOfStock ? (
+                <p className={styles.sidebarOutOfStock}>Price Updating soon</p>
+            ) : (
+                <>
+                    <div className={styles.sidebarPriceRow}>
+                        <span className={styles.sidebarSellingPrice}>
+                            ₹{sellingPrice.toLocaleString("en-IN")}
+                        </span>
+                        {mrp > 0 && sellingPrice < mrp && (
+                            <>
+                                <span className={styles.sidebarMrp}>₹{mrp.toLocaleString("en-IN")}</span>
+                                {discountPct > 0 && (
+                                    <span className={styles.sidebarDiscount}>{discountPct}% OFF</span>
+                                )}
+                            </>
+                        )}
+                    </div>
+                    <p className={styles.sidebarTaxNote}>Inclusive of all taxes</p>
+                </>
+            )}
+        </div>
+    );
+
     return (
         <div className={styles.productInfo}>
 
@@ -108,8 +163,48 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                 </div>
             </div>
 
+            <PricingBlock />
+
+            <DeliveryBlock />
+
+            <div className={styless.trustStrip}>
+    <div className={styless.trustItem}>
+        <span className={styless.trustIcon}><LuRefreshCcw /></span>
+        <div>
+            <span className={styless.trustTitle}>7 Days Replacement</span>
+            <span className={styless.trustDesc}>Not satisfied? Replace it easily</span>
+        </div>
+    </div>
+
+    <div className={styless.trustItem}>
+        <span className={styless.trustIcon}><FaTruckFast /></span>
+        <div>
+            <span className={styless.trustTitle}>Fast Delivery</span>
+            <span className={styless.trustDesc}>Fast & secure delivery</span>
+        </div>
+    </div>
+
+    <div className={styless.trustItem}>
+        <span className={styless.trustIcon}><FaCreditCard /></span>
+        <div>
+            <span className={styless.trustTitle}>Pay on Delivery</span>
+            <span className={styless.trustDesc}>Coming soon</span>
+        </div>
+    </div>
+
+    {/* 4th Box */}
+    <div className={styless.trustItem}>
+        <span className={styless.trustIcon}><FaShieldAlt /></span>
+        <div>
+            <span className={styless.trustTitle}>Secure Payment</span>
+            <span className={styless.trustDesc}>100% secure checkout</span>
+        </div>
+    </div>
+</div>
+
+
             {/* ── Select Variant (Storage pills) ── */}
-            {storageGroups.length > 0 && (
+            {/* {storageGroups.length > 0 && (
                 <div className={styles.variantSection}>
                     <p className={styles.sectionLabel}>Select Variant</p>
                     <div className={styles.storagePills}>
@@ -124,18 +219,16 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                                     disabled={!hasStock}
                                 >
                                     <span className={styles.pillStorage}>{storage}</span>
-                                    {/* {price > 0 && (
-                                        <span className={styles.pillPrice}>from ₹{price.toLocaleString("en-IN")}</span>
-                                    )} */}
+                                    
                                 </button>
                             );
                         })}
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* ── Select Colour ── */}
-            {colorVariants.length > 0 && (
+            {/* {colorVariants.length > 0 && (
                 <div className={styles.colorSection}>
                     <p className={styles.sectionLabel}>Select Colour</p>
                     <div className={styles.colorOptions}>
@@ -159,10 +252,10 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                         })}
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* ── Condition ── */}
-            <div className={styles.conditionSection}>
+            {/* <div className={styles.conditionSection}>
                 <div className={styles.conditionHeader}>
                     <p className={styles.sectionLabel} style={{ margin: 0 }}>Condition</p>
                     <button className={styles.howItWorksBtn}>How it Works?</button>
@@ -172,16 +265,8 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                         <span className={styles.conditionName}>Excellent</span>
                         <span className={styles.conditionDesc}>Like new, no visible signs of wear</span>
                     </div>
-                    {/* <div className={styles.conditionBox}>
-                        <span className={styles.conditionName}>Very Good</span>
-                        <span className={styles.conditionDesc}>Minor signs of use, rarely visible</span>
-                    </div>
-                    <div className={styles.conditionBox}>
-                        <span className={styles.conditionName}>Good</span>
-                        <span className={styles.conditionDesc}>Visible signs of use, fully functional</span>
-                    </div> */}
                 </div>
-            </div>
+            </div> */}
 
             {/* ── EMI row ── */}
             <div className={styles.emiRow}>

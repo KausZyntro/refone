@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./ProductGallerytest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
-import { FiHeart, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiHeart, FiChevronLeft, FiChevronRight, FiCheckCircle } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Thumbs, FreeMode } from "swiper/modules";
 
@@ -28,6 +28,8 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
     const images = selectedVariant?.images ?? [];
+
+
 
     return (
         <div className={styles.galleryRoot}>
@@ -118,7 +120,7 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
             </div>
 
             {/* Trust strip (Visible only on Desktop in this component) */}
-            <div className={styles.trustStrip}>
+            {/* <div className={styles.trustStrip}>
                 <div className={styles.trustItem}>
                     <span className={styles.trustIcon}><LuRefreshCcw/></span>
                     <div>
@@ -142,7 +144,7 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                         <span className={styles.trustDesc}>coming soon</span>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

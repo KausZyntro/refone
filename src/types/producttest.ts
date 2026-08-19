@@ -33,6 +33,8 @@ export interface VariantTest {
     variant_id: number;
     mrp: string;
     selling_price: string;
+    fair_price: string;
+    good_price:string;
   };
   inventory: {
     id: number;
@@ -43,6 +45,13 @@ export interface VariantTest {
   };
   images: ProductImage[];
   product_warranty: any[];
+}
+
+export interface FairColorVariant {
+    id: number;
+    color: string;
+    storage: string;
+    color_code: string;
 }
 
 export interface ProductImage {

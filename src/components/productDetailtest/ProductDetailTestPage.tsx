@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProductGallerytest from "@/components/productDetailtest/ProductGallerytest";
 import ProductInfotest from "@/components/productDetailtest/ProductInfotest";
 import ProductSpecstest from "@/components/productDetailtest/ProductSpecstest";
-import { ProductTest, VariantTest } from "@/types/producttest";
+import { FairColorVariant, ProductTest, VariantTest } from "@/types/producttest";
 import styles from "./ProductDetailTestPage.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -31,6 +31,7 @@ import CustomerReviews from "./CustomerReviews";
 import { productReviews } from "@/data/productReviews";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ProductCard from "@/app/allProduct/components/ProductCard";
+import { FiCheck, FiGift } from "react-icons/fi";
 // import ProductCard from "../ui/ProductCard";
 
 interface ProductDetailTestPageProps {
@@ -63,6 +64,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     const [isCartLoading, setIsCartLoading] = useState(false);
     const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
     const [relatedLoading, setRelatedLoading] = useState(false);
+    const [selectedCondition, setSelectedCondition] = useState<"Fair" | "Good" | "Superb">("Superb");
 
     /* ── redux ── */
     const { product, isLoading } = useSelector((state: RootState) => state.product);
@@ -103,6 +105,9 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     const isActive = selectedVariant?.inventory?.is_active === 1;
     const isInStock = stock > 0 || inboundStock > 0 || isActive;
     const isOutOfStock = !isInStock;
+    const fairProductPrice = selectedVariant?.pricing?.fair_price ?? 0;
+    const goodProductPrice = selectedVariant?.pricing?.good_price ?? 0;
+    console.log(fairProductPrice)
 
     const highlights = [
         product?.screen_size ? `${product.screen_size} display` : null,
@@ -112,6 +117,48 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         product?.network_support ? `${product.network_support} network support` : null,
         selectedVariant?.storage ? `${selectedVariant.storage} storage` : null,
     ].filter(Boolean) as string[];
+
+    /* ── Derived logic for Storage and Color ── */
+    const selectedStorage = selectedVariant?.storage;
+
+    const isVariantInStock = (v: VariantTest) => {
+        const s = v?.inventory?.total_stock ?? 0;
+        const i = v?.inventory?.inbound_stock ?? 0;
+        const a = v?.inventory?.is_active === 1;
+        return s > 0 || i > 0 || a;
+    };
+
+    const storageGroups = (product?.variants ?? []).reduce(
+        (acc: { storage: string; rep: VariantTest; hasStock: boolean }[], v: VariantTest) => {
+            const existing = acc.find(g => g.storage === v.storage);
+            const inStock = isVariantInStock(v);
+            if (!existing) {
+                acc.push({ storage: v.storage, rep: v, hasStock: inStock });
+            } else if (inStock && !existing.hasStock) {
+                existing.hasStock = true;
+                existing.rep = v;
+            }
+            return acc;
+        },
+        [] as { storage: string; rep: VariantTest; hasStock: boolean }[]
+    );
+
+
+
+    const colorVariants = (product?.variants ?? []).filter((v: VariantTest) => v.storage === selectedStorage);
+
+    const minPriceForStorage = (storage: string) => {
+        const variantsForStorage = (product?.variants ?? []).filter((v: VariantTest) => v.storage === storage);
+        const prices = variantsForStorage
+            .map((v: VariantTest) => Number(v?.pricing?.selling_price ?? 0))
+            .filter(p => p > 0);
+        return prices.length ? Math.min(...prices) : 0;
+    };
+
+
+
+
+
 
     /* ── handlers ── */
     const handleAddToCart = async () => {
@@ -272,26 +319,32 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         </div>
     );
 
-    const ActionButtons = () => (
-        <div className={styles.actionButtons}>
-            <button
-                className={styles.sidebarCartBtn}
-                onClick={() => isInStock && (addedToCart ? router.push("/cart") : handleAddToCart())}
-                disabled={isLoading || isCartLoading || isOutOfStock}
-            >
-                <FaShoppingCart />
-                {isLoading ? "Loading..." : isOutOfStock ? "Out of Stock" : isCartLoading ? "Adding…" : addedToCart ? "Go to Cart" : "Add to Cart"}
-            </button>
+    const ActionButtons = () => {
+        if (selectedCondition === "Fair" || selectedCondition === "Good") {
+            return null;
+        }
 
-            <button
-                className={styles.sidebarBuyNowBtn}
-                onClick={() => isInStock && handleBuyNow()}
-                disabled={isLoading || isCartLoading || isOutOfStock}
-            >
-                {isLoading ? "..." : "Buy Now"}
-            </button>
-        </div>
-    );
+        return (
+            <div className={styles.actionButtons}>
+                <button
+                    className={styles.sidebarBuyNowBtn}
+                    onClick={() => isInStock && handleBuyNow()}
+                    disabled={isLoading || isCartLoading || isOutOfStock}
+                >
+                    {isLoading ? "..." : "Buy Now"}
+                </button>
+
+                <button
+                    className={styles.sidebarCartBtn}
+                    onClick={() => isInStock && (addedToCart ? router.push("/cart") : handleAddToCart())}
+                    disabled={isLoading || isCartLoading || isOutOfStock}
+                >
+                    <FaShoppingCart />
+                    {isLoading ? "Loading..." : isOutOfStock ? "Out of Stock" : isCartLoading ? "Adding…" : addedToCart ? "Go to Cart" : "Add to Cart"}
+                </button>
+            </div>
+        );
+    };
 
     // const DeliveryBlock = () => (
     //     <div className={styles.deliveryBlock}>
@@ -328,6 +381,157 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
             </div> */}
         </div>
     );
+
+
+    const GradeExplanation = () => (
+        <div className={styles.gradeExplanationSection}>
+            <h2 className={styles.gradeTitle}>
+                <span className={styles.gradeTitleIcon}>⭐</span> Grade Explanation <span className={styles.gradeTitleIcon}>🍃</span>
+            </h2>
+            <div className={styles.gradeCardsContainer}>
+                {/* Fair Card */}
+                <div className={`${styles.gradeCard} ${styles.gradeCardFair}`}>
+                    <div className={styles.gradeCardContent}>
+                        <div className={styles.gradeCardHeader}>
+                            <div className={styles.gradeCardTitleWrap}>
+                                <FiShield className={styles.gradeCardIcon} />
+                                <h3 className={styles.gradeCardTitle}>Fair</h3>
+                            </div>
+                        </div>
+                        <p className={styles.gradeCardSubtitle}>Visible scratches and signs of use.</p>
+                        <ul className={styles.gradeCardList}>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> May have scratches on body & screen</li>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> Perfect working condition</li>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> Battery health {'>'} 80%</li>
+                        </ul>
+                    </div>
+                    <img src="/images/c1.png" alt="Fair Phone" className={styles.gradeCardImage} />
+                </div>
+
+                {/* Good Card */}
+                <div className={`${styles.gradeCard} ${styles.gradeCardGood}`}>
+                    <div className={styles.gradeCardContent}>
+                        <div className={styles.gradeCardHeader}>
+                            <div className={styles.gradeCardTitleWrap}>
+                                <FiShield className={styles.gradeCardIcon} />
+                                <h3 className={styles.gradeCardTitle}>Good</h3>
+                            </div>
+                        </div>
+                        <p className={styles.gradeCardSubtitle}>Minor signs of use.</p>
+                        <ul className={styles.gradeCardList}>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> Light scratches on body</li>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> Perfect working condition</li>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> Battery health {'>'} 85%</li>
+                        </ul>
+                    </div>
+                    <img src="/images/c2.png" alt="Good Phone" className={styles.gradeCardImage} />
+                </div>
+
+                {/* Superb Card */}
+                <div className={`${styles.gradeCard} ${styles.gradeCardSuperb}`}>
+                    <div className={styles.gradeCardContent}>
+                        <div className={styles.gradeCardHeader}>
+                            <div className={styles.gradeCardTitleWrap}>
+                                <FiShield className={styles.gradeCardIcon} />
+                                <h3 className={styles.gradeCardTitle}>Superb</h3>
+                            </div>
+                            <span className={styles.gradeCardBadge}>Recommended</span>
+                        </div>
+                        <p className={styles.gradeCardSubtitle}>Looks almost new.</p>
+                        <ul className={styles.gradeCardList}>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> No visible scratches from 12 inches</li>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> Perfect working condition</li>
+                            <li><FiCheck className={styles.gradeCardListIcon} /> Battery health {'>'} 90%</li>
+                        </ul>
+                    </div>
+                    <img src="/images/c3.png" alt="Superb Phone" className={styles.gradeCardImage} />
+                </div>
+            </div>
+        </div>
+    );
+
+    const WhatsInTheBox = () => {
+        const items = [
+            { name: "iPhone 14 Pro", img: "/images/iphone-d.png" },
+            { name: "USB-C to Lightning Cable", img: "/images/lightingCable.png" },
+            { name: "SIM Ejector Tool", img: "/images/simInjector.png" },
+            { name: "Welcome Guide", img: "/images/w1.png" },
+            { name: "Eco Friendly Packaging", img: "/images/w2.png" },
+        ];
+
+        return (
+            <div className={styles.whatsInBoxSection}>
+                <div className={styles.whatsInBoxMain}>
+                    <h2 className={styles.gradeTitle}>
+                        <span className={styles.gradeTitleIcon}>🎁</span> What&apos;s in the Box
+                    </h2>
+                    <div className={styles.whatsInBoxItems}>
+                        {items.map((item, idx) => (
+                            <div key={idx} className={styles.boxItem}>
+                                <div className={styles.boxItemImageWrap}>
+                                    <img src={item.img} alt={item.name} className={styles.boxItemImage} />
+                                </div>
+                                <span className={styles.boxItemName}>{item.name}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className={styles.ecoPromiseCard}>
+                    <div className={styles.ecoPromiseTop}>
+                        <span className={styles.ecoPromiseIcon}>🍃</span>
+                        <h3 className={styles.ecoPromiseTitle}>Our <span>Eco</span> Promise</h3>
+                        <p className={styles.ecoPromiseDesc}>Biodegradable packaging<br/>for a greener tomorrow.</p>
+                    </div>
+                    <img src="/images/globe.png" alt="Eco Promise Globe" className={styles.ecoPromiseImg} />
+                </div>
+            </div>
+        );
+    };
+
+    const FAQSectionLocal = () => {
+        const faqs = [
+            "Is the iPhone 14 Pro original?",
+            "What is the battery health in refurbished devices?",
+            "Will I get Apple warranty?",
+            "What is your return policy?",
+            "Is EMI available?",
+            "How long does delivery take?",
+            "Can I exchange my old device?",
+            "What if I receive a defective product?"
+        ];
+
+        return (
+            <div className={styles.faqSectionWrapper}>
+                <h2 className={styles.gradeTitle}>
+                    <span className={styles.gradeTitleIcon}>❔</span> Frequently Asked Questions
+                </h2>
+                <div className={styles.faqGrid}>
+                    {faqs.map((q, idx) => (
+                        <div key={idx} className={styles.faqItem}>
+                            <span className={styles.faqQuestionText}>{q}</span>
+                            <FiChevronDown className={styles.faqChevron} />
+                        </div>
+                    ))}
+                </div>
+                
+                <div className={styles.faqFooter}>
+                    <button className={styles.viewAllFaqsBtn}>View All FAQs &rarr;</button>
+                </div>
+
+                <div className={styles.mobileCareBanner}>
+                    <div className={styles.careIconWrap}>
+                        <FiShield className={styles.careIcon} />
+                    </div>
+                    <div className={styles.careTextWrap}>
+                        <h4>Refone Care+</h4>
+                        <p>Extended warranty & damage protection.</p>
+                        <span className={styles.careLearnMore}>Learn More &rarr;</span>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     /* ── render ── */
     return (
@@ -368,18 +572,176 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
 
                     {/* Desktop Sidebar */}
                     <div className={styles.cartSidebar}>
-                        <div className={styles.viewersRow}>
+                        {/* <div className={styles.viewersRow}>
                             <FiEye className={styles.viewerIcon} />
                             <span>61 people are viewing this product</span>
+                        </div> */}
+                        
+                        <div className={styles.conditionSectionWrapper}>
+                            <div className={styles.conditionSectionTitle}>Choose Condition</div>
+                            
+                            {/* Fair Condition */}
+                            <div 
+                                className={`${styles.conditionOption} ${selectedCondition === "Fair" ? styles.conditionOptionActive : ""}`}
+                                onClick={() => setSelectedCondition("Fair")}
+                            >
+                                <FiShield className={styles.conditionIcon} />
+                                <div className={styles.conditionDetails}>
+                                    <div className={styles.conditionNameRow}>
+                                        <span className={styles.conditionName}>Fair</span>
+                                    </div>
+                                    <div className={styles.conditionPrice}>₹{Number(fairProductPrice).toLocaleString("en-IN")}</div>
+                                    <div className={styles.conditionDesc}>Visible signs of use.</div>
+                                    <div style={{ marginTop: '8px' }}>
+                                        <span className={styles.stockBadgeOutOfStock}>Out of Stock</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Good Condition */}
+                            <div 
+                                className={`${styles.conditionOption} ${selectedCondition === "Good" ? styles.conditionOptionActive : ""}`}
+                                onClick={() => setSelectedCondition("Good")}
+                            >
+                                <FiShield className={styles.conditionIcon} />
+                                <div className={styles.conditionDetails}>
+                                    <div className={styles.conditionNameRow}>
+                                        <span className={styles.conditionName}>Good</span>
+                                    </div>
+                                    <div className={styles.conditionPrice}>₹{Number(fairProductPrice).toLocaleString("en-IN")}</div>
+                                    <div className={styles.conditionDesc}>Minor signs of use.</div>
+                                    <div style={{ marginTop: '8px' }}>
+                                        <span className={styles.stockBadgeOutOfStock}>Out of Stock</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Superb Condition */}
+                            <div 
+                                className={`${styles.conditionOption} ${selectedCondition === "Superb" ? styles.conditionOptionActive : ""}`}
+                                onClick={() => setSelectedCondition("Superb")}
+                            >
+                                <FiShield className={styles.conditionIcon} />
+                                <div className={styles.conditionDetails}>
+                                    <div className={styles.conditionNameRow}>
+                                        <span className={styles.conditionName}>Superb</span>
+                                        <span className={styles.conditionRecommended}>Recommended</span>
+                                    </div>
+                                    <div className={styles.conditionPrice}>₹{sellingPrice.toLocaleString("en-IN")}</div>
+                                    <div className={styles.conditionDesc}>Like new. Minimal to no signs.</div>
+                                    <div style={{ marginTop: '8px' }}>
+                                        <span className={styles.stockBadgeInStock}>In Stock</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className={styles.sidebarConditionBadge}>
-                            <FiCheckCircle size={13} /> Excellent Condition
-                        </div>
-                        <PricingBlock />
+
+                        {selectedCondition === "Superb" && (
+                            <>
+                                {/* Select Storage */}
+                                {storageGroups.length > 0 && (
+                                    <>
+                                        <div className={styles.sidebarSectionTitle}>Select Storage</div>
+                                        <div className={styles.sidebarStoragePills}>
+                                            {storageGroups.map(({ storage, rep, hasStock }) => {
+                                                const price = minPriceForStorage(storage);
+                                                const isSelected = selectedStorage === storage;
+                                                return (
+                                                    <button
+                                                        key={storage}
+                                                        className={`${styles.sidebarStoragePill} ${isSelected ? styles.sidebarStoragePillActive : ""} ${!hasStock ? styles.outOfStock : ""}`}
+                                                        onClick={() => hasStock && setSelectedVariant(rep)}
+                                                        disabled={!hasStock}
+                                                    >
+                                                        <span className={styles.sidebarPillStorage}>{storage}</span>
+                                                        {price > 0 && (
+                                                            <span className={styles.sidebarPillPrice}>₹{price.toLocaleString("en-IN")}</span>
+                                                        )}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* Select Color */}
+                                {colorVariants.length > 0 && (
+                                    <>
+                                        <div className={styles.sidebarSectionTitle}>Select Color</div>
+                                        <div className={styles.sidebarColorOptions}>
+                                            {colorVariants.map((v: VariantTest) => {
+                                                const inStock = isVariantInStock(v);
+                                                return (
+                                                    <button
+                                                        key={v.id}
+                                                        className={`${styles.sidebarColorSwatch} ${selectedVariant?.id === v.id ? styles.sidebarColorSwatchActive : ""} ${!inStock ? styles.outOfStock : ""}`}
+                                                        onClick={() => inStock && setSelectedVariant(v)}
+                                                        title={inStock ? v.color : `${v.color} (Out of Stock)`}
+                                                        disabled={!inStock}
+                                                    >
+                                                        <div className={styles.sidebarColorCircleWrap}>
+                                                            <span
+                                                                className={styles.sidebarColorCircle}
+                                                                style={{ backgroundColor: v.color_code || "#ccc" }}
+                                                            />
+                                                        </div>
+                                                        <span className={styles.sidebarColorLabel}>{v.color}</span>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </>
+                                )}
+                            </>
+                        )}
+
                         <ActionButtons />
-                        {/* <DeliveryBlock /> */}
                     </div>
                 </div>
+
+                {/* RELATED PRODUCTS */}
+                {relatedProducts && relatedProducts.length > 0 && (
+                    <div className={styles.relatedProductsSection}>
+                        <h2 className={styles.relatedTitle}>Product you may like</h2>
+
+                        <Swiper
+                            slidesPerView={2}
+                            spaceBetween={16}
+                            breakpoints={{
+                                768: {
+                                    slidesPerView: 3,
+                                },
+                                1024: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 16,
+                                },
+                                1280: {
+                                    slidesPerView: 5,
+                                    spaceBetween: 18,
+                                },
+                                1440: {
+                                    slidesPerView: 6,
+                                    spaceBetween: 20,
+                                },
+                            }}
+                        >
+                            {relatedProducts.map((product) => (
+                                <SwiperSlide  key={`${product.id}-${product.variants[0]?.id || 0}`}>
+                                    <ProductCard product={product} />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </div>
+                )}
+
+                {/* GRADE EXPLANATION */}
+                <GradeExplanation />
+
+                {/* WHATS IN THE BOX */}
+                <WhatsInTheBox />
+
+                {/* FAQ SECTION */}
+                <FAQSectionLocal />
 
                 {/* DESKTOP TABS */}
                 <div className={styles.desktopTabs}>
@@ -445,37 +807,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     </div>
                 </div>
 
-               <div className={styles.relatedProductsSection}>
-    <h2 className={styles.relatedTitle}>Product you may like</h2>
-
-    <Swiper
-        slidesPerView={2}
-        spaceBetween={16}
-        breakpoints={{
-            768: {
-                slidesPerView: 3,
-            },
-            1024: {
-                slidesPerView: 4,
-                spaceBetween: 16,
-            },
-            1280: {
-                slidesPerView: 5,
-                spaceBetween: 18,
-            },
-            1440: {
-                slidesPerView: 6,
-                spaceBetween: 20,
-            },
-        }}
-    >
-        {relatedProducts.map((product) => (
-            <SwiperSlide  key={`${product.id}-${product.variants[0].id}`}>
-                <ProductCard product={product} />
-            </SwiperSlide>
-        ))}
-    </Swiper>
-</div>
+            
 
                 {/* MOBILE ACCORDIONS */}
                 <div className={styles.mobileAccordions}>

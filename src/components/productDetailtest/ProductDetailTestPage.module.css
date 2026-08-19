@@ -63,7 +63,7 @@
 .topSection {
     display: grid;
     /* grid-template-columns: minmax(400px, 1.2fr) 2fr minmax(280px, 1fr); */
-    grid-template-columns: minmax(479px, 1.2fr) 2fr minmax(257px, 1fr);
+    grid-template-columns: minmax(479px, 1.7fr) 1.5fr minmax(257px, 1fr);
     gap: 30px;
     align-items: flex-start;
     background: #fff;
@@ -157,12 +157,25 @@
 .prepaidText { font-size: 12px; color: #1a1a1a; font-weight: 600; }
 .prepaidNote { font-size: 11px; color: #555; display: block; margin-top: 2px; }
 
-.sidebarCartBtn {
+.sidebarBuyNowBtn {
     width: 100%;
     padding: 14px;
-    background: #006ab0;
+    background: #00568c;
     color: #fff;
     border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.sidebarCartBtn {
+    width: 100%;
+    padding: 13px;
+    background: #fff;
+    color: #00568c;
+    border: 1.5px solid #00568c;
     border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
@@ -170,19 +183,8 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    margin-bottom: 10px;
-}
-
-.sidebarBuyNowBtn {
-    width: 100%;
-    padding: 13px;
-    background: #fff;
-    color: #006ab0;
-    border: 1.5px solid #006ab0;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
     margin-bottom: 18px;
+    font-size: 15px;
 }
 
 .deliveryTitle { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
@@ -277,11 +279,17 @@
     }
     .galleryColumn { background: #fff; padding: 16px; margin-bottom: 12px; border-radius: 8px; margin-top: 83px;}
     .infoColumn { background: #fff; border: none; padding: 20px; border-radius: 8px; }
-    .cartSidebar { display: none; }
+    .cartSidebar { 
+        display: flex; 
+        background: #fff; 
+        padding: 20px; 
+        border-radius: 8px; 
+        margin-top: 12px; 
+    }
     .desktopTabs { display: none; }
     .mobileAccordions { display: block; margin-top: 16px; margin-bottom: 80px; }
-    .mobileOnlyFlow { display: block; margin-top: 20px; }
-    .mobileBottomBar { display: flex; }
+    .mobileOnlyFlow { display: none; }
+    .mobileBottomBar { display: none; }
     .pageWrapper { margin: 0; padding: 0; padding-top: 60px; background: #f4f7f9; }
     .breadcrumb { display: none; }
 }
@@ -380,4 +388,682 @@
 
 .relatedProductsSection :global(.swiper-slide > *) {
     width: 100%;
+}
+
+/* ── Condition UI Sidebar ── */
+.conditionSectionWrapper {
+    margin-bottom: 16px;
+    margin-top: 10px;
+}
+.conditionSectionTitle {
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 12px;
+}
+
+.conditionOption {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.2s;
+}
+
+.conditionOptionActive {
+    border-color: #00568c;
+    background: #f4faf7;
+}
+
+.conditionIcon {
+    font-size: 20px;
+    color: #00568c;
+    margin-top: 2px;
+}
+
+.conditionDetails {
+    flex: 1;
+}
+
+.conditionNameRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.conditionName {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.conditionRecommended {
+    background: #00568c;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+}
+
+.stockBadgeInStock {
+    background: #e6f9f0;
+    color: #059669;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 12px;
+    margin-left: -5px;
+}
+
+.stockBadgeOutOfStock {
+    color: #64748b;
+    background: #dbdbdb;
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.conditionPrice {
+    font-size: 13px;
+    font-weight: 700;
+    color: #00568c;
+    margin-bottom: 4px;
+}
+
+.conditionDesc {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* ── Select Storage & Color ── */
+.sidebarSectionTitle {
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+    margin: 16px 0 12px;
+}
+
+.sidebarStoragePills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.sidebarStoragePill {
+    flex: 1;
+    min-width: 60px;
+    padding: 10px 6px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.sidebarStoragePill:hover {
+    border-color: #00568c;
+}
+
+.sidebarStoragePillActive {
+    border-color: #00568c;
+    background: #f4faf7;
+}
+
+.sidebarPillStorage {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.sidebarPillPrice {
+    display: block;
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.sidebarColorOptions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 46px;
+}
+
+.sidebarColorSwatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.sidebarColorCircleWrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.sidebarColorSwatchActive .sidebarColorCircleWrap {
+    border-color: #00568c;
+}
+
+.sidebarColorCircle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.sidebarColorLabel {
+    font-size: 11px;
+    color: #475569;
+    font-weight: 500;
+}
+
+.outOfStock {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    position: relative;
+    pointer-events: none;
+    background-color: #fcfcfc !important;
+    border-color: #e8e8e8 !important;
+}
+
+.outOfStock::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top right, transparent calc(50% - 0.5px), #999 50%, transparent calc(50% + 0.5px));
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+}
+
+/* ── Grade Explanation Section ── */
+.gradeExplanationSection {
+    margin-top: 32px;
+    margin-bottom: 32px;
+    padding: 0 10px;
+}
+
+.gradeTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gradeTitleIcon {
+    font-size: 22px;
+}
+
+.gradeCardsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.gradeCard {
+    position: relative;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    min-height: 280px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.gradeCardContent {
+    position: relative;
+    z-index: 2;
+}
+
+.gradeCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.gradeCardTitleWrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gradeCardIcon {
+    font-size: 24px;
+}
+
+.gradeCardTitle {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.gradeCardBadge {
+    background: #00568c;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.gradeCardSubtitle {
+    font-size: 13px;
+    color: #475569;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.gradeCardList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gradeCardList li {
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gradeCardListIcon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.gradeCardImage {
+    object-fit: cover;
+    z-index: 1;
+    border-radius: 12px;
+    width: 500px;
+    height: auto;
+    position: absolute;
+    bottom: -49px;
+    right: -193px;
+    transform: rotate(1deg);
+}
+
+/* Fair Theme */
+.gradeCardFair {
+    background: linear-gradient(135deg, #fffaf5, #fff4e6);
+}
+.gradeCardFair .gradeCardIcon,
+.gradeCardFair .gradeCardTitle,
+.gradeCardFair .gradeCardListIcon {
+    color: #ea580c; /* Orange */
+}
+
+/* Good Theme */
+.gradeCardGood {
+    background: linear-gradient(135deg, #f5f9ff, #e6f0ff);
+}
+.gradeCardGood .gradeCardIcon,
+.gradeCardGood .gradeCardTitle,
+.gradeCardGood .gradeCardListIcon {
+    color: #2563eb; /* Blue */
+}
+
+/* Superb Theme */
+.gradeCardSuperb {
+    background: linear-gradient(135deg, #f4fdf8, #e6f9f0);
+}
+.gradeCardSuperb .gradeCardIcon,
+.gradeCardSuperb .gradeCardTitle,
+.gradeCardSuperb .gradeCardListIcon {
+    color: #00568c; /* Green -> replaced with #00568c matching theme */
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+    .gradeCardImage {
+        width: 400px;
+        bottom: -40px;
+        right: -140px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .gradeCardsContainer {
+        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Order changes for mobile: Superb -> Good -> Fair */
+    .gradeCardSuperb {
+        order: 1;
+    }
+    .gradeCardGood {
+        order: 2;
+    }
+    .gradeCardFair {
+        order: 3;
+    }
+    
+    .gradeExplanationSection {
+        padding: 0 16px;
+    }
+
+    .gradeCardImage {
+        width: 250px;
+        bottom: -20px;
+        right: -60px;
+    }
+}
+
+/* ── Whats In The Box Section ── */
+.whatsInBoxSection {
+    display: flex;
+    gap: 20px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    padding: 0 10px;
+}
+
+.whatsInBoxMain {
+    flex: 1;
+    background: #f8f9fa;
+    border-radius: 16px;
+    padding: 24px 32px;
+}
+
+.whatsInBoxItems {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 24px;
+}
+
+.boxItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+}
+
+.boxItemImageWrap {
+    justify-content: center;
+    align-items: center;
+    width: 158px;
+    height: 140px;
+    display: flex;
+}
+
+.boxItemImage {
+    object-fit: contain;
+    max-width: 187%;
+    max-height: 113%;
+}
+
+.boxItemName {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+    max-width: 120px;
+}
+
+/* Eco Promise Card */
+.ecoPromiseCard {
+    width: 280px;
+    background: linear-gradient(180deg, #f4fdf8 0%, #e6f9f0 100%);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.ecoPromiseTop {
+    z-index: 2;
+}
+
+.ecoPromiseIcon {
+    font-size: 24px;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.ecoPromiseTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 12px;
+}
+
+.ecoPromiseTitle span {
+    color: #00568c;
+}
+
+.ecoPromiseDesc {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.ecoPromiseImg {
+    margin-top: 20px;
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    z-index: 1;
+    border-radius: 50%;
+}
+
+@media (max-width: 1024px) {
+    .whatsInBoxSection {
+        flex-direction: column;
+        padding: 0 16px;
+    }
+    
+    .ecoPromiseCard {
+        width: 100%;
+        padding: 24px 24px 0;
+    }
+    
+    .whatsInBoxMain {
+        background: transparent;
+        padding: 0;
+    }
+    
+    .whatsInBoxItems {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-top: 16px;
+    }
+    
+    .boxItem {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        background: #fff;
+        padding: 16px 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        text-align: left;
+    }
+    
+    .boxItemImageWrap {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .boxItemName {
+        font-size: 14px;
+        max-width: none;
+    }
+}
+
+/* ── FAQ Section Local ── */
+.faqSectionWrapper {
+    margin-top: 32px;
+    margin-bottom: 32px;
+    padding: 0 10px;
+}
+
+.faqGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.faqItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.faqItem:hover {
+    border-color: #00568c;
+}
+
+.faqQuestionText {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.faqChevron {
+    color: #888;
+    font-size: 16px;
+}
+
+.faqFooter {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.viewAllFaqsBtn {
+    background: #fff;
+    color: #00568c;
+    border: 1.5px solid #00568c;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.viewAllFaqsBtn:hover {
+    background: #f0f7ff;
+}
+
+.mobileCareBanner {
+    display: none;
+    margin-top: 24px;
+    background: linear-gradient(135deg, #f4fdf8, #e6f9f0);
+    border-radius: 12px;
+    padding: 20px;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.careIconWrap {
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    color: #00568c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.careTextWrap h4 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.careTextWrap p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.4;
+}
+
+.careLearnMore {
+    font-size: 13px;
+    font-weight: 700;
+    color: #00568c;
+    cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    .faqSectionWrapper {
+        padding: 0 16px;
+    }
+    
+    .faqGrid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .faqFooter {
+        display: none; /* Hide on mobile as per image */
+    }
+    
+    .mobileCareBanner {
+        display: flex;
+    }
+}
+
+@media (max-width: 600px) {
+    .gradeCardImage {
+        width: 301px;
+        bottom: -20px;
+        right: -110px;
+    }
 }
