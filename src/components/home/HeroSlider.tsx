@@ -61,7 +61,7 @@ const HeroSlider = () => {
         <SwiperSlide>
             <Link href="/allProduct" className="discount-banner-slide">
               <img
-                src="/discount.jpeg"
+                src="/discounted.png"
                 alt="Discount Banner"
               />
             </Link>

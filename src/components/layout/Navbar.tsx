@@ -399,7 +399,7 @@ useEffect(() => {
                 </div> */}
 
                 <Link href="/" className="logo">
-                  <Image src={"/logo.png"} alt="logo" height={40} width={120} />
+                  <Image src={"/logo-original.png"} alt="logo" height={40} width={120} />
                 </Link>
               </div>
             </div>

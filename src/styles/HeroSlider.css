@@ -572,7 +572,7 @@
     display: none !important;
   }
   .discount-banner-slide img {
-    content: url("/discount-mobile.jpeg");
+    content: url("/discounted-mobile.png");
   }
   .sell-banner-slide img {
     content: url("/sell-mobile.jpeg");

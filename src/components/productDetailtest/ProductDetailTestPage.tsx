@@ -45,9 +45,9 @@ type TabKey = "highlights" | "specs" | "box" | "faq" | "reviews";
 const TABS: { key: TabKey; label: string }[] = [
     { key: "highlights", label: "Product Details" },
     { key: "specs", label: "Specifications" },
-    { key: "box", label: "What's in the Box" },
-    { key: "faq", label: "FAQs" },
-    { key: "reviews", label: "Customer Reviews" },
+    // { key: "box", label: "What's in the Box" },
+    // { key: "faq", label: "FAQs" },
+    // { key: "reviews", label: "Customer Reviews" },
 ];
 
 const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId }) => {
@@ -405,7 +405,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                             <li><FiCheck className={styles.gradeCardListIcon} /> Battery health {'>'} 80%</li>
                         </ul>
                     </div>
-                    <img src="/images/c1.png" alt="Fair Phone" className={styles.gradeCardImage} />
+                    <img src="/images/c1.jpeg" alt="Fair Phone" className={styles.gradeCardImage} />
                 </div>
 
                 {/* Good Card */}
@@ -608,7 +608,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                     <div className={styles.conditionNameRow}>
                                         <span className={styles.conditionName}>Good</span>
                                     </div>
-                                    <div className={styles.conditionPrice}>₹{Number(fairProductPrice).toLocaleString("en-IN")}</div>
+                                    <div className={styles.conditionPrice}>₹{Number(goodProductPrice).toLocaleString("en-IN")}</div>
                                     <div className={styles.conditionDesc}>Minor signs of use.</div>
                                     <div style={{ marginTop: '8px' }}>
                                         <span className={styles.stockBadgeOutOfStock}>Out of Stock</span>
@@ -699,52 +699,9 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     </div>
                 </div>
 
-                {/* RELATED PRODUCTS */}
-                {relatedProducts && relatedProducts.length > 0 && (
-                    <div className={styles.relatedProductsSection}>
-                        <h2 className={styles.relatedTitle}>Product you may like</h2>
+                {/* tabs */}
 
-                        <Swiper
-                            slidesPerView={2}
-                            spaceBetween={16}
-                            breakpoints={{
-                                768: {
-                                    slidesPerView: 3,
-                                },
-                                1024: {
-                                    slidesPerView: 4,
-                                    spaceBetween: 16,
-                                },
-                                1280: {
-                                    slidesPerView: 5,
-                                    spaceBetween: 18,
-                                },
-                                1440: {
-                                    slidesPerView: 6,
-                                    spaceBetween: 20,
-                                },
-                            }}
-                        >
-                            {relatedProducts.map((product) => (
-                                <SwiperSlide  key={`${product.id}-${product.variants[0]?.id || 0}`}>
-                                    <ProductCard product={product} />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
-                )}
-
-                {/* GRADE EXPLANATION */}
-                <GradeExplanation />
-
-                {/* WHATS IN THE BOX */}
-                <WhatsInTheBox />
-
-                {/* FAQ SECTION */}
-                <FAQSectionLocal />
-
-                {/* DESKTOP TABS */}
-                <div className={styles.desktopTabs}>
+                  <div className={styles.desktopTabs}>
                     <div className={styles.tabsWrapper}>
                         {TABS.map((tab) => (
                             <button
@@ -839,6 +796,53 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         </div>
                     ))}
                 </div>
+
+                {/* RELATED PRODUCTS */}
+                {relatedProducts && relatedProducts.length > 0 && (
+                    <div className={styles.relatedProductsSection}>
+                        <h2 className={styles.relatedTitle}>Product you may like</h2>
+
+                        <Swiper
+                            slidesPerView={2}
+                            spaceBetween={16}
+                            breakpoints={{
+                                768: {
+                                    slidesPerView: 3,
+                                },
+                                1024: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 16,
+                                },
+                                1280: {
+                                    slidesPerView: 5,
+                                    spaceBetween: 18,
+                                },
+                                1440: {
+                                    slidesPerView: 6,
+                                    spaceBetween: 20,
+                                },
+                            }}
+                        >
+                            {relatedProducts.map((product) => (
+                                <SwiperSlide  key={`${product.id}-${product.variants[0]?.id || 0}`}>
+                                    <ProductCard product={product} />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </div>
+                )}
+
+                {/* GRADE EXPLANATION */}
+                <GradeExplanation />
+
+                {/* WHATS IN THE BOX */}
+                <WhatsInTheBox />
+
+                {/* FAQ SECTION */}
+                <FAQSectionLocal />
+
+                {/* DESKTOP TABS */}
+              
             </div>
 
 
