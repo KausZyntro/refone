@@ -405,7 +405,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                             <li><FiCheck className={styles.gradeCardListIcon} /> Battery health {'>'} 80%</li>
                         </ul>
                     </div>
-                    <img src="/images/c1.jpeg" alt="Fair Phone" className={styles.gradeCardImage} />
+                    <img src="/images/c1.png" alt="Fair Phone" className={styles.gradeCardImage} />
                 </div>
 
                 {/* Good Card */}
@@ -455,8 +455,8 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
             { name: "iPhone 14 Pro", img: "/images/iphone-d.png" },
             { name: "USB-C to Lightning Cable", img: "/images/lightingCable.png" },
             { name: "SIM Ejector Tool", img: "/images/simInjector.png" },
-            { name: "Welcome Guide", img: "/images/w1.png" },
-            { name: "Eco Friendly Packaging", img: "/images/w2.png" },
+            { name: "Eco Friendly Packaging", img: "/images/w1.png" },
+            { name: "Welcome Guide", img: "/images/w2.png" },
         ];
 
         return (
@@ -490,15 +490,41 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     };
 
     const FAQSectionLocal = () => {
+        const [openFaq, setOpenFaq] = useState<number | null>(null);
+
         const faqs = [
-            "Is the iPhone 14 Pro original?",
-            "What is the battery health in refurbished devices?",
-            "Will I get Apple warranty?",
-            "What is your return policy?",
-            "Is EMI available?",
-            "How long does delivery take?",
-            "Can I exchange my old device?",
-            "What if I receive a defective product?"
+            {
+                q: "Is the iPhone 14 Pro original?",
+                a: "Yes, all our devices are 100% original and go through rigorous 52+ quality checks."
+            },
+            {
+                q: "What is the battery health in refurbished devices?",
+                a: "Our devices have a minimum battery health of 90% to ensure optimal performance."
+            },
+            {
+                q: "Will I get Apple warranty?",
+                a: "You will get a comprehensive warranty from Refone for 12 months."
+            },
+            {
+                q: "What is your return policy?",
+                a: "We offer a 7-day hassle-free replacement policy if you are not satisfied."
+            },
+            {
+                q: "Is EMI available?",
+                a: "No, EMI is coming soon."
+            },
+            {
+                q: "How long does delivery take?",
+                a: "Standard delivery takes 2-4 business days depending on your location."
+            },
+            {
+                q: "Can I exchange my old device?",
+                a: "Yes, you can exchange your device."
+            },
+            {
+                q: "What if I receive a defective product?",
+                a: "In the rare case of a defect, our 7-day replacement guarantee has you covered."
+            }
         ];
 
         return (
@@ -507,10 +533,17 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     <span className={styles.gradeTitleIcon}>❔</span> Frequently Asked Questions
                 </h2>
                 <div className={styles.faqGrid}>
-                    {faqs.map((q, idx) => (
-                        <div key={idx} className={styles.faqItem}>
-                            <span className={styles.faqQuestionText}>{q}</span>
-                            <FiChevronDown className={styles.faqChevron} />
+                    {faqs.map((faq, idx) => (
+                        <div key={idx} className={styles.faqItem} onClick={() => setOpenFaq(openFaq === idx ? null : idx)} style={{ cursor: "pointer", flexDirection: "column", alignItems: "flex-start" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                                <span className={styles.faqQuestionText}>{faq.q}</span>
+                                {openFaq === idx ? <FiChevronUp className={styles.faqChevron} /> : <FiChevronDown className={styles.faqChevron} />}
+                            </div>
+                            {openFaq === idx && (
+                                <div style={{ marginTop: "12px", fontSize: "14px", color: "#666", lineHeight: "1.5" }}>
+                                    {faq.a}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -519,7 +552,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     <button className={styles.viewAllFaqsBtn}>View All FAQs &rarr;</button>
                 </div>
 
-                <div className={styles.mobileCareBanner}>
+                {/* <div className={styles.mobileCareBanner}>
                     <div className={styles.careIconWrap}>
                         <FiShield className={styles.careIcon} />
                     </div>
@@ -528,7 +561,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         <p>Extended warranty & damage protection.</p>
                         <span className={styles.careLearnMore}>Learn More &rarr;</span>
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     };
@@ -585,12 +618,12 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                 className={`${styles.conditionOption} ${selectedCondition === "Fair" ? styles.conditionOptionActive : ""}`}
                                 onClick={() => setSelectedCondition("Fair")}
                             >
-                                <FiShield className={styles.conditionIcon} />
+                                <FiShield className={styles.Fair} />
                                 <div className={styles.conditionDetails}>
                                     <div className={styles.conditionNameRow}>
-                                        <span className={styles.conditionName}>Fair</span>
+                                        <span className={styles.conditionNameFair}>Fair</span>
                                     </div>
-                                    <div className={styles.conditionPrice}>₹{Number(fairProductPrice).toLocaleString("en-IN")}</div>
+                                    <div className={styles.conditionPriceFair}>₹{Number(fairProductPrice).toLocaleString("en-IN")}</div>
                                     <div className={styles.conditionDesc}>Visible signs of use.</div>
                                     <div style={{ marginTop: '8px' }}>
                                         <span className={styles.stockBadgeOutOfStock}>Out of Stock</span>
@@ -603,12 +636,12 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                                 className={`${styles.conditionOption} ${selectedCondition === "Good" ? styles.conditionOptionActive : ""}`}
                                 onClick={() => setSelectedCondition("Good")}
                             >
-                                <FiShield className={styles.conditionIcon} />
+                                <FiShield className={styles.conditionIconGood} />
                                 <div className={styles.conditionDetails}>
                                     <div className={styles.conditionNameRow}>
-                                        <span className={styles.conditionName}>Good</span>
+                                        <span className={styles.conditionNameGood}>Good</span>
                                     </div>
-                                    <div className={styles.conditionPrice}>₹{Number(goodProductPrice).toLocaleString("en-IN")}</div>
+                                    <div className={styles.conditionPriceGood}>₹{Number(goodProductPrice).toLocaleString("en-IN")}</div>
                                     <div className={styles.conditionDesc}>Minor signs of use.</div>
                                     <div style={{ marginTop: '8px' }}>
                                         <span className={styles.stockBadgeOutOfStock}>Out of Stock</span>

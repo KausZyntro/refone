@@ -425,6 +425,16 @@
     color: #00568c;
     margin-top: 2px;
 }
+.conditionIconFair {
+    font-size: 20px;
+    color: #64748b;
+    margin-top: 2px;
+}
+.conditionIconGood {
+    font-size: 20px;
+    color: #64748b;
+    margin-top: 2px;
+}
 
 .conditionDetails {
     flex: 1;
@@ -441,6 +451,16 @@
     font-size: 14px;
     font-weight: 700;
     color: #1e293b;
+}
+.conditionNameFair {
+    font-size: 14px;
+    font-weight: 700;
+    color: #64748b;
+}
+.conditionNameGood {
+    font-size: 14px;
+    font-weight: 700;
+    color: #64748b;
 }
 
 .conditionRecommended {
@@ -475,6 +495,18 @@
     font-size: 13px;
     font-weight: 700;
     color: #00568c;
+    margin-bottom: 4px;
+}
+.conditionPriceFair {
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+.conditionPriceGood {
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
     margin-bottom: 4px;
 }
 
@@ -826,7 +858,7 @@
 
 .boxItemImage {
     object-fit: contain;
-    max-width: 187%;
+    max-width: 162%;
     max-height: 113%;
 }
 
@@ -834,7 +866,7 @@
     font-size: 13px;
     font-weight: 600;
     color: #1e293b;
-    max-width: 120px;
+    /* max-width: 120px; */
 }
 
 /* Eco Promise Card */
