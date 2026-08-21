@@ -25,6 +25,13 @@ import {
     FiChevronDown,
     FiChevronUp,
     FiRepeat,
+    FiSmartphone,
+    FiWifi,
+    FiMonitor,
+    FiCpu,
+    FiCamera,
+    FiBattery,
+    FiHardDrive
 } from "react-icons/fi";
 import { FaCreditCard, FaShoppingCart } from "react-icons/fa";
 import CustomerReviews from "./CustomerReviews";
@@ -452,7 +459,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
 
     const WhatsInTheBox = () => {
         const items = [
-            { name: "iPhone 14 Pro", img: "/images/iphone-d.png" },
+            { name: product?.name || "Smartphone", img: selectedVariant?.images?.[0]?.image_url || "/images/iphone-d.png" },
             { name: "USB-C to Lightning Cable", img: "/images/lightingCable.png" },
             { name: "SIM Ejector Tool", img: "/images/simInjector.png" },
             { name: "Eco Friendly Packaging", img: "/images/w1.png" },
@@ -493,10 +500,10 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         const [openFaq, setOpenFaq] = useState<number | null>(null);
 
         const faqs = [
-            {
-                q: "Is the iPhone 14 Pro original?",
-                a: "Yes, all our devices are 100% original and go through rigorous 52+ quality checks."
-            },
+            // {
+            //     q: "Is the iPhone 14 Pro original?",
+            //     a: "Yes, all our devices are 100% original and go through rigorous 52+ quality checks."
+            // },
             {
                 q: "What is the battery health in refurbished devices?",
                 a: "Our devices have a minimum battery health of 90% to ensure optimal performance."
@@ -548,9 +555,9 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     ))}
                 </div>
                 
-                <div className={styles.faqFooter}>
+                {/* <div className={styles.faqFooter}>
                     <button className={styles.viewAllFaqsBtn}>View All FAQs &rarr;</button>
-                </div>
+                </div> */}
 
                 {/* <div className={styles.mobileCareBanner}>
                     <div className={styles.careIconWrap}>
@@ -562,6 +569,107 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         <span className={styles.careLearnMore}>Learn More &rarr;</span>
                     </div>
                 </div> */}
+            </div>
+        );
+    };
+
+    const KeySpecifications = () => {
+        return (
+            <div className={styles.keySpecsWrapper}>
+                <div className={styles.keySpecsHeader}>
+                    <h2 className={styles.keySpecsTitle}>Key Specifications</h2>
+                    {/* <span className={styles.keySpecsViewAll}>View All</span> */}
+                </div>
+                <div className={styles.keySpecsGrid}>
+                    <div className={styles.keySpecItem}>
+                        <div className={styles.keySpecIconWrap}><FiSmartphone /></div>
+                        <div className={styles.keySpecText}>
+                            <span className={styles.keySpecLabel}>Model</span>
+                            <span className={styles.keySpecValue}>{product?.name || "-"}</span>
+                        </div>
+                    </div>
+                    {product?.network_support && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiWifi /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>Network</span>
+                                <span className={styles.keySpecValue}>{product.network_support} network support</span>
+                            </div>
+                        </div>
+                    )}
+                    {product?.screen_size && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiSmartphone /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>Display</span>
+                                <span className={styles.keySpecValue}>{product.screen_size} display</span>
+                            </div>
+                        </div>
+                    )}
+                    {product?.back_camera && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiCamera /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>Rear Camera</span>
+                                <span className={styles.keySpecValue}>{product.back_camera} rear camera</span>
+                            </div>
+                        </div>
+                    )}
+                    {product?.front_camera && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiCamera /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>Front Camera</span>
+                                <span className={styles.keySpecValue}>{product.front_camera} front camera</span>
+                            </div>
+                        </div>
+                    )}
+                    {product?.battery_capacity && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiBattery /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>Battery</span>
+                                <span className={styles.keySpecValue}>{product.battery_capacity} battery</span>
+                            </div>
+                        </div>
+                    )}
+                    {selectedStorage && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiHardDrive /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>Storage</span>
+                                <span className={styles.keySpecValue}>{selectedStorage} storage</span>
+                            </div>
+                        </div>
+                    )}
+                    {product?.sim_slots && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiCreditCard /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>SIM Slots</span>
+                                <span className={styles.keySpecValue}>{product.sim_slots}</span>
+                            </div>
+                        </div>
+                    )}
+                    {product?.fingerprint_scanner !== undefined && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiCheckCircle /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>Fingerprint Scanner</span>
+                                <span className={styles.keySpecValue}>{product.fingerprint_scanner ? "Yes" : "No"}</span>
+                            </div>
+                        </div>
+                    )}
+                    {product?.face_unlock !== undefined && (
+                        <div className={styles.keySpecItem}>
+                            <div className={styles.keySpecIconWrap}><FiEye /></div>
+                            <div className={styles.keySpecText}>
+                                <span className={styles.keySpecLabel}>Face Unlock</span>
+                                <span className={styles.keySpecValue}>{product.face_unlock ? "Yes" : "No"}</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         );
     };
@@ -732,9 +840,12 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     </div>
                 </div>
 
+                {/* KEY SPECIFICATIONS */}
+                <KeySpecifications />
+
                 {/* tabs */}
 
-                  <div className={styles.desktopTabs}>
+                  {/* <div className={styles.desktopTabs}>
                     <div className={styles.tabsWrapper}>
                         {TABS.map((tab) => (
                             <button
@@ -792,15 +903,14 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                             </div>
                         )}
                         {activeTab === "specs" && <ProductSpecstest product={product} selectedVariant={selectedVariant} />}
-                        {/* ... other tabs ... */}
                         {activeTab === "reviews" && <CustomerReviews data={reviewData}/>}
                     </div>
-                </div>
+                </div> */}
 
             
 
                 {/* MOBILE ACCORDIONS */}
-                <div className={styles.mobileAccordions}>
+                {/* <div className={styles.mobileAccordions}>
                     {TABS.map((tab) => (
                         <div key={tab.key} className={styles.accordionItem}>
                             <div className={styles.accordionHeader} onClick={() => toggleAccordion(tab.key)}>
@@ -828,7 +938,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                             )}
                         </div>
                     ))}
-                </div>
+                </div> */}
 
                 {/* RELATED PRODUCTS */}
                 {relatedProducts && relatedProducts.length > 0 && (

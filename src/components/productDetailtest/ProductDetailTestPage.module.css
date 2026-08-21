@@ -859,7 +859,7 @@
 .boxItemImage {
     object-fit: contain;
     max-width: 162%;
-    max-height: 113%;
+    max-height: 87%;
 }
 
 .boxItemName {
@@ -1097,5 +1097,83 @@
         width: 301px;
         bottom: -20px;
         right: -110px;
+    }
+}
+/* ── Key Specifications ── */
+.keySpecsWrapper {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #e8e8e8;
+    margin-bottom: 24px;
+}
+
+.keySpecsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.keySpecsTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.keySpecsViewAll {
+    font-size: 14px;
+    font-weight: 600;
+    color: #006ab0;
+    cursor: pointer;
+}
+
+.keySpecsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px 16px;
+}
+
+.keySpecItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.keySpecIconWrap {
+    color: #475569;
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+.keySpecText {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.keySpecLabel {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.keySpecValue {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+@media (max-width: 1024px) {
+    .keySpecsWrapper {
+        border-radius: 8px;
+        margin: 16px 0;
+        padding: 20px;
+    }
+    
+    .keySpecsGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 }

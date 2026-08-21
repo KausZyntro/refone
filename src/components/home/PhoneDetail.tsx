@@ -25,12 +25,12 @@ const categories = [
     slug: "iphone-15",
     img: "/images/iPhone15Pink.webp",
   },
-  {
-    name: "iPhone 14 Pro Max",
-    id: "5",
-    slug: "iphone-14-pro-max",
-    img: "/images/iphone14promax.webp",
-  },
+  // {
+  //   name: "iPhone 14 Pro Max",
+  //   id: "5",
+  //   slug: "iphone-14-pro-max",
+  //   img: "/images/iphone14promax.webp",
+  // },
   {
     name: "iPhone 14 Pro",
     id: "6",
