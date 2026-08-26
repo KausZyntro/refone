@@ -276,6 +276,10 @@ export const feedbackAPI = {
         const response = await api.get(`feedback${params ? `?${params}` : ""}`);
         return response.data;
     },
+    filterFeedbacks: async (keyword: string, productId: number | string) => {
+        const response = await api.get(`feedback/filter-message?keyword=${encodeURIComponent(keyword)}&product_id=${productId}`);
+        return response.data;
+    },
     getFeedbackById: async (id: number | string) => {
         const response = await api.get(`feedback/${id}`);
         return response.data;

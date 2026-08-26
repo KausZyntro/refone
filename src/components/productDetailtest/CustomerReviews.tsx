@@ -20,29 +20,40 @@ export default function CustomerReviews({ productId, initialData }: CustomerRevi
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
     const [visibleReviewsCount, setVisibleReviewsCount] = useState(3);
+    const [activeTag, setActiveTag] = useState<string | null>(null);
 
-    const fetchReviews = async () => {
+    const fetchReviews = async (keyword?: string) => {
         try {
             setLoading(true);
-            const response = await feedbackAPI.getFeedbacks(`product_id=${productId}&per_page=100`);
-            const fetchedReviews = response.data?.data || [];
+            let response;
+            if (keyword) {
+                response = await feedbackAPI.filterFeedbacks(keyword, productId);
+            } else {
+                response = await feedbackAPI.getFeedbacks(`product_id=${productId}&per_page=100`);
+            }
             
-            // Calculate stats
-            let totalRating = 0;
-            let dist: any = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-            fetchedReviews.forEach((r: any) => {
-                totalRating += r.rating;
-                dist[r.rating] = (dist[r.rating] || 0) + 1;
-            });
+            // Handle different response structures based on endpoint
+            const fetchedReviews = response?.data?.data || response?.data || [];
+            
+            if (!keyword) {
+                // Calculate stats only when not filtering
+                let totalRating = 0;
+                let dist: any = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+                fetchedReviews.forEach((r: any) => {
+                    totalRating += r.rating;
+                    dist[r.rating] = (dist[r.rating] || 0) + 1;
+                });
 
-            const avgRating = fetchedReviews.length > 0 ? (totalRating / fetchedReviews.length).toFixed(1) : 0;
-            
+                const avgRating = fetchedReviews.length > 0 ? (totalRating / fetchedReviews.length).toFixed(1) : 0;
+                
+                setStats({
+                    rating: avgRating,
+                    totalReviews: fetchedReviews.length,
+                    distribution: dist
+                });
+            }
             setReviews(fetchedReviews);
-            setStats({
-                rating: avgRating,
-                totalReviews: fetchedReviews.length,
-                distribution: dist
-            });
+            setVisibleReviewsCount(3); // Reset pagination on new fetch
         } catch (error) {
             console.error("Failed to fetch reviews:", error);
         } finally {
@@ -70,15 +81,24 @@ export default function CustomerReviews({ productId, initialData }: CustomerRevi
         setSelectedIndex((prev) => prev === 0 ? selectedImages.length - 1 : prev - 1);
     };
 
-    // Mock tags for "Customers Love"
     const customerLoveTags = [
-        { name: "Camera Quality", count: 482 },
-        { name: "Battery Backup", count: 312 },
-        { name: "Value for Money", count: 298 },
-        { name: "Display Quality", count: 185 },
+        { name: "Camera Quality", keyword: "camera", count: 482 },
+        { name: "Battery Backup", keyword: "battery", count: 312 },
+        { name: "Value for Money", keyword: "value", count: 298 },
+        { name: "Display Quality", keyword: "display", count: 185 },
     ];
 
-    if (loading) {
+    const handleTagClick = (tag: any) => {
+        if (activeTag === tag.name) {
+            setActiveTag(null);
+            fetchReviews();
+        } else {
+            setActiveTag(tag.name);
+            fetchReviews(tag.keyword);
+        }
+    };
+
+    if (loading && !reviews.length) {
         return <div className={styles.loading}>Loading reviews...</div>;
     }
 
@@ -141,7 +161,12 @@ export default function CustomerReviews({ productId, initialData }: CustomerRevi
                         <h3>Customers Love</h3>
                         <div className={styles.tagsContainer}>
                             {customerLoveTags.map((tag, idx) => (
-                                <span key={idx} className={styles.loveTag}>
+                                <span 
+                                    key={idx} 
+                                    className={`${styles.loveTag} ${activeTag === tag.name ? styles.activeLoveTag : ''}`}
+                                    onClick={() => handleTagClick(tag)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     {tag.name} ({tag.count})
                                 </span>
                             ))}
