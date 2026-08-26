@@ -940,6 +940,11 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     ))}
                 </div> */}
 
+                {/* CUSTOMER REVIEWS */}
+                <div style={{ marginTop: "40px" }}>
+                    <CustomerReviews productId={Number(productId)} />
+                </div>
+
                 {/* RELATED PRODUCTS */}
                 {relatedProducts && relatedProducts.length > 0 && (
                     <div className={styles.relatedProductsSection}>

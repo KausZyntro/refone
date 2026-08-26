@@ -1,7 +1,8 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import OrderStatusBadge from './OrderStatusBadge';
 import OrdersTimeline from './OrdersTimeline';
+import WriteReviewModal from '@/components/productDetailtest/WriteReviewModal';
 
 // Interface matching the API response shape
 export interface OrderItemAPI {
@@ -44,6 +45,8 @@ interface OrderCardProps {
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
     const primaryImage = order.product?.images?.find(img => img.is_primary === 1);
     const imageUrl = primaryImage?.image_url || order.product?.images?.[0]?.image_url || '';
 
@@ -93,15 +96,29 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
 
             <div className="order-actions">
                 {order.status === 'delivered' && (
-                    <button className="btn-order btn-primary">Buy Again</button>
+                    <>
+                        {/* <button className="btn-order btn-primary" onClick={() => setIsReviewModalOpen(true)}>Write a Review</button> */}
+                        <button className="btn-order btn-primary">Buy Again</button>
+                    </>
                 )}
                 {(order.status === 'placed' || order.status === 'processing') && (
                     <button className="btn-order btn-danger">Cancel Order</button>
                 )}
                 {(order.status === 'placed') && (
-                    <button className="btn-order btn-primary" onClick={() => window.open( order?.invoice?.invoice_url, "_blank")}>Download Invoice</button>
+                    <>
+                        <button className="btn-order btn-primary" onClick={() => window.open( order?.invoice?.invoice_url, "_blank")}>Download Invoice</button>
+                        <button className="btn-order btn-primary" onClick={() => setIsReviewModalOpen(true)}>Write a Review</button>
+                    </>
+                    
                 )}
             </div>
+
+            <WriteReviewModal
+                isOpen={isReviewModalOpen}
+                onClose={() => setIsReviewModalOpen(false)}
+                productId={order.product_id}
+                onReviewSubmitted={() => setIsReviewModalOpen(false)}
+            />
         </div>
     );
 };

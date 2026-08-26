@@ -271,5 +271,27 @@ export const supportAPI = {
     },
 };
 
+export const feedbackAPI = {
+    getFeedbacks: async (params?: string) => {
+        const response = await api.get(`feedback${params ? `?${params}` : ""}`);
+        return response.data;
+    },
+    getFeedbackById: async (id: number | string) => {
+        const response = await api.get(`feedback/${id}`);
+        return response.data;
+    },
+    createFeedback: async (payload: { product_id: number; user_id: number; name: string; email: string; rating: number; message: string; images?: string[] }) => {
+        const response = await api.post("feedback", payload);
+        return response.data;
+    },
+    updateFeedback: async (id: number | string, payload: any) => {
+        const response = await api.put(`feedback/${id}`, payload);
+        return response.data;
+    },
+    deleteFeedback: async (id: number | string) => {
+        const response = await api.delete(`feedback/${id}`);
+        return response.data;
+    }
+};
 
 export default api;
