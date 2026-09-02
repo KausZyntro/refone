@@ -173,7 +173,7 @@
 }
 
 .footer-links a:hover {
-  color: #006aaf;
+  color: #ffffff;
   padding-left: 5px;
 }
 
@@ -184,7 +184,7 @@
   height: 1.5px;
   bottom: -2px;
   left: 0;
-  background-color: #006aaf;
+  background-color: #ffffff;
   transition: width 0.3s ease;
 }
 

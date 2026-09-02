@@ -1,9 +1,11 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import OrderStatusBadge from './OrderStatusBadge';
 import OrdersTimeline from './OrdersTimeline';
 import WriteReviewModal from '@/components/productDetailtest/WriteReviewModal';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { feedbackAPI } from '@/services/api';
 // Interface matching the API response shape
 export interface OrderItemAPI {
     order_item_id: number;
@@ -46,6 +48,32 @@ interface OrderCardProps {
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [hasSubmittedFeedback, setHasSubmittedFeedback] = useState<boolean | null>(null);
+    const [checkingFeedback, setCheckingFeedback] = useState(false);
+    const user = useSelector((state: RootState) => state.auth.user);
+
+    useEffect(() => {
+        const checkFeedbackStatus = async () => {
+            if (order.status === 'placed' && user?.id && order.product_id) {
+                try {
+                    setCheckingFeedback(true);
+                    const response = await feedbackAPI.getFeedbacks(`product_id=${order.product_id}&user_id=${user.id}`);
+                    if (response?.feedback === true) {
+                        setHasSubmittedFeedback(true);
+                    } else {
+                        setHasSubmittedFeedback(false);
+                    }
+                } catch (error) {
+                    console.error("Error checking feedback status:", error);
+                    setHasSubmittedFeedback(false);
+                } finally {
+                    setCheckingFeedback(false);
+                }
+            }
+        };
+
+        checkFeedbackStatus();
+    }, [order.status, order.product_id, user?.id]);
 
     const primaryImage = order.product?.images?.find(img => img.is_primary === 1);
     const imageUrl = primaryImage?.image_url || order.product?.images?.[0]?.image_url || '';
@@ -107,7 +135,13 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                 {(order.status === 'placed') && (
                     <>
                         <button className="btn-order btn-primary" onClick={() => window.open( order?.invoice?.invoice_url, "_blank")}>Download Invoice</button>
-                        <button className="btn-order btn-primary" onClick={() => setIsReviewModalOpen(true)}>Write a Review</button>
+                        {checkingFeedback ? (
+                            <button className="btn-order btn-primary" style={{ backgroundColor: '#059669', borderColor: '#059669', cursor: 'wait' }} disabled>Loading...</button>
+                        ) : hasSubmittedFeedback ? (
+                            <button className="btn-order btn-primary" style={{ backgroundColor: '#059669', borderColor: '#059669' }} disabled>Review Submitted</button>
+                        ) : (
+                            <button className="btn-order btn-primary" onClick={() => setIsReviewModalOpen(true)}>Write a Review</button>
+                        )}
                     </>
                     
                 )}
@@ -117,7 +151,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                 isOpen={isReviewModalOpen}
                 onClose={() => setIsReviewModalOpen(false)}
                 productId={order.product_id}
-                onReviewSubmitted={() => setIsReviewModalOpen(false)}
+                onReviewSubmitted={() => {
+                    setIsReviewModalOpen(false);
+                    setHasSubmittedFeedback(true);
+                }}
             />
         </div>
     );

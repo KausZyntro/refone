@@ -533,6 +533,16 @@
     background: #0d6efd;
     color: white;
 }
+.btn-success {
+    color: #059669;
+    border-color: #059669;
+    background: transparent;
+}
+
+.btn-success:hover {
+    background: #059669;
+    color: white;
+}
 
 /* Empty State */
 .empty-orders {

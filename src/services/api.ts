@@ -270,7 +270,9 @@ export const supportAPI = {
         return response.data;
     },
 };
-
+export const Feed = {
+    
+}
 export const feedbackAPI = {
     getFeedbacks: async (params?: string) => {
         const response = await api.get(`feedback${params ? `?${params}` : ""}`);

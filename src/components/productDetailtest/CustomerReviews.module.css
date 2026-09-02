@@ -178,11 +178,12 @@
 }
 
 .loveTag:hover {
-    background: #e5e7eb;
+    background: #006aaf;
+    color: #fff;
 }
 
 .activeLoveTag {
-    background: #059669;
+    background: #006aaf;
     color: white;
 }
 
