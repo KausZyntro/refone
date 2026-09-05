@@ -40,6 +40,7 @@ export interface VariantTest {
     id: number;
     variant_id: number;
     total_stock: number;
+    available_stock: number;
     inbound_stock?: number;
     is_active?: number;
   };

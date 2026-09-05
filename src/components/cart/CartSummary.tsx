@@ -7,8 +7,82 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { FiArrowRight, FiShield, FiTag } from "react-icons/fi";
 import { openLoginModal, setRedirectPath } from "@/redux/features/authSlice";
+import SnapmintEMI from "../SnapmintLoader";
 
-const CartSummary: React.FC = () => {
+
+
+// function SnapmintEMI({ price }: { price: number }) {
+//   React.useEffect(() => {
+//     if (!price || price <= 0) return;
+
+//     const initialize = () => {
+//       const container = document.getElementById("cart-snapmint");
+
+//       console.log("Cart Snapmint container:", container);
+//       console.log("Snapmint loadOnPage:", window.loadOnPage);
+
+//       if (
+//         container &&
+//         typeof window.loadOnPage === "function"
+//       ) {
+//         window.loadOnPage();
+//       }
+//     };
+
+//     const script = document.getElementById(
+//       "snapmint-script"
+//     ) as HTMLScriptElement | null;
+
+//     if (!script) {
+//       const newScript = document.createElement("script");
+
+//       newScript.id = "snapmint-script";
+//       newScript.src =
+//         "https://checkout-merchant.snapmint.com/js/v1/2025";
+//       newScript.async = true;
+
+//       newScript.onload = () => {
+//         setTimeout(initialize, 500);
+//       };
+
+//       newScript.onerror = () => {
+//         console.error("Snapmint script failed to load");
+//       };
+
+//       document.body.appendChild(newScript);
+//     } else {
+//       setTimeout(initialize, 500);
+//     }
+//   }, [price]);
+
+//   return (
+//     <div
+//       id="cart-snapmint"
+//       className="snapmint-emi-container"
+//       style={{
+//         minHeight: "30px",
+//         width: "100%",
+//       }}
+//     >
+//       <div className="snap_emi_txt" />
+
+//       <span
+//         className="snapmint_lowest_emi_value"
+//         data-snapmint-price={price}
+//         data-snapmint-merchant_id="1439"
+//         data-snapmintpage="products_page"
+//       />
+//     </div>
+//   );
+// }
+
+
+
+interface CartSummaryProps {
+    selectedPaymentMode?: string | null;
+}
+
+const CartSummary: React.FC<CartSummaryProps> = ({ selectedPaymentMode = null }) => {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { pricing, totalQuantity } = useSelector((state: RootState) => state.cart);
@@ -34,6 +108,10 @@ const CartSummary: React.FC = () => {
     };
 
     const handleCheckout = () => {
+        if (!selectedPaymentMode) {
+            toast.error("Please select a payment mode to proceed.");
+            return;
+        }
         if (!token) {
             dispatch(setRedirectPath("/checkout"));
             dispatch(openLoginModal());
@@ -111,10 +189,15 @@ const CartSummary: React.FC = () => {
                 </form> */}
 
                 <div className="cart-summary-actions">
+                      {/* {p.grand_total > 0 && <SnapmintEMI price={p.grand_total} />} */}
+                      {p.grand_total > 0 && (
+                         <SnapmintEMI price={p.grand_total} page="products_page"/>
+                     )}
+
                     <button
                         onClick={handleCheckout}
                         // onClick={handleTrafficPage}
-                        disabled={totalQuantity === 0}
+                        disabled={totalQuantity === 0 || !selectedPaymentMode}
                         className="btn-checkout"
                     >
                         Proceed to Checkout

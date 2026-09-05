@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Script from 'next/script';
 import RatingStarstest from "@/components/common/RatingStarstest";
 import styles from "./ProductInfotest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
@@ -9,12 +10,69 @@ import { LuRefreshCcw } from "react-icons/lu";
 import { FaTruckFast } from "react-icons/fa6";
 import { FaCreditCard, FaShieldAlt } from "react-icons/fa";
 import styless from "./ProductGallerytest.module.css";
+import SnapmintEMI from "../SnapmintLoader";
+
 
 interface ProductInfoTestProps {
     product: ProductTest;
     selectedVariant: VariantTest | null;
     setSelectedVariant: (variant: VariantTest) => void;
 }
+interface SnapmintEMIProps {
+    price: number;
+}
+
+ declare global {
+    interface Window {
+        loadOnPage?: () => void;
+        snapOptions?: any;
+        Snapmint?: any;
+    }
+}
+
+
+// function SnapmintEMI({ price }: { price: number }) {
+//   React.useEffect(() => {
+//     let script = document.getElementById('snapmint-script') as HTMLScriptElement;
+    
+//     if (!script) {
+//       script = document.createElement('script');
+//       script.id = 'snapmint-script';
+//       script.src = 'https://checkout-merchant.snapmint.com/js/v1/2025';
+//       script.async = true;
+//       script.onload = () => {
+//         setTimeout(() => {
+//           if (typeof window.loadOnPage === 'function') {
+//             window.loadOnPage();
+//           }
+//         }, 300);
+//       };
+//       document.body.appendChild(script);
+//     } else {
+//       setTimeout(() => {
+//         if (typeof window.loadOnPage === 'function') {
+//           window.loadOnPage();
+//         }
+//       }, 300);
+//     }
+//   }, [price]);
+
+//   return (
+//     <div className="snapmint-emi-container" style={{ minHeight: '30px' }}>
+//       <div className="snap_emi_txt"></div>
+//       <span
+//         className="snapmint_lowest_emi_value"
+//         style={{ display: 'none' }}
+//         data-snapmint-price={price}
+//         data-snapmint-merchant_id="1439"
+//         data-snapmintpage="products_page"
+//       />
+//     </div>
+//   );
+// }
+
+
+
 
 const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVariant, setSelectedVariant }) => {
 
@@ -37,33 +95,13 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
         </div>
     );
     
-    /* ── Loading skeleton ── */
-    if (!selectedVariant) {
-        return (
-            <div className={styles.productInfo}>
-                <div className={styles.skeleton} style={{ height: 20, width: "30%", marginBottom: 10 }} />
-                <div className={styles.skeleton} style={{ height: 30, width: "75%" }} />
-                <div className={styles.skeleton} style={{ height: 16, width: "45%", marginTop: 10 }} />
-                <div className={styles.skeleton} style={{ height: 14, width: "60%", marginTop: 12 }} />
-                <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
-                    {[1, 2, 3].map(i => (
-                        <div key={i} className={styles.skeleton} style={{ width: 90, height: 56, borderRadius: 8 }} />
-                    ))}
-                </div>
-                <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
-                    {[1, 2, 3, 4, 5].map(i => (
-                        <div key={i} className={styles.skeleton} style={{ width: 60, height: 60, borderRadius: 8 }} />
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
     /* ── Derived values ── */
     const selectedStorage = selectedVariant?.storage;
 
-    const isVariantInStock = (v: VariantTest) => {
-        const stock = v?.inventory?.total_stock ?? 0;
+    const isVariantInStock = (v: VariantTest | null | undefined) => {
+        if (!v) return false;
+        // const stock = v?.inventory?.total_stock ?? 0;
+        const stock = v?.inventory?.available_stock ?? 0;
         const inboundStock = v?.inventory?.inbound_stock ?? 0;
         const isActive = v?.inventory?.is_active === 1;
         return stock > 0 || inboundStock > 0 || isActive;
@@ -104,6 +142,30 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
         ? Math.round(((mrp - sellingPrice) / mrp) * 100) : 0;
     const isOutOfStock = !isVariantInStock(selectedVariant);
 
+   
+
+    /* ── Loading skeleton ── */
+    if (!selectedVariant) {
+        return (
+            <div className={styles.productInfo}>
+                <div className={styles.skeleton} style={{ height: 20, width: "30%", marginBottom: 10 }} />
+                <div className={styles.skeleton} style={{ height: 30, width: "75%" }} />
+                <div className={styles.skeleton} style={{ height: 16, width: "45%", marginTop: 10 }} />
+                <div className={styles.skeleton} style={{ height: 14, width: "60%", marginTop: 12 }} />
+                <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className={styles.skeleton} style={{ width: 90, height: 56, borderRadius: 8 }} />
+                    ))}
+                </div>
+                <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+                    {[1, 2, 3, 4, 5].map(i => (
+                        <div key={i} className={styles.skeleton} style={{ width: 60, height: 60, borderRadius: 8 }} />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     const PricingBlock = () => (
         <div className={styles.pricingBlock}>
             {isOutOfStock ? (
@@ -114,6 +176,9 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                         <span className={styles.sidebarSellingPrice}>
                             ₹{sellingPrice.toLocaleString("en-IN")}
                         </span>
+                       
+
+
                         {mrp > 0 && sellingPrice < mrp && (
                             <>
                                 <span className={styles.sidebarMrp}>₹{mrp.toLocaleString("en-IN")}</span>
@@ -124,6 +189,9 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                         )}
                     </div>
                     <p className={styles.sidebarTaxNote}>Inclusive of all taxes</p>
+                     {/* <SnapmintEMI price={sellingPrice} /> */}
+                     <SnapmintEMI price={sellingPrice} page="products_page"/>
+
                 </>
             )}
         </div>

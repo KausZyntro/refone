@@ -10,6 +10,7 @@ import { FiShoppingBag } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import "../cart/cart.css";
+import "./payment-options.css";
 
 export default function CartPage() {
     const dispatch = useDispatch<AppDispatch>();
@@ -18,6 +19,7 @@ export default function CartPage() {
     const { items, isLoading, error } = useSelector((state: RootState) => state.cart);
     const { user } = useSelector((state: RootState) => state.auth);
     const [mounted, setMounted] = useState(false);
+    const [paymentMode, setPaymentMode] = useState<string | null>(null);
 
     useEffect(() => {
         setMounted(true);
@@ -95,10 +97,47 @@ export default function CartPage() {
                         {items.map((item) => (
                             <CartItemCard key={item.id} item={item} />
                         ))}
+
+                        <div className="payment-options">
+                            <h3>Payment Mode:</h3>
+                            <p className="payment-subtitle">Want faster delivery? Choose prepaid & get your parcel within 4 days!</p>
+                            
+                            <div className="payment-options-grid">
+                                <label className={`payment-option ${paymentMode === "online" ? "selected" : ""}`}>
+                                    <input 
+                                        type="radio" 
+                                        name="paymentMode" 
+                                        value="online" 
+                                        checked={paymentMode === "online"} 
+                                        onChange={() => setPaymentMode("online")} 
+                                    />
+                                    <div className="payment-info">
+                                        <h4>Pay Online</h4>
+                                        <p>UPI • Credit Card • Debit Card • Net Banking • Wallet</p>
+                                    </div>
+                                    <span className="badge recommended">Recommended</span>
+                                </label>
+
+                                <label className={`payment-option ${paymentMode === "snapmint" ? "selected" : ""}`}>
+                                    <input 
+                                        type="radio" 
+                                        name="paymentMode" 
+                                        value="snapmint" 
+                                        checked={paymentMode === "snapmint"} 
+                                        onChange={() => setPaymentMode("snapmint")} 
+                                    />
+                                    <div className="payment-info">
+                                        <h4>Snapmint EMI</h4>
+                                        <p>Snapmint • 0% EMI • No credit card needed</p>
+                                    </div>
+                                    <span className="badge snapmint">Snapmint EMI</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="cart-sidebar">
-                        <CartSummary />
+                        <CartSummary selectedPaymentMode={paymentMode} />
                     </div>
                 </div>
             </div>

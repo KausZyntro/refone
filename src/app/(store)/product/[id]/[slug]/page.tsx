@@ -18,15 +18,13 @@ export async function generateMetadata({ params }: { params: Promise<{  id: stri
 
 
 async function getProduct(id: string) {
-  const data = await productAPI.getProducts();
-  // console.log(data);
-const product = data?.data?.find(
-    (item: any) => item?.id === Number(id)
-  );
-
-  // console.log("Selected Product:", product);
-
-  return product;
+  try {
+    const response = await productAPI.getProductById(id);
+    return response?.data ?? response ?? null;
+  } catch (error) {
+    console.error("Error fetching product details for SEO:", error);
+    return null;
+  }
 }
 
 

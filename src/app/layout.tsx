@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 
 import { Suspense } from "react";
 import { Outfit } from "next/font/google";
+import SnapmintLoader from "@/components/SnapmintLoader";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <Navbar />
           </Suspense>
+          
           {children}
           <Footer />
           <ToastContainer position="top-right" autoClose={3000} />
