@@ -1,198 +1,616 @@
-.exchangeWrapper {
+/* Wizard Layout - Global */
+.wizardLayout {
+  max-width: 1800px;
+  margin: 122px auto 32px;
+  padding: 20px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #333;
+}
+
+/* Typography & Colors */
+:root {
+  --primary-green: #008f75;
+  --primary-blue: #006aaf;
+  --primary-hover: #007560;
+  --primary-blue-hover: #005a8f;
+  --bg-gray: #f9fbfb;
+  --border-gray: #e0e5e5;
+  --text-dark: #1f2937;
+  --text-muted: #6b7280;
+  --white: #ffffff;
+}
+
+/* Main Layout Grid */
+.wizardMainContent {
   display: flex;
-  max-width: 1100px;
-  margin: 0 auto;
-  gap: 3rem;
-  align-items: center;
-  padding: 2rem 1.5rem;
+  gap: 30px;
+  margin-top: 20px;
 }
 
-.lottieSection {
-  flex: 1;
+/* Sidebar Styles */
+.wizardSidebar {
+  flex: 0 0 247px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.lottieAnimation {
-  width: 100%;
-  max-width: 500px;
-}
-
-.exchangeFormContainer {
-  flex: 1;
-  max-width: 550px;
-  width: 100%;
-  padding: 2.5rem;
-  background-color: #ffffff;
+.deviceInfoCard {
+  background: var(--white);
+  border: 1px solid var(--border-gray);
   border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* Soft, premium shadow */
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  box-sizing: border-box;
-}
-
-.exchangeFormTitle {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: #111827;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  letter-spacing: -0.02em;
-}
-
-.exchangeFormSubtitle {
-  font-size: 0.95rem;
-  color: #6b7280;
-  margin-top: 0;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.exchangeForm {
+  padding: 20px;
   display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
-}
-
-.formRow {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
-}
-
-.input,
-.select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 0.95rem;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 8px;
-  background-color: #f9fafb;
-  color: #111827;
-  transition: all 0.25s ease;
-  box-sizing: border-box;
-  font-family: inherit;
-}
-
-.input::placeholder {
-  color: #9ca3af;
-}
-
-.input:hover,
-.select:hover {
-  border-color: #d1d5db;
-}
-
-.input:focus,
-.select:focus {
-  outline: none;
-  border-color: #006ab0;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 4px rgba(0, 106, 176, 0.1);
-}
-
-.input.error,
-.select.error {
-  border-color: #ef4444;
-  background-color: #fef2f2;
-}
-
-.input.error:focus,
-.select.error:focus {
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
-  border-color: #ef4444;
-}
-
-.errorText {
-  font-size: 0.75rem;
-  color: #ef4444;
-  margin-top: 0.125rem;
-  font-weight: 500;
-}
-
-.submitBtn {
-  margin-top: 1rem;
-  padding: 0.875rem;
-  background-color: #006ab0;
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  width: 100%;
-  font-family: inherit;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  gap: 15px;
 }
 
-.submitBtn:hover {
-  background-color: #005690;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 106, 176, 0.25);
-}
-
-.submitBtn:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 6px rgba(0, 106, 176, 0.2);
-}
-
-.successMessage {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #166534;
+.deviceImageWrapper {
+  width: 60px;
+  height: 80px;
+  background: var(--bg-gray);
   border-radius: 8px;
-  text-align: center;
-  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.deviceImage {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.deviceDetails h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  color: var(--text-dark);
+}
+
+.deviceDetails p {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.changeDeviceBtn {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  font-size: 13px;
   font-weight: 500;
-  animation: fadeIn 0.3s ease;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+.sidebarSteps {
+  background: var(--white);
+  border: 1px solid var(--border-gray);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-@media (max-width: 800px) {
-  .exchangeWrapper {
+.sidebarStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  opacity: 0.5;
+  position: relative;
+}
+
+.sidebarStep.active, .sidebarStep.completed {
+  opacity: 1;
+}
+
+/* Connector Line */
+.sidebarStep:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 30px;
+  bottom: -15px;
+  width: 2px;
+  background: var(--border-gray);
+  z-index: 0;
+}
+
+.sidebarStepCircle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg-gray);
+  border: 2px solid var(--border-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.sidebarStep.completed .sidebarStepCircle, 
+.sidebarStep.active .sidebarStepCircle {
+  background: var(--primary-green);
+  border-color: var(--primary-green);
+  color: var(--white);
+}
+
+.sidebarStepLabels {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarStepTitle {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.sidebarStepSubtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.helpCard {
+  background: var(--bg-gray);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid var(--border-gray);
+}
+
+.helpIconWrapper {
+  color: var(--primary-blue);
+  margin-bottom: 10px;
+}
+
+.helpCard h4 {
+  margin: 0 0 5px 0;
+  color: var(--text-dark);
+}
+
+.helpCard p {
+  margin: 0 0 15px 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.chatBtn {
+  background: var(--white);
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chatBtn:hover {
+  background: var(--primary-blue);
+  color: var(--white);
+}
+
+/* Form Area */
+.wizardFormArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktopTopHeader {
+  margin-bottom: 30px;
+}
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px 0;
+  background: var(--white);
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.5;
+}
+
+.stepItem.active, .stepItem.completed {
+  opacity: 1;
+}
+
+.stepLine {
+  flex: 1;
+  height: 2px;
+  background: var(--border-gray);
+  max-width: 160px;
+}
+
+.stepItem.completed + .stepLine {
+  background: var(--primary-green);
+}
+
+.stepCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--bg-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--text-muted);
+  border: 1px solid var(--border-gray);
+}
+
+.stepItem.completed .stepCircle, .stepItem.active .stepCircle {
+  background: var(--primary-green);
+  color: var(--white);
+  border-color: var(--primary-green);
+}
+
+.stepLabels {
+  display: flex;
+  flex-direction: column;
+}
+
+.stepTitle {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.stepSubtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Questions Container */
+.questionsContainer {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  align-items: start;
+}
+
+.heroHeader {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #f0f8f7 0%, #e1f2f0 100%);
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.heroHeader h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: var(--text-dark);
+}
+
+.heroHeader p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.categoryBlock {
+  border: 1px solid var(--border-gray);
+  border-radius: 12px;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-gray);
+  background: #fdfdfd;
+}
+
+.categoryIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e8f5f3;
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.categoryTitles h3 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+}
+
+.categoryTitles p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.categoryQuestions {
+  padding: 0 20px;
+}
+
+.questionItem {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border-gray);
+}
+
+.questionItem:last-child {
+  border-bottom: none;
+}
+
+.questionText {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.qBadge {
+  background: var(--primary-blue);
+  color: var(--white);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.questionText label {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-dark);
+  line-height: 1.4;
+}
+
+.infoBox {
+  background: #f0f7ff;
+  border: 1px solid #cce3ff;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #3b82f6;
+  font-size: 13px;
+}
+
+.optionsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-left: 34px; /* Align with text */
+}
+
+.optionBtn {
+  background: var(--white);
+  border: 1px solid var(--border-gray);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: calc(33.333% - 12px); /* Default to 3 columns max */
+  justify-content: center;
+}
+
+.optionBtn:hover {
+  border-color: #b0c4c2;
+}
+
+.optionBtn.selected {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+  background: #f0fdfa;
+}
+
+.checkIcon {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Actions */
+.wizardActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+  padding: 20px 0;
+}
+
+.backBtn {
+  background: var(--white);
+  border: 1px solid var(--border-gray);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.backBtn:hover {
+  background: var(--bg-gray);
+}
+
+.continueBtn {
+  background: var(--primary-blue);
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--white);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.continueBtn:hover {
+  background: var(--primary-blue-hover);
+}
+
+.continueBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Footer Trust Badges */
+.trustBadgesFooter {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-gray);
+  padding-top: 30px;
+  margin-top: 50px;
+}
+
+.trustBadge {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.trustBadge .badgeIcon, .trustBadge svg {
+  color: var(--primary-green);
+  font-size: 24px;
+}
+
+.trustBadge h5 {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.trustBadge p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Mobile Responsive */
+.mobileTopHeader {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .wizardMainContent {
     flex-direction: column;
-    margin: 40px auto;
-    gap: 1.5rem;
-    padding: 0 1rem;
   }
   
-  .lottieSection {
+  .wizardSidebar {
+    display: none; /* Hide sidebar on mobile as per standard wizard patterns */
+  }
+
+  .desktopTopHeader {
     display: none;
   }
-}
 
-@media (max-width: 640px) {
-  .formRow {
-    flex-direction: column;
-    gap: 1.25rem;
+  .mobileTopHeader {
+    display: block;
+    margin-bottom: 20px;
+    background: var(--white);
+    border-radius: 12px;
+    padding: 15px 0;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .mobileTopHeader::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  .stepIndicator {
+    justify-content: flex-start;
+    gap: 15px;
+    padding: 0 15px;
+    width: max-content;
+    margin: 0 auto;
   }
   
-  .exchangeFormContainer {
-    margin: 0;
-    padding: 1.5rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-    border-radius: 10px;
+  .stepItem {
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+    min-width: 80px;
+  }
+
+  .stepLine {
+    min-width: 30px;
+    max-width: 50px;
+  }
+  
+  .stepLabels {
+    align-items: center;
+  }
+  
+  .stepTitle {
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .stepSubtitle{
+    display: none;
+  }
+
+  .questionsContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .optionsGrid {
+    padding-left: 0;
+  }
+  
+  .optionBtn {
+    min-width: calc(50% - 12px); /* Allow two options like Yes/No on the same line */
+    flex: 1;
+  }
+
+  .wizardActions {
+    position: sticky;
+    bottom: 0;
+    background: var(--white);
+    padding: 15px;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+    z-index: 10;
+    justify-content: space-between;
+  }
+
+  .continueBtn {
+    flex: 1;
+  }
+
+  .trustBadgesFooter {
+    flex-direction: column;
+    gap: 20px;
   }
 }

@@ -3,7 +3,7 @@ import React from 'react'
 
 const exchange = () => {
   return (
-    <div style={{ marginTop: '154px' }}>
+    <div>
       <ExchangeForm />
     </div>
   )

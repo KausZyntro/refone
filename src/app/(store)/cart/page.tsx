@@ -98,7 +98,8 @@ export default function CartPage() {
                             <CartItemCard key={item.id} item={item} />
                         ))}
 
-                        <div className="payment-options">
+{/* I have to change this */}
+                        {/* <div className="payment-options">
                             <h3>Payment Mode:</h3>
                             <p className="payment-subtitle">Want faster delivery? Choose prepaid & get your parcel within 4 days!</p>
                             
@@ -133,7 +134,7 @@ export default function CartPage() {
                                     <span className="badge snapmint">Snapmint EMI</span>
                                 </label>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="cart-sidebar">

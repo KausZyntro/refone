@@ -407,7 +407,7 @@ useEffect(() => {
             <div className="search-box">
               <input
                 type="text"
-                placeholder="Search for phones, tablets, accessories & more..."
+                placeholder="Search for Iphones"
                 value={search}
                 onChange={handleChange}
                 onFocus={() => setShowDropdown(true)}

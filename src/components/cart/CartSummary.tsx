@@ -108,16 +108,16 @@ const CartSummary: React.FC<CartSummaryProps> = ({ selectedPaymentMode = null })
     };
 
     const handleCheckout = () => {
-        if (!selectedPaymentMode) {
-            toast.error("Please select a payment mode to proceed.");
-            return;
-        }
-        if (!token) {
-            dispatch(setRedirectPath("/checkout"));
-            dispatch(openLoginModal());
-            toast.info("Please login to proceed to checkout");
-            return;
-        }
+        // if (!selectedPaymentMode) {
+        //     toast.error("Please select a payment mode to proceed.");
+        //     return;
+        // }
+        // if (!token) {
+        //     dispatch(setRedirectPath("/checkout"));
+        //     dispatch(openLoginModal());
+        //     toast.info("Please login to proceed to checkout");
+        //     return;
+        // }
         router.push("/checkout");
     };
     // const handleTrafficPage = () => {
@@ -197,7 +197,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ selectedPaymentMode = null })
                     <button
                         onClick={handleCheckout}
                         // onClick={handleTrafficPage}
-                        disabled={totalQuantity === 0 || !selectedPaymentMode}
+                        // disabled={totalQuantity === 0 || !selectedPaymentMode} change
                         className="btn-checkout"
                     >
                         Proceed to Checkout

@@ -10,7 +10,8 @@ import { LuRefreshCcw } from "react-icons/lu";
 import { FaTruckFast } from "react-icons/fa6";
 import { FaCreditCard, FaShieldAlt } from "react-icons/fa";
 import styless from "./ProductGallerytest.module.css";
-import SnapmintEMI from "../SnapmintLoader";
+import { Changa_One } from "next/font/google";
+// import SnapmintEMI from "../SnapmintLoader";
 
 
 interface ProductInfoTestProps {
@@ -18,58 +19,21 @@ interface ProductInfoTestProps {
     selectedVariant: VariantTest | null;
     setSelectedVariant: (variant: VariantTest) => void;
 }
-interface SnapmintEMIProps {
-    price: number;
-}
-
- declare global {
-    interface Window {
-        loadOnPage?: () => void;
-        snapOptions?: any;
-        Snapmint?: any;
-    }
-}
-
-
-// function SnapmintEMI({ price }: { price: number }) {
-//   React.useEffect(() => {
-//     let script = document.getElementById('snapmint-script') as HTMLScriptElement;
-    
-//     if (!script) {
-//       script = document.createElement('script');
-//       script.id = 'snapmint-script';
-//       script.src = 'https://checkout-merchant.snapmint.com/js/v1/2025';
-//       script.async = true;
-//       script.onload = () => {
-//         setTimeout(() => {
-//           if (typeof window.loadOnPage === 'function') {
-//             window.loadOnPage();
-//           }
-//         }, 300);
-//       };
-//       document.body.appendChild(script);
-//     } else {
-//       setTimeout(() => {
-//         if (typeof window.loadOnPage === 'function') {
-//           window.loadOnPage();
-//         }
-//       }, 300);
-//     }
-//   }, [price]);
-
-//   return (
-//     <div className="snapmint-emi-container" style={{ minHeight: '30px' }}>
-//       <div className="snap_emi_txt"></div>
-//       <span
-//         className="snapmint_lowest_emi_value"
-//         style={{ display: 'none' }}
-//         data-snapmint-price={price}
-//         data-snapmint-merchant_id="1439"
-//         data-snapmintpage="products_page"
-//       />
-//     </div>
-//   );
+// Change
+// interface SnapmintEMIProps {
+//     price: number;
 // }
+
+//  declare global {
+//     interface Window {
+//         loadOnPage?: () => void;
+//         snapOptions?: any;
+//         Snapmint?: any;
+//     }
+// }
+
+
+
 
 
 
@@ -189,8 +153,8 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
                         )}
                     </div>
                     <p className={styles.sidebarTaxNote}>Inclusive of all taxes</p>
-                     {/* <SnapmintEMI price={sellingPrice} /> */}
-                     <SnapmintEMI price={sellingPrice} page="products_page"/>
+                     {/* change */}
+                     {/* <SnapmintEMI price={sellingPrice} page="products_page"/> */}
 
                 </>
             )}

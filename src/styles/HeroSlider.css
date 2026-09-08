@@ -127,6 +127,12 @@
   display: block;
   border-radius: 15px;
 }
+.deals-banner-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 15px;
+}
 .sell-banner-slide img {
   width: 100%;
   height: auto;
@@ -573,6 +579,9 @@
   }
   .discount-banner-slide img {
     content: url("/discounted-mobile.png");
+  }
+  .deals-banner-slide img {
+    content: url("/deals-mobile.png");
   }
   .sell-banner-slide img {
     content: url("/sell-mobile.jpeg");

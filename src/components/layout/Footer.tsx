@@ -6,6 +6,8 @@ import Link from "next/link";
 import { FaFacebook, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FiMapPin } from "react-icons/fi";
+import Script from "next/script";
+
 
 const FooterSection = ({ title, links }: { title: string, links: any[] }) => {
   const [open, setOpen] = useState(false);
@@ -154,6 +156,9 @@ const Footer = () => {
        
 
       </div>
+     
+
+
     </footer>
   );
 };
