@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { submitExchangeRequest } from '@/redux/features/exchangeSlice';
+import { openLoginModal } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
 import { exchangeQuestionsSchema, StepSchema } from './ExchangeQuestions';
@@ -37,19 +38,32 @@ interface Answers {
 }
 
 export default function ExchangeForm() {
+  // const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [answers, setAnswers] = useState<Answers>({});
   
   const dispatch = useDispatch<AppDispatch>();
   const { isLoading: isSubmitting } = useSelector((state: RootState) => state.exchange);
+  const isAuthenticated = useSelector((state: RootState) => state.auth?.isAuthenticated);
 
-  const totalSteps = 6; // 1: Condition, 2-5: Additional, 6: Review & Offer
+  useEffect(() => {
+    if (isAuthenticated === false) {
+      dispatch(openLoginModal());
+    }
+  }, [isAuthenticated, dispatch]);
+
+  const totalSteps = 7; // 1: Model Details, 2: Condition, 3-6: Additional, 7: Review & Offer
 
   const handleOptionSelect = (questionId: number, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
   };
 
   const handleNext = () => {
+    if (!isAuthenticated) {
+      dispatch(openLoginModal());
+      return;
+    }
+
     // Basic validation: check if all questions in the current step are answered
     const currentSchema = exchangeQuestionsSchema.find(s => s.step === currentStep);
     if (currentSchema) {
@@ -101,45 +115,53 @@ export default function ExchangeForm() {
       <div className={`stepItem ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>
         <div className="stepCircle">{currentStep > 1 ? '✓' : '1'}</div>
         <div className="stepLabels">
-          <span className="stepTitle">Device Condition</span>
-          <span className="stepSubtitle">Answer a few questions</span>
+          <span className="stepTitle">Model Details</span>
+          <span className="stepSubtitle">Identify your device</span>
         </div>
       </div>
       <div className="stepLine" />
       <div className={`stepItem ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
         <div className="stepCircle">{currentStep > 2 ? '✓' : '2'}</div>
         <div className="stepLabels">
-          <span className="stepTitle">Body Condition</span>
-          <span className="stepSubtitle">Screen & Body</span>
+          <span className="stepTitle">Device Condition</span>
+          <span className="stepSubtitle">Answer a few questions</span>
         </div>
       </div>
       <div className="stepLine" />
       <div className={`stepItem ${currentStep >= 3 ? 'active' : ''} ${currentStep > 3 ? 'completed' : ''}`}>
         <div className="stepCircle">{currentStep > 3 ? '✓' : '3'}</div>
         <div className="stepLabels">
-          <span className="stepTitle">Camera & Audio</span>
-          <span className="stepSubtitle">Lenses & Sound</span>
+          <span className="stepTitle">Body Condition</span>
+          <span className="stepSubtitle">Screen & Body</span>
         </div>
       </div>
       <div className="stepLine" />
       <div className={`stepItem ${currentStep >= 4 ? 'active' : ''} ${currentStep > 4 ? 'completed' : ''}`}>
         <div className="stepCircle">{currentStep > 4 ? '✓' : '4'}</div>
         <div className="stepLabels">
-          <span className="stepTitle">Connectivity</span>
-          <span className="stepSubtitle">Network & Sensors</span>
+          <span className="stepTitle">Camera & Audio</span>
+          <span className="stepSubtitle">Lenses & Sound</span>
         </div>
       </div>
       <div className="stepLine" />
       <div className={`stepItem ${currentStep >= 5 ? 'active' : ''} ${currentStep > 5 ? 'completed' : ''}`}>
         <div className="stepCircle">{currentStep > 5 ? '✓' : '5'}</div>
         <div className="stepLabels">
+          <span className="stepTitle">Connectivity</span>
+          <span className="stepSubtitle">Network & Sensors</span>
+        </div>
+      </div>
+      <div className="stepLine" />
+      <div className={`stepItem ${currentStep >= 6 ? 'active' : ''} ${currentStep > 6 ? 'completed' : ''}`}>
+        <div className="stepCircle">{currentStep > 6 ? '✓' : '6'}</div>
+        <div className="stepLabels">
           <span className="stepTitle">Additional Details</span>
           <span className="stepSubtitle">Buttons & Sensors</span>
         </div>
       </div>
       <div className="stepLine" />
-      <div className={`stepItem ${currentStep === 6 ? 'active' : ''}`}>
-        <div className="stepCircle">6</div>
+      <div className={`stepItem ${currentStep === 7 ? 'active' : ''}`}>
+        <div className="stepCircle">7</div>
         <div className="stepLabels">
           <span className="stepTitle">Review Offer</span>
           <span className="stepSubtitle">Get your final offer</span>
@@ -166,40 +188,47 @@ export default function ExchangeForm() {
          <div className={`sidebarStep ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>
             <div className="sidebarStepCircle">{currentStep > 1 ? '✓' : '1'}</div>
             <div className="sidebarStepLabels">
-               <span className="sidebarStepTitle">Device Condition</span>
-               <span className="sidebarStepSubtitle">Answer a few questions</span>
+               <span className="sidebarStepTitle">Model Details</span>
+               <span className="sidebarStepSubtitle">Identify your device</span>
             </div>
          </div>
          <div className={`sidebarStep ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
             <div className="sidebarStepCircle">{currentStep > 2 ? '✓' : '2'}</div>
             <div className="sidebarStepLabels">
-               <span className="sidebarStepTitle">Body Condition</span>
-               <span className="sidebarStepSubtitle">Screen & Body</span>
+               <span className="sidebarStepTitle">Device Condition</span>
+               <span className="sidebarStepSubtitle">Answer a few questions</span>
             </div>
          </div>
          <div className={`sidebarStep ${currentStep >= 3 ? 'active' : ''} ${currentStep > 3 ? 'completed' : ''}`}>
             <div className="sidebarStepCircle">{currentStep > 3 ? '✓' : '3'}</div>
             <div className="sidebarStepLabels">
-               <span className="sidebarStepTitle">Camera & Audio</span>
-               <span className="sidebarStepSubtitle">Lenses & Sound</span>
+               <span className="sidebarStepTitle">Body Condition</span>
+               <span className="sidebarStepSubtitle">Screen & Body</span>
             </div>
          </div>
          <div className={`sidebarStep ${currentStep >= 4 ? 'active' : ''} ${currentStep > 4 ? 'completed' : ''}`}>
             <div className="sidebarStepCircle">{currentStep > 4 ? '✓' : '4'}</div>
             <div className="sidebarStepLabels">
-               <span className="sidebarStepTitle">Connectivity</span>
-               <span className="sidebarStepSubtitle">Network & Sensors</span>
+               <span className="sidebarStepTitle">Camera & Audio</span>
+               <span className="sidebarStepSubtitle">Lenses & Sound</span>
             </div>
          </div>
          <div className={`sidebarStep ${currentStep >= 5 ? 'active' : ''} ${currentStep > 5 ? 'completed' : ''}`}>
             <div className="sidebarStepCircle">{currentStep > 5 ? '✓' : '5'}</div>
             <div className="sidebarStepLabels">
+               <span className="sidebarStepTitle">Connectivity</span>
+               <span className="sidebarStepSubtitle">Network & Sensors</span>
+            </div>
+         </div>
+         <div className={`sidebarStep ${currentStep >= 6 ? 'active' : ''} ${currentStep > 6 ? 'completed' : ''}`}>
+            <div className="sidebarStepCircle">{currentStep > 6 ? '✓' : '6'}</div>
+            <div className="sidebarStepLabels">
                <span className="sidebarStepTitle">Additional Details</span>
                <span className="sidebarStepSubtitle">Buttons & Sensors</span>
             </div>
          </div>
-         <div className={`sidebarStep ${currentStep === 6 ? 'active' : ''}`}>
-            <div className="sidebarStepCircle">6</div>
+         <div className={`sidebarStep ${currentStep === 7 ? 'active' : ''}`}>
+            <div className="sidebarStepCircle">7</div>
             <div className="sidebarStepLabels">
                <span className="sidebarStepTitle">Review Offer</span>
                <span className="sidebarStepSubtitle">Get your final offer</span>
@@ -219,12 +248,13 @@ export default function ExchangeForm() {
   );
 
   const renderQuestions = () => {
-    const currentSchema = exchangeQuestionsSchema.find(s => s.step === currentStep);
+    // schema uses 1-5, but currentStep is 2-6 for these questions.
+    const currentSchema = exchangeQuestionsSchema.find(s => s.step === currentStep - 1);
     
     if (!currentSchema) return null;
 
     return (
-      <div className={`questionsContainer ${currentStep === 5 ? 'threeColumns' : ''}`}>
+      <div className={`questionsContainer ${currentStep === 6 ? 'threeColumns' : ''}`}>
         {/* {currentSchema.step === 1 && (
            <div className="heroHeader">
              <h2>iPhone Buyback</h2>
@@ -279,6 +309,7 @@ export default function ExchangeForm() {
   };
 
   // const renderFooterTrustBadges = () => (
+
   //   <div className="trustBadgesFooter">
   //     <div className="trustBadge">
   //       <ShieldIcon />
@@ -329,9 +360,70 @@ export default function ExchangeForm() {
           </div> */}
           
           <div className="scrollableQuestions">
-            {renderQuestions()}
+            {currentStep === 1 && (
+               <div className="stepOneContainer">
+                  <div className="stepOneForm">
+                     <div className="stepOneHeader">
+                        <h2>Let's identify your device</h2>
+                        <p>Tell us a few details about your phone to get an accurate buyback value.</p>
+                     </div>
+                     <div className="stepOneDropdowns">
+                        <div className="dropdownWrapper">
+                           <span className="dropdownIcon"><ShieldIcon /></span>
+                           <div className="dropdownContent">
+                              <label>Brand</label>
+                              <select><option>Apple</option></select>
+                           </div>
+                        </div>
+                        <div className="dropdownWrapper">
+                           <span className="dropdownIcon"><PhoneIcon /></span>
+                           <div className="dropdownContent">
+                              <label>Model</label>
+                              <select><option>iPhone 14</option></select>
+                           </div>
+                        </div>
+                        <div className="dropdownWrapper">
+                           <span className="dropdownIcon"><PowerIcon /></span>
+                           <div className="dropdownContent">
+                              <label>Variant</label>
+                              <select><option>128 GB</option></select>
+                           </div>
+                        </div>
+                        <div className="dropdownWrapper">
+                           <span className="dropdownIcon"><ShieldIcon /></span>
+                           <div className="dropdownContent">
+                              <label>Color</label>
+                              <select><option>Midnight (Black)</option></select>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     <button 
+                       type="button" 
+                       className="stepOneContinueBtn" 
+                       onClick={handleNext}
+                       disabled={isSubmitting}
+                     >
+                       Continue to Device Condition &rarr;
+                     </button>
+                     
+                    
+                  </div>
+                  
+                  <div className="stepOneHero">
+                     <h2>Same Device.<br/><span>New Possibilities.</span></h2>
+                     <p>Sell your old phone in a few simple steps and get the best value.</p>
+                     <div className="heroImageWrapper">
+                        <img src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="Dummy Phone" className="heroPhoneImg" />
+                        
+                     </div>
+                  </div>
+               </div>
+            )}
+
+            {currentStep > 1 && currentStep < 7 && renderQuestions()}
             
-            {currentStep === 6 && (
+            {currentStep === 7 && (
               <div className="reviewSection">
                 <h3>Review & Offer Placeholder</h3>
                 <p>Calculated offer will be shown here.</p>
@@ -339,21 +431,21 @@ export default function ExchangeForm() {
             )}
           </div>
           
-          <div className="wizardActions">
-            {currentStep > 1 && (
+          {currentStep > 1 && (
+            <div className="wizardActions">
               <button type="button" className="backBtn" onClick={handleBack}>
                 &lt; Back
               </button>
-            )}
-            <button 
-              type="button" 
-              className="continueBtn" 
-              onClick={handleNext}
-              disabled={isSubmitting}
-            >
-              {currentStep === totalSteps ? 'Submit' : (currentStep === 1 ? 'Continue >' : 'Continue to Review >')}
-            </button>
-          </div>
+              <button 
+                type="button" 
+                className="continueBtn" 
+                onClick={handleNext}
+                disabled={isSubmitting}
+              >
+                {currentStep === totalSteps ? 'Submit' : 'Continue >'}
+              </button>
+            </div>
+          )}
         </div>
       </div>
       
