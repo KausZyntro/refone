@@ -62,10 +62,10 @@ export default function ExchangeForm() {
           }
         }
       }
-      if (!allAnswered) {
-        toast.error('Please answer all questions before proceeding.');
-        return;
-      }
+      // if (!allAnswered) {
+      //   toast.error('Please answer all questions before proceeding.');
+      //   return;
+      // }
     }
     
     if (currentStep < totalSteps) {
