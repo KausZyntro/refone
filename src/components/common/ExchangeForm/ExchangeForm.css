@@ -285,6 +285,9 @@
   gap: 25px;
   align-items: start;
 }
+.questionsContainer.threeColumns {
+    grid-template-columns: repeat(3, 1fr);
+}
 
 .heroHeader {
   grid-column: 1 / -1;
@@ -582,7 +585,8 @@
     display: none;
   }
 
-  .questionsContainer {
+  .questionsContainer,
+  .questionsContainer.threeColumns {
     grid-template-columns: 1fr;
   }
 

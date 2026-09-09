@@ -423,5 +423,167 @@ export const exchangeQuestionsSchema: StepSchema[] = [
       ]
     }
   ]
+  },
+{
+  step: 5,
+  title: 'Additional Details',
+  subtitle: 'Buttons, Sensors & Repair History',
+  categories: [
+    {
+      id: 'buttons_sensors',
+      title: '9. Buttons & Sensors',
+      subtitle: 'Check the buttons and sensors of your iPhone.',
+      questions: [
+        {
+          id: 42,
+          text: 'Does the Power/Side button work properly?',
+          options: [
+            { label: 'Yes', value: 'yes' },
+            { label: 'No', value: 'no' }
+          ]
+        },
+        {
+          id: 43,
+          text: 'Do the Volume buttons work properly?',
+          options: [
+            { label: 'Yes', value: 'yes' },
+            { label: 'No', value: 'no' }
+          ]
+        },
+        {
+          id: 44,
+          text: 'Does the Ring/Silent switch work properly?',
+          options: [
+            { label: 'Yes', value: 'yes' },
+            { label: 'No', value: 'no' }
+          ]
+        },
+        {
+          id: 45,
+          text: 'Does the Action Button work properly? (supported models)',
+          options: [
+            { label: 'Yes', value: 'yes' },
+            { label: 'No', value: 'no' },
+            { label: 'Not applicable', value: 'not_applicable' }
+          ]
+        },
+        {
+          id: 46,
+          text: 'Does the proximity sensor work properly during calls?',
+          options: [
+            { label: 'Yes', value: 'yes' },
+            { label: 'No', value: 'no' }
+          ]
+        },
+        {
+          id: 47,
+          text: 'Does auto-brightness work properly?',
+          options: [
+            { label: 'Yes', value: 'yes' },
+            { label: 'No', value: 'no' }
+          ]
+        },
+        {
+          id: 48,
+          text: 'Does vibration/haptic feedback work properly?',
+          options: [
+            { label: 'Yes', value: 'yes' },
+            { label: 'No', value: 'no' }
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'water_liquid_damage',
+      title: '10. Water / Liquid Damage',
+      subtitle: 'Check whether the device has been exposed to liquid.',
+      questions: [
+        {
+          id: 49,
+          text: 'Has the phone ever been exposed to water or liquid?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' },
+            { label: "Don't know", value: 'dont_know' }
+          ]
+        },
+        {
+          id: 50,
+          text: 'Is there any visible sign of liquid damage or corrosion?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' },
+            { label: "Don't know", value: 'dont_know' }
+          ],
+          infoMessage:
+            'For your physical inspection, this will be an inspector-controlled field rather than relying on the customer’s answer.'
+        }
+      ]
+    },
+
+    {
+      id: 'parts_repair_history',
+      title: '11. Parts Replacement / Repair History',
+      subtitle: 'Tell us about any previous repairs or part replacements.',
+      questions: [
+        {
+          id: 51,
+          text: 'Has the screen ever been replaced?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' },
+            { label: "Don't know", value: 'dont_know' }
+          ]
+        },
+        {
+          id: 52,
+          text: 'Has the battery ever been replaced?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' },
+            { label: "Don't know", value: 'dont_know' }
+          ]
+        },
+        {
+          id: 53,
+          text: 'Has the rear camera ever been replaced?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' },
+            { label: "Don't know", value: 'dont_know' }
+          ]
+        },
+        {
+          id: 54,
+          text: 'Has the front camera/Face ID assembly ever been replaced?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' },
+            { label: "Don't know", value: 'dont_know' }
+          ]
+        },
+        {
+          id: 55,
+          text: 'Has the back glass/body ever been replaced?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' },
+            { label: "Don't know", value: 'dont_know' }
+          ]
+        },
+        {
+          id: 56,
+          text: 'Has the phone ever been repaired by an unauthorized service center?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' },
+            { label: "Don't know", value: 'dont_know' }
+          ]
+        }
+      ]
+    }
+  ]
 }
+
 ];

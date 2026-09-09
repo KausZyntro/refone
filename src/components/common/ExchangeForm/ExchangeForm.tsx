@@ -43,7 +43,7 @@ export default function ExchangeForm() {
   const dispatch = useDispatch<AppDispatch>();
   const { isLoading: isSubmitting } = useSelector((state: RootState) => state.exchange);
 
-  const totalSteps = 5; // 1: Condition, 2-4: Additional, 5: Review & Offer
+  const totalSteps = 6; // 1: Condition, 2-5: Additional, 6: Review & Offer
 
   const handleOptionSelect = (questionId: number, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
@@ -130,8 +130,16 @@ export default function ExchangeForm() {
         </div>
       </div>
       <div className="stepLine" />
-      <div className={`stepItem ${currentStep === 5 ? 'active' : ''}`}>
-        <div className="stepCircle">5</div>
+      <div className={`stepItem ${currentStep >= 5 ? 'active' : ''} ${currentStep > 5 ? 'completed' : ''}`}>
+        <div className="stepCircle">{currentStep > 5 ? '✓' : '5'}</div>
+        <div className="stepLabels">
+          <span className="stepTitle">Additional Details</span>
+          <span className="stepSubtitle">Buttons & Sensors</span>
+        </div>
+      </div>
+      <div className="stepLine" />
+      <div className={`stepItem ${currentStep === 6 ? 'active' : ''}`}>
+        <div className="stepCircle">6</div>
         <div className="stepLabels">
           <span className="stepTitle">Review Offer</span>
           <span className="stepSubtitle">Get your final offer</span>
@@ -183,8 +191,15 @@ export default function ExchangeForm() {
                <span className="sidebarStepSubtitle">Network & Sensors</span>
             </div>
          </div>
-         <div className={`sidebarStep ${currentStep === 5 ? 'active' : ''}`}>
-            <div className="sidebarStepCircle">5</div>
+         <div className={`sidebarStep ${currentStep >= 5 ? 'active' : ''} ${currentStep > 5 ? 'completed' : ''}`}>
+            <div className="sidebarStepCircle">{currentStep > 5 ? '✓' : '5'}</div>
+            <div className="sidebarStepLabels">
+               <span className="sidebarStepTitle">Additional Details</span>
+               <span className="sidebarStepSubtitle">Buttons & Sensors</span>
+            </div>
+         </div>
+         <div className={`sidebarStep ${currentStep === 6 ? 'active' : ''}`}>
+            <div className="sidebarStepCircle">6</div>
             <div className="sidebarStepLabels">
                <span className="sidebarStepTitle">Review Offer</span>
                <span className="sidebarStepSubtitle">Get your final offer</span>
@@ -209,7 +224,7 @@ export default function ExchangeForm() {
     if (!currentSchema) return null;
 
     return (
-      <div className="questionsContainer">
+      <div className={`questionsContainer ${currentStep === 5 ? 'threeColumns' : ''}`}>
         {/* {currentSchema.step === 1 && (
            <div className="heroHeader">
              <h2>iPhone Buyback</h2>
@@ -316,7 +331,7 @@ export default function ExchangeForm() {
           <div className="scrollableQuestions">
             {renderQuestions()}
             
-            {currentStep === 5 && (
+            {currentStep === 6 && (
               <div className="reviewSection">
                 <h3>Review & Offer Placeholder</h3>
                 <p>Calculated offer will be shown here.</p>
