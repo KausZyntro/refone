@@ -9,7 +9,7 @@ import { openLoginModal } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
 import { exchangeQuestionsSchema, StepSchema } from './ExchangeQuestions';
-import { FaCubes } from 'react-icons/fa';
+import { FaCubes, FaHome } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 import { TbDeviceMobileX } from 'react-icons/tb';
 import { AiOutlineMobile } from 'react-icons/ai';
@@ -176,8 +176,8 @@ export default function ExchangeForm() {
       <div className={`stepItem ${currentStep === 8 ? 'active' : ''}`}>
         <div className="stepCircle">8</div>
         <div className="stepLabels">
-          <span className="stepTitle">Review Offer</span>
-          <span className="stepSubtitle">Get your final offer</span>
+          <span className="stepTitle">Pickup & Payment</span>
+          <span className="stepSubtitle">Schedule pickup</span>
         </div>
       </div>
     </div>
@@ -248,10 +248,10 @@ export default function ExchangeForm() {
             </div>
          </div>
          <div className={`sidebarStep ${currentStep === 8 ? 'active' : ''}`}>
-            <div className="sidebarStepCircle">7</div>
+            <div className="sidebarStepCircle">8</div>
             <div className="sidebarStepLabels">
-               <span className="sidebarStepTitle">Review Offer</span>
-               <span className="sidebarStepSubtitle">Get your final offer</span>
+               <span className="sidebarStepTitle">Pickup & Payment</span>
+               <span className="sidebarStepSubtitle">Schedule pickup</span>
             </div>
          </div>
       </div>
@@ -625,6 +625,192 @@ export default function ExchangeForm() {
   //   </div>
   // );
 
+  const renderSchedulePickup = () => (
+    <div className="schedulePickupContainer">
+      <div className="spHeader">
+        <div className="spHeaderLeft">
+          <h2>Schedule Your Pickup</h2>
+          <p>Choose a date and time that works best for you. Our partner will pick up the device from your location, free of cost.</p>
+        </div>
+        <div className="spHeaderBadge desktopOnly">
+          <span className="spShieldIcon"><ShieldIcon /></span>
+          <div>
+            <strong>Free & Safe Pickup</strong>
+            <span>Insured and contactless pickup</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="spContent">
+        <div className="spFormColumn">
+          <div className="spSection">
+            <div className="spSectionHeader">
+              {/* <span className="spIcon">📍</span> */}
+              <h3>Pickup Address</h3>
+            </div>
+            <p className="spSectionSub">Select a saved address or add a new one.</p>
+            
+            <div className="spAddressList">
+              <div className="spAddressCard selected">
+                <div className="spRadioBtn"><span className="spRadioInner"></span></div>
+                <div className="spAddressDetails">
+                  <div className="spAddressTitleRow">
+                    <strong>Home</strong>
+                    <button className="spEditBtn"><span className="editIcon">✎</span> Edit</button>
+                  </div>
+                  <p>123, Green Park, Sector 45, Gurgaon,<br/>Haryana - 122003</p>
+                  <p className="spContact">Jatin Agarwal | 98765 43210</p>
+                </div>
+              </div>
+              
+              <div className="spAddressCard">
+                <div className="spRadioBtn"></div>
+                <div className="spAddressDetails">
+                  <div className="spAddressTitleRow">
+                    <strong>Office</strong>
+                    <button className="spEditBtn"><span className="editIcon">✎</span> Edit</button>
+                  </div>
+                  <p>Tower B, DLF Cyber City, Phase 3,<br/>Gurgaon - 122002</p>
+                  <p className="spContact">Jatin Agarwal | 98765 43210</p>
+                </div>
+              </div>
+            </div>
+            
+            <button className="spAddAddressBtn">
+              + Add New Address
+            </button>
+            
+            <div className="spConvenienceBox desktopOnly">
+              <span><FaHome /></span>
+              <div>
+                <strong>Pickup at your convenience</strong>
+                <p>Our executive will call you before arriving.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="spFormColumn">
+          <div className="spSection">
+            <div className="spSectionHeader">
+              {/* <span className="spIcon">📅</span> */}
+              <h3>Select Pickup Date</h3>
+              <span className="spSeeMore mobileOnly">See more &gt;</span>
+            </div>
+            <p className="spSectionSub desktopOnly">Choose a convenient date for pickup.</p>
+            
+            <div className="spDateList">
+              <div className="spDateCard selected">
+                <span className="spDay">Tue</span>
+                <span className="spDate">10 Sep</span>
+              </div>
+              <div className="spDateCard">
+                <span className="spDay">Wed</span>
+                <span className="spDate">11 Sep</span>
+              </div>
+              <div className="spDateCard">
+                <span className="spDay">Thu</span>
+                <span className="spDate">12 Sep</span>
+              </div>
+              <div className="spDateCard">
+                <span className="spDay">Fri</span>
+                <span className="spDate">13 Sep</span>
+              </div>
+              <div className="spDateCard">
+                <span className="spDay">Sat</span>
+                <span className="spDate">14 Sep</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="spSection">
+            <div className="spSectionHeader">
+              {/* <span className="spIcon">🕒</span> */}
+              <h3>Select Time Slot</h3>
+            </div>
+            <p className="spSectionSub desktopOnly">Choose a time slot for pickup.</p>
+            
+            <div className="spTimeGrid">
+              <div className="spTimeCard selected">
+                <div className="spRadioBtn"><span className="spRadioInner"></span></div>
+                <span>9:00 AM - 11:00 AM</span>
+              </div>
+              <div className="spTimeCard">
+                <div className="spRadioBtn"></div>
+                <span>11:00 AM - 1:00 PM</span>
+              </div>
+              <div className="spTimeCard">
+                <div className="spRadioBtn"></div>
+                <span>1:00 PM - 3:00 PM</span>
+              </div>
+              <div className="spTimeCard">
+                <div className="spRadioBtn"></div>
+                <span>3:00 PM - 6:00 PM</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="spInfoBox desktopOnly">
+            <span className="spInfoIcon">i</span>
+            <p>Our executive will contact you 30 minutes before pickup.</p>
+          </div>
+        </div>
+
+        <div className="spSummaryColumn">
+          <div className="spSummaryCard">
+            <h3>Pickup Summary</h3>
+            <div className="spSummaryProduct">
+              <img src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="iPhone 14" />
+              <div>
+                <h4>Apple iPhone 14</h4>
+                <p>128 GB | Midnight (Black)</p>
+              </div>
+            </div>
+            <div className="spSummaryValueRow">
+              <span>Estimated Value</span>
+              <strong>₹28,430</strong>
+            </div>
+            <div className="spSummaryDetails">
+              <div className="spSummaryRow">
+                <span className="spSummaryLabel">Pickup Address</span>
+                <span className="spSummaryValue">123, Green Park, Sector 45, Gurgaon - 122003</span>
+              </div>
+              <div className="spSummaryRow">
+                <span className="spSummaryLabel">Pickup Date</span>
+                <span className="spSummaryValue">Tue, 10 Sep 2024</span>
+              </div>
+              <div className="spSummaryRow">
+                <span className="spSummaryLabel">Time Slot</span>
+                <span className="spSummaryValue">9:00 AM - 11:00 AM</span>
+              </div>
+            </div>
+            
+            <div className="spSummaryGuarantees">
+              <div className="spGuaranteeItem">
+                <span className="spCheckShieldIcon"><ShieldIcon /></span>
+                <div>
+                  <strong>Safe & Secure Pickup</strong>
+                  <ul>
+                    <li><span className="check">✓</span> Trained verification executive</li>
+                    <li><span className="check">✓</span> Device inspected on pickup</li>
+                    <li><span className="check">✓</span> Instant payment after verification</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="spFooterAction">
+        <button className="spConfirmBtn" onClick={submitForm}>
+          Confirm Pickup &rarr;
+        </button>
+        <p>You'll receive an SMS and a call to confirm your pickup.</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="wizardLayout">
       <div className="wizardTopHeader">
@@ -708,15 +894,10 @@ export default function ExchangeForm() {
             
             {currentStep === 7 && renderFinalQuote()}
 
-            {currentStep === 8 && (
-              <div className="reviewSection">
-                <h3>Review & Offer Placeholder</h3>
-                <p>Calculated offer will be shown here.</p>
-              </div>
-            )}
+            {currentStep === 8 && renderSchedulePickup()}
           </div>
           
-          {currentStep > 1 && (
+          {currentStep > 1 && currentStep < 8 && (
             <div className="wizardActions">
               <button type="button" className="backBtn" onClick={handleBack}>
                 &lt; Back
@@ -734,6 +915,39 @@ export default function ExchangeForm() {
         </div>
       </div>
       
+      {/* {currentStep === 8 && (
+        <div className="sellingEasyBanner">
+          <div className="sebContent">
+            <h2>We Make Selling Easy</h2>
+            <p>Sit back while we take care of the rest.</p>
+            
+            <div className="sebFeatures">
+              <div className="sebFeature">
+                <span className="sebIcon">🚚</span>
+                <div>
+                  <strong>Free Pickup</strong>
+                  <span>Across India</span>
+                </div>
+              </div>
+              <div className="sebFeature">
+                <span className="sebIcon"><ShieldIcon /></span>
+                <div>
+                  <strong>100% Secure</strong>
+                  <span>Insured & Tracked</span>
+                </div>
+              </div>
+              <div className="sebFeature">
+                <span className="sebIcon">⚡</span>
+                <div>
+                  <strong>Instant Payment</strong>
+                  <span>After Device Verification</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )} */}
+
       {/* {renderFooterTrustBadges()} */}
     </div>
   );
