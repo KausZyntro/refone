@@ -837,4 +837,543 @@
     flex-wrap: wrap;
     gap: 15px;
   }
+ 
+}
+
+
+/* Final Quote Step (Step 7) */
+.finalQuoteContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 30px;
+}
+
+.finalQuoteHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.finalQuoteHeaderLeft h2 {
+  font-size: 24px;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.finalQuoteHeaderLeft p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.accurateQuoteBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.accurateQuoteBadge .shieldIcon {
+  color: #16a34a;
+  background: #dcfce7;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accurateQuoteBadge div {
+  display: flex;
+  flex-direction: column;
+}
+
+.accurateQuoteBadge strong {
+  font-size: 13px;
+  color: #166534;
+}
+
+.accurateQuoteBadge span {
+  font-size: 11px;
+  color: #166534;
+}
+
+.fqDeviceCardContainer {
+  display: flex;
+  align-items: stretch;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  gap: 20px;
+}
+
+.fqDeviceCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.fqDeviceImage {
+  width: 80px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background: #f9fafb; */
+  border-radius: 8px;
+  /* padding: 10px; */
+}
+
+.fqDeviceImage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.fqDeviceDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.fqDeviceDetails h3 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #111827;
+}
+
+.fqDeviceDetails p {
+  margin: 0 0 15px 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.fqChangeModelBtn {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fqValueSection {
+  display: flex;
+  align-items: stretch;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 15px;
+  gap: 29px;
+  border: 1px solid #e2e8f0;
+}
+
+.fqValueDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.fqValueDetails > span {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.fqValueDetails h2 {
+  font-size: 28px;
+  color: #008f75;
+  margin: 0 0 5px 0;
+  font-weight: 800;
+}
+
+.fqValueSub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.fqStrikethrough {
+  font-size: 14px;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+.fqLowerBadge {
+  background: #dcfce7;
+  color: #166534;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fqBasedOn {
+  font-size: 11px;
+  color: #64748b;
+  margin: 0;
+}
+
+.fqGreatValueBadge {
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  min-width: 100px;
+}
+
+.fqGreatValueIcon {
+  background: #10b981;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.fqGreatValueBadge strong {
+  font-size: 12px;
+  color: #065f46;
+}
+
+.fqGreatValueBadge span {
+  font-size: 10px;
+  color: #065f46;
+  line-height: 1.2;
+}
+
+.fqConditionSummary, .fqPartWiseDetails {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.fqSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.fqSectionHeader h3 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #111827;
+}
+
+.fqSectionHeader p {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.fqEditAllBtn {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fqSummaryList {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 15px;
+}
+
+.fqSummaryItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.fqSummaryItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.fqItemIcon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+}
+
+.fqItemLabel {
+  font-size: 14px;
+  color: #111827;
+  font-weight: 500;
+  width: 150px;
+}
+
+.fqItemValue {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.fqSummaryItemRight {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.fqFactor {
+  font-size: 12px;
+  color: #9ca3af;
+  background: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.fqEditBtn {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: #006aaf;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fqChevronRight {
+  color: #9ca3af;
+  font-weight: bold;
+  display: none;
+}
+
+.fqFooterAction {
+  background: #f0fdf4;
+  border-radius: 12px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.fqFooterTop {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.fqFooterImgCircle {
+  width: 60px;
+  height: 60px;
+  background: #dcfce7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.fqFooterPriceInfo p {
+  margin: 0 0 5px 0;
+  font-size: 15px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.fqFooterPriceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fqFooterPriceRow h2 {
+  margin: 0;
+  font-size: 32px;
+  color: #008f75;
+}
+
+.fqFooterFeatures {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+  width: 100%;
+  justify-content: center;
+}
+
+.fqFeature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.fqFeatureIcon {
+  font-size: 24px;
+  color: #008f75;
+}
+
+.fqFeature div {
+  display: flex;
+  flex-direction: column;
+}
+
+.fqFeature strong {
+  font-size: 14px;
+  color: #111827;
+}
+
+.fqFeature span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.fqConfirmBtn {
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  padding: 16px 40px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+  max-width: 400px;
+}
+
+.fqConfirmBtn:hover {
+  opacity: 0.9;
+}
+
+.fqRedirectText {
+  margin: 15px 0 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Mobile Adjustments for Final Quote */
+@media (max-width: 900px) {
+  .fqDeviceCardContainer {
+    flex-direction: column;
+    align-items: stretch;
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: 15px;
+  }
+  
+  .fqDeviceCard {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 15px;
+    align-items: center;
+    flex-direction: row;
+    text-align: left;
+  }
+  
+  .fqDeviceDetails {
+    align-items: flex-start;
+  }
+  
+  .fqValueSection {
+    flex-direction: row;
+  }
+  
+  .fqValueDetails {
+    align-items: center;
+  }
+  
+  .finalQuoteHeader {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .fqSummaryItem {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .fqSummaryItemLeft {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 12px;
+    row-gap: 4px;
+    align-items: center;
+  }
+  
+  .fqItemIcon {
+    grid-row: 1 / span 2;
+  }
+  
+  .fqItemLabel {
+    width: auto;
+    line-height: 1.2;
+  }
+  
+  .fqSummaryItemRight {
+    justify-content: flex-end;
+  }
+  
+  .fqEditBtn {
+    display: none;
+  }
+  
+  .fqChevronRight {
+    display: none;
+  }
+  
+  .fqFactorText {
+    display: none;
+  }
+  
+  .fqFooterFeatures {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+   .accurateQuoteBadge{
+  display:none;
+}
 }

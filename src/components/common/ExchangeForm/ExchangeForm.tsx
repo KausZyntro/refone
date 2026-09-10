@@ -9,6 +9,11 @@ import { openLoginModal } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
 import { exchangeQuestionsSchema, StepSchema } from './ExchangeQuestions';
+import { FaCubes } from 'react-icons/fa';
+import { MdVerified } from 'react-icons/md';
+import { TbDeviceMobileX } from 'react-icons/tb';
+import { AiOutlineMobile } from 'react-icons/ai';
+import { IoBatteryHalfSharp } from 'react-icons/io5';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -52,7 +57,7 @@ export default function ExchangeForm() {
     }
   }, [isAuthenticated, dispatch]);
 
-  const totalSteps = 7; // 1: Model Details, 2: Condition, 3-6: Additional, 7: Review & Offer
+  const totalSteps = 8; // 1: Model Details, 2: Condition, 3-6: Additional, 7: Review & Offer, 8: Final Quote
 
   const handleOptionSelect = (questionId: number, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
@@ -163,6 +168,14 @@ export default function ExchangeForm() {
       <div className={`stepItem ${currentStep === 7 ? 'active' : ''}`}>
         <div className="stepCircle">7</div>
         <div className="stepLabels">
+          <span className="stepTitle">Final Quote</span>
+          <span className="stepSubtitle">Get your final quote</span>
+        </div>
+      </div>
+      <div className="stepLine" />
+      <div className={`stepItem ${currentStep === 8 ? 'active' : ''}`}>
+        <div className="stepCircle">8</div>
+        <div className="stepLabels">
           <span className="stepTitle">Review Offer</span>
           <span className="stepSubtitle">Get your final offer</span>
         </div>
@@ -227,7 +240,14 @@ export default function ExchangeForm() {
                <span className="sidebarStepSubtitle">Buttons & Sensors</span>
             </div>
          </div>
-         <div className={`sidebarStep ${currentStep === 7 ? 'active' : ''}`}>
+          <div className={`sidebarStep ${currentStep === 7 ? 'active' : ''}`}>
+            <div className="sidebarStepCircle">7</div>
+            <div className="sidebarStepLabels">
+               <span className="sidebarStepTitle">Final Quote</span>
+               <span className="sidebarStepSubtitle">Get your final quote</span>
+            </div>
+         </div>
+         <div className={`sidebarStep ${currentStep === 8 ? 'active' : ''}`}>
             <div className="sidebarStepCircle">7</div>
             <div className="sidebarStepLabels">
                <span className="sidebarStepTitle">Review Offer</span>
@@ -250,6 +270,7 @@ export default function ExchangeForm() {
   const renderQuestions = () => {
     // schema uses 1-5, but currentStep is 2-6 for these questions.
     const currentSchema = exchangeQuestionsSchema.find(s => s.step === currentStep - 1);
+    // console.log("IT IS?",currentSchema)
     
     if (!currentSchema) return null;
 
@@ -307,6 +328,268 @@ export default function ExchangeForm() {
       </div>
     );
   };
+
+  const renderFinalQuote = () => (
+    <div className="finalQuoteContainer">
+      <div className="finalQuoteHeader">
+        <div className="finalQuoteHeaderLeft">
+          <h2>Review Your Device Details</h2>
+          <p>Here's a summary of the information you've provided.<br/>Please check and confirm to get your final buyback price.</p>
+        </div>
+        <div className="accurateQuoteBadge">
+          <span className="shieldIcon"><ShieldIcon /></span>
+          <div>
+            <strong>Accurate quote</strong>
+            <span>Based on your device condition</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="fqDeviceCardContainer">
+        <div className="fqDeviceCard">
+          <div className="fqDeviceImage">
+            <img src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="Apple iPhone 14" />
+          </div>
+          <div className="fqDeviceDetails">
+            <h3>Apple iPhone 14</h3>
+            <p>128 GB | Midnight (Black)</p>
+            <button className="fqChangeModelBtn">
+              <span className="editIcon">✎</span> Change Model
+            </button>
+          </div>
+        </div>
+        <div className="fqValueSection">
+          <div className="fqValueDetails">
+            <span>Estimated Buyback Value</span>
+            <h2>₹28,430</h2>
+            <div className="fqValueSub">
+              <span className="fqStrikethrough">₹32,000</span>
+              <span className="fqLowerBadge">↓ 12% lower</span>
+            </div>
+            <p className="fqBasedOn">Based on your device condition</p>
+          </div>
+          <div className="fqGreatValueBadge">
+            <div className="fqGreatValueIcon">↗</div>
+            <strong>Great Value!</strong>
+            <span>Your device is in<br/>good condition.</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="fqConditionSummary">
+        <div className="fqSectionHeader">
+          <div>
+            <h3>Condition Summary</h3>
+            <p>You can go back and edit any details if needed.</p>
+          </div>
+          <button className="fqEditAllBtn"><span className="editIcon">✎</span> Edit All</button>
+        </div>
+        
+        <div className="fqSummaryList">
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><AiOutlineMobile /></span>
+              <span className="fqItemLabel">Device Age</span>
+              <span className="fqItemValue">1 – 2 years (12–23 months)</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>0.78</span>
+              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
+              <span className="fqChevronRight">&gt;</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><PhoneIcon /></span>
+              <span className="fqItemLabel">Body Condition</span>
+              <span className="fqItemValue">Minor scratches</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>0.95</span>
+              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
+              <span className="fqChevronRight">&gt;</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><PhoneIcon /></span>
+              <span className="fqItemLabel">Display Condition</span>
+              <span className="fqItemValue">Original + perfect</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
+              <span className="fqChevronRight">&gt;</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><IoBatteryHalfSharp /></span>
+              <span className="fqItemLabel">Battery Health</span>
+              <span className="fqItemValue">85 – 89%</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>0.95</span>
+              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
+              <span className="fqChevronRight">&gt;</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><TbDeviceMobileX /></span>
+              <span className="fqItemLabel">Dents</span>
+              <span className="fqItemValue">No dent</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
+              <span className="fqChevronRight">&gt;</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><MdVerified /></span>
+              <span className="fqItemLabel">Functional Status</span>
+              <span className="fqItemValue">Everything working</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
+              <span className="fqChevronRight">&gt;</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><FaCubes /></span>
+              <span className="fqItemLabel">Parts (Overall)</span>
+              <span className="fqItemValue">Original</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
+              <span className="fqChevronRight">&gt;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="fqPartWiseDetails">
+        <div className="fqSectionHeader">
+          <div>
+            <h3>Part-wise Details</h3>
+            <p>Here are the details for individual components.</p>
+          </div>
+        </div>
+        <div className="fqSummaryList">
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><PhoneIcon /></span>
+              <span className="fqItemLabel">Display</span>
+              <span className="fqItemValue">Original</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><PowerIcon /></span>
+              <span className="fqItemLabel">Battery</span>
+              <span className="fqItemValue">Original</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon">📷</span>
+              <span className="fqItemLabel">Camera</span>
+              <span className="fqItemValue">Original</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon"><PhoneIcon /></span>
+              <span className="fqItemLabel">Back Glass</span>
+              <span className="fqItemValue">Original</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon">🎛️</span>
+              <span className="fqItemLabel">Motherboard</span>
+              <span className="fqItemValue">Original</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+            </div>
+          </div>
+          <div className="fqSummaryItem">
+            <div className="fqSummaryItemLeft">
+              <span className="fqItemIcon">🔌</span>
+              <span className="fqItemLabel">Charging Port</span>
+              <span className="fqItemValue">Original</span>
+            </div>
+            <div className="fqSummaryItemRight">
+              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="fqFooterAction">
+        <div className="fqFooterTop">
+          <div className="fqFooterImg">
+            <div className="fqFooterImgCircle">
+              <span>💸</span>
+            </div>
+          </div>
+          <div className="fqFooterPriceInfo">
+            <p>Your Estimated Buyback Value</p>
+            <div className="fqFooterPriceRow">
+              <h2>₹28,430</h2>
+              <span className="fqStrikethrough">₹32,000</span>
+              <span className="fqLowerBadge">↓ 12% lower</span>
+            </div>
+          </div>
+        </div>
+        <div className="fqFooterFeatures">
+          <div className="fqFeature">
+            <span className="fqFeatureIcon">🚚</span>
+            <div>
+              <strong>Free Pickup</strong>
+              <span>Across India</span>
+            </div>
+          </div>
+          <div className="fqFeature">
+            <span className="fqFeatureIcon">⚡</span>
+            <div>
+              <strong>Instant Payment</strong>
+              <span>UPI / Bank Transfer</span>
+            </div>
+          </div>
+          <div className="fqFeature">
+            <span className="fqFeatureIcon"><ShieldIcon /></span>
+            <div>
+              <strong>100% Secure</strong>
+              <span>Safe & Transparent</span>
+            </div>
+          </div>
+        </div>
+        <button className="fqConfirmBtn" onClick={() => submitForm()}>
+          Confirm & Get Final Quote &rarr;
+        </button>
+        <p className="fqRedirectText">You'll be redirected to schedule pickup and choose your payment method.</p>
+      </div> */}
+    </div>
+  );
 
   // const renderFooterTrustBadges = () => (
 
@@ -423,7 +706,9 @@ export default function ExchangeForm() {
 
             {currentStep > 1 && currentStep < 7 && renderQuestions()}
             
-            {currentStep === 7 && (
+            {currentStep === 7 && renderFinalQuote()}
+
+            {currentStep === 8 && (
               <div className="reviewSection">
                 <h3>Review & Offer Placeholder</h3>
                 <p>Calculated offer will be shown here.</p>
