@@ -1,0 +1,670 @@
+.container {
+  max-width: 1200px;
+  /* margin: 0 auto; */
+  margin:180px auto 20px;
+  padding: 24px;
+  font-family: var(--font-inter, sans-serif);
+  color: #1a202c;
+  /* background-color: #f7fafc; */
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.badge {
+  background-color: #e6ffed;
+  color: #22c55e;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+}
+
+.needHelp {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 25px;
+}
+
+.needHelp:hover {
+  background-color: #f8fafc;
+}
+
+.helpIcon {
+  width: 24px;
+  height: 24px;
+  color: #0f172a;
+}
+
+.helpText {
+  display: flex;
+  flex-direction: column;
+}
+
+.helpTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.helpDesc {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.deviceCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 32px;
+}
+
+.deviceInfo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.deviceImage {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.deviceDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.deviceName {
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.deviceSpec {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.requestId {
+  font-size: 14px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copyIcon {
+  cursor: pointer;
+  color: #94a3b8;
+}
+
+.copyIcon:hover {
+  color: #0f172a;
+}
+
+.quoteSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.verifiedQuoteBadge {
+  background-color: #e6ffed;
+  color: #22c55e;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quoteAmount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #16a34a;
+  margin: 0;
+}
+
+.requestDate {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.viewDetailsBtn {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.viewDetailsBtn:hover {
+  background-color: #f8fafc;
+}
+
+.actionSection {
+  display: flex;
+  align-items: center;
+}
+
+/* Stepper */
+.stepperContainer {
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+
+.stepperLine {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #e2e8f0;
+  z-index: 1;
+}
+
+.stepperProgress {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  height: 2px;
+  background-color: #16a34a;
+  z-index: 2;
+  transition: width 0.3s ease;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 3;
+  width: 100px;
+  text-align: center;
+}
+
+.stepCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #94a3b8;
+  position: relative;
+}
+
+.step.completed .stepCircle {
+  background-color: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
+.step.active .stepCircle {
+  background-color: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+.stepTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.step.completed .stepTitle, .step.active .stepTitle {
+  color: #0f172a;
+}
+
+.stepDate {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* Status Block */
+.statusContainer {
+  background-color: #f0f7ff;
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  gap: 40px;
+  margin-bottom: 32px;
+}
+
+.statusLeft {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.statusImageWrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.statusIllustration {
+  width: 100px;
+  height: 100px;
+}
+
+.statusContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statusTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.statusDesc {
+  font-size: 14px;
+  color: #475569;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.estimatedBox {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.estimatedIcon {
+  color: #3b82f6;
+  width: 24px;
+  height: 24px;
+}
+
+.estimatedText {
+  display: flex;
+  flex-direction: column;
+}
+
+.estimatedLabel {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.estimatedTime {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.statusRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid #dbeafe;
+  padding-left: 40px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 11px;
+  width: 2px;
+  background-color: #dbeafe;
+  z-index: 1;
+}
+
+.timelineItem {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.timelineItem:last-child {
+  padding-bottom: 0;
+}
+
+.timelineIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.timelineItem.completed .timelineIcon {
+  background-color: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
+.timelineItem.active .timelineIcon {
+  background-color: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+.timelineContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.timelineTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0;
+}
+
+.timelineItem.completed .timelineTitle, .timelineItem.active .timelineTitle {
+  color: #0f172a;
+}
+
+.timelineSubtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.gridSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.detailsCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.detailsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.detailsTitleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detailsTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.editBtn {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+}
+
+.infoLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.infoValue {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.bulletList {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bulletList li {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.footerBanner {
+  background-color: #e6ffed;
+  border-radius: 12px;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.footerContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 2;
+}
+
+.leafIcon {
+  width: 48px;
+  height: 48px;
+  background-color: #16a34a;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+}
+
+.footerText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footerTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.footerSubtitle {
+  font-size: 14px;
+  color: #475569;
+  margin: 0;
+}
+
+.footerGraphic {
+  position: absolute;
+  right: 24px;
+  bottom: 0;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+}
+
+.footerGraphic img {
+  height: 80%;
+  object-fit: contain;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .needHelp {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .deviceCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .quoteSection {
+    align-items: flex-start;
+    width: 100%;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
+  }
+
+  .actionSection {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .stepperContainer {
+    overflow-x: auto;
+    padding-bottom: 20px;
+  }
+
+  .stepper {
+    min-width: 600px;
+  }
+
+  .statusContainer {
+    flex-direction: column;
+    padding: 20px;
+    gap: 24px;
+  }
+
+  .statusRight {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid #dbeafe;
+    padding-top: 24px;
+  }
+
+  .gridSection {
+    grid-template-columns: 1fr;
+  }
+
+  .footerBanner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 24px;
+  }
+  
+  .footerGraphic {
+    position: relative;
+    right: 0;
+    height: 80px;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+@media(max-width:900px){
+  .needHelp{
+    display:none;
+  }
+  .title{
+    font-size: 27px;
+  }
+}
