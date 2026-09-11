@@ -31,29 +31,54 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const handlePlayPause = useCallback(async () => {
+  const handlePlayPause = useCallback((e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     const video = videoRef.current;
     if (!video) return;
 
     if (!video.paused) {
       video.pause();
+      setIsPlaying(false);
     } else {
       setIsLoading(true);
-      try {
-        // Pause all other videos on the page
-        document.querySelectorAll("video").forEach((v) => {
-          if (v !== video && !v.paused) {
-            v.pause();
-          }
-        });
+      
+      // Pause all other videos on the page
+      document.querySelectorAll("video").forEach((v) => {
+        if (v !== video && !v.paused) {
+          v.pause();
+        }
+      });
 
-        video.muted = false; // Unmute when user explicitly plays
-        setIsMuted(false);
-        await video.play();
-      } catch (err) {
-        console.warn("Video play failed:", err);
-      } finally {
+      video.muted = false; // Unmute when user explicitly plays
+      setIsMuted(false);
+      
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsLoading(false);
+            setIsPlaying(true);
+          })
+          .catch((err) => {
+            console.warn("Video play failed:", err);
+            // Fallback: If iOS blocks unmuted autoplay/play without proper gesture, try muted
+            video.muted = true;
+            setIsMuted(true);
+            video.play()
+              .then(() => {
+                setIsLoading(false);
+                setIsPlaying(true);
+              })
+              .catch((e) => {
+                console.error("Muted play also failed", e);
+                setIsLoading(false);
+                setIsPlaying(false);
+                setHasError(true);
+              });
+          });
+      } else {
         setIsLoading(false);
+        setIsPlaying(true);
       }
     }
   }, []);
@@ -94,8 +119,7 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onEnded={handleVideoEnd}
-        
-        // onError={handleError}
+        onClick={(e) => e.preventDefault()} // Let parent div handle click
         onError={() => {console.log("Video error:", reel.media_url);}}
       />
 
@@ -199,6 +223,9 @@ const ReelsSlider: React.FC<ReelsSliderProps> = ({ reels }) => {
             centeredSlides={false}
             freeMode
             grabCursor
+            preventClicks={false}
+            preventClicksPropagation={false}
+            touchStartPreventDefault={false}
             breakpoints={{
               360: { spaceBetween: 14 },
               480: { spaceBetween: 14 },
