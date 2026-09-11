@@ -110,7 +110,7 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
       <video
         ref={videoRef}
         className="reel-video"
-        src={reel.media_url}
+        src={reel.media_url ? `${reel.media_url}#t=0.001` : undefined}
         poster={reel.thumbnail_url || undefined}
         preload="metadata"
         playsInline
