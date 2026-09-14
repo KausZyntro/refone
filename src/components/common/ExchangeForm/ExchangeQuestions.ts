@@ -327,16 +327,53 @@ export const exchangeQuestionsSchema: StepSchema[] = [
 },
   {
   step: 4,
-  title: 'Connectivity',
-  subtitle: 'Network & Sensors',
+  title: 'Battery & Connectivity',
+  subtitle: 'Power, Network & Sensors',
   categories: [
     {
-      id: 'connectivity',
-      title: '7. Connectivity',
-      subtitle: 'Check the connectivity features of your iPhone.',
+      id: 'battery',
+      title: '7. Battery',
+      subtitle: 'Check the health of your battery.',
       questions: [
         {
           id: 33,
+          text: 'What is your battery health?',
+          options: [
+            { label: '95 - 100%', value: '95_100' },
+            { label: '90 - 94%', value: '90_94' },
+            { label: '85 - 89%', value: '85_89' },
+            { label: '80 - 84%', value: '80_84' },
+            { label: '75 - 79%', value: '75_79' },
+            { label: '70 - 74%', value: '70_74' },
+            { label: 'Below 70%', value: 'below_70' }
+          ]
+        },
+        {
+          id: 34,
+          text: 'Has the battery ever been replaced?',
+          options: [
+            { label: 'No, original battery', value: 'no_original' },
+            { label: 'Yes, genuine replacement', value: 'yes_genuine' },
+            { label: 'Yes, aftermarket replacement', value: 'yes_aftermarket' }
+          ]
+        },
+        {
+          id: 35,
+          text: 'Is the battery swollen or physically damaged?',
+          options: [
+            { label: 'No', value: 'no' },
+            { label: 'Yes', value: 'yes' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'connectivity_1',
+      title: '8. Connectivity',
+      subtitle: 'Check the connectivity features of your iPhone.',
+      questions: [
+        {
+          id: 36,
           text: 'Can the iPhone connect to a mobile network properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -344,7 +381,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 34,
+          id: 37,
           text: 'Does Wi-Fi work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -352,15 +389,22 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 35,
+          id: 38,
           text: 'Does Bluetooth work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
             { label: 'No', value: 'no' }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: 'connectivity_2',
+      title: '',
+      subtitle: '',
+      questions: [
         {
-          id: 36,
+          id: 39,
           text: 'Does GPS/location work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -368,7 +412,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 37,
+          id: 40,
           text: 'Does NFC work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -377,7 +421,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 38,
+          id: 41,
           text: 'Does 4G/5G work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -389,11 +433,11 @@ export const exchangeQuestionsSchema: StepSchema[] = [
     },
     {
       id: 'face_touch_id',
-      title: '8. Face ID / Touch ID',
+      title: '9. Face ID / Touch ID',
       subtitle: 'Check the biometric authentication features of your iPhone.',
       questions: [
         {
-          id: 39,
+          id: 42,
           text: 'Does Face ID work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -402,7 +446,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 40,
+          id: 43,
           text: 'Is Face ID disabled because of a hardware issue?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -412,7 +456,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           infoMessage: 'For older iPhones:'
         },
         {
-          id: 41,
+          id: 44,
           text: 'Does Touch ID work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -431,11 +475,11 @@ export const exchangeQuestionsSchema: StepSchema[] = [
   categories: [
     {
       id: 'buttons_sensors',
-      title: '9. Buttons & Sensors',
+      title: '10. Buttons & Sensors',
       subtitle: 'Check the buttons and sensors of your iPhone.',
       questions: [
         {
-          id: 42,
+          id: 45,
           text: 'Does the Power/Side button work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -443,7 +487,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 43,
+          id: 46,
           text: 'Do the Volume buttons work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -451,7 +495,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 44,
+          id: 47,
           text: 'Does the Ring/Silent switch work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -459,7 +503,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 45,
+          id: 48,
           text: 'Does the Action Button work properly? (supported models)',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -468,7 +512,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 46,
+          id: 49,
           text: 'Does the proximity sensor work properly during calls?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -476,7 +520,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 47,
+          id: 50,
           text: 'Does auto-brightness work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -484,7 +528,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 48,
+          id: 51,
           text: 'Does vibration/haptic feedback work properly?',
           options: [
             { label: 'Yes', value: 'yes' },
@@ -496,11 +540,11 @@ export const exchangeQuestionsSchema: StepSchema[] = [
 
     {
       id: 'water_liquid_damage',
-      title: '10. Water / Liquid Damage',
+      title: '11. Water / Liquid Damage',
       subtitle: 'Check whether the device has been exposed to liquid.',
       questions: [
         {
-          id: 49,
+          id: 52,
           text: 'Has the phone ever been exposed to water or liquid?',
           options: [
             { label: 'No', value: 'no' },
@@ -509,7 +553,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 50,
+          id: 53,
           text: 'Is there any visible sign of liquid damage or corrosion?',
           options: [
             { label: 'No', value: 'no' },
@@ -524,11 +568,11 @@ export const exchangeQuestionsSchema: StepSchema[] = [
 
     {
       id: 'parts_repair_history',
-      title: '11. Parts Replacement / Repair History',
+      title: '12. Parts Replacement / Repair History',
       subtitle: 'Tell us about any previous repairs or part replacements.',
       questions: [
         {
-          id: 51,
+          id: 54,
           text: 'Has the screen ever been replaced?',
           options: [
             { label: 'No', value: 'no' },
@@ -537,7 +581,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 52,
+          id: 55,
           text: 'Has the battery ever been replaced?',
           options: [
             { label: 'No', value: 'no' },
@@ -546,7 +590,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 53,
+          id: 56,
           text: 'Has the rear camera ever been replaced?',
           options: [
             { label: 'No', value: 'no' },
@@ -555,7 +599,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 54,
+          id: 57,
           text: 'Has the front camera/Face ID assembly ever been replaced?',
           options: [
             { label: 'No', value: 'no' },
@@ -564,7 +608,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 55,
+          id: 58,
           text: 'Has the back glass/body ever been replaced?',
           options: [
             { label: 'No', value: 'no' },
@@ -573,7 +617,7 @@ export const exchangeQuestionsSchema: StepSchema[] = [
           ]
         },
         {
-          id: 56,
+          id: 59,
           text: 'Has the phone ever been repaired by an unauthorized service center?',
           options: [
             { label: 'No', value: 'no' },

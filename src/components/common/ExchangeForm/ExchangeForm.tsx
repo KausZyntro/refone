@@ -275,7 +275,7 @@ export default function ExchangeForm() {
     if (!currentSchema) return null;
 
     return (
-      <div className={`questionsContainer ${currentStep === 6 ? 'threeColumns' : ''}`}>
+      <div className={`questionsContainer ${currentSchema.categories.length === 3 ? 'layout-masonry-3' : currentSchema.categories.length === 4 ? 'layout-masonry-4' : ''}`}>
         {/* {currentSchema.step === 1 && (
            <div className="heroHeader">
              <h2>iPhone Buyback</h2>
@@ -285,15 +285,17 @@ export default function ExchangeForm() {
 
         {currentSchema.categories.map((category) => (
           <div key={category.id} className="categoryBlock">
-            <div className="categoryHeader">
-              <div className="categoryIcon">
-                {category.id.includes('power') ? <PowerIcon /> : <PhoneIcon />}
+            {category.title && (
+              <div className="categoryHeader">
+                <div className="categoryIcon">
+                  {category.id.includes('power') ? <PowerIcon /> : <PhoneIcon />}
+                </div>
+                <div className="categoryTitles">
+                  <h3>{category.title}</h3>
+                  {category.subtitle && <p>{category.subtitle}</p>}
+                </div>
               </div>
-              <div className="categoryTitles">
-                <h3>{category.title}</h3>
-                {category.subtitle && <p>{category.subtitle}</p>}
-              </div>
-            </div>
+            )}
             <div className="categoryQuestions">
               {category.questions.map((q) => (
                 <div key={q.id} className="questionItem">

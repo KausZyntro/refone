@@ -1,0 +1,51 @@
+/* SkeletonLoader.css */
+
+.home-skeletor {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.home-skeletor-shimmer {
+  background: #e0e0e0 !important;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer 1.5s infinite linear;
+  width: 1360px;
+  height: 480px;
+  border-radius: 15px;
+}
+.home-category-skeletor-shimmer{
+  width: 1250px;
+  height: 32px;
+  border-radius: 4px;
+}
+.home-cat-mob-skeletor-shimmer{
+  width: 80px; 
+  height: 32px; 
+  border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+    .home-skeletor-shimmer{
+      width: 370px;
+      height: 300px;
+      border-radius: 15px;
+    }
+    .home-category-skeletor-shimmer{
+display: none;
+}
+.home-cat-mob-skeletor-shimmer{
+display: none;
+}
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
