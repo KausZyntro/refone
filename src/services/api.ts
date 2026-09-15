@@ -261,6 +261,12 @@ export const exchangeAPI = {
     getProductList: async () => {
         const response = await api.get("exchange/products");
         return response.data;
+    },
+    getBuybackQuestions: async (index: number) => {
+        const formData = new FormData();
+        formData.append("index", index.toString());
+        const response = await api.post("buyback/questions", formData);
+        return response.data;
     }
 };
 
@@ -299,5 +305,6 @@ export const feedbackAPI = {
         return response.data;
     }
 };
+
 
 export default api;

@@ -4,12 +4,46 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { submitExchangeRequest } from '@/redux/features/exchangeSlice';
+import { submitExchangeRequest, fetchBuybackQuestions } from '@/redux/features/exchangeSlice';
 import { openLoginModal } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
 import { exchangeQuestionsSchema, StepSchema } from './ExchangeQuestions';
 import { FaCubes, FaHome } from 'react-icons/fa';
+
+interface Option {
+  id: number;
+  question_id: number;
+  option_label: string;
+  option_value: string;
+  price_adjustment: string;
+  adjustment_type: string;
+  reject_device: number;
+  option_order: number;
+  status: number;
+}
+
+interface Question {
+  id: number;
+  section_id: number;
+  question: string;
+  question_type: string;
+  is_required: number;
+  inspection_only: number;
+  question_order: number;
+  status: number;
+  options: Option[];
+}
+
+interface Section {
+  id: number;
+  section_name: string;
+  section_slug: string;
+  section_order: number;
+  status: number;
+  questions: Question[];
+}
+
 import { MdVerified } from 'react-icons/md';
 import { TbDeviceMobileX } from 'react-icons/tb';
 import { AiOutlineMobile } from 'react-icons/ai';
@@ -48,7 +82,7 @@ export default function ExchangeForm() {
   const [answers, setAnswers] = useState<Answers>({});
   
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading: isSubmitting } = useSelector((state: RootState) => state.exchange);
+  const { isLoading: isSubmitting, questions: apiQuestions, isLoadingQuestions } = useSelector((state: RootState) => state.exchange);
   const isAuthenticated = useSelector((state: RootState) => state.auth?.isAuthenticated);
 
   useEffect(() => {
@@ -56,6 +90,12 @@ export default function ExchangeForm() {
       dispatch(openLoginModal());
     }
   }, [isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (currentStep > 1 && currentStep < 7) {
+      dispatch(fetchBuybackQuestions(currentStep - 1));
+    }
+  }, [currentStep, dispatch]);
 
   const totalSteps = 8; // 1: Model Details, 2: Condition, 3-6: Additional, 7: Review & Offer, 8: Final Quote
 
@@ -70,12 +110,11 @@ export default function ExchangeForm() {
     }
 
     // Basic validation: check if all questions in the current step are answered
-    const currentSchema = exchangeQuestionsSchema.find(s => s.step === currentStep);
-    if (currentSchema) {
+    if (currentStep > 1 && currentStep < 7) {
       let allAnswered = true;
-      for (const category of currentSchema.categories) {
-        for (const question of category.questions) {
-          if (!answers[question.id]) {
+      for (const section of apiQuestions) {
+        for (const question of section.questions) {
+          if (question.is_required && !answers[question.id]) {
             allAnswered = false;
             break;
           }
@@ -268,57 +307,47 @@ export default function ExchangeForm() {
   );
 
   const renderQuestions = () => {
-    // schema uses 1-5, but currentStep is 2-6 for these questions.
-    const currentSchema = exchangeQuestionsSchema.find(s => s.step === currentStep - 1);
-    // console.log("IT IS?",currentSchema)
-    
-    if (!currentSchema) return null;
+    if (isLoadingQuestions) {
+      return (
+        <div className="loadingQuestions" style={{ padding: '40px', textAlign: 'center' }}>
+          Loading questions...
+        </div>
+      );
+    }
+
+    if (!apiQuestions || apiQuestions.length === 0) return null;
 
     return (
-      <div className={`questionsContainer ${currentSchema.categories.length === 3 ? 'layout-masonry-3' : currentSchema.categories.length === 4 ? 'layout-masonry-4' : ''}`}>
-        {/* {currentSchema.step === 1 && (
-           <div className="heroHeader">
-             <h2>iPhone Buyback</h2>
-             <p>Help us know your device better.<br/>Answer a few quick questions.</p>
-           </div>
-        )} */}
-
-        {currentSchema.categories.map((category) => (
-          <div key={category.id} className="categoryBlock">
-            {category.title && (
+      <div className={`questionsContainer ${apiQuestions.length === 3 ? 'layout-masonry-3' : apiQuestions.length === 4 ? 'layout-masonry-4' : ''}`}>
+        {apiQuestions.map((section) => (
+          <div key={section.id} className="categoryBlock">
+            {section.section_name && (
               <div className="categoryHeader">
                 <div className="categoryIcon">
-                  {category.id.includes('power') ? <PowerIcon /> : <PhoneIcon />}
+                  {section.section_slug.includes('power') ? <PowerIcon /> : <PhoneIcon />}
                 </div>
                 <div className="categoryTitles">
-                  <h3>{category.title}</h3>
-                  {category.subtitle && <p>{category.subtitle}</p>}
+                  <h3>{section.section_name}</h3>
                 </div>
               </div>
             )}
             <div className="categoryQuestions">
-              {category.questions.map((q) => (
+              {section.questions.map((q) => (
                 <div key={q.id} className="questionItem">
                   <div className="questionText">
-                    <span className="qBadge">{q.id}</span>
-                    <label>{q.text}</label>
+                    <span className="qBadge">{q.question_order}</span>
+                    <label>{q.question}</label>
                   </div>
-                  {q.infoMessage && (
-                    <div className="infoBox">
-                      <span className="infoIcon">ⓘ</span>
-                      <p>{q.infoMessage}</p>
-                    </div>
-                  )}
                   <div className="optionsGrid">
                     {q.options.map((opt) => (
                       <button
-                        key={opt.value}
+                        key={opt.id}
                         type="button"
-                        className={`optionBtn ${answers[q.id] === opt.value ? 'selected' : ''}`}
-                        onClick={() => handleOptionSelect(q.id, opt.value)}
+                        className={`optionBtn ${answers[q.id] === opt.option_value ? 'selected' : ''}`}
+                        onClick={() => handleOptionSelect(q.id, opt.option_value)}
                       >
-                        {answers[q.id] === opt.value && <span className="checkIcon">✔</span>}
-                        {opt.label}
+                        {answers[q.id] === opt.option_value && <span className="checkIcon">✔</span>}
+                        {opt.option_label}
                       </button>
                     ))}
                   </div>

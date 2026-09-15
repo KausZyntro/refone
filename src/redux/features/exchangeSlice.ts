@@ -40,16 +40,40 @@ export const fetchExchangeProducts = createAsyncThunk(
   }
 );
 
+export const fetchBuybackQuestions = createAsyncThunk(
+  "exchange/fetchBuybackQuestions",
+  async (index: number, { rejectWithValue }) => {
+    try {
+      const response = await exchangeAPI.getBuybackQuestions(index);
+      if (response.status === true) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.message || "Failed to fetch questions");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong"
+      );
+    }
+  }
+);
+
 interface ExchangeState {
     products: any[];
+    questions: any[];
     isLoading: boolean;
+    isLoadingQuestions: boolean;
     error: string | null;
     successData: any | null;
 }
 
 const initialState: ExchangeState = {
     products: [],
+    questions: [],
     isLoading: false,
+    isLoadingQuestions: false,
     error: null,
     successData: null,
 };
@@ -92,6 +116,19 @@ const exchangeSlice = createSlice({
             })
             .addCase(fetchExchangeProducts.rejected, (state, action) => {
                 state.isLoading = false;
+                state.error = action.payload as string;
+            })
+            .addCase(fetchBuybackQuestions.pending, (state) => {
+                state.isLoadingQuestions = true;
+                state.error = null;
+            })
+            .addCase(fetchBuybackQuestions.fulfilled, (state, action) => {
+                state.isLoadingQuestions = false;
+                state.questions = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchBuybackQuestions.rejected, (state, action) => {
+                state.isLoadingQuestions = false;
                 state.error = action.payload as string;
             });
     },
