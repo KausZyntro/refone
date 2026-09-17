@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { submitExchangeRequest, fetchBuybackQuestions } from '@/redux/features/exchangeSlice';
+import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest } from '@/redux/features/exchangeSlice';
 import { openLoginModal } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
@@ -48,6 +48,7 @@ import { MdVerified } from 'react-icons/md';
 import { TbDeviceMobileX } from 'react-icons/tb';
 import { AiOutlineMobile } from 'react-icons/ai';
 import { IoBatteryHalfSharp } from 'react-icons/io5';
+import { SlCalender } from 'react-icons/sl';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -80,10 +81,20 @@ export default function ExchangeForm() {
   // const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [answers, setAnswers] = useState<Answers>({});
+  const [purchaseDateType, setPurchaseDateType] = useState<string>('monthYear');
+  const [purchaseMonth, setPurchaseMonth] = useState<string>('04');
+  const [purchaseYear, setPurchaseYear] = useState<string>('2026');
+  const [exactDate, setExactDate] = useState<string>('');
+  
+  const [selectedBrand, setSelectedBrand] = useState<number | ''>('');
+  const [selectedModel, setSelectedModel] = useState<number | ''>('');
+  const [selectedStorage, setSelectedStorage] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>('');
   
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading: isSubmitting, questions: apiQuestions, isLoadingQuestions } = useSelector((state: RootState) => state.exchange);
+  const { isLoading: isSubmitting, questions: apiQuestions, isLoadingQuestions, deviceOptions, isLoadingDeviceOptions } = useSelector((state: RootState) => state.exchange);
   const isAuthenticated = useSelector((state: RootState) => state.auth?.isAuthenticated);
+  const user = useSelector((state: RootState) => state.auth?.user);
 
   useEffect(() => {
     if (isAuthenticated === false) {
@@ -96,6 +107,22 @@ export default function ExchangeForm() {
       dispatch(fetchBuybackQuestions(currentStep - 1));
     }
   }, [currentStep, dispatch]);
+
+  useEffect(() => {
+    if (currentStep === 1) {
+      dispatch(fetchDeviceOptions({ 
+        brand_id: selectedBrand || 1, 
+        product_id: selectedModel || 7, 
+        color: selectedColor || 'BLUE', 
+        storage: selectedStorage || '128GB' 
+      }));
+    }
+  }, [currentStep, dispatch, selectedBrand, selectedModel, selectedColor, selectedStorage]);
+
+  const brands = deviceOptions?.data?.brands || [];
+  const models = deviceOptions?.data?.models || [];
+  const storages = deviceOptions?.data?.storages || [];
+  const colors = deviceOptions?.data?.colors || [];
 
   const totalSteps = 8; // 1: Model Details, 2: Condition, 3-6: Additional, 7: Review & Offer, 8: Final Quote
 
@@ -127,6 +154,38 @@ export default function ExchangeForm() {
     }
     
     if (currentStep < totalSteps) {
+      if (currentStep === 1) {
+        if (!selectedBrand || !selectedModel || !selectedStorage || !selectedColor) {
+          toast.error('Please select Brand, Model, Variant, and Color.');
+          return;
+        }
+
+        let buyingDate = exactDate;
+        if (purchaseDateType === 'monthYear') {
+          buyingDate = `${purchaseYear}-${purchaseMonth}-01`;
+        } else if (purchaseDateType === 'exact' && !exactDate) {
+          toast.error('Please select an exact purchase date.');
+          return;
+        }
+        
+        const payload = {
+          user_id: user?.id,
+          buying_date: buyingDate,
+          brand_id: selectedBrand,
+          product_id: selectedModel,
+          storage: selectedStorage,
+          color: selectedColor
+        };
+        
+        dispatch(submitDeviceBuybackRequest(payload)).unwrap().then(() => {
+          setCurrentStep(prev => prev + 1);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }).catch((err) => {
+          toast.error(err || 'Failed to submit device details');
+        });
+        return;
+      }
+      
       setCurrentStep(prev => prev + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -872,30 +931,154 @@ export default function ExchangeForm() {
                            <span className="dropdownIcon"><ShieldIcon /></span>
                            <div className="dropdownContent">
                               <label>Brand</label>
-                              <select><option>Apple</option></select>
+                              <select value={selectedBrand} onChange={(e) => setSelectedBrand(Number(e.target.value))}>
+                                 <option value="">Select Brand</option>
+                                 {brands.map((b: any) => (
+                                    <option key={b.id} value={b.id}>{b.name}</option>
+                                 ))}
+                              </select>
                            </div>
                         </div>
                         <div className="dropdownWrapper">
                            <span className="dropdownIcon"><PhoneIcon /></span>
                            <div className="dropdownContent">
                               <label>Model</label>
-                              <select><option>iPhone 14</option></select>
+                              <select value={selectedModel} onChange={(e) => setSelectedModel(Number(e.target.value))}>
+                                 <option value="">Select Model</option>
+                                 {models.map((m: any) => (
+                                    <option key={m.id} value={m.id}>{m.name}</option>
+                                 ))}
+                              </select>
                            </div>
                         </div>
                         <div className="dropdownWrapper">
                            <span className="dropdownIcon"><PowerIcon /></span>
                            <div className="dropdownContent">
                               <label>Variant</label>
-                              <select><option>128 GB</option></select>
+                              <select value={selectedStorage} onChange={(e) => setSelectedStorage(e.target.value)}>
+                                 <option value="">Select Variant</option>
+                                 {storages.map((s: string) => (
+                                    <option key={s} value={s}>{s}</option>
+                                 ))}
+                              </select>
                            </div>
                         </div>
                         <div className="dropdownWrapper">
                            <span className="dropdownIcon"><ShieldIcon /></span>
                            <div className="dropdownContent">
                               <label>Color</label>
-                              <select><option>Midnight (Black)</option></select>
+                              <select value={selectedColor} onChange={(e) => setSelectedColor(e.target.value)}>
+                                 <option value="">Select Color</option>
+                                 {colors.map((c: any) => (
+                                    <option key={c.color} value={c.color}>{c.color}</option>
+                                 ))}
+                              </select>
                            </div>
                         </div>
+                        
+                        <div className="purchaseDateSection">
+                          <div className="purchaseDateHeader">
+                            <label>Purchase Date</label>
+                            <p>Tell us when you purchased your phone.</p>
+                          </div>
+                          
+                          <div className="purchaseDateTypeSelect">
+                            <label className={`pdRadio ${purchaseDateType === 'monthYear' ? 'active' : ''}`}>
+                              <div className="pdRadioBtn">
+                                <input 
+                                  type="radio" 
+                                  name="pdType" 
+                                  checked={purchaseDateType === 'monthYear'}
+                                  onChange={() => setPurchaseDateType('monthYear')}
+                                />
+                                <span className="pdRadioInner"></span>
+                              </div>
+                              <div className="pdRadioText">
+                                <strong>Month & Year</strong>
+                                <span>I only remember the month and year</span>
+                              </div>
+                            </label>
+                            
+                            <label className={`pdRadio ${purchaseDateType === 'exact' ? 'active' : ''}`}>
+                              <div className="pdRadioBtn">
+                                <input 
+                                  type="radio" 
+                                  name="pdType" 
+                                  checked={purchaseDateType === 'exact'}
+                                  onChange={() => setPurchaseDateType('exact')}
+                                />
+                                <span className="pdRadioInner"></span>
+                              </div>
+                              <div className="pdRadioText">
+                                <strong>Exact Date</strong>
+                                <span>I know the exact date</span>
+                              </div>
+                            </label>
+                          </div>
+
+                          {purchaseDateType === 'monthYear' ? (
+                            <div className="pdInputsRow">
+                              <div className="pdInputGroup">
+                                <label>Purchase Month</label>
+                                <div className="pdDropdown">
+                                  <span className="pdCalendarIcon"><SlCalender /></span>
+                                  <select value={purchaseMonth} onChange={(e) => setPurchaseMonth(e.target.value)}>
+                                  {[
+                                    { name: "January", value: "01" },
+                                    { name: "February", value: "02" },
+                                    { name: "March", value: "03" },
+                                    { name: "April", value: "04" },
+                                    { name: "May", value: "05" },
+                                    { name: "June", value: "06" },
+                                    { name: "July", value: "07" },
+                                    { name: "August", value: "08" },
+                                    { name: "September", value: "09" },
+                                    { name: "October", value: "10" },
+                                    { name: "November", value: "11" },
+                                    { name: "December", value: "12" }
+                                  ].map((month) => (
+                                    <option key={month.value} value={month.value}>
+                                      {month.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                </div>
+                              </div>
+                              <div className="pdInputGroup">
+                                <label>Purchase Year</label>
+                                <div className="pdDropdown">
+                                  <span className="pdCalendarIcon"><SlCalender /></span>
+                                  <select value={purchaseYear} onChange={(e) => setPurchaseYear(e.target.value)}>
+                                    {Array.from({ length: 15 }, (_, i) => {
+                                      const year = new Date().getFullYear() - i;
+                                      return (
+                                        <option key={year} value={year}>
+                                          {year}
+                                        </option>
+                                      );
+                                    })}
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="pdInputsRow">
+                              <div className="pdInputGroup">
+                                <label>Exact Date</label>
+                                <div className="pdDropdown">
+                                  <span className="pdCalendarIcon"><SlCalender /></span>
+                                  <input 
+                                    type="date" 
+                                    className="pdDateInput"
+                                    value={exactDate}
+                                    onChange={(e) => setExactDate(e.target.value)}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        
                      </div>
                      
                      <button 

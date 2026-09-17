@@ -267,6 +267,15 @@ export const exchangeAPI = {
         formData.append("index", index.toString());
         const response = await api.post("buyback/questions", formData);
         return response.data;
+    },
+    getDeviceOptions: async (params: { brand_id: number | string; product_id: number | string; color: string; storage: string }) => {
+        const { brand_id, product_id, color, storage } = params;
+        const response = await api.get(`device-options?brand_id=${brand_id}&product_id=${product_id}&color=${color}&storage=${storage}`);
+        return response.data;
+    },
+    submitDeviceBuyback: async (payload: any) => {
+        const response = await api.post("device-buyback/submit", payload);
+        return response.data;
     }
 };
 

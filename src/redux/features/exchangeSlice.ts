@@ -17,6 +17,22 @@ export const submitExchangeRequest = createAsyncThunk(
     }
 );
 
+export const submitDeviceBuybackRequest = createAsyncThunk(
+    "exchange/submitDeviceBuyback",
+    async (payload: any, { rejectWithValue }) => {
+        try {
+            const response = await exchangeAPI.submitDeviceBuyback(payload);
+            if (response.success === true || response.status === "success") {
+                return response.data;
+            } else {
+                return rejectWithValue(response.message || "Failed to submit device buyback");
+            }
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || error.message || "An error occurred");
+        }
+    }
+);
+
 export const fetchExchangeProducts = createAsyncThunk(
   "exchange/fetchProducts",
   async (_, { rejectWithValue }) => {
@@ -60,11 +76,29 @@ export const fetchBuybackQuestions = createAsyncThunk(
   }
 );
 
+export const fetchDeviceOptions = createAsyncThunk(
+  "exchange/fetchDeviceOptions",
+  async (params: { brand_id: number | string; product_id: number | string; color: string; storage: string }, { rejectWithValue }) => {
+    try {
+      const data = await exchangeAPI.getDeviceOptions(params);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong"
+      );
+    }
+  }
+);
+
 interface ExchangeState {
     products: any[];
     questions: any[];
+    deviceOptions: any | null;
     isLoading: boolean;
     isLoadingQuestions: boolean;
+    isLoadingDeviceOptions: boolean;
     error: string | null;
     successData: any | null;
 }
@@ -72,8 +106,10 @@ interface ExchangeState {
 const initialState: ExchangeState = {
     products: [],
     questions: [],
+    deviceOptions: null,
     isLoading: false,
     isLoadingQuestions: false,
+    isLoadingDeviceOptions: false,
     error: null,
     successData: null,
 };
@@ -129,6 +165,34 @@ const exchangeSlice = createSlice({
             })
             .addCase(fetchBuybackQuestions.rejected, (state, action) => {
                 state.isLoadingQuestions = false;
+                state.error = action.payload as string;
+            })
+            .addCase(submitDeviceBuybackRequest.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+                state.successData = null;
+            })
+            .addCase(submitDeviceBuybackRequest.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.successData = action.payload;
+                state.error = null;
+            })
+            .addCase(submitDeviceBuybackRequest.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
+                state.successData = null;
+            })
+            .addCase(fetchDeviceOptions.pending, (state) => {
+                state.isLoadingDeviceOptions = true;
+                state.error = null;
+            })
+            .addCase(fetchDeviceOptions.fulfilled, (state, action) => {
+                state.isLoadingDeviceOptions = false;
+                state.deviceOptions = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchDeviceOptions.rejected, (state, action) => {
+                state.isLoadingDeviceOptions = false;
                 state.error = action.payload as string;
             });
     },
