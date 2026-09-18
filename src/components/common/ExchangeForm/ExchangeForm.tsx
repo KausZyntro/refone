@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest } from '@/redux/features/exchangeSlice';
+import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest } from '@/redux/features/exchangeSlice';
 import { openLoginModal } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
@@ -177,11 +177,24 @@ export default function ExchangeForm() {
           color: selectedColor
         };
         
-        dispatch(submitDeviceBuybackRequest(payload)).unwrap().then(() => {
-          setCurrentStep(prev => prev + 1);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+        dispatch(submitDeviceBuybackRequest(payload)).unwrap().then((res) => {
+          // console.log("Device Buyback Response:", res);
+          const assessmentFormData = new FormData();
+          assessmentFormData.append('customer_id', String(user?.id || ''));
+          assessmentFormData.append('device_id', String(res?.id || res?.data?.id || res?.device_id || '1')); // Defaulting to '1' if id not found just in case
+          assessmentFormData.append('base_price', '50000');
+
+          dispatch(submitBuybackAssessmentRequest(assessmentFormData)).unwrap().then((assessmentRes) => {
+            // console.log("Assessment Response:", assessmentRes);
+            setCurrentStep(prev => prev + 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }).catch((err) => {
+            console.error("Buyback Assessment API Error:", err);
+            toast.error(typeof err === 'string' ? err : err?.message || 'Failed to submit buyback assessment');
+          });
         }).catch((err) => {
-          toast.error(err || 'Failed to submit device details');
+          console.error("Device Buyback API Error:", err);
+          toast.error(typeof err === 'string' ? err : err?.message || 'Failed to submit device details');
         });
         return;
       }

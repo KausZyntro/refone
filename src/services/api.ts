@@ -276,6 +276,14 @@ export const exchangeAPI = {
     submitDeviceBuyback: async (payload: any) => {
         const response = await api.post("device-buyback/submit", payload);
         return response.data;
+    },
+    submitBuybackAssessment: async (payload: FormData) => {
+        const response = await api.post("buyback/assessments", payload, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data;
     }
 };
 
