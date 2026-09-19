@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest } from '@/redux/features/exchangeSlice';
+import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest, submitBuybackAssessmentStepRequest } from '@/redux/features/exchangeSlice';
 import { openLoginModal } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
@@ -74,13 +75,14 @@ const ShieldIcon = () => (
 );
 
 interface Answers {
-  [questionId: number]: string;
+  [questionId: number]: number;
 }
 
 export default function ExchangeForm() {
-  // const router = useRouter();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [answers, setAnswers] = useState<Answers>({});
+  const [assessmentId, setAssessmentId] = useState<number | string | null>(null);
   const [purchaseDateType, setPurchaseDateType] = useState<string>('monthYear');
   const [purchaseMonth, setPurchaseMonth] = useState<string>('04');
   const [purchaseYear, setPurchaseYear] = useState<string>('2026');
@@ -126,8 +128,8 @@ export default function ExchangeForm() {
 
   const totalSteps = 8; // 1: Model Details, 2: Condition, 3-6: Additional, 7: Review & Offer, 8: Final Quote
 
-  const handleOptionSelect = (questionId: number, value: string) => {
-    setAnswers(prev => ({ ...prev, [questionId]: value }));
+  const handleOptionSelect = (questionId: number, optionId: number) => {
+    setAnswers(prev => ({ ...prev, [questionId]: optionId }));
   };
 
   const handleNext = () => {
@@ -139,18 +141,54 @@ export default function ExchangeForm() {
     // Basic validation: check if all questions in the current step are answered
     if (currentStep > 1 && currentStep < 7) {
       let allAnswered = true;
+      const stepAnswers: { question_id: number; option_id: number }[] = [];
+      
       for (const section of apiQuestions) {
         for (const question of section.questions) {
           if (question.is_required && !answers[question.id]) {
             allAnswered = false;
-            break;
+            // break;
+          }
+          if (answers[question.id]) {
+            console.log("question_id:", question.id);
+            console.log("option_id:", answers[question.id]);
+            stepAnswers.push({
+               question_id: question.id,
+               option_id: answers[question.id]
+            });
+            
           }
         }
       }
       // if (!allAnswered) {
       //   toast.error('Please answer all questions before proceeding.');
       //   return;
-      // }
+      console.log("Assessment ID currently is:", assessmentId);
+      console.log("Step answers prepared:", stepAnswers);
+      
+      if (assessmentId) {
+        const payload = {
+            step: currentStep - 1,
+            answers: stepAnswers
+        };
+        console.log("Dispatching step submission with payload:", payload);
+        dispatch(submitBuybackAssessmentStepRequest({ assessmentId, payload })).unwrap().then(() => {
+            setCurrentStep(prev => prev + 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }).catch((err) => {
+            console.error("Buyback Assessment Step API Error:", err);
+            
+            if (err === "This buyback assessment is already rejected") {
+                router.push('/assesment-result');
+                return;
+            }
+
+            toast.error(typeof err === 'string' ? err : err?.message || 'Failed to submit step answers');
+        });
+        return; // Don't increment currentStep here, it's done in the then block
+      } else {
+        console.warn("No assessmentId found, skipping step API submission.");
+      }
     }
     
     if (currentStep < totalSteps) {
@@ -185,7 +223,10 @@ export default function ExchangeForm() {
           assessmentFormData.append('base_price', '50000');
 
           dispatch(submitBuybackAssessmentRequest(assessmentFormData)).unwrap().then((assessmentRes) => {
-            // console.log("Assessment Response:", assessmentRes);
+            console.log("Assessment Response received:", assessmentRes);
+            const extractedId = assessmentRes?.data?.id || assessmentRes?.id || assessmentRes?.assessment_id;
+            console.log("Extracted assessment ID:", extractedId);
+            setAssessmentId(extractedId);
             setCurrentStep(prev => prev + 1);
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }).catch((err) => {
@@ -415,10 +456,10 @@ export default function ExchangeForm() {
                       <button
                         key={opt.id}
                         type="button"
-                        className={`optionBtn ${answers[q.id] === opt.option_value ? 'selected' : ''}`}
-                        onClick={() => handleOptionSelect(q.id, opt.option_value)}
+                        className={`optionBtn ${answers[q.id] === opt.id ? 'selected' : ''}`}
+                        onClick={() => handleOptionSelect(q.id, opt.id)}
                       >
-                        {answers[q.id] === opt.option_value && <span className="checkIcon">✔</span>}
+                        {answers[q.id] === opt.id && <span className="checkIcon">✔</span>}
                         {opt.option_label}
                       </button>
                     ))}

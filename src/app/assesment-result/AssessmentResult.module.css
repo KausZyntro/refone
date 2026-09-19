@@ -1,0 +1,118 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    padding: 103px 20px;
+    text-align: center;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.card {
+    /* background-color: #ffffff; */
+    /* border: 1px solid #e0e5e5; */
+    border-radius: 12px;
+    padding: 50px;
+    max-width: 600px;
+    width: 100%;
+    /* box-shadow: 0 8px 24px rgba(0,0,0,0.04); */
+}
+.imgs{
+    height: 400px;
+    width: 400px;
+}
+
+.iconWrapper {
+    color: #e53e3e;
+    font-size: 64px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.title {
+    color: #1f2937;
+    font-size: 28px;
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.description {
+    color: #6b7280;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+.button {
+    background-color: #006aaf;
+    color: #ffffff;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #007560;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 100px 16px;
+        min-height: 60vh;
+    }
+
+    .card {
+        padding: 30px 20px;
+    }
+
+    .iconWrapper {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .title {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+
+    .description {
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+
+    .button {
+        padding: 12px 24px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 100px 12px;
+    }
+
+    .card {
+        padding: 24px 16px;
+        border-radius: 8px;
+    }
+
+    .iconWrapper {
+        font-size: 40px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+}

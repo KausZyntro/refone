@@ -50,6 +50,22 @@ export const submitBuybackAssessmentRequest = createAsyncThunk(
     }
 );
 
+export const submitBuybackAssessmentStepRequest = createAsyncThunk(
+    "exchange/submitBuybackAssessmentStep",
+    async ({ assessmentId, payload }: { assessmentId: string | number; payload: any }, { rejectWithValue }) => {
+        try {
+            const response = await exchangeAPI.submitBuybackAssessmentStep(assessmentId, payload);
+            if (response && response.status !== false) {
+                return response.data || response;
+            } else {
+                return rejectWithValue(response?.message || "Failed to submit buyback assessment step");
+            }
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || error.message || "An error occurred");
+        }
+    }
+);
+
 export const fetchExchangeProducts = createAsyncThunk(
   "exchange/fetchProducts",
   async (_, { rejectWithValue }) => {
@@ -213,6 +229,18 @@ const exchangeSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload as string;
                 state.successData = null;
+            })
+            .addCase(submitBuybackAssessmentStepRequest.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(submitBuybackAssessmentStepRequest.fulfilled, (state) => {
+                state.isLoading = false;
+                state.error = null;
+            })
+            .addCase(submitBuybackAssessmentStepRequest.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
             })
             .addCase(fetchDeviceOptions.pending, (state) => {
                 state.isLoadingDeviceOptions = true;

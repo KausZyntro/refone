@@ -284,6 +284,10 @@ export const exchangeAPI = {
             },
         });
         return response.data;
+    },
+    submitBuybackAssessmentStep: async (assessmentId: string | number, payload: any) => {
+        const response = await api.post(`buyback/assessments/${assessmentId}/step`, payload);
+        return response.data;
     }
 };
 
