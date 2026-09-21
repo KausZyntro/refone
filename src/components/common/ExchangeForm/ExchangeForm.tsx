@@ -221,6 +221,7 @@ export default function ExchangeForm() {
           assessmentFormData.append('customer_id', String(user?.id || ''));
           assessmentFormData.append('device_id', String(res?.id || res?.data?.id || res?.device_id || '1')); // Defaulting to '1' if id not found just in case
           assessmentFormData.append('base_price', '50000');
+          assessmentFormData.append('model_id', String(selectedModel));
 
           dispatch(submitBuybackAssessmentRequest(assessmentFormData)).unwrap().then((assessmentRes) => {
             console.log("Assessment Response received:", assessmentRes);
@@ -976,9 +977,26 @@ export default function ExchangeForm() {
             {currentStep === 1 && (
                <div className="stepOneContainer">
                   <div className="stepOneForm">
-                     <div className="stepOneHeader">
-                        <h2>Let's identify your device</h2>
-                        <p>Tell us a few details about your phone to get an accurate buyback value.</p>
+                     <div className="stepOneHeader" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div>
+                           <h2>Let's identify your device</h2>
+                           <p>Tell us a few details about your phone to get an accurate buyback value.</p>
+                        </div>
+                        <button 
+                           onClick={() => window.location.href = '/assessment-history'}
+                           style={{
+                              backgroundColor: '#ffffff',
+                              color: '#4b80a9',
+                              padding: '4px 10px',
+                              borderRadius: '6px',
+                              border: '1px solid #4b80a9',
+                              cursor: 'pointer',
+                              fontWeight: 500,
+                              fontSize: '14px'
+                           }}
+                        >
+                           Assessment History
+                        </button>
                      </div>
                      <div className="stepOneDropdowns">
                         <div className="dropdownWrapper">
