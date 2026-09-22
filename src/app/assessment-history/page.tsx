@@ -164,19 +164,19 @@ export default function AssessmentHistory() {
                 </button>
                 <button
                   className={`${styles.tab} ${activeTab === "Completed" ? styles.tabActive : ""}`}
-                  // onClick={() => setActiveTab("Completed")}
+                  onClick={() => setActiveTab("Completed")}
                 >
                   Completed ({summary.completed.count})
                 </button>
                 <button
                   className={`${styles.tab} ${activeTab === "In Progress" ? styles.tabActive : ""}`}
-                  // onClick={() => setActiveTab("In Progress")}
+                  onClick={() => setActiveTab("In Progress")}
                 >
                   In Progress ({summary.inProgress.count})
                 </button>
                 <button
                   className={`${styles.tab} ${activeTab === "Rejected" ? styles.tabActive : ""}`}
-                  // onClick={() => setActiveTab("Rejected")}
+                  onClick={() => setActiveTab("Rejected")}
                 >
                   Rejected ({summary.rejected.count})
                 </button>
