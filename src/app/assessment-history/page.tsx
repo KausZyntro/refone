@@ -1,34 +1,25 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { FaCheckCircle, FaClock, FaTimesCircle, FaChartBar, FaSearch, FaMobileAlt, FaPlus } from "react-icons/fa";
 import styles from "./AssessmentHistory.module.css";
 import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCustomerAssessments } from "@/redux/features/exchangeSlice";
 
 export default function AssessmentHistory() {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const { user } = useSelector((state: any) => state.auth);
+  const { customerAssessments: data, isLoadingCustomerAssessments: loading } = useSelector(
+    (state: any) => state.exchange
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(
-          "https://refones.com/ApiAuthUat/api/buyback/assessments/customer",
-          { user_id: 37 }
-        );
-        if (response.data && response.data.status) {
-          setData(response.data.data || []);
-        }
-      } catch (error) {
-        console.error("Error fetching assessments:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+    if (user?.id) {
+      dispatch(fetchCustomerAssessments(user.id) as any);
+    }
+  }, [dispatch, user]);
 
   const getFilteredData = () => {
     let filtered = data;
@@ -94,7 +85,7 @@ export default function AssessmentHistory() {
         <div className={styles.titleSection}>
           <h1>Assessments</h1>
           <div className={styles.subtitle}>
-            Customer #37 &gt; <strong>All Assessments</strong>
+            {user?.name || `Customer #${user?.id}`} &gt; <strong>All Assessments</strong>
           </div>
         </div>
         {/* <button className={styles.createBtn} onClick={() => window.location.href = '/exchange-phone'}>
@@ -203,66 +194,74 @@ export default function AssessmentHistory() {
                   <th>Base Price</th>
                   <th>Final Offer</th>
                   <th>Status</th>
-                  {/* <th>Actions</th> */}
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((item) => (
-                  <tr key={item.assessment_id}>
-                    <td>
-                      <div className={styles.deviceInfo}>
-                        <div className={styles.deviceIcon}>
-                          <FaMobileAlt />
+                {filteredData.length > 0 ? (
+                  filteredData.map((item) => (
+                    <tr key={item.assessment_id}>
+                      <td>
+                        <div className={styles.deviceInfo}>
+                          <div className={styles.deviceIcon}>
+                            <FaMobileAlt />
+                          </div>
+                          <div className={styles.deviceDetails}>
+                            <h4>
+                              {item.device?.brand} {item.device?.model}
+                            </h4>
+                            <p>
+                              {item.device?.storage} • {item.device?.color}
+                            </p>
+                          </div>
                         </div>
-                        <div className={styles.deviceDetails}>
-                          <h4>
-                            {item.device?.brand} {item.device?.model}
-                          </h4>
-                          <p>
-                            {item.device?.storage} • {item.device?.color}
-                          </p>
-                        </div>
-                      </div>
+                      </td>
+                      <td>#{item.assessment_id.toString().padStart(3, "0")}</td>
+                      <td>{formatDate(item.created_at)}</td>
+                      <td>
+                        <span
+                          className={`${styles.progressBadge} ${
+                            item.status === "rejected"
+                              ? styles.rejected
+                              : item.status === "in_progress"
+                              ? styles.inProgress
+                              : ""
+                          }`}
+                        >
+                          Step {item.current_step} of 8
+                        </span>
+                      </td>
+                      <td>{formatCurrency(item.base_price)}</td>
+                      <td className={item.status === "rejected" ? styles.priceStrikethrough : ""}>
+                        {formatCurrency(item.final_price)}
+                      </td>
+                      <td>
+                        <span
+                          className={`${styles.statusBadge} ${
+                            item.status === "completed"
+                              ? styles.statusCompleted
+                              : item.status === "rejected"
+                              ? styles.statusRejected
+                              : styles.statusInProgress
+                          }`}
+                        >
+                          {item.status.replace("_", " ")}
+                        </span>
+                      </td>
+                      <td>
+                        <button className={styles.actionBtn}>
+                          {item.status === "in_progress" ? "Resume" : "View"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+                      No assessments found.
                     </td>
-                    <td>#{item.assessment_id.toString().padStart(3, "0")}</td>
-                    <td>{formatDate(item.created_at)}</td>
-                    <td>
-                      <span
-                        className={`${styles.progressBadge} ${
-                          item.status === "rejected"
-                            ? styles.rejected
-                            : item.status === "in_progress"
-                            ? styles.inProgress
-                            : ""
-                        }`}
-                      >
-                        Step {item.current_step} of 8
-                      </span>
-                    </td>
-                    <td>{formatCurrency(item.base_price)}</td>
-                    <td className={item.status === "rejected" ? styles.priceStrikethrough : ""}>
-                      {formatCurrency(item.final_price)}
-                    </td>
-                    <td>
-                      <span
-                        className={`${styles.statusBadge} ${
-                          item.status === "completed"
-                            ? styles.statusCompleted
-                            : item.status === "rejected"
-                            ? styles.statusRejected
-                            : styles.statusInProgress
-                        }`}
-                      >
-                        {item.status.replace("_", " ")}
-                      </span>
-                    </td>
-                    {/* <td>
-                      <button className={styles.actionBtn}>
-                        {item.status === "in_progress" ? "Resume" : "View"}
-                      </button>
-                    </td> */}
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
 

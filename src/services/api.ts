@@ -292,6 +292,10 @@ export const exchangeAPI = {
     getPriceBreakdown: async (assessmentId: string | number) => {
         const response = await api.get(`buyback/assessments/${assessmentId}/price-breakdown`);
         return response.data;
+    },
+    getCustomerAssessments: async (user_id: number) => {
+        const response = await api.post("buyback/assessments/customer", { user_id });
+        return response.data;
     }
 };
 

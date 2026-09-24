@@ -142,6 +142,26 @@ export const fetchDeviceOptions = createAsyncThunk(
   }
 );
 
+export const fetchCustomerAssessments = createAsyncThunk(
+  "exchange/fetchCustomerAssessments",
+  async (userId: number, { rejectWithValue }) => {
+    try {
+      const response = await exchangeAPI.getCustomerAssessments(userId);
+      if (response && response.status) {
+        return response.data || [];
+      } else {
+        return rejectWithValue(response.message || "Failed to fetch assessments");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong"
+      );
+    }
+  }
+);
+
 interface ExchangeState {
     products: any[];
     questions: any[];
@@ -150,7 +170,9 @@ interface ExchangeState {
     isLoadingQuestions: boolean;
     isLoadingDeviceOptions: boolean;
     isLoadingPriceBreakdown: boolean;
+    isLoadingCustomerAssessments: boolean;
     priceBreakdownData: any | null;
+    customerAssessments: any[];
     error: string | null;
     successData: any | null;
 }
@@ -163,7 +185,9 @@ const initialState: ExchangeState = {
     isLoadingQuestions: false,
     isLoadingDeviceOptions: false,
     isLoadingPriceBreakdown: false,
+    isLoadingCustomerAssessments: false,
     priceBreakdownData: null,
+    customerAssessments: [],
     error: null,
     successData: null,
 };
@@ -287,6 +311,19 @@ const exchangeSlice = createSlice({
             })
             .addCase(fetchPriceBreakdown.rejected, (state, action) => {
                 state.isLoadingPriceBreakdown = false;
+                state.error = action.payload as string;
+            })
+            .addCase(fetchCustomerAssessments.pending, (state) => {
+                state.isLoadingCustomerAssessments = true;
+                state.error = null;
+            })
+            .addCase(fetchCustomerAssessments.fulfilled, (state, action) => {
+                state.isLoadingCustomerAssessments = false;
+                state.customerAssessments = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchCustomerAssessments.rejected, (state, action) => {
+                state.isLoadingCustomerAssessments = false;
                 state.error = action.payload as string;
             });
     },

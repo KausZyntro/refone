@@ -140,6 +140,17 @@ export default function ExchangeForm() {
 
   console.log(priceBreakdownData?.deductions[0]?.type)
 
+const handleAssesment = () => {
+  console.log("clicked", isAuthenticated);
+   if (!isAuthenticated) {
+      dispatch(openLoginModal());
+      return;
+   }
+
+   window.location.href = '/assessment-history';
+};
+
+
   const handleNext = () => {
     if (!isAuthenticated) {
       dispatch(openLoginModal());
@@ -921,7 +932,8 @@ export default function ExchangeForm() {
                            <p>Tell us a few details about your phone to get an accurate buyback value.</p>
                         </div>
                         <button 
-                           onClick={() => window.location.href = '/assessment-history'}
+                          //  onClick={() => window.location.href = '/assessment-history'}
+                         onClick={handleAssesment}
                            style={{
                               backgroundColor: '#ffffff',
                               color: '#4b80a9',
