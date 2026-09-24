@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest, submitBuybackAssessmentStepRequest } from '@/redux/features/exchangeSlice';
+import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest, submitBuybackAssessmentStepRequest, fetchPriceBreakdown } from '@/redux/features/exchangeSlice';
 import { openLoginModal } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
@@ -84,9 +84,9 @@ export default function ExchangeForm() {
   const [answers, setAnswers] = useState<Answers>({});
   const [assessmentId, setAssessmentId] = useState<number | string | null>(null);
   const [purchaseDateType, setPurchaseDateType] = useState<string>('monthYear');
+  const [exactDate, setExactDate] = useState<string>('');
   const [purchaseMonth, setPurchaseMonth] = useState<string>('04');
   const [purchaseYear, setPurchaseYear] = useState<string>('2026');
-  const [exactDate, setExactDate] = useState<string>('');
   
   const [selectedBrand, setSelectedBrand] = useState<number | ''>('');
   const [selectedModel, setSelectedModel] = useState<number | ''>('');
@@ -94,7 +94,7 @@ export default function ExchangeForm() {
   const [selectedColor, setSelectedColor] = useState<string>('');
   
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading: isSubmitting, questions: apiQuestions, isLoadingQuestions, deviceOptions, isLoadingDeviceOptions } = useSelector((state: RootState) => state.exchange);
+  const { isLoading: isSubmitting, questions: apiQuestions, isLoadingQuestions, deviceOptions, isLoadingDeviceOptions, isLoadingPriceBreakdown, priceBreakdownData } = useSelector((state: RootState) => state.exchange);
   const isAuthenticated = useSelector((state: RootState) => state.auth?.isAuthenticated);
   const user = useSelector((state: RootState) => state.auth?.user);
 
@@ -109,6 +109,12 @@ export default function ExchangeForm() {
       dispatch(fetchBuybackQuestions(currentStep - 1));
     }
   }, [currentStep, dispatch]);
+
+  useEffect(() => {
+    if (currentStep === 7 && assessmentId) {
+      dispatch(fetchPriceBreakdown(assessmentId));
+    }
+  }, [currentStep, assessmentId, dispatch]);
 
   useEffect(() => {
     if (currentStep === 1) {
@@ -132,11 +138,14 @@ export default function ExchangeForm() {
     setAnswers(prev => ({ ...prev, [questionId]: optionId }));
   };
 
+  console.log(priceBreakdownData?.deductions[0]?.type)
+
   const handleNext = () => {
     if (!isAuthenticated) {
       dispatch(openLoginModal());
       return;
     }
+    console.log(assessmentId)
 
     // Basic validation: check if all questions in the current step are answered
     if (currentStep > 1 && currentStep < 7) {
@@ -474,6 +483,30 @@ export default function ExchangeForm() {
     );
   };
 
+  // Safely unwrap priceBreakdownData just in case it's wrapped in an array or a .data property
+  let finalDeductions: any[] = [];
+  let finalBasePrice = 0;
+  let finalFinalPrice = 0;
+
+  if (priceBreakdownData) {
+    const dataObj = Array.isArray(priceBreakdownData) ? priceBreakdownData[0] : priceBreakdownData;
+    const innerData = dataObj?.data ? dataObj.data : dataObj;
+    
+    finalDeductions = innerData?.deductions || [];
+    finalBasePrice = innerData?.base_price || 0;
+    finalFinalPrice = innerData?.final_price || 0;
+  }
+
+
+  if (currentStep === 7) {
+    console.log("DEBUG: isLoadingPriceBreakdown =", isLoadingPriceBreakdown);
+    console.log("DEBUG: raw priceBreakdownData from Redux =", priceBreakdownData);
+    console.log("DEBUG: parsed finalDeductions =", finalDeductions);
+    console.log("DEBUG: parts =", finalDeductions.filter((d: any) => d.type === 'part'));
+    console.log("DEBUG: conditions =", finalDeductions.filter((d: any) => d.type === 'condition'));
+  }
+
+
   const renderFinalQuote = () => (
     <div className="finalQuoteContainer">
       <div className="finalQuoteHeader">
@@ -506,10 +539,14 @@ export default function ExchangeForm() {
         <div className="fqValueSection">
           <div className="fqValueDetails">
             <span>Estimated Buyback Value</span>
-            <h2>₹28,430</h2>
+            <h2>{isLoadingPriceBreakdown ? 'Loading...' : `₹${finalFinalPrice}`}</h2>
             <div className="fqValueSub">
-              <span className="fqStrikethrough">₹32,000</span>
-              <span className="fqLowerBadge">↓ 12% lower</span>
+              <span className="fqStrikethrough">₹{finalBasePrice}</span>
+              {finalBasePrice > 0 && finalFinalPrice > 0 && (
+                <span className="fqLowerBadge">
+                  ↓ {Math.round(((finalBasePrice - finalFinalPrice) / finalBasePrice) * 100)}% lower
+                </span>
+              )}
             </div>
             <p className="fqBasedOn">Based on your device condition</p>
           </div>
@@ -531,90 +568,28 @@ export default function ExchangeForm() {
         </div>
         
         <div className="fqSummaryList">
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><AiOutlineMobile /></span>
-              <span className="fqItemLabel">Device Age</span>
-              <span className="fqItemValue">1 – 2 years (12–23 months)</span>
+          {finalDeductions.filter((d: any) => d.type === 'condition').map((cond: any, index: number) => (
+            <div className="fqSummaryItem" key={index}>
+              <div className="fqSummaryItemLeft">
+                <span className="fqItemIcon"><AiOutlineMobile /></span>
+                <span className="fqItemLabel">{cond.question}</span>
+                <span className="fqItemValue">{cond.selected_option}</span>
+              </div>
+              <div className="fqSummaryItemRight">
+                <span className="fqFactor"><span className="fqFactorText">Factor: </span>{cond.factor !== null ? cond.factor : 'N/A'}</span>
+              </div>
             </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>0.78</span>
-              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
-              <span className="fqChevronRight">&gt;</span>
+          ))}
+          {isLoadingPriceBreakdown && (
+            <div className="fqSummaryItem">
+              <span className="fqItemLabel">Loading condition details...</span>
             </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><PhoneIcon /></span>
-              <span className="fqItemLabel">Body Condition</span>
-              <span className="fqItemValue">Minor scratches</span>
+          )}
+          {!isLoadingPriceBreakdown && finalDeductions.filter((d: any) => d.type === 'condition').length === 0 && (
+            <div className="fqSummaryItem">
+              <span className="fqItemLabel">No condition details available.</span>
             </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>0.95</span>
-              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
-              <span className="fqChevronRight">&gt;</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><PhoneIcon /></span>
-              <span className="fqItemLabel">Display Condition</span>
-              <span className="fqItemValue">Original + perfect</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
-              <span className="fqChevronRight">&gt;</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><IoBatteryHalfSharp /></span>
-              <span className="fqItemLabel">Battery Health</span>
-              <span className="fqItemValue">85 – 89%</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>0.95</span>
-              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
-              <span className="fqChevronRight">&gt;</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><TbDeviceMobileX /></span>
-              <span className="fqItemLabel">Dents</span>
-              <span className="fqItemValue">No dent</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
-              <span className="fqChevronRight">&gt;</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><MdVerified /></span>
-              <span className="fqItemLabel">Functional Status</span>
-              <span className="fqItemValue">Everything working</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
-              <span className="fqChevronRight">&gt;</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><FaCubes /></span>
-              <span className="fqItemLabel">Parts (Overall)</span>
-              <span className="fqItemValue">Original</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-              <button className="fqEditBtn"><span className="editIcon">✎</span> Edit</button>
-              <span className="fqChevronRight">&gt;</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -626,67 +601,30 @@ export default function ExchangeForm() {
           </div>
         </div>
         <div className="fqSummaryList">
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><PhoneIcon /></span>
-              <span className="fqItemLabel">Display</span>
-              <span className="fqItemValue">Original</span>
+          {finalDeductions.filter((d: any) => d.type === 'part').map((part: any, index: number) => (
+            <div className="fqSummaryItem" key={index}>
+              <div className="fqSummaryItemLeft">
+                <span className="fqItemIcon"><PhoneIcon /></span>
+                <span className="fqItemLabel">{part.question}</span>
+                <span className="fqItemValue">{part.selected_option}</span>
+              </div>
+              <div className="fqSummaryItemRight">
+                <span className="fqFactor"><span className="fqFactorText">Factor: </span>{part.factor !== null ? part.factor : 'N/A'}</span>
+              </div>
             </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
+          ))}
+          {isLoadingPriceBreakdown && (
+            <div className="fqSummaryItem">
+              <span className="fqItemLabel">Loading part details...</span>
             </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><PowerIcon /></span>
-              <span className="fqItemLabel">Battery</span>
-              <span className="fqItemValue">Original</span>
+          )}
+          {!isLoadingPriceBreakdown && finalDeductions.filter((d: any) => d.type === 'part').length === 0 && (
+            <div className="fqSummaryItem">
+              <span className="fqItemLabel">No part details available.</span>
             </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon">📷</span>
-              <span className="fqItemLabel">Camera</span>
-              <span className="fqItemValue">Original</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon"><PhoneIcon /></span>
-              <span className="fqItemLabel">Back Glass</span>
-              <span className="fqItemValue">Original</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon">🎛️</span>
-              <span className="fqItemLabel">Motherboard</span>
-              <span className="fqItemValue">Original</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-            </div>
-          </div>
-          <div className="fqSummaryItem">
-            <div className="fqSummaryItemLeft">
-              <span className="fqItemIcon">🔌</span>
-              <span className="fqItemLabel">Charging Port</span>
-              <span className="fqItemValue">Original</span>
-            </div>
-            <div className="fqSummaryItemRight">
-              <span className="fqFactor"><span className="fqFactorText">Factor: </span>1.00</span>
-            </div>
-          </div>
+          )}
         </div>
+        
       </div>
 
       {/* <div className="fqFooterAction">

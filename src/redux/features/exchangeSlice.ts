@@ -66,6 +66,23 @@ export const submitBuybackAssessmentStepRequest = createAsyncThunk(
     }
 );
 
+export const fetchPriceBreakdown = createAsyncThunk(
+    "exchange/fetchPriceBreakdown",
+    async (assessmentId: string | number, { rejectWithValue }) => {
+        try {
+            const response = await exchangeAPI.getPriceBreakdown(assessmentId);
+            const actualResponse = Array.isArray(response) ? response[0] : response;
+            if (actualResponse && actualResponse.status !== false) {
+                return actualResponse.data;
+            } else {
+                return rejectWithValue(actualResponse?.message || "Failed to fetch price breakdown");
+            }
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || error.message || "An error occurred");
+        }
+    }
+);
+
 export const fetchExchangeProducts = createAsyncThunk(
   "exchange/fetchProducts",
   async (_, { rejectWithValue }) => {
@@ -132,6 +149,8 @@ interface ExchangeState {
     isLoading: boolean;
     isLoadingQuestions: boolean;
     isLoadingDeviceOptions: boolean;
+    isLoadingPriceBreakdown: boolean;
+    priceBreakdownData: any | null;
     error: string | null;
     successData: any | null;
 }
@@ -143,6 +162,8 @@ const initialState: ExchangeState = {
     isLoading: false,
     isLoadingQuestions: false,
     isLoadingDeviceOptions: false,
+    isLoadingPriceBreakdown: false,
+    priceBreakdownData: null,
     error: null,
     successData: null,
 };
@@ -253,6 +274,19 @@ const exchangeSlice = createSlice({
             })
             .addCase(fetchDeviceOptions.rejected, (state, action) => {
                 state.isLoadingDeviceOptions = false;
+                state.error = action.payload as string;
+            })
+            .addCase(fetchPriceBreakdown.pending, (state) => {
+                state.isLoadingPriceBreakdown = true;
+                state.error = null;
+            })
+            .addCase(fetchPriceBreakdown.fulfilled, (state, action) => {
+                state.isLoadingPriceBreakdown = false;
+                state.priceBreakdownData = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchPriceBreakdown.rejected, (state, action) => {
+                state.isLoadingPriceBreakdown = false;
                 state.error = action.payload as string;
             });
     },

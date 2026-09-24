@@ -288,6 +288,10 @@ export const exchangeAPI = {
     submitBuybackAssessmentStep: async (assessmentId: string | number, payload: any) => {
         const response = await api.post(`buyback/assessments/${assessmentId}/step`, payload);
         return response.data;
+    },
+    getPriceBreakdown: async (assessmentId: string | number) => {
+        const response = await api.get(`buyback/assessments/${assessmentId}/price-breakdown`);
+        return response.data;
     }
 };
 
