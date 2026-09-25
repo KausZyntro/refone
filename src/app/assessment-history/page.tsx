@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaClock, FaTimesCircle, FaChartBar, FaSearch, FaMobileAlt, FaPlus } from "react-icons/fa";
 import styles from "./AssessmentHistory.module.css";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCustomerAssessments } from "@/redux/features/exchangeSlice";
 
 export default function AssessmentHistory() {
+  const router = useRouter();
   const dispatch = useDispatch();
+  const [isMounted, setIsMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useSelector((state: any) => state.auth);
@@ -20,6 +23,12 @@ export default function AssessmentHistory() {
       dispatch(fetchCustomerAssessments(user.id) as any);
     }
   }, [dispatch, user]);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   const getFilteredData = () => {
     let filtered = data;
@@ -104,8 +113,8 @@ export default function AssessmentHistory() {
               </div>
               <div className={styles.cardContent}>
                 <h3>Completed</h3>
-                <p>
-                  Count: <strong>{summary.completed.count}</strong> &nbsp; Value: <strong>{formatCurrency(summary.completed.value)}</strong>
+                <p className="">
+                  Count: <strong>{summary.completed.count}</strong> <br/> Value: <strong>{formatCurrency(summary.completed.value)}</strong>
                 </p>
               </div>
             </div>
@@ -116,7 +125,7 @@ export default function AssessmentHistory() {
               <div className={styles.cardContent}>
                 <h3>In Progress</h3>
                 <p>
-                  Count: <strong>{summary.inProgress.count}</strong> &nbsp; Value: <strong>{formatCurrency(summary.inProgress.value)}</strong>
+                  Count: <strong>{summary.inProgress.count}</strong> <br/> Value: <strong>{formatCurrency(summary.inProgress.value)}</strong>
                 </p>
               </div>
             </div>
@@ -127,7 +136,7 @@ export default function AssessmentHistory() {
               <div className={styles.cardContent}>
                 <h3>Rejected</h3>
                 <p>
-                  Count: <strong>{summary.rejected.count}</strong> &nbsp; Value: <strong>{formatCurrency(summary.rejected.value)}</strong>
+                  Count: <strong>{summary.rejected.count}</strong> <br/> Value: <strong>{formatCurrency(summary.rejected.value)}</strong>
                 </p>
               </div>
             </div>
@@ -138,7 +147,7 @@ export default function AssessmentHistory() {
               <div className={styles.cardContent}>
                 <h3>Total</h3>
                 <p>
-                  Count: <strong>{summary.total.count}</strong> &nbsp; Value: <strong>{formatCurrency(summary.total.value)}</strong>
+                  Count: <strong>{summary.total.count}</strong> <br/> Value: <strong>{formatCurrency(summary.total.value)}</strong>
                 </p>
               </div>
             </div>
@@ -249,8 +258,21 @@ export default function AssessmentHistory() {
                         </span>
                       </td>
                       <td>
-                        <button className={styles.actionBtn}>
-                          {item.status === "in_progress" ? "Resume" : "View"}
+                        <button
+                          className={styles.actionBtn}
+                          onClick={() => {
+                            if (item.status === "in_progress") {
+                              router.push(`/exchange-phone?step=${item.current_step + 1}&assessmentId=${item.assessment_id}`);
+                            } else if (item.status === "completed") {
+                              router.push(`/exchange-phone?step=7&assessmentId=${item.assessment_id}`);
+                            }
+                          }}
+                        >
+                          {item.status === "in_progress"
+                            ? "Resume"
+                            : item.status === "rejected"
+                              ? "--"
+                              : "View"}
                         </button>
                       </td>
                     </tr>
@@ -265,13 +287,13 @@ export default function AssessmentHistory() {
               </tbody>
             </table>
 
-            <div className={styles.pagination}>
+            {/* <div className={styles.pagination}>
               <button className={styles.pageBtn}>&larr; Previous</button>
               <div className={styles.pageNumbers}>
                 <div className={`${styles.pageNumber} ${styles.pageNumberActive}`}>1</div>
               </div>
               <button className={styles.pageBtn}>Next &rarr;</button>
-            </div>
+            </div> */}
           </div>
         </>
       )}

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest, submitBuybackAssessmentStepRequest, fetchPriceBreakdown } from '@/redux/features/exchangeSlice';
@@ -80,9 +80,13 @@ interface Answers {
 
 export default function ExchangeForm() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const initialStep = searchParams.get('step');
+  const initialAssessmentId = searchParams.get('assessmentId');
+
+  const [currentStep, setCurrentStep] = useState<number>(initialStep ? parseInt(initialStep, 10) : 1);
   const [answers, setAnswers] = useState<Answers>({});
-  const [assessmentId, setAssessmentId] = useState<number | string | null>(null);
+  const [assessmentId, setAssessmentId] = useState<number | string | null>(initialAssessmentId || null);
   const [purchaseDateType, setPurchaseDateType] = useState<string>('monthYear');
   const [exactDate, setExactDate] = useState<string>('');
   const [purchaseMonth, setPurchaseMonth] = useState<string>('04');

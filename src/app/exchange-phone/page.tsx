@@ -1,10 +1,12 @@
 import ExchangeForm from '@/components/common/ExchangeForm/ExchangeForm'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const exchange = () => {
   return (
     <div>
-      <ExchangeForm />
+      <Suspense fallback={<div>Loading...</div>}>
+        <ExchangeForm />
+      </Suspense>
     </div>
   )
 }
