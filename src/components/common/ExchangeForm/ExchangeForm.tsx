@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest, submitBuybackAssessmentStepRequest, fetchPriceBreakdown } from '@/redux/features/exchangeSlice';
 import { openLoginModal } from '@/redux/features/authSlice';
+import { fetchAddresses, setSelectedAddress, addAddress, updateAddress, deleteAddress } from '@/redux/features/addressSlice';
+import AddressModal from '@/components/address/AddressModal';
 import { toast } from 'react-toastify';
 import './ExchangeForm.css';
 import { exchangeQuestionsSchema, StepSchema } from './ExchangeQuestions';
@@ -50,6 +52,7 @@ import { TbDeviceMobileX } from 'react-icons/tb';
 import { AiOutlineMobile } from 'react-icons/ai';
 import { IoBatteryHalfSharp } from 'react-icons/io5';
 import { SlCalender } from 'react-icons/sl';
+import AddressList from '@/components/address/AddressList';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -93,6 +96,35 @@ export default function ExchangeForm() {
   const [purchaseYear, setPurchaseYear] = useState<string>('2026');
   
   const [selectedBrand, setSelectedBrand] = useState<number | ''>('');
+  
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [editingAddress, setEditingAddress] = useState<any>(null);
+
+  // const getNextDates = () => {
+  //   const dates = [];
+  //   for (let i = 0; i < 4; i++) {
+  //     const d = new Date();
+  //     d.setDate(d.getDate() + i);
+  //     dates.push(d);
+  //   }
+  //   return dates;
+  // };
+  const getNextDates = (): Date[] => {
+  const dates: Date[] = [];
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    dates.push(d);
+  }
+
+  return dates;
+};
+  const [upcomingDates] = useState<Date[]>(getNextDates());
+  const [selectedPickupDate, setSelectedPickupDate] = useState<string>(
+    upcomingDates[0].toISOString().split('T')[0]
+  );
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('9:00 AM - 11:00 AM');
   const [selectedModel, setSelectedModel] = useState<number | ''>('');
   const [selectedStorage, setSelectedStorage] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
@@ -101,6 +133,41 @@ export default function ExchangeForm() {
   const { isLoading: isSubmitting, questions: apiQuestions, isLoadingQuestions, deviceOptions, isLoadingDeviceOptions, isLoadingPriceBreakdown, priceBreakdownData } = useSelector((state: RootState) => state.exchange);
   const isAuthenticated = useSelector((state: RootState) => state.auth?.isAuthenticated);
   const user = useSelector((state: RootState) => state.auth?.user);
+  const { addresses, selectedAddressId, isLoading: isLoadingAddresses } = useSelector((state: RootState) => state.address);
+
+  useEffect(() => {
+    if (user?.id && addresses.length === 0) {
+      dispatch(fetchAddresses(user.id));
+    }
+  }, [dispatch, user?.id, addresses.length]);
+
+  const handleAddAddressClick = () => {
+    setEditingAddress(null);
+    setIsAddressModalOpen(true);
+  };
+
+  const handleEditAddressClick = (e: React.MouseEvent, addr: any) => {
+    e.stopPropagation();
+    setEditingAddress(addr);
+    setIsAddressModalOpen(true);
+  };
+
+  const handleSaveAddress = async (formData: any) => {
+    if (!user?.id) return;
+    const addressData = { ...formData, user_id: user.id };
+    if (editingAddress) {
+      await dispatch(updateAddress({ id: editingAddress.id, data: addressData }));
+    } else {
+      const result = await dispatch(addAddress(addressData));
+      if (addAddress.fulfilled.match(result)) {
+        const newAddr = result.payload?.data || result.payload;
+        if (newAddr?.id) {
+          dispatch(setSelectedAddress(newAddr.id));
+        }
+      }
+    }
+    setIsAddressModalOpen(false);
+  };
 
   useEffect(() => {
     if (isAuthenticated === false) {
@@ -342,8 +409,8 @@ const handleAssesment = () => {
         </div>
       </div>
       <div className="stepLine" />
-      <div className={`stepItem ${currentStep === 7 ? 'active' : ''}`}>
-        <div className="stepCircle">7</div>
+      <div className={`stepItem ${currentStep === 7 ? 'active' : ''} ${currentStep > 7 ? 'completed' : ''}`}>
+        <div className="stepCircle">{currentStep > 7 ? '✓' : '7'}</div>
         <div className="stepLabels">
           <span className="stepTitle">Final Quote</span>
           <span className="stepSubtitle">Get your final quote</span>
@@ -749,32 +816,42 @@ const handleAssesment = () => {
             <p className="spSectionSub">Select a saved address or add a new one.</p>
             
             <div className="spAddressList">
-              <div className="spAddressCard selected">
-                <div className="spRadioBtn"><span className="spRadioInner"></span></div>
-                <div className="spAddressDetails">
-                  <div className="spAddressTitleRow">
-                    <strong>Home</strong>
-                    <button className="spEditBtn"><span className="editIcon">✎</span> Edit</button>
-                  </div>
-                  <p>123, Green Park, Sector 45, Gurgaon,<br/>Haryana - 122003</p>
-                  <p className="spContact">Jatin Agarwal | 98765 43210</p>
-                </div>
-              </div>
-              
-              <div className="spAddressCard">
-                <div className="spRadioBtn"></div>
-                <div className="spAddressDetails">
-                  <div className="spAddressTitleRow">
-                    <strong>Office</strong>
-                    <button className="spEditBtn"><span className="editIcon">✎</span> Edit</button>
-                  </div>
-                  <p>Tower B, DLF Cyber City, Phase 3,<br/>Gurgaon - 122002</p>
-                  <p className="spContact">Jatin Agarwal | 98765 43210</p>
-                </div>
-              </div>
+              {isLoadingAddresses && addresses.length === 0 ? (
+                <p>Loading addresses...</p>
+              ) : addresses.length === 0 ? (
+                <p>No saved addresses found.</p>
+              ) : (
+                addresses.map((addr) => {
+                  const isSelected = selectedAddressId === addr.id;
+                  return (
+                    <div 
+                      key={addr.id} 
+                      className={`spAddressCard ${isSelected ? 'selected' : ''}`}
+                      onClick={() => dispatch(setSelectedAddress(addr.id))}
+                    >
+                      <div className="spRadioBtn">
+                        {isSelected && <span className="spRadioInner"></span>}
+                      </div>
+                      <div className="spAddressDetails">
+                        <div className="spAddressTitleRow">
+                          <strong>{addr.name || user?.name || "User"}</strong>
+                          <button 
+                            className="spEditBtn" 
+                            onClick={(e) => handleEditAddressClick(e, addr)}
+                          >
+                            <span className="editIcon">✎</span> Edit
+                          </button>
+                        </div>
+                        <p>{addr.address_line1}, {addr.city},<br/>{addr.state} - {addr.pincode}</p>
+                        <p className="spContact">Phone: {addr.phone}</p>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
             
-            <button className="spAddAddressBtn">
+            <button className="spAddAddressBtn" onClick={handleAddAddressClick}>
               + Add New Address
             </button>
             
@@ -798,25 +875,62 @@ const handleAssesment = () => {
             <p className="spSectionSub desktopOnly">Choose a convenient date for pickup.</p>
             
             <div className="spDateList">
-              <div className="spDateCard selected">
-                <span className="spDay">Tue</span>
-                <span className="spDate">10 Sep</span>
-              </div>
-              <div className="spDateCard">
-                <span className="spDay">Wed</span>
-                <span className="spDate">11 Sep</span>
-              </div>
-              <div className="spDateCard">
-                <span className="spDay">Thu</span>
-                <span className="spDate">12 Sep</span>
-              </div>
-              <div className="spDateCard">
-                <span className="spDay">Fri</span>
-                <span className="spDate">13 Sep</span>
-              </div>
-              <div className="spDateCard">
-                <span className="spDay">Sat</span>
-                <span className="spDate">14 Sep</span>
+              {upcomingDates.map((date, index) => {
+                const dateString = date.toISOString().split('T')[0];
+                const isSelected = selectedPickupDate === dateString;
+                const isToday = index === 0;
+                const isTomorrow = index === 1;
+                
+                const dayName = isToday ? 'Today' : isTomorrow ? 'Tomorrow' : date.toLocaleDateString('en-US', { weekday: 'short' });
+                const dateDisplay = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+                
+                return (
+                  <div 
+                    key={dateString} 
+                    className={`spDateCard ${isSelected ? 'selected' : ''}`}
+                    onClick={() => setSelectedPickupDate(dateString)}
+                  >
+                    <span className="spDay">{dayName}</span>
+                    <span className="spDate">{dateDisplay}</span>
+                  </div>
+                );
+              })}
+              
+              <div 
+                className={`spDateCard ${!upcomingDates.some(d => d.toISOString().split('T')[0] === selectedPickupDate) ? 'selected' : ''}`} 
+                style={{ position: 'relative' }}
+              >
+                 {!upcomingDates.some(d => d.toISOString().split('T')[0] === selectedPickupDate) ? (
+                   <>
+                     <span className="spDay">{new Date(selectedPickupDate).toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                     <span className="spDate">{new Date(selectedPickupDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}</span>
+                   </>
+                 ) : (
+                   <>
+                     <span className="spDay" style={{ display: 'flex', justifyContent: 'center' }}><SlCalender size={18} /></span>
+                     <span className="spDate">More</span>
+                   </>
+                 )}
+                 <input 
+                   type="date"
+                   min={new Date().toISOString().split('T')[0]}
+                   value={selectedPickupDate}
+                   onChange={(e) => setSelectedPickupDate(e.target.value)}
+                   onClick={(e) => {
+                     try {
+                       (e.target as HTMLInputElement).showPicker?.();
+                     } catch (err) {}
+                   }}
+                   style={{
+                     position: 'absolute',
+                     top: 0,
+                     left: 0,
+                     width: '100%',
+                     height: '100%',
+                     opacity: 0,
+                     cursor: 'pointer'
+                   }}
+                 />
               </div>
             </div>
           </div>
@@ -829,22 +943,18 @@ const handleAssesment = () => {
             <p className="spSectionSub desktopOnly">Choose a time slot for pickup.</p>
             
             <div className="spTimeGrid">
-              <div className="spTimeCard selected">
-                <div className="spRadioBtn"><span className="spRadioInner"></span></div>
-                <span>9:00 AM - 11:00 AM</span>
-              </div>
-              <div className="spTimeCard">
-                <div className="spRadioBtn"></div>
-                <span>11:00 AM - 1:00 PM</span>
-              </div>
-              <div className="spTimeCard">
-                <div className="spRadioBtn"></div>
-                <span>1:00 PM - 3:00 PM</span>
-              </div>
-              <div className="spTimeCard">
-                <div className="spRadioBtn"></div>
-                <span>3:00 PM - 6:00 PM</span>
-              </div>
+              {['9:00 AM - 11:00 AM', '11:00 AM - 1:00 PM', '1:00 PM - 3:00 PM', '3:00 PM - 6:00 PM'].map((slot) => (
+                <div 
+                  key={slot}
+                  className={`spTimeCard ${selectedTimeSlot === slot ? 'selected' : ''}`}
+                  onClick={() => setSelectedTimeSlot(slot)}
+                >
+                  <div className="spRadioBtn">
+                    {selectedTimeSlot === slot && <span className="spRadioInner"></span>}
+                  </div>
+                  <span>{slot}</span>
+                </div>
+              ))}
             </div>
           </div>
           
@@ -871,15 +981,26 @@ const handleAssesment = () => {
             <div className="spSummaryDetails">
               <div className="spSummaryRow">
                 <span className="spSummaryLabel">Pickup Address</span>
-                <span className="spSummaryValue">123, Green Park, Sector 45, Gurgaon - 122003</span>
+                <span className="spSummaryValue">
+                  {addresses.find(a => a.id === selectedAddressId)
+                    ? (() => {
+                        const addr = addresses.find(a => a.id === selectedAddressId)!;
+                        return `${addr.address_line1}, ${addr.city} - ${addr.pincode}`;
+                      })()
+                    : 'No address selected'}
+                </span>
               </div>
               <div className="spSummaryRow">
                 <span className="spSummaryLabel">Pickup Date</span>
-                <span className="spSummaryValue">Tue, 10 Sep 2024</span>
+                <span className="spSummaryValue">
+                  {selectedPickupDate 
+                    ? new Date(selectedPickupDate).toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) 
+                    : 'No date selected'}
+                </span>
               </div>
               <div className="spSummaryRow">
                 <span className="spSummaryLabel">Time Slot</span>
-                <span className="spSummaryValue">9:00 AM - 11:00 AM</span>
+                <span className="spSummaryValue">{selectedTimeSlot}</span>
               </div>
             </div>
             
@@ -1189,6 +1310,12 @@ const handleAssesment = () => {
       )} */}
 
       {/* {renderFooterTrustBadges()} */}
+      <AddressModal
+        isOpen={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        onSave={handleSaveAddress}
+        initialData={editingAddress}
+      />
     </div>
   );
 }

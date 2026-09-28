@@ -3,6 +3,7 @@ import { Address } from '../../types/address';
 import { MdMyLocation, MdClose } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import "@/styles/AddressManagement.css";
 
 interface AddressModalProps {
     isOpen: boolean;
