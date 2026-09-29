@@ -66,6 +66,22 @@ export const submitBuybackAssessmentStepRequest = createAsyncThunk(
     }
 );
 
+export const schedulePickupRequest = createAsyncThunk(
+    "exchange/schedulePickup",
+    async ({ assessmentId, payload }: { assessmentId: string | number; payload: any }, { rejectWithValue }) => {
+        try {
+            const response = await exchangeAPI.schedulePickup(assessmentId, payload);
+            if (response && response.status === true) {
+                return response.data;
+            } else {
+                return rejectWithValue(response?.message || "Failed to schedule pickup");
+            }
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || error.message || "An error occurred");
+        }
+    }
+);
+
 export const fetchPriceBreakdown = createAsyncThunk(
     "exchange/fetchPriceBreakdown",
     async (assessmentId: string | number, { rejectWithValue }) => {
@@ -171,6 +187,7 @@ interface ExchangeState {
     isLoadingDeviceOptions: boolean;
     isLoadingPriceBreakdown: boolean;
     isLoadingCustomerAssessments: boolean;
+    isLoadingSchedulePickup: boolean;
     priceBreakdownData: any | null;
     customerAssessments: any[];
     error: string | null;
@@ -186,6 +203,7 @@ const initialState: ExchangeState = {
     isLoadingDeviceOptions: false,
     isLoadingPriceBreakdown: false,
     isLoadingCustomerAssessments: false,
+    isLoadingSchedulePickup: false,
     priceBreakdownData: null,
     customerAssessments: [],
     error: null,
@@ -324,6 +342,18 @@ const exchangeSlice = createSlice({
             })
             .addCase(fetchCustomerAssessments.rejected, (state, action) => {
                 state.isLoadingCustomerAssessments = false;
+                state.error = action.payload as string;
+            })
+            .addCase(schedulePickupRequest.pending, (state) => {
+                state.isLoadingSchedulePickup = true;
+                state.error = null;
+            })
+            .addCase(schedulePickupRequest.fulfilled, (state) => {
+                state.isLoadingSchedulePickup = false;
+                state.error = null;
+            })
+            .addCase(schedulePickupRequest.rejected, (state, action) => {
+                state.isLoadingSchedulePickup = false;
                 state.error = action.payload as string;
             });
     },

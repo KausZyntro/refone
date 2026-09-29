@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest, submitBuybackAssessmentStepRequest, fetchPriceBreakdown } from '@/redux/features/exchangeSlice';
+import { submitExchangeRequest, fetchBuybackQuestions, fetchDeviceOptions, submitDeviceBuybackRequest, submitBuybackAssessmentRequest, submitBuybackAssessmentStepRequest, fetchPriceBreakdown, schedulePickupRequest } from '@/redux/features/exchangeSlice';
 import { openLoginModal } from '@/redux/features/authSlice';
 import { fetchAddresses, setSelectedAddress, addAddress, updateAddress, deleteAddress } from '@/redux/features/addressSlice';
 import AddressModal from '@/components/address/AddressModal';
@@ -112,7 +112,7 @@ export default function ExchangeForm() {
   const getNextDates = (): Date[] => {
   const dates: Date[] = [];
 
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 4; i++) {
     const d = new Date();
     d.setDate(d.getDate() + i);
     dates.push(d);
@@ -130,7 +130,7 @@ export default function ExchangeForm() {
   const [selectedColor, setSelectedColor] = useState<string>('');
   
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading: isSubmitting, questions: apiQuestions, isLoadingQuestions, deviceOptions, isLoadingDeviceOptions, isLoadingPriceBreakdown, priceBreakdownData } = useSelector((state: RootState) => state.exchange);
+  const { isLoading: isSubmitting, questions: apiQuestions, isLoadingQuestions, deviceOptions, isLoadingDeviceOptions, isLoadingPriceBreakdown, isLoadingSchedulePickup, priceBreakdownData } = useSelector((state: RootState) => state.exchange);
   const isAuthenticated = useSelector((state: RootState) => state.auth?.isAuthenticated);
   const user = useSelector((state: RootState) => state.auth?.user);
   const { addresses, selectedAddressId, isLoading: isLoadingAddresses } = useSelector((state: RootState) => state.address);
@@ -347,15 +347,51 @@ const handleAssesment = () => {
   };
 
   const submitForm = async () => {
-    // In a real scenario, map these answers to the backend payload structure
+    if (!selectedAddressId) {
+      toast.error("Please select a pickup address");
+      return;
+    }
+    const address = addresses.find(a => a.id === selectedAddressId);
+    const addressString = address ? `${address.address_line1}, ${address.city}, ${address.state} - ${address.pincode}` : '';
+    const phone = address?.phone || user?.phone || '';
+    
+    let slot_start = '09:00';
+    let slot_end = '11:00';
+    if (selectedTimeSlot) {
+      const times = selectedTimeSlot.split(' - ');
+      if (times.length === 2) {
+        const convertTo24 = (time: string) => {
+          let [timePart, modifier] = time.split(' ');
+          let [hours, minutes] = timePart.split(':');
+          if (hours === '12') hours = '00';
+          if (modifier === 'PM') hours = String(parseInt(hours, 10) + 12);
+          return `${hours.padStart(2, '0')}:${minutes}`;
+        };
+        slot_start = convertTo24(times[0]);
+        slot_end = convertTo24(times[1]);
+      }
+    }
+
+    const payload = {
+      address: addressString,
+      phone: phone,
+      pickup_date: selectedPickupDate,
+      slot_label: selectedTimeSlot,
+      slot_start,
+      slot_end
+    };
+
     try {
-      console.log('Final Answers Payload:', answers);
-      // const response = await dispatch(submitExchangeRequest(payload)).unwrap();
-      toast.success("Device evaluated successfully! Generating offer...");
-      // Handle navigation or show success state
+      if (assessmentId) {
+        await dispatch(schedulePickupRequest({ assessmentId: assessmentId as any, payload })).unwrap();
+        toast.success("Pickup scheduled successfully");
+        router.push('/exchange-phone/success');
+      } else {
+        toast.error("Assessment ID is missing. Cannot schedule pickup.");
+      }
     } catch (error: any) {
-      console.error("Exchange submission error:", error);
-      toast.error(error || "An error occurred while submitting. Please try again.");
+      console.error("Pickup scheduling error:", error);
+      toast.error(error || "An error occurred while scheduling pickup. Please try again.");
     }
   };
 
@@ -409,7 +445,7 @@ const handleAssesment = () => {
         </div>
       </div>
       <div className="stepLine" />
-      <div className={`stepItem ${currentStep === 7 ? 'active' : ''} ${currentStep > 7 ? 'completed' : ''}`}>
+      <div className={`stepItem ${currentStep >= 7 ? 'active' : ''} ${currentStep > 7 ? 'completed' : ''}`}>
         <div className="stepCircle">{currentStep > 7 ? '✓' : '7'}</div>
         <div className="stepLabels">
           <span className="stepTitle">Final Quote</span>
@@ -417,8 +453,8 @@ const handleAssesment = () => {
         </div>
       </div>
       <div className="stepLine" />
-      <div className={`stepItem ${currentStep === 8 ? 'active' : ''}`}>
-        <div className="stepCircle">8</div>
+      <div className={`stepItem ${currentStep >= 8 ? 'active' : ''} ${currentStep > 8 ? 'completed' : ''}`}>
+        <div className="stepCircle">{currentStep > 8 ? '✓' : '8'}</div>
         <div className="stepLabels">
           <span className="stepTitle">Pickup & Payment</span>
           <span className="stepSubtitle">Schedule pickup</span>
@@ -484,15 +520,15 @@ const handleAssesment = () => {
                <span className="sidebarStepSubtitle">Buttons & Sensors</span>
             </div>
          </div>
-          <div className={`sidebarStep ${currentStep === 7 ? 'active' : ''}`}>
-            <div className="sidebarStepCircle">7</div>
+          <div className={`sidebarStep ${currentStep >= 7 ? 'active' : ''} ${currentStep > 7 ? 'completed' : ''}`}>
+            <div className="sidebarStepCircle">{currentStep > 7 ? '✓' : '7'}</div>
             <div className="sidebarStepLabels">
                <span className="sidebarStepTitle">Final Quote</span>
                <span className="sidebarStepSubtitle">Get your final quote</span>
             </div>
          </div>
-         <div className={`sidebarStep ${currentStep === 8 ? 'active' : ''}`}>
-            <div className="sidebarStepCircle">8</div>
+         <div className={`sidebarStep ${currentStep >= 8 ? 'active' : ''} ${currentStep > 8 ? 'completed' : ''}`}>
+            <div className="sidebarStepCircle">{currentStep > 8 ? '✓' : '8'}</div>
             <div className="sidebarStepLabels">
                <span className="sidebarStepTitle">Pickup & Payment</span>
                <span className="sidebarStepSubtitle">Schedule pickup</span>
@@ -1022,8 +1058,8 @@ const handleAssesment = () => {
       </div>
       
       <div className="spFooterAction">
-        <button className="spConfirmBtn" onClick={submitForm}>
-          Confirm Pickup &rarr;
+        <button className="spConfirmBtn" onClick={submitForm} disabled={isLoadingSchedulePickup}>
+          {isLoadingSchedulePickup ? 'Scheduling...' : 'Confirm Pickup \u2192'}
         </button>
         <p>You'll receive an SMS and a call to confirm your pickup.</p>
       </div>

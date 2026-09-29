@@ -296,6 +296,10 @@ export const exchangeAPI = {
     getCustomerAssessments: async (user_id: number) => {
         const response = await api.post("buyback/assessments/customer", { user_id });
         return response.data;
+    },
+    schedulePickup: async (assessmentId: string | number, payload: any) => {
+        const response = await api.post(`buyback/assessments/${assessmentId}/pickup`, payload);
+        return response.data;
     }
 };
 
