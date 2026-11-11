@@ -1,9 +1,8 @@
 import React from 'react'
+import ProductDetailSkeleton from '@/components/productDetailtest/ProductDetailSkeleton'
 
 const loading = () => {
-  return (
-    <div>loading.....</div>
-  )
+  return <ProductDetailSkeleton />
 }
 
 export default loading

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProductGallerytest from "@/components/productDetailtest/ProductGallerytest";
 import ProductInfotest from "@/components/productDetailtest/ProductInfotest";
 import ProductSpecstest from "@/components/productDetailtest/ProductSpecstest";
+import ProductDetailSkeleton from "@/components/productDetailtest/ProductDetailSkeleton";
 import { FairColorVariant, ProductTest, VariantTest } from "@/types/producttest";
 import styles from "./ProductDetailTestPage.module.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -74,7 +75,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     const [selectedCondition, setSelectedCondition] = useState<"Fair" | "Good" | "Superb">("Superb");
 
     /* ── redux ── */
-    const { product, isLoading } = useSelector((state: RootState) => state.product);
+    const { product, isLoading, error } = useSelector((state: RootState) => state.product);
     const { user } = useSelector((state: RootState) => state.auth);
 
     /* ── effects ── */
@@ -675,6 +676,12 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     };
 
     /* ── render ── */
+    // While the product API is in flight (or before the fetch kicks off) show a
+    // skeleton so the short empty page never pulls the footer up under the navbar.
+    if (!product && !error) {
+        return <ProductDetailSkeleton />;
+    }
+
     return (
         <div className={styles.pageWrapper}>
             {/* Desktop Breadcrumb */}
