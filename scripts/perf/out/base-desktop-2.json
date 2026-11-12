@@ -1,0 +1,73 @@
+{
+  "url": "http://localhost:3100/product/2/iphone-15-pro",
+  "mode": "desktop (no throttle)",
+  "wallMs": 34150,
+  "requests": 35,
+  "bytesByType": {
+    "Image": 5332,
+    "Font": 32582,
+    "Stylesheet": 28871,
+    "Script": 288455,
+    "Document": 14972
+  },
+  "fcp": 2272,
+  "lcp": {
+    "time": 17796,
+    "size": 3200,
+    "url": "http://localhost:3100/_next/image?url=%2Flogo-original.png&w=128&q=75",
+    "tag": "IMG",
+    "id": "",
+    "cls": "",
+    "src": "http://localhost:3100/_next/image?url=%2Flogo-original.png&w=128&q=75",
+    "text": "",
+    "rect": {
+      "w": 80,
+      "h": 40,
+      "top": 8
+    }
+  },
+  "lcpCandidates": [
+    {
+      "time": 2348,
+      "tag": null,
+      "cls": "",
+      "size": 1904,
+      "text": null,
+      "rect": null,
+      "src": null
+    },
+    {
+      "time": 17796,
+      "tag": "IMG",
+      "cls": "",
+      "size": 3200,
+      "text": "",
+      "rect": {
+        "w": 80,
+        "h": 40,
+        "top": 8
+      },
+      "src": "http://localhost:3100/_next/image?url=%2Flogo-original.png&w=128&q=75"
+    }
+  ],
+  "cls": 0,
+  "tbt": 2426,
+  "longTaskCount": 31,
+  "ttfb": 517.8999998569489,
+  "domContentLoaded": 4464.899999856949,
+  "load": null,
+  "transferTotal": 349459,
+  "requestCount": 28,
+  "jsTransfer": 286207,
+  "jsCount": 14,
+  "imgTransfer": 2622,
+  "imgCount": 4,
+  "api": [],
+  "htmlBytes": 14339,
+  "titles": 0,
+  "href": "http://localhost:3100/product/2/iphone-15-pro",
+  "readyState": "interactive",
+  "bodyLen": 373,
+  "bodyText": "Contact Detail:\n\n+91 90444 47828\n\n S-2/1A-81-R-I/101, Tagore Town Colony, Orderly Bazar, Varanasi-221002\n\n 5/1 Ranglal Street, Watgunge, Kolkata-700023, West Bengal\n\nCompany\n⌄\nAbout Us\nOur Story\nCaree",
+  "imgCountDom": 4
+}

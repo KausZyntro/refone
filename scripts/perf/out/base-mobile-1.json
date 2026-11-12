@@ -1,0 +1,56 @@
+{
+  "url": "http://localhost:3100/product/2/iphone-15-pro",
+  "mode": "mobile (4x CPU, ~1.6Mbps, 150ms RTT)",
+  "wallMs": 10489,
+  "requests": 35,
+  "bytesByType": {
+    "Image": 2533,
+    "Stylesheet": 28871,
+    "Font": 32582,
+    "Document": 14972,
+    "Script": 310659
+  },
+  "fcp": 2664,
+  "lcp": {
+    "time": 2976,
+    "size": 1904,
+    "url": null,
+    "tag": null,
+    "id": null,
+    "cls": "",
+    "src": null,
+    "text": null,
+    "rect": null
+  },
+  "lcpCandidates": [
+    {
+      "time": 2976,
+      "tag": null,
+      "cls": "",
+      "size": 1904,
+      "text": null,
+      "rect": null,
+      "src": null
+    }
+  ],
+  "cls": 0,
+  "tbt": 640,
+  "longTaskCount": 7,
+  "ttfb": 163.39999985694885,
+  "domContentLoaded": 2663.7999999523163,
+  "load": null,
+  "transferTotal": 368488,
+  "requestCount": 31,
+  "jsTransfer": 307858,
+  "jsCount": 18,
+  "imgTransfer": 0,
+  "imgCount": 3,
+  "api": [],
+  "htmlBytes": 14339,
+  "titles": 0,
+  "href": "http://localhost:3100/product/2/iphone-15-pro",
+  "readyState": "interactive",
+  "bodyLen": 373,
+  "bodyText": "Contact Detail:\n\n+91 90444 47828\n\n S-2/1A-81-R-I/101, Tagore Town Colony, Orderly Bazar, Varanasi-221002\n\n 5/1 Ranglal Street, Watgunge, Kolkata-700023, West Bengal\n\nCompany\n⌄\nAbout Us\nOur Story\nCaree",
+  "imgCountDom": 4
+}

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Script from 'next/script';
 import RatingStarstest from "@/components/common/RatingStarstest";
 import styles from "./ProductInfotest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
@@ -10,8 +9,6 @@ import { LuRefreshCcw } from "react-icons/lu";
 import { FaTruckFast } from "react-icons/fa6";
 import { FaCreditCard, FaShieldAlt } from "react-icons/fa";
 import styless from "./ProductGallerytest.module.css";
-import { Changa_One } from "next/font/google";
-// import SnapmintEMI from "../SnapmintLoader";
 
 
 interface ProductInfoTestProps {
@@ -40,7 +37,7 @@ interface ProductInfoTestProps {
 
 const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVariant, setSelectedVariant }) => {
 
-        const DeliveryBlock = () => (
+        const deliveryBlock = (
         <div className={styles.deliveryBlock}>
             <p className={styles.deliveryTitle}>Check Estimated Delivery Date</p>
             <div className={styles.pincodeRow}>
@@ -197,7 +194,7 @@ const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVari
 
             <PricingBlock />
 
-            <DeliveryBlock />
+            {deliveryBlock}
 
             <div className={styless.trustStrip}>
     <div className={styless.trustItem}>

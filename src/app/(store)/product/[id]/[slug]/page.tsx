@@ -1,9 +1,7 @@
-import React from "react";
-import "./productDetail.css";
-import ProductPageClient from "@/components/product/ProductPageClient";
+import React, { cache } from "react";
 import ProductDetailTestPage from "@/components/productDetailtest/ProductDetailTestPage";
 import { Metadata } from "next";
-import { productAPI } from "@/services/api";
+import { fetchProductByIdServer } from "@/services/api";
 
 export async function generateMetadata({ params }: { params: Promise<{  id: string, slug: string }> }): Promise<Metadata> {
   const { id, slug } = await params;
@@ -17,15 +15,9 @@ export async function generateMetadata({ params }: { params: Promise<{  id: stri
 
 
 
-async function getProduct(id: string) {
-  try {
-    const response = await productAPI.getProductById(id);
-    return response?.data ?? response ?? null;
-  } catch (error) {
-    console.error("Error fetching product details for SEO:", error);
-    return null;
-  }
-}
+// Cached per request: the product is fetched once on the server and handed to
+// the client tree, so it never has to be re-fetched after hydration.
+const getProduct = cache((id: string) => fetchProductByIdServer(id));
 
 
 // Next.js App Router — server component.
@@ -45,7 +37,7 @@ const Page = async ({ params }: { params: Promise<{ id: string; slug: string }> 
   category: "Refurbished Smartphones",
   brand: {
     "@type": "Brand",
-    name: product?.brand.name,
+    name: product?.brand?.name,
   },
   hasVariant: product?.variants?.map((variant: any) => ({
     "@type": "Product",
@@ -110,7 +102,7 @@ const Page = async ({ params }: { params: Promise<{ id: string; slug: string }> 
         }}
       />
 
-      <ProductDetailTestPage productId={id} />
+      <ProductDetailTestPage productId={id} initialProduct={product} />
     </>
     ;
 };

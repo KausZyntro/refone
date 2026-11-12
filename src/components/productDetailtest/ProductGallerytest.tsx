@@ -60,7 +60,9 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                                             alt={`${product?.name || "Product"} view ${i + 1}`}
                                             width={500}
                                             height={500}
+                                            sizes="(max-width: 1024px) 92vw, 480px"
                                             className={styles.mainImg}
+                                            /* The first slide is the LCP element: preload it and never lazy-load it. */
                                             priority={i === 0}
                                         />
                                     </div>
@@ -74,7 +76,9 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                                         alt="Product fallback"
                                         width={500}
                                         height={500}
+                                        sizes="(max-width: 1024px) 92vw, 480px"
                                         className={styles.mainImg}
+                                        priority
                                     />
                                 </div>
                             </SwiperSlide>
@@ -110,6 +114,7 @@ const ProductGallerytest: React.FC<ProductGalleryTestProps> = ({ product, select
                                         alt="thumbnail"
                                         width={70}
                                         height={70}
+                                        sizes="(max-width: 768px) 22vw, 80px"
                                         className={styles.thumbImg}
                                     />
                                 </div>

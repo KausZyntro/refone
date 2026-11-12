@@ -1,17 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import dynamic from "next/dynamic";
 import ProductGallerytest from "@/components/productDetailtest/ProductGallerytest";
 import ProductInfotest from "@/components/productDetailtest/ProductInfotest";
-import ProductSpecstest from "@/components/productDetailtest/ProductSpecstest";
 import ProductDetailSkeleton from "@/components/productDetailtest/ProductDetailSkeleton";
-import { FairColorVariant, ProductTest, VariantTest } from "@/types/producttest";
+import { ProductTest, VariantTest } from "@/types/producttest";
 import styles from "./ProductDetailTestPage.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { clearProduct, fetchProductById } from "@/redux/features/productSlice";
 import { addToCart, addLocalItem } from "@/redux/features/cartSlice";
 import { openLoginModal, setRedirectPath } from "@/redux/features/authSlice";
-import { productAPI } from "@/services/api";
 import { useRouter } from "next/navigation";
 import { parsePrice } from "@/utils/format";
 import { toast } from "react-toastify";
@@ -25,26 +25,33 @@ import {
     FiCreditCard,
     FiChevronDown,
     FiChevronUp,
-    FiRepeat,
     FiSmartphone,
     FiWifi,
-    FiMonitor,
-    FiCpu,
     FiCamera,
     FiBattery,
-    FiHardDrive
+    FiHardDrive,
+    FiCheck
 } from "react-icons/fi";
-import { FaCreditCard, FaShoppingCart } from "react-icons/fa";
-import CustomerReviews from "./CustomerReviews";
-import { productReviews } from "@/data/productReviews";
-import { Swiper, SwiperSlide } from "swiper/react";
-import ProductCard from "@/app/allProduct/components/ProductCard";
-import { FiCheck, FiGift } from "react-icons/fi";
-// import ProductCard from "../ui/ProductCard";
+import { FaShoppingCart } from "react-icons/fa";
+
+// Related products sit below the fold: their Swiper + ProductCard code and the
+// API call only load once the section approaches the viewport.
+const RelatedProductsSection = dynamic(
+    () => import("@/components/productDetailtest/RelatedProductsSection"),
+    { ssr: false, loading: () => null }
+);
 
 interface ProductDetailTestPageProps {
     productId: string;
+    initialProduct?: ProductTest | null;
 }
+
+const isVariantInStock = (v: VariantTest | null | undefined) => {
+    const stock = v?.inventory?.total_stock ?? 0;
+    const inboundStock = v?.inventory?.inbound_stock ?? 0;
+    const isActive = v?.inventory?.is_active === 1;
+    return stock > 0 || inboundStock > 0 || isActive;
+};
 
 
 type TabKey = "highlights" | "specs" | "box" | "faq" | "reviews";
@@ -58,48 +65,54 @@ const TABS: { key: TabKey; label: string }[] = [
     // { key: "reviews", label: "Customer Reviews" },
 ];
 
-const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId }) => {
+const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId, initialProduct }) => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
 
-    const reviewData = productReviews[Number(productId)] || null;
-
     /* ── state ── */
-    const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(null);
+    const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<TabKey>("highlights");
     const [openAccordion, setOpenAccordion] = useState<TabKey | null>(null);
     const [addedToCart, setAddedToCart] = useState(false);
     const [isCartLoading, setIsCartLoading] = useState(false);
-    const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
-    const [relatedLoading, setRelatedLoading] = useState(false);
     const [selectedCondition, setSelectedCondition] = useState<"Fair" | "Good" | "Superb">("Superb");
 
     /* ── redux ── */
-    const { product, isLoading, error } = useSelector((state: RootState) => state.product);
+    const { product: reduxProduct, isLoading: reduxLoading, error } = useSelector((state: RootState) => state.product);
     const { user } = useSelector((state: RootState) => state.auth);
+
+    // The product is fetched on the server and passed in, so the main gallery
+    // image is part of the first HTML response. Redux stays as a fallback.
+    const product = initialProduct ?? reduxProduct;
+    const isLoading = !product && reduxLoading;
 
     /* ── effects ── */
     useEffect(() => {
-        dispatch(fetchProductById(productId));
+        if (!initialProduct) dispatch(fetchProductById(productId));
         return () => { dispatch(clearProduct()); };
-    }, [dispatch, productId]);
+    }, [dispatch, productId, initialProduct]);
 
-    useEffect(() => {
-        if (product?.variants?.length) {
-            const inStockVariant = product.variants.find((v: VariantTest) => {
-                const stock = v?.inventory?.total_stock ?? 0;
-                const inboundStock = v?.inventory?.inbound_stock ?? 0;
-                const isActive = v?.inventory?.is_active === 1;
-                return stock > 0 || inboundStock > 0 || isActive;
-            });
-            setSelectedVariant(inStockVariant || product.variants[0]);
-        }
+    // Derived while rendering (not in an effect) so the very first paint already
+    // contains the selected variant and its image.
+    const defaultVariant = React.useMemo(() => {
+        const variants: VariantTest[] = product?.variants ?? [];
+        if (!variants.length) return null;
+        return variants.find(isVariantInStock) || variants[0];
     }, [product]);
-    useEffect(() => {
-    if (product?.name) {
-        getRelatedProducts();
-    }
-}, [product]);
+
+    const selectedVariant = React.useMemo(() => {
+        const variants: VariantTest[] = product?.variants ?? [];
+        if (!variants.length) return null;
+        if (selectedVariantId != null) {
+            const match = variants.find((v) => v.id === selectedVariantId);
+            if (match) return match;
+        }
+        return defaultVariant;
+    }, [product, selectedVariantId, defaultVariant]);
+
+    const setSelectedVariant = React.useCallback((variant: VariantTest) => {
+        setSelectedVariantId(variant.id);
+    }, []);
 
     /* ── derived values ── */
     const sellingPrice = Number(selectedVariant?.pricing?.selling_price ?? 0);
@@ -115,7 +128,6 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     const isOutOfStock = !isInStock;
     const fairProductPrice = selectedVariant?.pricing?.fair_price ?? 0;
     const goodProductPrice = selectedVariant?.pricing?.good_price ?? 0;
-    console.log(fairProductPrice)
 
     const highlights = [
         product?.screen_size ? `${product.screen_size} display` : null,
@@ -128,13 +140,6 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
 
     /* ── Derived logic for Storage and Color ── */
     const selectedStorage = selectedVariant?.storage;
-
-    const isVariantInStock = (v: VariantTest) => {
-        const s = v?.inventory?.total_stock ?? 0;
-        const i = v?.inventory?.inbound_stock ?? 0;
-        const a = v?.inventory?.is_active === 1;
-        return s > 0 || i > 0 || a;
-    };
 
     const storageGroups = (product?.variants ?? []).reduce(
         (acc: { storage: string; rep: VariantTest; hasStock: boolean }[], v: VariantTest) => {
@@ -229,55 +234,6 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         } catch (err: any) { toast.error(err || "Failed to proceed to checkout"); }
         finally { setIsCartLoading(false); }
     };
-
-//     const getRelatedProducts = async () => {
-//     if (!product?.name) return;
-
-//     try {
-//         setRelatedLoading(true);
-
-//         const response = await productAPI.getRelatedProducts(product.name);
-//         // console.log("Response:", response);
-// // console.log("Response.data:", response?.success);
-
-//         if (response.success) {
-//             const filteredProducts = response.pdata.filter(
-//                 (item: any) => item.id !== product.id
-//             );
-
-//             setRelatedProducts(filteredProducts);
-//         }
-//     } catch (error) {
-//         console.error("Related products error:", error);
-//     } finally {
-//         setRelatedLoading(false);
-//     }
-// };
-
-   const getRelatedProducts = async () => {
-    if (!product?.name) return;
-
-    try {
-        setRelatedLoading(true);
-
-        const response = await productAPI.getRelatedProducts(product.name);
-
-        if (response.success) {
-            const relatedProducts = response.pdata
-                .filter((item: any) => item.id !== product.id)
-                .map((item: any) => ({
-                    ...item,
-                    variants: item.variants.length ? [item.variants[0]] : [],
-                }));
-
-            setRelatedProducts(relatedProducts);
-        }
-    } catch (error) {
-        console.error("Related products error:", error);
-    } finally {
-        setRelatedLoading(false);
-    }
-};
 
     const toggleAccordion = (key: TabKey) => {
         setOpenAccordion(openAccordion === key ? null : key);
@@ -413,7 +369,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                             <li><FiCheck className={styles.gradeCardListIcon} /> Battery health {'>'} 80%</li>
                         </ul>
                     </div>
-                    <img src="/images/c1.png" alt="Fair Phone" className={styles.gradeCardImage} />
+                    <Image src="/images/c1.png" alt="Fair Phone" width={666} height={375} sizes="(max-width: 600px) 301px, (max-width: 1280px) 400px, 500px" className={styles.gradeCardImage} />
                 </div>
 
                 {/* Good Card */}
@@ -432,7 +388,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                             <li><FiCheck className={styles.gradeCardListIcon} /> Battery health {'>'} 85%</li>
                         </ul>
                     </div>
-                    <img src="/images/c2.png" alt="Good Phone" className={styles.gradeCardImage} />
+                    <Image src="/images/c2.png" alt="Good Phone" width={666} height={375} sizes="(max-width: 600px) 301px, (max-width: 1280px) 400px, 500px" className={styles.gradeCardImage} />
                 </div>
 
                 {/* Superb Card */}
@@ -452,19 +408,21 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                             <li><FiCheck className={styles.gradeCardListIcon} /> Battery health {'>'} 90%</li>
                         </ul>
                     </div>
-                    <img src="/images/c3.png" alt="Superb Phone" className={styles.gradeCardImage} />
+                    <Image src="/images/c3.png" alt="Superb Phone" width={666} height={375} sizes="(max-width: 600px) 301px, (max-width: 1280px) 400px, 500px" className={styles.gradeCardImage} />
                 </div>
             </div>
         </div>
     );
 
     const WhatsInTheBox = () => {
+        // The handset image is already loaded by the gallery, so it stays a plain
+        // <img>. The bundled artwork below the fold is optimised and lazy-loaded.
         const items = [
-            { name: product?.name || "Smartphone", img: selectedVariant?.images?.[0]?.image_url || "/images/iphone-d.png" },
-            { name: "USB-C to Lightning Cable", img: "/images/lightingCable.png" },
-            { name: "SIM Ejector Tool", img: "/images/simInjector.png" },
-            { name: "Eco Friendly Packaging", img: "/images/w1.png" },
-            { name: "Welcome Guide", img: "/images/w2.png" },
+            { name: product?.name || "Smartphone", img: selectedVariant?.images?.[0]?.image_url || "/images/iphone-d.png", isOptimized: false },
+            { name: "USB-C to Lightning Cable", img: "/images/lightingCable.png", isOptimized: true },
+            { name: "SIM Ejector Tool", img: "/images/simInjector.png", isOptimized: true },
+            { name: "Eco Friendly Packaging", img: "/images/w1.png", isOptimized: true },
+            { name: "Welcome Guide", img: "/images/w2.png", isOptimized: true },
         ];
 
         return (
@@ -477,7 +435,11 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         {items.map((item, idx) => (
                             <div key={idx} className={styles.boxItem}>
                                 <div className={styles.boxItemImageWrap}>
-                                    <img src={item.img} alt={item.name} className={styles.boxItemImage} />
+                                    {item.isOptimized ? (
+                                        <Image src={item.img} alt={item.name} width={1920} height={1080} sizes="(max-width: 1024px) 60px, 256px" className={styles.boxItemImage} />
+                                    ) : (
+                                        <img src={item.img} alt={item.name} loading="lazy" decoding="async" className={styles.boxItemImage} />
+                                    )}
                                 </div>
                                 <span className={styles.boxItemName}>{item.name}</span>
                             </div>
@@ -491,7 +453,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         <h3 className={styles.ecoPromiseTitle}>Our <span>Eco</span> Promise</h3>
                         <p className={styles.ecoPromiseDesc}>Biodegradable packaging<br/>for a greener tomorrow.</p>
                     </div>
-                    <img src="/images/globe.png" alt="Eco Promise Globe" className={styles.ecoPromiseImg} />
+                    <Image src="/images/globe.png" alt="Eco Promise Globe" width={140} height={140} sizes="140px" className={styles.ecoPromiseImg} />
                 </div>
             </div>
         );
@@ -953,39 +915,12 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                     <CustomerReviews productId={Number(productId)} />
                 </div> */}
 
-                {/* RELATED PRODUCTS */}
-                {relatedProducts && relatedProducts.length > 0 && (
-                    <div className={styles.relatedProductsSection}>
-                        <h2 className={styles.relatedTitle}>Product you may like</h2>
-
-                        <Swiper
-                            slidesPerView={2}
-                            spaceBetween={16}
-                            breakpoints={{
-                                768: {
-                                    slidesPerView: 3,
-                                },
-                                1024: {
-                                    slidesPerView: 4,
-                                    spaceBetween: 16,
-                                },
-                                1280: {
-                                    slidesPerView: 5,
-                                    spaceBetween: 18,
-                                },
-                                1440: {
-                                    slidesPerView: 6,
-                                    spaceBetween: 20,
-                                },
-                            }}
-                        >
-                            {relatedProducts.map((product) => (
-                                <SwiperSlide  key={`${product.id}-${product.variants[0]?.id || 0}`}>
-                                    <ProductCard product={product} />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
+                {/* RELATED PRODUCTS (lazy: bundle + API load near the viewport) */}
+                {product && (
+                    <RelatedProductsSection
+                        productId={product.id}
+                        productName={product.name}
+                    />
                 )}
 
                 {/* GRADE EXPLANATION */}

@@ -1,0 +1,65 @@
+{
+  "url": "http://localhost:3100/product/2/iphone-15-pro",
+  "mode": "desktop (no throttle)",
+  "wallMs": 6361,
+  "requests": 45,
+  "bytesByType": {
+    "Stylesheet": 27292,
+    "Font": 32582,
+    "Image": 49613,
+    "Script": 427245,
+    "Document": 21069,
+    "Fetch": 10045
+  },
+  "fcp": 516,
+  "lcp": {
+    "time": 920,
+    "size": 124640,
+    "url": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=750&q=75",
+    "tag": "IMG",
+    "id": "",
+    "cls": "ProductGallerytest-module__O5luhW__mainImg",
+    "src": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=750&q=75",
+    "text": "",
+    "rect": {
+      "w": 410,
+      "h": 410,
+      "top": 180
+    }
+  },
+  "lcpCandidates": [
+    {
+      "time": 920,
+      "tag": "IMG",
+      "cls": "ProductGallerytest-module__O5luhW__mainImg",
+      "size": 124640,
+      "text": "",
+      "rect": {
+        "w": 410,
+        "h": 410,
+        "top": 180
+      },
+      "src": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=750&q=75"
+    }
+  ],
+  "cls": 0,
+  "tbt": 0,
+  "longTaskCount": 0,
+  "ttfb": 62,
+  "domContentLoaded": 912.7000000476837,
+  "load": 3703.100000143051,
+  "transferTotal": 538421,
+  "requestCount": 44,
+  "jsTransfer": 423488,
+  "jsCount": 24,
+  "imgTransfer": 46702,
+  "imgCount": 5,
+  "api": [],
+  "htmlBytes": 20435,
+  "titles": 1,
+  "href": "http://localhost:3100/product/2/iphone-15-pro",
+  "readyState": "complete",
+  "bodyLen": 2079,
+  "bodyText": "Bestseller\nApple iPhone 15 Pro\n4.6\n52+ Quality Checks\n12 Months Warranty\n100% Original Product\n₹70,294.99\n\nInclusive of all taxes\n\nCheck Estimated Delivery Date\n\nCheck\nUsually delivered in 2-4 days\n7 ",
+  "imgCountDom": 15
+}

@@ -1,0 +1,97 @@
+{
+  "url": "http://localhost:3100/product/2/iphone-15-pro",
+  "mode": "mobile (4x CPU, ~1.6Mbps, 150ms RTT)",
+  "wallMs": 9443,
+  "requests": 56,
+  "bytesByType": {
+    "Document": 14972,
+    "Stylesheet": 29604,
+    "Image": 8082,
+    "Script": 407921,
+    "Font": 32582,
+    "Fetch": 9991,
+    "XHR": 1856
+  },
+  "fcp": 2340,
+  "lcp": {
+    "time": 8036,
+    "size": 5238,
+    "url": null,
+    "tag": "H1",
+    "id": "",
+    "cls": "ProductInfotest-module__cS5Xka__title",
+    "src": null,
+    "text": "Apple iPhone 15 Pro",
+    "rect": {
+      "w": 372,
+      "h": 24,
+      "top": 654
+    }
+  },
+  "lcpCandidates": [
+    {
+      "time": 2640,
+      "tag": null,
+      "cls": "",
+      "size": 1904,
+      "text": null,
+      "rect": null,
+      "src": null
+    },
+    {
+      "time": 5640,
+      "tag": "IMG",
+      "cls": "",
+      "size": 3200,
+      "text": "",
+      "rect": {
+        "w": 80,
+        "h": 40,
+        "top": 8
+      },
+      "src": "http://localhost:3100/_next/image?url=%2Flogo-original.png&w=256&q=75"
+    },
+    {
+      "time": 8036,
+      "tag": "H1",
+      "cls": "ProductInfotest-module__cS5Xka__title",
+      "size": 5238,
+      "text": "Apple iPhone 15 Pro",
+      "rect": {
+        "w": 372,
+        "h": 24,
+        "top": 654
+      },
+      "src": null
+    }
+  ],
+  "cls": 0,
+  "tbt": 844,
+  "longTaskCount": 4,
+  "ttfb": 215.79999995231628,
+  "domContentLoaded": 2325.4000000953674,
+  "load": 6562.5,
+  "transferTotal": 480632,
+  "requestCount": 41,
+  "jsTransfer": 404766,
+  "jsCount": 20,
+  "imgTransfer": 5370,
+  "imgCount": 4,
+  "api": [
+    {
+      "name": "https://refones.com/ApiAuthUat/api/products/get-product-by-id?product_id=2",
+      "ms": 503
+    },
+    {
+      "name": "https://refones.com/ApiAuthUat/api/products/products-you-may-like?search=iPhone%2015%20Pro",
+      "ms": 754
+    }
+  ],
+  "htmlBytes": 14339,
+  "titles": 1,
+  "href": "http://localhost:3100/product/2/iphone-15-pro",
+  "readyState": "complete",
+  "bodyLen": 2079,
+  "bodyText": "Bestseller\nApple iPhone 15 Pro\n4.6\n52+ Quality Checks\n12 Months Warranty\n100% Original Product\n₹70,294.99\n\nInclusive of all taxes\n\nCheck Estimated Delivery Date\n\nCheck\nUsually delivered in 2-4 days\n7 ",
+  "imgCountDom": 15
+}

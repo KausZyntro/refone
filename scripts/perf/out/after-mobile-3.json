@@ -1,0 +1,78 @@
+{
+  "url": "http://localhost:3100/product/2/iphone-15-pro",
+  "mode": "mobile (4x CPU, ~1.6Mbps, 150ms RTT)",
+  "wallMs": 13284,
+  "requests": 46,
+  "bytesByType": {
+    "Document": 21069,
+    "Stylesheet": 27292,
+    "Image": 56672,
+    "Font": 32582,
+    "Script": 427245,
+    "Fetch": 10037
+  },
+  "fcp": 1364,
+  "lcp": {
+    "time": 2104,
+    "size": 78400,
+    "url": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=750&q=75",
+    "tag": "IMG",
+    "id": "",
+    "cls": "ProductGallerytest-module__O5luhW__mainImg",
+    "src": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=750&q=75",
+    "text": "",
+    "rect": {
+      "w": 280,
+      "h": 280,
+      "top": 180
+    }
+  },
+  "lcpCandidates": [
+    {
+      "time": 1816,
+      "tag": "H1",
+      "cls": "ProductInfotest-module__cS5Xka__title",
+      "size": 5238,
+      "text": "Apple iPhone 15 Pro",
+      "rect": {
+        "w": 372,
+        "h": 24,
+        "top": 654
+      },
+      "src": null
+    },
+    {
+      "time": 2104,
+      "tag": "IMG",
+      "cls": "ProductGallerytest-module__O5luhW__mainImg",
+      "size": 78400,
+      "text": "",
+      "rect": {
+        "w": 280,
+        "h": 280,
+        "top": 180
+      },
+      "src": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=750&q=75"
+    }
+  ],
+  "cls": 0.007274030278598943,
+  "tbt": 932,
+  "longTaskCount": 11,
+  "ttfb": 159.20000004768372,
+  "domContentLoaded": 1363.7999999523163,
+  "load": 8882.100000143051,
+  "transferTotal": 545295,
+  "requestCount": 45,
+  "jsTransfer": 423488,
+  "jsCount": 24,
+  "imgTransfer": 53576,
+  "imgCount": 6,
+  "api": [],
+  "htmlBytes": 20435,
+  "titles": 1,
+  "href": "http://localhost:3100/product/2/iphone-15-pro",
+  "readyState": "complete",
+  "bodyLen": 2079,
+  "bodyText": "Bestseller\nApple iPhone 15 Pro\n4.6\n52+ Quality Checks\n12 Months Warranty\n100% Original Product\n₹70,294.99\n\nInclusive of all taxes\n\nCheck Estimated Delivery Date\n\nCheck\nUsually delivered in 2-4 days\n7 ",
+  "imgCountDom": 15
+}

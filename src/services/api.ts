@@ -160,7 +160,6 @@ export const productAPI = {
     },
     getProductById: async (productId: number | string) => {
         const response = await api.get(`products/get-product-by-id?product_id=${productId}`);
-        console.log("API RAW RESPONSE:", response.data);
         return response.data;
     },
     getFilters: async () => {
@@ -179,6 +178,26 @@ export const productAPI = {
     return response.data;
     },
 }
+
+// Server-side product fetch for the product detail route. Same endpoint and
+// response shape as productAPI.getProductById, but served from Next's data
+// cache so repeat requests do not wait on the upstream API.
+export const fetchProductByIdServer = async (productId: number | string) => {
+    try {
+        const response = await fetch(`${API_URL}products/get-product-by-id?product_id=${productId}`, {
+            headers: { Accept: "application/json" },
+            next: { revalidate: 60 },
+        });
+
+        if (!response.ok) return null;
+
+        const payload = await response.json();
+        return payload?.data ?? payload ?? null;
+    } catch (error) {
+        console.error("Error fetching product details:", error);
+        return null;
+    }
+};
 
 export const addressAPI = {
     getAddresses: async (userId: number) => {

@@ -27,11 +27,6 @@ const displayPrice = availableVariant?.pricing?.selling_price || '0';
 const displayMrp = availableVariant?.pricing?.mrp || '0';
 
     
-        const stocks = product?.variants?.map(v => v.inventory?.available_stock);
-        console.log(stocks);
-        console.log(product)
-    console.log("this is ",availableVariant)
-    
     // Calculate discount
     const mrp = Number(displayMrp);
     const sellingPrice = Number(displayPrice);

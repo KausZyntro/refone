@@ -1,0 +1,80 @@
+{
+  "url": "http://localhost:3100/product/2/iphone-15-pro",
+  "mode": "desktop (no throttle)",
+  "wallMs": 21149,
+  "requests": 54,
+  "bytesByType": {
+    "Image": 262552,
+    "Stylesheet": 28871,
+    "Script": 407921,
+    "Font": 32582,
+    "Document": 14972,
+    "XHR": 1398,
+    "Fetch": 856
+  },
+  "fcp": 8856,
+  "lcp": {
+    "time": 17136,
+    "size": 3200,
+    "url": "http://localhost:3100/_next/image?url=%2Flogo-original.png&w=128&q=75",
+    "tag": "IMG",
+    "id": "",
+    "cls": "",
+    "src": "http://localhost:3100/_next/image?url=%2Flogo-original.png&w=128&q=75",
+    "text": "",
+    "rect": {
+      "w": 80,
+      "h": 40,
+      "top": 8
+    }
+  },
+  "lcpCandidates": [
+    {
+      "time": 9008,
+      "tag": null,
+      "cls": "",
+      "size": 1904,
+      "text": null,
+      "rect": null,
+      "src": null
+    },
+    {
+      "time": 17136,
+      "tag": "IMG",
+      "cls": "",
+      "size": 3200,
+      "text": "",
+      "rect": {
+        "w": 80,
+        "h": 40,
+        "top": 8
+      },
+      "src": "http://localhost:3100/_next/image?url=%2Flogo-original.png&w=128&q=75"
+    }
+  ],
+  "cls": 0,
+  "tbt": 2094,
+  "longTaskCount": 15,
+  "ttfb": 2734.5,
+  "domContentLoaded": 9023,
+  "load": 17305.39999985695,
+  "transferTotal": 725600,
+  "requestCount": 40,
+  "jsTransfer": 404766,
+  "jsCount": 20,
+  "imgTransfer": 259540,
+  "imgCount": 8,
+  "api": [
+    {
+      "name": "https://refones.com/ApiAuthUat/api/products/get-product-by-id?product_id=2",
+      "ms": 1179
+    }
+  ],
+  "htmlBytes": 14339,
+  "titles": 1,
+  "href": "http://localhost:3100/product/2/iphone-15-pro",
+  "readyState": "complete",
+  "bodyLen": 2079,
+  "bodyText": "Bestseller\nApple iPhone 15 Pro\n4.6\n52+ Quality Checks\n12 Months Warranty\n100% Original Product\n₹70,294.99\n\nInclusive of all taxes\n\nCheck Estimated Delivery Date\n\nCheck\nUsually delivered in 2-4 days\n7 ",
+  "imgCountDom": 15
+}

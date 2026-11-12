@@ -1,0 +1,97 @@
+{
+  "url": "http://localhost:3100/product/2/iphone-15-pro",
+  "mode": "desktop (no throttle)",
+  "wallMs": 10067,
+  "requests": 56,
+  "bytesByType": {
+    "Font": 32582,
+    "Stylesheet": 29604,
+    "Document": 14972,
+    "Image": 3779331,
+    "Script": 447226,
+    "Fetch": 9999,
+    "XHR": 1856
+  },
+  "fcp": 1088,
+  "lcp": {
+    "time": 8372,
+    "size": 124640,
+    "url": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=640&q=75",
+    "tag": "IMG",
+    "id": "",
+    "cls": "ProductGallerytest-module__O5luhW__mainImg",
+    "src": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=640&q=75",
+    "text": "",
+    "rect": {
+      "w": 410,
+      "h": 410,
+      "top": 180
+    }
+  },
+  "lcpCandidates": [
+    {
+      "time": 1356,
+      "tag": null,
+      "cls": "",
+      "size": 1904,
+      "text": null,
+      "rect": null,
+      "src": null
+    },
+    {
+      "time": 7624,
+      "tag": "IMG",
+      "cls": "",
+      "size": 3200,
+      "text": "",
+      "rect": {
+        "w": 80,
+        "h": 40,
+        "top": 8
+      },
+      "src": "http://localhost:3100/_next/image?url=%2Flogo-original.png&w=128&q=75"
+    },
+    {
+      "time": 8372,
+      "tag": "IMG",
+      "cls": "ProductGallerytest-module__O5luhW__mainImg",
+      "size": 124640,
+      "text": "",
+      "rect": {
+        "w": 410,
+        "h": 410,
+        "top": 180
+      },
+      "src": "http://localhost:3100/_next/image?url=https%3A%2F%2Fpub-5e96f9530a7c4c18bb5736a581da8ede.r2.dev%2Fiphone-models%2Fiphone_15_pro%2Fiphone_15_pro_white.webp&w=640&q=75"
+    }
+  ],
+  "cls": 0,
+  "tbt": 493,
+  "longTaskCount": 5,
+  "ttfb": 65.90000009536743,
+  "domContentLoaded": 1099.6000001430511,
+  "load": 7502.700000047684,
+  "transferTotal": 4085364,
+  "requestCount": 55,
+  "jsTransfer": 443752,
+  "jsCount": 22,
+  "imgTransfer": 3571116,
+  "imgCount": 16,
+  "api": [
+    {
+      "name": "https://refones.com/ApiAuthUat/api/products/get-product-by-id?product_id=2",
+      "ms": 432
+    },
+    {
+      "name": "https://refones.com/ApiAuthUat/api/products/products-you-may-like?search=iPhone%2015%20Pro",
+      "ms": 455
+    }
+  ],
+  "htmlBytes": 14339,
+  "titles": 1,
+  "href": "http://localhost:3100/product/2/iphone-15-pro",
+  "readyState": "complete",
+  "bodyLen": 2079,
+  "bodyText": "Bestseller\nApple iPhone 15 Pro\n4.6\n52+ Quality Checks\n12 Months Warranty\n100% Original Product\n₹70,294.99\n\nInclusive of all taxes\n\nCheck Estimated Delivery Date\n\nCheck\nUsually delivered in 2-4 days\n7 ",
+  "imgCountDom": 15
+}
