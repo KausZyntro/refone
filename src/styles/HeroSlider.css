@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playball&display=swap');
-
 .container-hero {
   max-width: 1400px;
   margin: 20px auto;
@@ -138,6 +136,13 @@
   height: auto;
   display: block;
   border-radius: 15px;
+}
+
+/* Art direction: only the matching hero source is displayed. */
+.discount-banner-slide img.hero-img-mobile,
+.deals-banner-slide img.hero-img-mobile,
+.sell-banner-slide img.hero-img-mobile {
+  display: none;
 }
 .why-buy-card {
   width: 100%;
@@ -377,7 +382,7 @@
 }
 
 .md-title {
-  font-family: 'Playball', cursive;
+  font-family: var(--font-playball), 'Playball', cursive;
   font-size: 64px !important;
   color: #ffebcc !important;
   line-height: 0.85 !important;
@@ -577,14 +582,15 @@
   .mothers-day-slide .hero-why-card {
     display: none !important;
   }
-  .discount-banner-slide img {
-    content: url("/discounted-mobile.png");
+  .discount-banner-slide img.hero-img-desktop,
+  .deals-banner-slide img.hero-img-desktop,
+  .sell-banner-slide img.hero-img-desktop {
+    display: none;
   }
-  .deals-banner-slide img {
-    content: url("/deals-mobile.png");
-  }
-  .sell-banner-slide img {
-    content: url("/sell-mobile.jpeg");
+  .discount-banner-slide img.hero-img-mobile,
+  .deals-banner-slide img.hero-img-mobile,
+  .sell-banner-slide img.hero-img-mobile {
+    display: block;
   }
 }
 

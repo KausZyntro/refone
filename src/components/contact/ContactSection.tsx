@@ -1,17 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import Lottie from 'lottie-react';
+import LazyLottie from '@/components/common/LazyLottie';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { submitSupportRequest } from '@/redux/features/supportSlice';
 import { toast } from 'react-toastify';
 import '@/styles/ContactSection.css';
 
-// Using a placeholder JSON for demonstration. 
-// Replace next line with your actual Lottie JSON import.
-// import contactAnimationData from './contact-animation.json'; 
-import contactAnimationData from '../../../public/lottie/Email.json';
 
 interface FormData {
   name: string;
@@ -137,7 +133,7 @@ const ContactSection = () => {
       <div className="contact-section-content">
         {/* Left Side: Lottie Animation */}
         <div className="lottie-container">
-          <Lottie animationData={contactAnimationData} loop={true} className="lottieAnimation" />
+          <LazyLottie src="/lottie/Email.json" className="lottieAnimation" />
           {/* <Lottie 
             animationData={contactAnimationData} 
             loop={true} 

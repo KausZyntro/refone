@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import "@/styles/FAQSection.css";
 
 const faqs = [
@@ -75,16 +76,14 @@ const FAQSection = () => {
   const [limit, setLimit] = useState(6); // Default for mobile to avoid hydration mismatch
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setLimit(8);
-      } else {
-        setLimit(6);
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    // matchMedia only fires when the breakpoint actually changes, instead of on
+    // every resize event (which caused repeated state updates).
+    const media = window.matchMedia("(min-width: 1024px)");
+    const handleChange = () => setLimit(media.matches ? 8 : 6);
+
+    handleChange();
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
   }, []);
 
   const toggleFAQ = (index: number) => {
@@ -134,7 +133,14 @@ const FAQSection = () => {
           </div>
 
           <div className="faq-image-container">
-            <img src="/faq_hero.png" alt="FAQ Illustration" />
+            <Image
+              src="/faq_hero.webp"
+              alt="FAQ Illustration"
+              width={900}
+              height={806}
+              sizes="(max-width: 1023px) 1px, (max-width: 1200px) 320px, 400px"
+              quality={70}
+            />
           </div>
         </div>
 

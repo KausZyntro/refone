@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -53,8 +52,6 @@ import { AiOutlineMobile } from 'react-icons/ai';
 import { IoBatteryHalfSharp } from 'react-icons/io5';
 import { SlCalender } from 'react-icons/sl';
 import AddressList from '@/components/address/AddressList';
-
-const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 // Icons (SVG strings or React components) can be extracted later, using placeholders for now
 const PhoneIcon = () => (

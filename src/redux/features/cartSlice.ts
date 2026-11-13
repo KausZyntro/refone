@@ -15,6 +15,21 @@ export const fetchCartSummary = createAsyncThunk(
                 error.response?.data?.message || "Failed to fetch cart summary"
             );
         }
+    },
+    {
+        // Dedupe: the navbar, cart page and checkout page all request the same
+        // summary on mount. Skip the repeat while one is in flight or when the
+        // cached summary for this user is still fresh.
+        condition: (userId, { getState }) => {
+            const { cart } = getState() as { cart: CartState };
+            const sameUser = cart.summaryUserId === Number(userId);
+
+            if (!sameUser) return true;
+            if (cart.isLoading) return false;
+            if (cart.lastFetchedAt && Date.now() - cart.lastFetchedAt < 30_000) return false;
+
+            return true;
+        },
     }
 );
 
@@ -100,6 +115,8 @@ const initialState: CartState = {
     isLoading: false,
     error: null,
     successMessage: null,
+    lastFetchedAt: 0,
+    summaryUserId: null,
 };
 
 // ── Slice ─────────────────────────────────────────────────────────────────────
@@ -241,8 +258,10 @@ const cartSlice = createSlice({
                 state.isLoading = true;
                 state.error = null;
             })
-            .addCase(fetchCartSummary.fulfilled, (state, { payload }) => {
+            .addCase(fetchCartSummary.fulfilled, (state, { payload, meta }) => {
                 state.isLoading = false;
+                state.lastFetchedAt = Date.now();
+                state.summaryUserId = Number(meta.arg);
                 const items = payload.data?.cart_items || [];
                 state.items = items;
                 
@@ -294,6 +313,8 @@ const cartSlice = createSlice({
             // })
             .addCase(addToCart.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
+                // Force the next summary read to come from the server.
+                state.lastFetchedAt = 0;
 
                 const newItem = payload.data;
 
@@ -340,6 +361,7 @@ const cartSlice = createSlice({
             })
             .addCase(removeFromCart.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
+                state.lastFetchedAt = 0;
 
                 const cartId = payload.cart_id;
                 console.log(cartId)
@@ -395,6 +417,7 @@ const cartSlice = createSlice({
             })
             .addCase(updateCartQuantityThunk.fulfilled, (state) => {
                 state.isLoading = false;
+                state.lastFetchedAt = 0;
             })
             .addCase(updateCartQuantityThunk.rejected, (state, { payload, meta }) => {
                 state.isLoading = false;

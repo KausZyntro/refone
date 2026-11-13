@@ -1,8 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "@/styles/AuthModal.css";
-import Lottie from "lottie-react";
-import animationData from "../../../public/lottie/shopping-cart.json";
+import LazyLottie from "@/components/common/LazyLottie";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, registerUser, clearError, googleLoginUser, clearRedirectPath } from "@/redux/features/authSlice";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -104,11 +103,7 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
       <div className="auth-modal">
         {/* LEFT SIDE (Lottie Space) */}
         <div className="auth-left">
-          <Lottie
-            animationData={animationData as any}
-            loop={true}
-            className="auth-lottie"
-          />
+          <LazyLottie src="/lottie/shopping-cart.json" className="auth-lottie" />
         </div>
 
         {/* RIGHT SIDE */}

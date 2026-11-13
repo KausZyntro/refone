@@ -66,7 +66,13 @@ const Testimonial = () => {
           <SwiperSlide key={index}>
             <div className="testimonial-card">
               <div className="user-info">
-                <img src={item.image} alt={item.name} />
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={48}
+                  height={48}
+                  sizes="48px"
+                />
                 <h4>{item.name}</h4>
               </div>
               <p className="testimonial-text">{item.text}</p>

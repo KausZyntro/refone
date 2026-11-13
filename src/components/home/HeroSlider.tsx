@@ -7,10 +7,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-import ActionCards from "@/components/home/ActionCards";
+import Image from "next/image";
 
 import "@/styles/HeroSlider.css";
-import { FaMobileAlt, FaShoppingCart, FaCheckCircle, FaShieldAlt, FaUndo, FaTruck, FaClock } from "react-icons/fa";
 import Link from "next/link";
 
 // const WhyBuyCard = () => (
@@ -47,6 +46,9 @@ import Link from "next/link";
 //   </div>
 // );
 
+const HERO_DESKTOP_SIZES = "(max-width: 768px) 1px, (max-width: 1440px) calc(100vw - 40px), 1360px";
+const HERO_MOBILE_SIZES = "(max-width: 768px) calc(100vw - 20px), 1px";
+
 const HeroSlider = () => {
   return (
     <div className="container-hero">
@@ -60,27 +62,75 @@ const HeroSlider = () => {
       >
         <SwiperSlide>
             <Link href="/allProduct" className="discount-banner-slide">
-              <img
-                src="/discounted.png"
+              <Image
+                src="/discounted.webp"
                 alt="Discount Banner"
+                width={1600}
+                height={566}
+                sizes={HERO_DESKTOP_SIZES}
+                quality={70}
+                priority
+                className="hero-img-desktop"
+              />
+              <Image
+                src="/discounted-mobile.webp"
+                alt="Discount Banner"
+                width={800}
+                height={649}
+                sizes={HERO_MOBILE_SIZES}
+                quality={70}
+                loading="eager"
+                className="hero-img-mobile"
               />
             </Link>
           </SwiperSlide>
           
          <SwiperSlide>
           <Link href="/allProduct" className="deals-banner-slide">
-            <img
-              src="/deals.png"
+            <Image
+              src="/deals.webp"
               alt="Premium Phones"
+              width={1360}
+              height={480}
+              sizes={HERO_DESKTOP_SIZES}
+              quality={70}
+              loading="lazy"
+              className="hero-img-desktop"
+            />
+            <Image
+              src="/deals-mobile.webp"
+              alt="Premium Phones"
+              width={370}
+              height={300}
+              sizes={HERO_MOBILE_SIZES}
+              quality={70}
+              loading="lazy"
+              className="hero-img-mobile"
             />
           </Link>
         </SwiperSlide>
 
         <SwiperSlide>
             <Link href="/exchange-phone" className="sell-banner-slide">
-              <img
-                src="/sell.jpeg"
+              <Image
+                src="/sell.webp"
                 alt="Sell Banner"
+                width={1600}
+                height={565}
+                sizes={HERO_DESKTOP_SIZES}
+                quality={70}
+                loading="lazy"
+                className="hero-img-desktop"
+              />
+              <Image
+                src="/sell-mobile.webp"
+                alt="Sell Banner"
+                width={555}
+                height={450}
+                sizes={HERO_MOBILE_SIZES}
+                quality={70}
+                loading="lazy"
+                className="hero-img-mobile"
               />
             </Link>
         </SwiperSlide>

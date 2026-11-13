@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import "@/styles/AuthModal.css";
-import Lottie from "lottie-react";
-import animationData from "../../../public/lottie/shopping-cart.json";
+import LazyLottie from "@/components/common/LazyLottie";
 import { authAPI } from "@/services/api";
 import { toast } from "react-toastify";
 
@@ -50,11 +49,7 @@ const ForgotPasswordModal = ({
             <div className="auth-modal">
                 {/* LEFT SIDE (Lottie Space) */}
                 <div className="auth-left">
-                    <Lottie
-                        animationData={animationData as any}
-                        loop={true}
-                        className="auth-lottie"
-                    />
+                    <LazyLottie src="/lottie/shopping-cart.json" className="auth-lottie" />
                 </div>
 
                 {/* RIGHT SIDE */}

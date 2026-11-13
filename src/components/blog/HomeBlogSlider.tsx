@@ -96,7 +96,7 @@ export default function HomeBlogSlider({ blogs }: Props) {
                       src={image}
                       alt={title}
                       fill
-                      unoptimized
+                      sizes="(max-width: 480px) 110px, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, 290px"
                       className={styles.image}
                     />
                   ) : (

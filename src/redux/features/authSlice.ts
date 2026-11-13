@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authAPI, userAPI } from "@/services/api";
-import { parse } from "path";
 
 /* ---------------- TOKEN HELPER ---------------- */
 

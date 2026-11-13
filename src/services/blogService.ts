@@ -5,15 +5,21 @@ const BLOG_BASE_URL = process.env.NEXT_BLOG_BASE_URL || 'https://refones.com';
 
 export const blogService = {
   
-  async getBlogs(): Promise<BlogPost[]> {
-      let page = 1;
-  let totalPages = 1;
+  async getBlogs(limit = 4): Promise<BlogPost[]> {
+      const page = 1;
     try {
       // Note: You may need to adjust the '/api/blogs' path to match your exact backend endpoint
       // e.g., '/api/posts' or '/wp-json/wp/v2/posts'
-      const response = await fetch(`${BLOG_BASE_URL}?_embed&per_page=100&page=${page}`, {
-        next: { revalidate: 60 }, // Cache for 60 seconds (adjust as needed)
-      });
+      // Only request what the homepage renders: 100 embedded posts used to be
+      // fetched (and returned ~9 MB) just to show four cards.
+      const separator = BLOG_BASE_URL.includes("?") ? "&" : "?";
+      const response = await fetch(
+        `${BLOG_BASE_URL}${separator}_embed&per_page=${limit}&page=${page}`,
+        {
+          next: { revalidate: 300 },
+          signal: AbortSignal.timeout(8000),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to fetch blogs: ${response.status}`);
@@ -24,7 +30,7 @@ export const blogService = {
       // If your API wraps the array in a 'data' property (like Laravel often does), use data.data
       const blogsList = Array.isArray(data) ? data : (data.data || []);
       
-      return blogsList as BlogPost[];
+      return (blogsList as BlogPost[]).slice(0, limit);
     } catch (error) {
       console.error('Error in getBlogs:', error);
       return []; // Return empty array on error to prevent page crash

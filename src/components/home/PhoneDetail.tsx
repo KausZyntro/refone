@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import Image from "next/image";
 import "@/styles/PhoneDetail.css";
 
 const categories = [
@@ -110,7 +111,14 @@ const PhoneDetail = () => {
                 className="category-item"
               >
                 <div className="category-icon-wrapper">
-                  <img src={cat.img} alt={cat.name} />
+                  <Image
+                    src={cat.img}
+                    alt={cat.name}
+                    width={150}
+                    height={150}
+                    sizes="(max-width: 480px) 75px, (max-width: 768px) 90px, (max-width: 1024px) 130px, 150px"
+                    className="category-img"
+                  />
                 </div>
                 <p className="category-name">{cat.name}</p>
               </a>

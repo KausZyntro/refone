@@ -69,4 +69,8 @@ export interface CartState {
     isLoading: boolean;
     error: string | null;
     successMessage: string | null;
+    /** Timestamp of the last successful summary fetch, used to dedupe requests. */
+    lastFetchedAt?: number;
+    /** User id the cached summary belongs to. */
+    summaryUserId?: number | null;
 }

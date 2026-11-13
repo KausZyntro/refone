@@ -1,10 +1,5 @@
 import axios from "axios";
 import type { AddToCartPayload } from "@/types/cart";
-import app, { auth, googleProvider } from "./firebase";
-
-import {
-  signInWithPopup,
-} from "firebase/auth";
 
 // Using environment variable or fallback to a local API 
 // const API_URL_BASE = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_AUTH_BASE_URL || "https://api-auth.refones.com/api";
@@ -22,6 +17,7 @@ const API_URLE = API_URL_BASEE.endsWith("/") ? API_URL_BASEE : `${API_URL_BASEE}
 
 const api = axios.create({
     baseURL: API_URL,
+    timeout: 20000,
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -30,6 +26,7 @@ const api = axios.create({
 
 const apie = axios.create({
     baseURL: API_URLE,
+    timeout: 20000,
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -107,6 +104,13 @@ export const authAPI = {
     },
     googleLogin: async () => {
     try {
+
+        // Firebase is loaded only when the user explicitly starts Google sign-in.
+        // This keeps the SDK out of the bundle of every page that uses the API.
+        const [{ signInWithPopup }, { auth, googleProvider }] = await Promise.all([
+            import("firebase/auth"),
+            import("./firebase"),
+        ]);
 
         // Open Google popup
         const result = await signInWithPopup(

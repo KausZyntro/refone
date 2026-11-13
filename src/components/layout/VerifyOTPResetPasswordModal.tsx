@@ -2,8 +2,7 @@
 import React, { useState } from "react";
 import "@/styles/AuthModal.css";
 import { toast } from "react-toastify";
-import Lottie from "lottie-react";
-import animationData from "../../../public/lottie/shopping-cart.json";
+import LazyLottie from "@/components/common/LazyLottie";
 import { authAPI } from "@/services/api";
 
 const VerifyOTPResetPasswordModal = ({
@@ -48,11 +47,7 @@ const VerifyOTPResetPasswordModal = ({
             <div className="auth-modal">
                 {/* LEFT SIDE (Lottie Space) */}
                 <div className="auth-left">
-                    <Lottie
-                        animationData={animationData as any}
-                        loop={true}
-                        className="auth-lottie"
-                    />
+                    <LazyLottie src="/lottie/shopping-cart.json" className="auth-lottie" />
                 </div>
 
                 {/* RIGHT SIDE */}

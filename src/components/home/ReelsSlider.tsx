@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, FreeMode } from "swiper/modules";
 import "swiper/css";
@@ -30,58 +30,94 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
   const [isMuted, setIsMuted] = useState(true); // Always muted by default
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  // The video source is attached only after the user asks to play it, so the
+  // 2-5 MB MP4s are never fetched during the initial page load.
+  const [src, setSrc] = useState<string | undefined>(undefined);
+  const playOnLoadRef = useRef(false);
+
+  const playVideo = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    setIsLoading(true);
+
+    // Pause all other videos on the page
+    document.querySelectorAll("video").forEach((v) => {
+      if (v !== video && !v.paused) {
+        v.pause();
+      }
+    });
+
+    video.muted = false; // Unmute when user explicitly plays
+    setIsMuted(false);
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsLoading(false);
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          console.warn("Video play failed:", err);
+          // Fallback: If iOS blocks unmuted autoplay/play without proper gesture, try muted
+          video.muted = true;
+          setIsMuted(true);
+          video.play()
+            .then(() => {
+              setIsLoading(false);
+              setIsPlaying(true);
+            })
+            .catch((e) => {
+              console.error("Muted play also failed", e);
+              setIsLoading(false);
+              setIsPlaying(false);
+              setHasError(true);
+            });
+        });
+    } else {
+      setIsLoading(false);
+      setIsPlaying(true);
+    }
+  }, []);
 
   const handlePlayPause = useCallback((e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     const video = videoRef.current;
     if (!video) return;
 
+    if (!src) {
+      playOnLoadRef.current = true;
+      setIsLoading(true);
+      setSrc(`${reel.media_url}#t=0.001`);
+      return;
+    }
+
     if (!video.paused) {
       video.pause();
       setIsPlaying(false);
     } else {
-      setIsLoading(true);
-      
-      // Pause all other videos on the page
-      document.querySelectorAll("video").forEach((v) => {
-        if (v !== video && !v.paused) {
-          v.pause();
-        }
-      });
-
-      video.muted = false; // Unmute when user explicitly plays
-      setIsMuted(false);
-      
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setIsLoading(false);
-            setIsPlaying(true);
-          })
-          .catch((err) => {
-            console.warn("Video play failed:", err);
-            // Fallback: If iOS blocks unmuted autoplay/play without proper gesture, try muted
-            video.muted = true;
-            setIsMuted(true);
-            video.play()
-              .then(() => {
-                setIsLoading(false);
-                setIsPlaying(true);
-              })
-              .catch((e) => {
-                console.error("Muted play also failed", e);
-                setIsLoading(false);
-                setIsPlaying(false);
-                setHasError(true);
-              });
-          });
-      } else {
-        setIsLoading(false);
-        setIsPlaying(true);
-      }
+      playVideo();
     }
-  }, []);
+  }, [src, reel.media_url, playVideo]);
+
+  // Start playback as soon as the lazily attached source can play.
+  useEffect(() => {
+    if (!src || !playOnLoadRef.current) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    playOnLoadRef.current = false;
+    const onReady = () => playVideo();
+
+    if (video.readyState >= 2) {
+      onReady();
+    } else {
+      video.addEventListener("loadeddata", onReady, { once: true });
+    }
+
+    return () => video.removeEventListener("loadeddata", onReady);
+  }, [src, playVideo]);
 
   const handleMuteToggle = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -110,9 +146,9 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
       <video
         ref={videoRef}
         className="reel-video"
-        src={reel.media_url ? `${reel.media_url}#t=0.001` : undefined}
-        poster={reel.thumbnail_url || undefined}
-        preload="metadata"
+        src={src}
+        poster={reel.poster_url || reel.thumbnail_url || undefined}
+        preload="none"
         playsInline
         muted
         loop={false}
@@ -183,6 +219,20 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel }) => {
 };
 
 const ReelsSlider: React.FC<ReelsSliderProps> = ({ reels }) => {
+  // The desktop grid and the mobile Swiper used to mount the same reel list at
+  // the same time. Both are kept for the first render (so SSR matches CSS and
+  // there is no layout shift), then the non-matching one is unmounted.
+  // Video sources are only attached on click, so this costs no media requests.
+  const [device, setDevice] = useState<"both" | "desktop" | "mobile">("both");
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const update = () => setDevice(mq.matches ? "mobile" : "desktop");
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   return (
     <section className="reels-section">
       <div className="container">
@@ -209,12 +259,15 @@ const ReelsSlider: React.FC<ReelsSliderProps> = ({ reels }) => {
         </div>
 
         {/* Grid (desktop) / Swiper (mobile) */}
-        <div className="reels-grid-desktop">
-          {reels.map((reel) => (
-            <ReelCard key={reel.id} reel={reel} />
-          ))}
-        </div>
+        {device !== "mobile" && (
+          <div className="reels-grid-desktop">
+            {reels.map((reel) => (
+              <ReelCard key={reel.id} reel={reel} />
+            ))}
+          </div>
+        )}
 
+        {device !== "desktop" && (
         <div className="reels-slider-mobile">
           <Swiper
             modules={[Navigation, FreeMode]}
@@ -240,6 +293,7 @@ const ReelsSlider: React.FC<ReelsSliderProps> = ({ reels }) => {
             ))}
           </Swiper>
         </div>
+        )}
       </div>
     </section>
   );

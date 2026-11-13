@@ -3,8 +3,7 @@ import React, { useState, useRef } from "react";
 import { FaTimes } from 'react-icons/fa';
 import styles from './OtpModal.module.css';
 import { toast } from 'react-toastify';
-import Lottie from "lottie-react";
-import animationData from "../../../public/lottie/shopping-cart.json";
+import LazyLottie from "@/components/common/LazyLottie";
 
 const OtpModal = ({
   isOpen,
@@ -56,11 +55,7 @@ const OtpModal = ({
       <div className="auth-modal">
         {/* LEFT SIDE (Lottie Space) */}
         <div className="auth-left">
-          <Lottie
-            animationData={animationData as any}
-            loop={true}
-            className="auth-lottie"
-          />
+          <LazyLottie src="/lottie/shopping-cart.json" className="auth-lottie" />
         </div>
 
         {/* RIGHT SIDE */}

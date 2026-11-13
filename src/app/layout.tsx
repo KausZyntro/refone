@@ -7,10 +7,23 @@ import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
 import { Suspense } from "react";
-import { Outfit } from "next/font/google";
-import SnapmintLoader from "@/components/SnapmintLoader";
+import { Outfit, Playball } from "next/font/google";
 
-const outfit = Outfit({ subsets: ["latin"] });
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+});
+
+// Self-hosted (no blocking Google Fonts @import). preload is disabled because
+// this face is only used by the optional seasonal hero slide; the browser fetches
+// it only if an element actually uses the font.
+const playball = Playball({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-playball",
+  preload: false,
+});
 
 export const metadata: Metadata = {
   title: "Buy Refurbished iPhones India | Upto 75% Off | Shop Refone",
@@ -33,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={playball.variable}>
       <body className={outfit.className}>
         <ReduxProvider>
           <Suspense fallback={null}>

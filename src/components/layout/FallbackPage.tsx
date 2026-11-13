@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import Lottie from "lottie-react";
-import animationData from "../../../public/lottie/Network.json";
+import LazyLottie from "@/components/common/LazyLottie";
 import "@/styles/FallbackPage.css";
 
 export default function FallbackPage() {
@@ -47,9 +46,8 @@ export default function FallbackPage() {
     <div className="fallback-container">
       <div className="fallback-card">
         <div className="fallback-animation">
-          <Lottie 
-            animationData={animationData} 
-            loop={true} 
+          <LazyLottie
+            src="/lottie/Network.json"
             style={{ width: '100%', height: '100%' }}
           />
         </div>

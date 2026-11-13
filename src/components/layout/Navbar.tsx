@@ -1,26 +1,23 @@
 "use client"
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import dynamic from 'next/dynamic';
 import "@/styles/Navbar.css";
 
-import {
-  FiSearch,
-  FiMapPin,
-  FiChevronDown,
-  FiMenu,
-  FiX,
-} from "react-icons/fi";
-import { HiMenuAlt2 } from "react-icons/hi";
+import { FiSearch, FiMapPin } from "react-icons/fi";
 import Image from 'next/image';
-import AuthModal from './AuthModal';
-import OtpModal from './OtpModal';
-import ForgotPasswordModal from './ForgotPasswordModal';
-import VerifyOTPResetPasswordModal from './VerifyOTPResetPasswordModal';
+
+// Auth dialogs are only needed after a click. Loading them on demand keeps the
+// Lottie player, animation JSON and Firebase out of the initial page bundle.
+const AuthModal = dynamic(() => import('./AuthModal'), { ssr: false });
+const OtpModal = dynamic(() => import('./OtpModal'), { ssr: false });
+const ForgotPasswordModal = dynamic(() => import('./ForgotPasswordModal'), { ssr: false });
+const VerifyOTPResetPasswordModal = dynamic(() => import('./VerifyOTPResetPasswordModal'), { ssr: false });
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { logout, verifyOtpUser, openLoginModal, closeLoginModal, clearRedirectPath } from '@/redux/features/authSlice';
 import { fetchCartSummary } from '@/redux/features/cartSlice';
 import { RootState } from "@/redux/store";
-import { FaCartShopping, FaUser } from 'react-icons/fa6';
+import { FaUser } from 'react-icons/fa6';
 import { LiaShoppingCartSolid } from 'react-icons/lia';
 import Link from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -28,7 +25,6 @@ import { toast } from 'react-toastify';
 import { productAPI } from '@/services/api';
 import { debounce } from '@/utils/debounce';
 import { FaCheckCircle, FaHistory, FaShieldAlt } from "react-icons/fa";
-import { googleLoginUser } from "@/redux/features/authSlice";
 
 const SEARCH_HISTORY_KEY = 'recent_searches';
 const MAX_HISTORY = 5;
@@ -53,7 +49,7 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [searchCache, setSearchCache] = useState<Record<string, any[]>>({});
+  const searchCacheRef = React.useRef<Record<string, any[]>>({});
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [city, setCity] = useState("Loading...");
   const abortControllerRef = React.useRef<AbortController | null>(null);
@@ -63,10 +59,22 @@ const Navbar = () => {
     setMounted(true);
   }, []);
 
+  // Defer the badge refresh until the browser is idle so it never competes with
+  // the initial render. The slice also dedupes repeated calls for the same user.
   useEffect(() => {
-    if (user?.id) {
-      dispatch(fetchCartSummary(user.id));
+    if (!user?.id) return;
+    const userId = user.id;
+    const run = () => {
+      dispatch(fetchCartSummary(userId));
+    };
+
+    if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+      const handle = window.requestIdleCallback(run, { timeout: 3000 });
+      return () => window.cancelIdleCallback(handle);
     }
+
+    const timeout = setTimeout(run, 1500);
+    return () => clearTimeout(timeout);
   }, [user?.id, dispatch]);
 
   // Load search history
@@ -275,8 +283,9 @@ useEffect(() => {
       }
 
       // Check cache
-      if (searchCache[trimmedQuery]) {
-        setSearchResults(searchCache[trimmedQuery]);
+      const cachedResults = searchCacheRef.current[trimmedQuery];
+      if (cachedResults) {
+        setSearchResults(cachedResults);
         setIsSearching(false);
         return;
       }
@@ -308,7 +317,7 @@ useEffect(() => {
         setSearchResults(results);
 
         // Update cache
-        setSearchCache(prev => ({ ...prev, [trimmedQuery]: results }));
+        searchCacheRef.current[trimmedQuery] = results;
 
         if (results.length > 0) {
           saveToHistory(query);
@@ -323,7 +332,7 @@ useEffect(() => {
         setIsSearching(false);
       }
     }, 500),
-    [pathname, router, searchParams, searchCache, saveToHistory]
+    [pathname, router, searchParams, saveToHistory]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -533,8 +542,9 @@ useEffect(() => {
           </div>
         )}
       </div>
+      {isLoginModalOpen && (
       <AuthModal
-        isOpen={isLoginModalOpen}
+        isOpen
         onClose={() => dispatch(closeLoginModal())}
         openOtp={(id) => {
           setUserId(id);
@@ -547,8 +557,10 @@ useEffect(() => {
         }}
 
       />
+      )}
+      {forgotPasswordOpen && (
       <ForgotPasswordModal
-        isOpen={forgotPasswordOpen}
+        isOpen
         onClose={() => setForgotPasswordOpen(false)}
         openOtp={(id) => {
           setUserId(id);
@@ -560,8 +572,10 @@ useEffect(() => {
           dispatch(openLoginModal());
         }}
       />
+      )}
+      {verifyResetPasswordOpen && (
       <VerifyOTPResetPasswordModal
-        isOpen={verifyResetPasswordOpen}
+        isOpen
         onClose={() => setVerifyResetPasswordOpen(false)}
         userId={userId}
         openLogin={() => {
@@ -569,8 +583,10 @@ useEffect(() => {
           dispatch(openLoginModal());
         }}
       />
+      )}
+      {otpOpen && (
       <OtpModal
-        isOpen={otpOpen}
+        isOpen
         onClose={() => setOtpOpen(false)}
         onVerify={(otp) => {
           if (userId) {
@@ -599,6 +615,7 @@ useEffect(() => {
           }
         }}
       />
+      )}
     </>
   );
 };

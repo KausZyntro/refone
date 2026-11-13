@@ -1,7 +1,29 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Pull in only the icons that are actually used from the large
+    // react-icons entry points (helps dev compile time and bundle graph).
+    optimizePackageImports: [
+      "react-icons/fa",
+      "react-icons/fa6",
+      "react-icons/fi",
+      "react-icons/lia",
+      "react-icons/hi",
+      "react-icons/hi2",
+      "react-icons/lu",
+      "react-icons/md",
+      "react-icons/tb",
+      "react-icons/ai",
+      "react-icons/io5",
+      "react-icons/sl",
+      "react-icons/pi",
+    ],
+  },
   images: {
+    formats: ["image/avif", "image/webp"],
+    qualities: [70, 75],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     remotePatterns: [
       {
         protocol: "https",
@@ -14,6 +36,12 @@ const nextConfig: NextConfig = {
         hostname: "fdn2.gsmarena.com",
         port: "",
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "refones.com",
+        port: "",
+        pathname: "/blogs/wp-content/uploads/**",
       },
     ],
   },

@@ -8,6 +8,7 @@ export interface InstagramReel {
   id: string;
   title: string;
   thumbnail_url: string;
+  poster_url: string; // Lightweight first-frame poster (no video download)
   media_url: string; // Video URL (mp4)
   permalink: string;
   timestamp: string;
@@ -29,6 +30,7 @@ export const STATIC_REELS: InstagramReel[] = [
     id: "reel_1",
     title: "iPhone 15 Pro Unboxing!",
     thumbnail_url: "", // Add thumbnail URL here
+    poster_url: "/videos/1-poster.webp",
     media_url: "/videos/1.mp4",
     permalink: "https://www.instagram.com/refoneindia/",
     timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
@@ -39,6 +41,7 @@ export const STATIC_REELS: InstagramReel[] = [
     id: "reel_2",
     title: "Check Out The Camera Quality?",
     thumbnail_url: "",
+    poster_url: "/videos/2-poster.webp",
     media_url: "/videos/2.mp4",
     permalink: "https://www.instagram.com/refoneindia/",
     timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
@@ -49,6 +52,7 @@ export const STATIC_REELS: InstagramReel[] = [
     id: "reel_3",
     title: "What is Refone",
     thumbnail_url: "",
+    poster_url: "/videos/3-poster.webp",
     media_url: "/videos/3.mp4",
     permalink: "https://www.instagram.com/refoneindia/",
     timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
@@ -59,6 +63,7 @@ export const STATIC_REELS: InstagramReel[] = [
     id: "reel_4",
     title: "Refone gives best value!",
     thumbnail_url: "",
+    poster_url: "/videos/4-poster.webp",
     media_url: "/videos/4.mp4",
     permalink: "https://www.instagram.com/refoneindia/",
     timestamp: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
@@ -69,6 +74,7 @@ export const STATIC_REELS: InstagramReel[] = [
     id: "reel_5",
     title: "From Old to Gold",
     thumbnail_url: "",
+    poster_url: "/videos/5-poster.webp",
     media_url: "https://videos.pexels.com/video-files/9558745/9558745-sd_506_960_25fps.mp4",
     permalink: "https://www.instagram.com/refoneindia/",
     timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
@@ -79,6 +85,7 @@ export const STATIC_REELS: InstagramReel[] = [
     id: "reel_6",
     title: "Happy Customers",
     thumbnail_url: "",
+    poster_url: "/videos/6-poster.webp",
     media_url: "https://videos.pexels.com/video-files/18291332/18291332-sd_360_640_30fps.mp4",
     permalink: "https://www.instagram.com/refoneindia/",
     timestamp: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
