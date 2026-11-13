@@ -44,6 +44,7 @@ const RelatedProductsSection = dynamic(
 interface ProductDetailTestPageProps {
     productId: string;
     initialProduct?: ProductTest | null;
+    initialVariantId?: number;
 }
 
 const isVariantInStock = (v: VariantTest | null | undefined) => {
@@ -65,12 +66,12 @@ const TABS: { key: TabKey; label: string }[] = [
     // { key: "reviews", label: "Customer Reviews" },
 ];
 
-const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId, initialProduct }) => {
+const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId, initialProduct, initialVariantId }) => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
 
     /* ── state ── */
-    const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null);
+    const [selectedVariantId, setSelectedVariantId] = useState<number | null>(initialVariantId ?? null);
     const [activeTab, setActiveTab] = useState<TabKey>("highlights");
     const [openAccordion, setOpenAccordion] = useState<TabKey | null>(null);
     const [addedToCart, setAddedToCart] = useState(false);

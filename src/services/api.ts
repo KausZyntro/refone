@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { AddToCartPayload } from "@/types/cart";
+import { slugify } from "@/utils/slug";
 
 // Using environment variable or fallback to a local API 
 // const API_URL_BASE = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_AUTH_BASE_URL || "https://api-auth.refones.com/api";
@@ -199,6 +200,57 @@ export const fetchProductByIdServer = async (productId: number | string) => {
         return payload?.data ?? payload ?? null;
     } catch (error) {
         console.error("Error fetching product details:", error);
+        return null;
+    }
+};
+
+// Server-side product lookup for the /products/[slug] route. The API has no
+// top-level slug field: the slider links are built from `seo_meta.slug`, with
+// the product name as fallback (see `slugify`). The lookup must use the same
+// slug, otherwise every product URL resolves to 404. A `search` query narrows
+// the list first, then we fall back to a full paginated scan for an exact match.
+export const fetchProductBySlugServer = async (slug: string) => {
+    const fetchProducts = async (query: string) => {
+        const response = await fetch(`${API_URL}product-list${query}`, {
+            headers: { Accept: "application/json" },
+            next: { revalidate: 60 },
+        });
+
+        if (!response.ok) return [];
+
+        const payload = await response.json();
+        const data = payload?.data?.data ?? payload?.data ?? [];
+        return Array.isArray(data) ? data : [];
+    };
+
+    const productSlug = (product: any) =>
+        slugify(product?.seo_meta?.slug || product?.name || "");
+
+    const findMatch = (products: any[]) => {
+        const target = slugify(slug);
+        return products.find(
+            (product) =>
+                productSlug(product) === target || slugify(product?.name ?? "") === target,
+        );
+    };
+
+    try {
+        const searchTerm = slug.replace(/-/g, " ");
+        const matched = findMatch(await fetchProducts(`?search=${encodeURIComponent(searchTerm)}`));
+        if (matched) return matched;
+
+        // The API defaults to 14 products per page and ignores `limit` for
+        // pagination, so walk the pages until it runs out of products.
+        for (let page = 1; page <= 20; page++) {
+            const products = await fetchProducts(page === 1 ? "" : `?page=${page}`);
+            const pageMatch = findMatch(products);
+            if (pageMatch) return pageMatch;
+            if (products.length === 0) break;
+        }
+
+        return null;
+    } catch (error) {
+        console.error("Error fetching product by slug:", error);
         return null;
     }
 };
