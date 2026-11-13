@@ -6,6 +6,7 @@ import Link from 'next/link';
 import styles from '../allProduct.module.css';
 import AddToCartSectiontest from '@/components/productDetailtest/AddToCartSectiontest';
 import { VariantTest } from '@/types/producttest';
+import { slugify } from '@/utils/slug';
 
 interface ProductCardProps {
     product: any;
@@ -40,14 +41,14 @@ const displayMrp = availableVariant?.pricing?.mrp || '0';
     const [selectedVariant, setSelectedVariant] = React.useState<VariantTest | null>(
     availableVariant || null
 );
-const slug = product.name
-  .toLowerCase()
-  .replace(/\s+/g, "-")
-  .replace(/[^\w-]/g, "");
+// Product detail URLs are short and slug-based: /products/<slug>?variant=<id>
+// (see src/app/(store)/products/[slug]/page.tsx).
+const slug = slugify(product.seo_meta?.slug || product.name || "");
+const productHref = `/products/${slug}${availableVariant?.id ? `?variant=${availableVariant.id}` : ""}`;
 
     return (
         <div className={styles.productCard}>
-            <Link href={`/product/${product.id}/${slug}`} className={styles.cardLinkWrapper}>
+            <Link href={productHref} className={styles.cardLinkWrapper}>
                 <div className={styles.cardHeader}>
                     <span className={styles.bestsellerBadge}>Bestseller</span>
                     <button 
