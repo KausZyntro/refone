@@ -173,6 +173,7 @@ async function main() {
     sessionId
   );
 
+  
   const metrics = evalRes.result.value;
   const out = {
     url,
