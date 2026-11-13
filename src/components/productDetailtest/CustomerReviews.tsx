@@ -1,4 +1,5 @@
 import styles from "./CustomerReviews.module.css";
+import Image from "next/image";
 import { FaRegStar, FaStar, FaStarHalfAlt, FaCheckCircle } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { feedbackAPI } from "@/services/api";
@@ -218,13 +219,7 @@ export default function CustomerReviews({ productId, initialData }: CustomerRevi
                                     {review.images?.length > 0 && (
                                         <div className={styles.reviewImages}>
                                             {review.images.map((img: string, index: number) => (
-                                                <img
-                                                    key={index}
-                                                    src={img}
-                                                    alt="review"
-                                                    className={styles.reviewImage}
-                                                    onClick={() => openGallery(review.images, index)}
-                                                />
+                                                <Image key={index} src={img} alt="review" width={80} height={80} sizes="80px" className={styles.reviewImage} onClick={() => openGallery(review.images, index)} />
                                             ))}
                                         </div>
                                     )}
@@ -249,7 +244,7 @@ export default function CustomerReviews({ productId, initialData }: CustomerRevi
                     <div className={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
                         <button className={styles.closeBtn} onClick={() => setIsGalleryOpen(false)}>×</button>
                         {selectedImages.length > 1 && <button className={styles.prevBtn} onClick={prevImage}>‹</button>}
-                        <img src={selectedImages[selectedIndex]} alt="preview" className={styles.largeImage} />
+                        <Image src={selectedImages[selectedIndex]} alt="preview" width={1200} height={900} sizes="90vw" className={styles.largeImage} style={{ width: "auto", height: "auto" }} />
                         {selectedImages.length > 1 && <button className={styles.nextBtn} onClick={nextImage}>›</button>}
                     </div>
                 </div>

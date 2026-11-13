@@ -34,7 +34,7 @@ export default function BuybackRequest() {
       {/* Device Card */}
       <div className={styles.deviceCard}>
         <div className={styles.deviceInfo}>
-          <ImageWithFallback src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" fallbackSrc="https://via.placeholder.com/80x80?text=iPhone" alt="Apple iPhone 14" className={styles.deviceImage} />
+          <ImageWithFallback src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" fallbackSrc="https://via.placeholder.com/80x80?text=iPhone" alt="Apple iPhone 14" width={679} height={679} sizes="80px" className={styles.deviceImage} />
           <div className={styles.deviceDetails}>
             <h2 className={styles.deviceName}>Apple iPhone 14</h2>
             <p className={styles.deviceSpec}>128 GB | Midnight (Black)</p>
@@ -77,7 +77,7 @@ export default function BuybackRequest() {
       <div className={styles.statusContainer}>
         <div className={styles.statusLeft}>
           <div className={styles.statusImageWrapper}>
-            <ImageWithFallback src="/assets/images/inspection.png" fallbackSrc="https://via.placeholder.com/100x100?text=Inspection" alt="Inspection" className={styles.statusIllustration} />
+            <ImageWithFallback src="/assets/images/inspection.png" fallbackSrc="https://via.placeholder.com/100x100?text=Inspection" alt="Inspection" width={100} height={100} sizes="100px" className={styles.statusIllustration} />
             <div className={styles.statusContent}>
               <h3 className={styles.statusTitle}>Your device is under inspection</h3>
               <p className={styles.statusDesc}>

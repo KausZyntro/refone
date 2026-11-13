@@ -415,14 +415,13 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
     );
 
     const WhatsInTheBox = () => {
-        // The handset image is already loaded by the gallery, so it stays a plain
-        // <img>. The bundled artwork below the fold is optimised and lazy-loaded.
+        // These images sit below the fold and load lazily through Next Image.
         const items = [
-            { name: product?.name || "Smartphone", img: selectedVariant?.images?.[0]?.image_url || "/images/iphone-d.png", isOptimized: false },
-            { name: "USB-C to Lightning Cable", img: "/images/lightingCable.png", isOptimized: true },
-            { name: "SIM Ejector Tool", img: "/images/simInjector.png", isOptimized: true },
-            { name: "Eco Friendly Packaging", img: "/images/w1.png", isOptimized: true },
-            { name: "Welcome Guide", img: "/images/w2.png", isOptimized: true },
+            { name: product?.name || "Smartphone", img: selectedVariant?.images?.[0]?.image_url || "/images/iphone-d.png", width: 679, height: 679 },
+            { name: "USB-C to Lightning Cable", img: "/images/lightingCable.png", width: 1920, height: 1080 },
+            { name: "SIM Ejector Tool", img: "/images/simInjector.png", width: 1920, height: 1080 },
+            { name: "Eco Friendly Packaging", img: "/images/w1.png", width: 1920, height: 1080 },
+            { name: "Welcome Guide", img: "/images/w2.png", width: 1920, height: 1080 },
         ];
 
         return (
@@ -435,11 +434,7 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
                         {items.map((item, idx) => (
                             <div key={idx} className={styles.boxItem}>
                                 <div className={styles.boxItemImageWrap}>
-                                    {item.isOptimized ? (
-                                        <Image src={item.img} alt={item.name} width={1920} height={1080} sizes="(max-width: 1024px) 60px, 256px" className={styles.boxItemImage} />
-                                    ) : (
-                                        <img src={item.img} alt={item.name} loading="lazy" decoding="async" className={styles.boxItemImage} />
-                                    )}
+                                    <Image src={item.img} alt={item.name} width={item.width} height={item.height} sizes="(max-width: 1024px) 60px, 256px" className={styles.boxItemImage} />
                                 </div>
                                 <span className={styles.boxItemName}>{item.name}</span>
                             </div>

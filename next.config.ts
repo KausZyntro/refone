@@ -43,6 +43,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/blogs/wp-content/uploads/**",
       },
+      ...[
+        "www.apple.com", "images.samsung.com", "image01.oneplus.net", "lh3.googleusercontent.com",
+        "in.nothing.tech", "image01.realme.net", "in-exstatic-vivofs.vivo.com", "image.oppo.com",
+        "i.pinimg.com", "m.media-amazon.com", "via.placeholder.com", "i.pravatar.cc",
+        "picsum.photos", "s3ng.cashify.in", "img.icons8.com", "www.gstatic.com",
+      ].map((hostname) => ({ protocol: "https" as const, hostname, port: "", pathname: "/**" })),
     ],
   },
   async headers() {

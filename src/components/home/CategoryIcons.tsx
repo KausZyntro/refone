@@ -1,5 +1,6 @@
 "use client"
 import React, { useRef } from "react";
+import Image from "next/image";
 import "@/styles/CategoryIcons.css";
 
 const categories = [
@@ -44,7 +45,7 @@ const CategoryIcons = () => {
               <a href={cat.link} className="category-card">
                 <div className="category-img-wrapper">
                   {cat.img ? (
-                    <img src={cat.img} alt={cat.name} />
+                    <Image src={cat.img} alt={cat.name} width={60} height={60} sizes="60px" />
                   ) : (
                     <span className="category-emoji">{cat.icon}</span>
                   )}

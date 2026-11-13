@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -102,19 +103,7 @@ const ScrollImageSequence = () => {
       ref={containerRef}
       style={{ height: "100vh", position: "relative" }}
     >
-      <img
-        ref={imageRef}
-        src={images[0]}
-        alt="sequence"
-        className="sequence"
-        style={{
-          width: "100%",
-          height: "100vh",
-          objectFit: "contain",
-          position: "sticky",
-          top: 0,
-        }}
-      />
+      <Image ref={imageRef} src={images[0]} alt="sequence" width={1920} height={1080} unoptimized priority className="sequence" style={{ width: "100%", height: "100vh", objectFit: "contain", position: "sticky", top: 0 }} />
       {/* <div className="text-container">
         <h1 className="sequence-title">{"Scroll to Animate. This is a scroll-triggered image sequence animation"
         .split("")

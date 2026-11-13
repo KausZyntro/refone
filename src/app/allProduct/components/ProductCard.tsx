@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../allProduct.module.css';
 import AddToCartSectiontest from '@/components/productDetailtest/AddToCartSectiontest';
@@ -65,13 +66,7 @@ const slug = product.name
                 </div>
 
                 <div className={styles.productImageWrapper}>
-                    <img
-                        src={displayImage}
-                        alt={product.name}
-                        loading="lazy"
-                        decoding="async"
-                        className={styles.productImage}
-                    />
+                    <Image src={displayImage} alt={product.name} width={220} height={220} sizes="(max-width: 480px) 120px, (max-width: 768px) 180px, 220px" className={styles.productImage} />
                 </div>
 
                 <div className={styles.productDetails}>

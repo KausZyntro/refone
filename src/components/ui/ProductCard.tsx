@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import "@/styles/ProductCard.css";
 import styles from '@/app/allProduct/allProduct.module.css';
 import Link from "next/link";
@@ -18,11 +19,7 @@ const ProductCard = ({ product }: { product: any }) => {
     <Link href={`/product/${product.id || product.slug || ""}`}>
       <div className={styles.productCard}>
             <div className={styles.productImageWrapper}>
-                <img
-                    src={product.image || '/placeholder.png'}
-                    alt={product.name}
-                    className={styles.productImage}
-                />
+                <Image src={product.image || '/placeholder.png'} alt={product.name} width={220} height={220} sizes="(max-width: 768px) 50vw, 220px" className={styles.productImage} />
             </div>
             <div className={styles.productDetails}>
                 <h3 className={styles.productName}>{product.name}</h3>
@@ -57,7 +54,7 @@ const ProductCard = ({ product }: { product: any }) => {
       {/* <div className="product-card">
         <div className="product-image-section">
           <span className="wishlist">♡</span>
-          <img
+          <Image
             src={product.image || "/placeholder.png"}
             alt={product.name}
             className="product-image"

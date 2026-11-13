@@ -1,6 +1,7 @@
 import React from "react";
 import "@/styles/RefoneProductCard.css";
 import Link from "next/link";
+import Image from "next/image";
 import { FaRegHeart } from "react-icons/fa";
 
 const RefoneProductCard = ({ product }: { product: any }) => {
@@ -24,11 +25,7 @@ const RefoneProductCard = ({ product }: { product: any }) => {
       <div className="refone-product-card-horizontal">
         <div className="card-left">
           <div className="product-image-container">
-            <img
-              src={product.image || '/placeholder.png'}
-              alt={product.name}
-              className="card-image"
-            />
+            <Image src={product.image || '/placeholder.png'} alt={product.name} width={110} height={110} sizes="110px" className="card-image" />
           </div>
         </div>
 

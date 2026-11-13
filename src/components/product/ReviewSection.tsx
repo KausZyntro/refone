@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { FaStar, FaRegStar } from "react-icons/fa";
 
 const StarRating = ({ rating }) => {
@@ -69,11 +70,7 @@ const ReviewsSection = () => {
       <div className="comment-review">
         <div className="comment-review-header">
           <div className="comment-review-user">
-            <img
-            src="https://i.pravatar.cc/100?img=1"
-            alt="user"
-            className="comment-avatar"
-          />
+            <Image src="https://i.pravatar.cc/100?img=1" alt="user" width={50} height={50} sizes="50px" className="comment-avatar" />
           <div>
             <h4>Alexander Rity</h4>
             <span>4 months ago</span>
@@ -93,10 +90,10 @@ const ReviewsSection = () => {
         </p>
 
         <div className="comment-images">
-          <img src="https://picsum.photos/200?1" alt="" />
-          <img src="https://picsum.photos/200?2" alt="" />
-          <img src="https://picsum.photos/200?3" alt="" />
-          <img src="https://picsum.photos/200?4" alt="" />
+          <Image src="https://picsum.photos/200?1" alt="" width={80} height={80} sizes="80px" />
+          <Image src="https://picsum.photos/200?2" alt="" width={80} height={80} sizes="80px" />
+          <Image src="https://picsum.photos/200?3" alt="" width={80} height={80} sizes="80px" />
+          <Image src="https://picsum.photos/200?4" alt="" width={80} height={80} sizes="80px" />
         </div>
       </div>
 
@@ -104,11 +101,7 @@ const ReviewsSection = () => {
       <div className="comment-review">
         <div className="comment-review-header">
           <div className="comment-review-user">
-            <img
-            src="https://i.pravatar.cc/100?img=5"
-            alt="user"
-            className="comment-avatar"
-          />
+            <Image src="https://i.pravatar.cc/100?img=5" alt="user" width={50} height={50} sizes="50px" className="comment-avatar" />
           <div>
             <h4>Emma Crieght</h4>
             <span>4 months ago</span>

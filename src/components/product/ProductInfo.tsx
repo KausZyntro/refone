@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useCallback } from "react";
+import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { BsCreditCard2Front } from "react-icons/bs";
 import { CiBank } from "react-icons/ci";
@@ -276,10 +277,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
           </div>
           <div className="payment-item">
             <div className="icon-box">
-              <img
-                src="https://s3ng.cashify.in/estore/08af477c2db941be8ba3c9848418acbb.webp"
-                alt="UPI"
-              />
+              <Image src="https://s3ng.cashify.in/estore/08af477c2db941be8ba3c9848418acbb.webp" alt="UPI" width={26} height={26} sizes="26px" />
             </div>
             <span>UPI</span>
           </div>

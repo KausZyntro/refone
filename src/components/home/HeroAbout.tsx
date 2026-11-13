@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import "@/styles/HeroAbout.css";
 
 const HeroAbout = () => {
@@ -19,10 +20,7 @@ const HeroAbout = () => {
               rel="noopener noreferrer"
               className="store-btn"
             >
-              <img
-                src="/GooglePlay_Badge.svg"
-                alt="Google Play"
-              />
+              <Image src="/GooglePlay_Badge.svg" alt="Google Play" width={239} height={71} sizes="140px" />
             </a>
 
             <a
@@ -31,19 +29,13 @@ const HeroAbout = () => {
               rel="noopener noreferrer"
               className="store-btns"
             >
-              <img
-                src="/App_Store_Badge.svg"
-                alt="Apple Store"
-              />
+              <Image src="/App_Store_Badge.svg" alt="Apple Store" width={120} height={40} sizes="126px" />
             </a>
           </div>
         </div>
 
         <div className="heroAbout-image">
-          <img
-            src="../iphone.png"
-            alt="Download App Banner"
-          />
+          <Image src="/iphone.png" alt="Download App Banner" width={485} height={515} sizes="(max-width: 767px) 100vw, 450px" />
         </div>
       </div>
     </div>

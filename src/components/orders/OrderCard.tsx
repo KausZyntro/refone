@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import OrderStatusBadge from './OrderStatusBadge';
 import OrdersTimeline from './OrdersTimeline';
 import WriteReviewModal from '@/components/productDetailtest/WriteReviewModal';
@@ -103,11 +104,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
             </div>
 
             <div className="order-body">
-                <img 
-                    src={imageUrl || '/placeholder.png'} 
-                    alt={order.product?.name} 
-                    className="product-img" 
-                />
+                <Image src={imageUrl || '/placeholder.png'} alt={order.product?.name || "Product"} width={100} height={100} sizes="100px" className="product-img" />
                 <div className="product-details">
                     <h3>{order.product?.name}</h3>
                     <p className="product-description">

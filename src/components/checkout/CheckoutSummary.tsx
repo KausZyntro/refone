@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
@@ -61,12 +62,7 @@ const CheckoutSummary: React.FC = () => {
                             <div key={item.id} className="checkout-item-micro">
                                 <div className="checkout-item-micro-img">
                                     {imageUrl ? (
-                                        <img
-                                            src={imageUrl}
-                                            alt={item.product?.name || "Product"}
-                                            className="object-cover"
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
+                                        <Image src={imageUrl} alt={item.product?.name || "Product"} fill sizes="48px" className="object-cover" style={{ objectFit: "cover" }} />
                                     ) : (
                                         <div className="no-img-micro" />
                                     )}

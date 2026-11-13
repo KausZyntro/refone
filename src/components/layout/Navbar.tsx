@@ -392,10 +392,10 @@ useEffect(() => {
             </div>
           </div>
           <div className="utility-right">
-            <div className="utility-item" onClick={handleClickForDownload}><img src="https://img.icons8.com/ios/16/666666/smartphone.png" alt="app" /> Download App</div>
+            <div className="utility-item" onClick={handleClickForDownload}><Image src="https://img.icons8.com/ios/16/666666/smartphone.png" alt="app" width={16} height={16} sizes="16px" /> Download App</div>
             {/* <div className="utility-item" onClick={getLocation}><FiMapPin /> Store Locator</div> */}
-            <div className="utility-item"><img src="https://img.icons8.com/ios/16/666666/truck.png" alt="order" /> Track Order</div>
-            <div className="utility-item" onClick={handleClickForHelpCenter}><img src="https://img.icons8.com/ios/16/666666/help.png" alt="help" /> Help Center</div>
+            <div className="utility-item"><Image src="https://img.icons8.com/ios/16/666666/truck.png" alt="order" width={16} height={16} sizes="16px" /> Track Order</div>
+            <div className="utility-item" onClick={handleClickForHelpCenter}><Image src="https://img.icons8.com/ios/16/666666/help.png" alt="help" width={16} height={16} sizes="16px" /> Help Center</div>
           </div>
         </div>
 
@@ -450,7 +450,7 @@ useEffect(() => {
                     <>
                       {searchResults.map((product) => (
                         <Link key={product.id} href={`/product/${product.id}`} className="search-result-item" onClick={() => { setShowDropdown(false); saveToHistory(search); }}>
-                          <img src={product.variants?.[0]?.images?.[0]?.image_url || '/placeholder.png'} alt={product.name} />
+                          <Image src={product.variants?.[0]?.images?.[0]?.image_url || '/placeholder.png'} alt={product.name} width={40} height={40} sizes="40px" />
                           <div className="result-info">
                             <span className="result-name">{product.name}</span>
                             <span className="result-price">₹{Number(product.variants?.[0]?.pricing?.selling_price || 0).toLocaleString('en-IN')}</span>

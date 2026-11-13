@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import "@/styles/AuthModal.css";
 import LazyLottie from "@/components/common/LazyLottie";
@@ -207,11 +208,7 @@ const AuthModal = ({ isOpen, onClose, openOtp, openForgotPassword }: { isOpen: b
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
               >
-                <img
-                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                  alt="Google"
-                  className="google-icon"
-                />
+                <Image src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width={20} height={20} sizes="20px" className="google-icon" />
                 Continue with Google
               </button>
             </>

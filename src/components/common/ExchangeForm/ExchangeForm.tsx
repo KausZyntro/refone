@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -465,7 +466,7 @@ const handleAssesment = () => {
       <div className="deviceInfoCard">
         {/* Placeholder image, should come from product state */}
         <div className="deviceImageWrapper">
-           <img src="https://m.media-amazon.com/images/I/81sigpKWFHL._SX679_.jpg" alt="Device" className="deviceImage" />
+           <Image src="https://m.media-amazon.com/images/I/81sigpKWFHL._SX679_.jpg" alt="Device" width={679} height={679} sizes="60px" className="deviceImage" />
         </div>
         <div className="deviceDetails">
           <h5 className="deviceName">iPhone 15 Pro Max</h5>
@@ -641,7 +642,7 @@ const handleAssesment = () => {
       <div className="fqDeviceCardContainer">
         <div className="fqDeviceCard">
           <div className="fqDeviceImage">
-            <img src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="Apple iPhone 14" />
+            <Image src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="Apple iPhone 14" width={679} height={679} sizes="80px" />
           </div>
           <div className="fqDeviceDetails">
             <h3>Apple iPhone 14</h3>
@@ -1001,7 +1002,7 @@ const handleAssesment = () => {
           <div className="spSummaryCard">
             <h3>Pickup Summary</h3>
             <div className="spSummaryProduct">
-              <img src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="iPhone 14" />
+              <Image src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="iPhone 14" width={48} height={48} sizes="48px" />
               <div>
                 <h4>Apple iPhone 14</h4>
                 <p>128 GB | Midnight (Black)</p>
@@ -1277,7 +1278,7 @@ const handleAssesment = () => {
                      <h2>Same Device.<br/><span>New Possibilities.</span></h2>
                      <p>Sell your old phone in a few simple steps and get the best value.</p>
                      <div className="heroImageWrapper">
-                        <img src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="Dummy Phone" className="heroPhoneImg" />
+                        <Image src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="Dummy Phone" width={679} height={679} sizes="(max-width: 480px) 90vw, 370px" className="heroPhoneImg" />
                         
                      </div>
                   </div>

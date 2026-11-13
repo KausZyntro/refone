@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
+import Image from "next/image";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -40,11 +41,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
           backgroundSize: isZooming ? "200%" : "100%",
         }}
       >
-        <img
-          src={activeImage} 
-          alt="product"
-          className={`main-img ${ isZooming ? "hide" : ""}`}
-        />
+        <Image src={activeImage} alt="product" width={800} height={800} sizes="(max-width: 768px) 100vw, 50vw" className={isZooming ? "main-img hide" : "main-img"} />
       </div>
 
       <div className="thumbnail-row">
@@ -54,7 +51,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
             className={`thumb ${activeImage === img ? "active" : ""}`}
             onClick={() => setActiveImage(img)}
           >
-            <img src={img} alt="thumb" />
+            <Image src={img} alt="thumb" width={80} height={80} sizes="80px" />
           </div>
         ))}
       </div>

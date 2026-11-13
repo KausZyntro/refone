@@ -1,5 +1,6 @@
 "use client"
 import React from "react";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -110,7 +111,7 @@ const PhoneDetailSlider = () => {
                 className="category-item"
               >
                 <div className="category-icon-wrapper">
-                  <img src={cat.img} alt={cat.name} />
+                  <Image src={cat.img} alt={cat.name} width={150} height={150} sizes="150px" />
                 </div>
                 <p className="category-name">{cat.name}</p>
               </a>
