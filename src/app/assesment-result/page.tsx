@@ -1,9 +1,6 @@
-'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import styles from './AssessmentResult.module.css';
-import Image from 'next/image';
 
 export default function AssessmentResultPage() {
     return (

@@ -1,6 +1,4 @@
-"use client";
 
-import React from "react";
 import styles from "./WarrantyInfo.module.css";
 
 const WarrantyInfoPage = () => {

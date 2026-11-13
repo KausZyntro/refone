@@ -1,6 +1,4 @@
-"use client";
-
-import React from "react";
+import ScrollToBenefitsButton from "@/components/careers/ScrollToBenefitsButton";
 import Image from "next/image";
 import styles from "./Careers.module.css";
 import {
@@ -63,9 +61,7 @@ const CareersPage = () => {
                         <p className={styles.heroSubtitle}>
                             Be part of a forward-thinking team where your ideas matter. We're looking for passionate individuals to help us build the future of technology.
                         </p>
-                        <button className={styles.btnPrimary} onClick={() => document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth' })}>
-                            View Openings
-                        </button>
+                        <ScrollToBenefitsButton className={styles.btnPrimary}>View Openings</ScrollToBenefitsButton>
                     </div>
                     <div className={styles.heroImage}>
                         <Image

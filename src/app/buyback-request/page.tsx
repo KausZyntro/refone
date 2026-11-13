@@ -1,6 +1,4 @@
-'use client';
-
-import React from 'react';
+import ImageWithFallback from '@/components/common/ImageWithFallback';
 import styles from './BuybackRequest.module.css';
 import { FiHeadphones, FiCopy, FiEye, FiClock, FiEdit2, FiInfo, FiCheck } from 'react-icons/fi';
 import { MdOutlineLocalShipping } from 'react-icons/md';
@@ -36,7 +34,7 @@ export default function BuybackRequest() {
       {/* Device Card */}
       <div className={styles.deviceCard}>
         <div className={styles.deviceInfo}>
-          <img src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" alt="Apple iPhone 14" className={styles.deviceImage} onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/80x80?text=iPhone" }} />
+          <ImageWithFallback src="https://m.media-amazon.com/images/I/71bErtQPC3L._SX679_.jpg" fallbackSrc="https://via.placeholder.com/80x80?text=iPhone" alt="Apple iPhone 14" className={styles.deviceImage} />
           <div className={styles.deviceDetails}>
             <h2 className={styles.deviceName}>Apple iPhone 14</h2>
             <p className={styles.deviceSpec}>128 GB | Midnight (Black)</p>
@@ -79,7 +77,7 @@ export default function BuybackRequest() {
       <div className={styles.statusContainer}>
         <div className={styles.statusLeft}>
           <div className={styles.statusImageWrapper}>
-            <img src="/assets/images/inspection.png" alt="Inspection" className={styles.statusIllustration} onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/100x100?text=Inspection" }} />
+            <ImageWithFallback src="/assets/images/inspection.png" fallbackSrc="https://via.placeholder.com/100x100?text=Inspection" alt="Inspection" className={styles.statusIllustration} />
             <div className={styles.statusContent}>
               <h3 className={styles.statusTitle}>Your device is under inspection</h3>
               <p className={styles.statusDesc}>

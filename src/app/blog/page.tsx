@@ -1,8 +1,6 @@
-import React from 'react';
 import styles from './page.module.css';
 import BlogCard from '@/components/blog/BlogCard';
-import { BlogPost } from '@/types/blog';
-import { Metadata } from 'next';
+import type { BlogPost } from '@/types/blog';
 
 // export const metadata: Metadata = {
 //   title: 'Blog | Refone',
@@ -11,14 +9,6 @@ import { Metadata } from 'next';
 //     canonical: '/blog',
 //   },
 // };
-export const getImageUrl = (url: string) => {
-  if (!url) return "";
-
-  return url.replace(
-    "https://refones.com/blogs/wp-content/uploads/",
-    "/blog-images/"
-  );
-};
 // Fetch function integrated directly into the page
 // async function getBlogs(): Promise<BlogPost[]> {
 //   const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'https://refones.com';
@@ -101,7 +91,7 @@ async function getBlogs(): Promise<BlogPost[]> {
   try {
     do {
       const response = await fetch(
-        `https://refones.com/blogs/wp-json/wp/v2/posts?_embed&per_page=100&page=${page}`,
+        `https://refones.com/blogs/wp-json/wp/v2/posts?_embed=author,wp:term,wp:featuredmedia&_fields=id,slug,date,title,excerpt,author,yoast_head_json,jetpack_featured_media_url,_links,_embedded&per_page=100&page=${page}`,
         {
           next: { revalidate: 60 },
         }
@@ -120,6 +110,34 @@ async function getBlogs(): Promise<BlogPost[]> {
       const posts = await response.json();
 
       allPosts = [...allPosts, ...posts];
+
+      if (page === 1 && totalPages > 1) {
+        const remainingPageNumbers = Array.from(
+          { length: totalPages - 1 },
+          (_, index) => index + 2
+        );
+        const remainingPosts = await Promise.all(
+          remainingPageNumbers.map(async (pageNumber) => {
+            try {
+              const pageResponse = await fetch(
+                "https://refones.com/blogs/wp-json/wp/v2/posts?_embed=author,wp:term,wp:featuredmedia&_fields=id,slug,date,title,excerpt,author,yoast_head_json,jetpack_featured_media_url,_links,_embedded&per_page=100&page=" +
+                  pageNumber,
+                { next: { revalidate: 60 } }
+              );
+              if (!pageResponse.ok) {
+                console.error("API failed for page:", pageNumber, pageResponse.status);
+                return [];
+              }
+              return (await pageResponse.json()) as BlogPost[];
+            } catch (pageError) {
+              console.error("Blog fetch error for page " + pageNumber + ":", pageError);
+              return [];
+            }
+          })
+        );
+        allPosts.push(...remainingPosts.flat());
+        page = totalPages;
+      }
 
       page++;
     } while (page <= totalPages);

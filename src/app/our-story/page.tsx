@@ -1,6 +1,4 @@
-"use client";
 
-import React from "react";
 import styles from "./OurStory.module.css";
 
 const OurStoryPage = () => {

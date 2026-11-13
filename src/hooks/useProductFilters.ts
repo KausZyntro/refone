@@ -81,6 +81,10 @@ export const useProductFilters = () => {
         debounce((currentFilters: FilterState) => {
             const query = buildQueryString(currentFilters);
             const currentQuery = searchParams.toString();
+            const urlFilters = parseParams(new URLSearchParams(currentQuery));
+            if (JSON.stringify(urlFilters) === JSON.stringify(currentFilters)) {
+                return;
+            }
 
             if (query !== currentQuery) {
                 router.push(`?${query}`, { scroll: false });

@@ -68,6 +68,8 @@ const slug = product.name
                     <img
                         src={displayImage}
                         alt={product.name}
+                        loading="lazy"
+                        decoding="async"
                         className={styles.productImage}
                     />
                 </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import styles from './blogDetail.module.css';
@@ -14,7 +14,7 @@ type Props = {
 import Link from 'next/link';
 
 // Fetch function integrated directly into the page
-async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
+const getBlogBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   const baseUrl = process.env.NEXT_BLOG_BASE_URL || 'https://refones.com/blogs/wp-json/wp/v2/posts';
   try {
     // Append slug and _embed for WordPress REST API
@@ -32,7 +32,7 @@ async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
     console.error(`Error fetching blog ${slug}:`, error);
     return null;
   }
-}
+});
 
 // export async function generateMetadata({ params }: Props): Promise<Metadata> {
 //   const { slug } = await params;

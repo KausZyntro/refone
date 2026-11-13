@@ -1,19 +1,17 @@
-"use client";
-
-import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import styles from './BlogCard.module.css';
-import { BlogPost } from '@/types/blog';
-import { getImageUrl } from '@/app/blog/page';
+import type { FC } from 'react';
+import type { BlogPost } from '@/types/blog';
+import BlogCardImage from './BlogCardImage';
+
+const getImageUrl = (url: string) =>
+  url ? url.replace('https://refones.com/blogs/wp-content/uploads/', '/blog-images/') : '';
 
 interface BlogCardProps {
   blog: BlogPost;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
-  const [imgError, setImgError] = useState(false);
-
+const BlogCard: FC<BlogCardProps> = ({ blog }) => {
   const title = blog?.title?.rendered || blog?.title || 'Untitled';
   const slug = blog?.slug || '';
   
@@ -50,7 +48,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
 
   // Format WordPress date
   const rawDate = blog?.date || blog?.publishedAt;
-  const publishedAt = rawDate ? new Date(rawDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+  const publishedAt = rawDate ? new Date(rawDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'Asia/Kolkata' }) : '';
 
   // WordPress excerpt usually contains HTML tags, strip them for the card
   const rawExcerpt = blog?.excerpt?.rendered || blog?.excerpt || '';
@@ -60,20 +58,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
     <Link href={slug ? `/blog/${slug}` : '#'} className={styles.card}>
       <div className={styles.imageContainer}>
         {/* We use unoptimized for placeholders. In production, remove unoptimized and use valid image domains */}
-        {(!imgError && coverImage) ? (
-          <Image
-            src={coverImage}
-            alt={title}
-            fill
-            className={styles.image}
-            onError={() => setImgError(true)}
-            unoptimized
-          />
-        ) : (
-          <div className={styles.image} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', backgroundColor: '#e9ecef' }}>
-            No Image
-          </div>
-        )}
+        <BlogCardImage src={coverImage} alt={title} className={styles.image} />
       </div>
       <div className={styles.content}>
         <div className={styles.category}>{category}</div>

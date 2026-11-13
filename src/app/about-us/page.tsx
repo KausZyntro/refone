@@ -1,6 +1,4 @@
-'use client';
 
-import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './AboutUs.module.css';
@@ -18,8 +16,7 @@ interface FooterLinksResponse {
 }
 
 const AboutUsPage = () => {
-    const [pageData, setPageData] = useState<PageDataType | null>(null);
-    const [loading, setLoading] = useState(true);
+
 
     // useEffect(() => {
     //     const fetchPageData = async () => {
@@ -92,7 +89,7 @@ const AboutUsPage = () => {
                 <div className={styles.contentWrapper}>
                     <div className={styles.textSide}>
                         <h2 className={styles.sectionHeading}>
-                            {pageData?.title || 'About Refone'}
+                            About Refone
                         </h2>
 
                         {/* {loading ? ( */}

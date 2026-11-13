@@ -21,8 +21,10 @@ export default function AllProductPage() {
 
 
     useEffect(() => {
-        dispatch(fetchFilters());
-    }, [dispatch]);
+        if (!availableFilters) {
+            dispatch(fetchFilters());
+        }
+    }, [availableFilters, dispatch]);
 
     // const renderSkeletons = () => (
     //     Array.from({ length: 8 }).map((_, i) => (
@@ -94,7 +96,6 @@ export default function AllProductPage() {
         return 0;
     });
 }, [products]);
-console.log(sortedProducts)
 
     return (
         <div className={styles.pageContainer}>

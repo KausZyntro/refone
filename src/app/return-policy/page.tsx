@@ -1,6 +1,4 @@
-"use client";
 
-import React from "react";
 import styles from "./ReturnPolicy.module.css";
 
 const ReturnPolicyPage = () => {
