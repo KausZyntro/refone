@@ -344,7 +344,7 @@
     background: #bbdefb;
 }
 
-/* ── Google Maps location picker ──────────────────────────────────────── */
+/* ── Geoapify location picker ─────────────────────────────────────────── */
 
 .address-map-picker {
     margin-bottom: 18px;
@@ -356,9 +356,63 @@
     margin-bottom: 10px;
 }
 
-.map-search-input {
+.map-search-wrap {
+    position: relative;
+    /* Leaflet panes/controls go up to z-index 1000, so the suggestion
+       dropdown has to sit above the map it overlaps. */
+    z-index: 1100;
     flex: 1 1 auto;
     min-width: 0;
+}
+
+.map-search-wrap .map-search-input {
+    width: 100%;
+}
+
+.map-search-suggestions {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    margin: 0;
+    padding: 4px 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #dbe4ec;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(15, 40, 70, 0.12);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.map-search-suggestions li {
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #33475b;
+    cursor: pointer;
+}
+
+.map-search-suggestions li:hover {
+    background: #f0f7fd;
+    color: #1976d2;
+}
+
+.geoapify-pin {
+    background: transparent;
+    border: none;
+}
+
+.geoapify-pin-dot {
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    background: #006aaf;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 
 .btn-map-location {

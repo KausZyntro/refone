@@ -3,6 +3,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { MdMyLocation } from 'react-icons/md';
+import 'leaflet/dist/leaflet.css';
+import {
+    GEOAPIFY_API_KEY,
+    GeoapifyFeature,
+    reverseGeocode,
+    searchAddresses,
+    toMapAddressDetails,
+} from '@/lib/geoapify';
 
 export interface MapAddressDetails {
     address_line1?: string;
@@ -15,110 +23,20 @@ interface AddressMapPickerProps {
     onAddressSelect: (details: MapAddressDetails) => void;
 }
 
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-const SCRIPT_ID = 'google-maps-script';
 // Fallback view (centre of India) until the user searches or picks a location
 const DEFAULT_CENTER = { lat: 20.5937, lng: 78.9629 };
-
-let mapsLoader: Promise<any> | null = null;
-
-// The Maps JS API is loaded once per page and shared by every picker instance
-const loadGoogleMaps = (): Promise<any> => {
-    if (typeof window === 'undefined') {
-        return Promise.reject(new Error('Google Maps can only load in the browser.'));
-    }
-
-    const existingMaps = (window as any).google?.maps;
-    if (existingMaps?.Map) {
-        return Promise.resolve(existingMaps);
-    }
-
-    if (!GOOGLE_MAPS_API_KEY) {
-        return Promise.reject(
-            new Error('Google Maps API key is missing. Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment.')
-        );
-    }
-
-    if (!mapsLoader) {
-        mapsLoader = new Promise((resolve, reject) => {
-            const handleLoad = () => {
-                const maps = (window as any).google?.maps;
-                if (maps?.Map) {
-                    resolve(maps);
-                } else {
-                    mapsLoader = null;
-                    reject(new Error('Google Maps failed to initialise.'));
-                }
-            };
-
-            const handleError = () => {
-                mapsLoader = null;
-                reject(new Error('Unable to load Google Maps. Check the API key and enabled APIs.'));
-            };
-
-            const existingScript = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
-            if (existingScript) {
-                existingScript.addEventListener('load', handleLoad);
-                existingScript.addEventListener('error', handleError);
-                return;
-            }
-
-            const script = document.createElement('script');
-            script.id = SCRIPT_ID;
-            script.async = true;
-            script.defer = true;
-            script.src =
-                `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_API_KEY)}` +
-                `&libraries=places&loading=async&v=weekly`;
-            script.addEventListener('load', handleLoad);
-            script.addEventListener('error', handleError);
-            document.head.appendChild(script);
-        });
-    }
-
-    return mapsLoader;
-};
-
-const readComponent = (components: any[], type: string, shortName = false) => {
-    const match = components.find(
-        (component) => Array.isArray(component.types) && component.types.includes(type)
-    );
-    if (!match) return '';
-    return (shortName ? match.shortText ?? match.short_name : match.longText ?? match.long_name) ?? '';
-};
-
-// Maps a Geocoder address_components list onto the fields the form needs
-const buildAddressDetails = (components: any[], formattedAddress?: string): MapAddressDetails => {
-    const streetNumber = readComponent(components, 'street_number');
-    const route = readComponent(components, 'route');
-    const premise = readComponent(components, 'premise') || readComponent(components, 'subpremise');
-
-    const addressLine =
-        [premise, streetNumber, route].filter(Boolean).join(' ').trim() ||
-        readComponent(components, 'sublocality_level_1') ||
-        readComponent(components, 'neighborhood') ||
-        (formattedAddress ? formattedAddress.split(',')[0].trim() : '');
-
-    const city =
-        readComponent(components, 'locality') ||
-        readComponent(components, 'postal_town') ||
-        readComponent(components, 'administrative_area_level_2');
-
-    return {
-        address_line1: addressLine,
-        city,
-        state: readComponent(components, 'administrative_area_level_1'),
-        pincode: readComponent(components, 'postal_code').replace(/\D/g, '').slice(0, 6),
-    };
-};
+const MAP_ATTRIBUTION =
+    'Powered by <a href="https://www.geoapify.com/" target="_blank" rel="noopener noreferrer">Geoapify</a> | ' +
+    '© <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener noreferrer">OpenMapTiles</a> | ' +
+    '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors';
 
 const AddressMapPicker: React.FC<AddressMapPickerProps> = ({ onAddressSelect }) => {
     const mapContainerRef = useRef<HTMLDivElement>(null);
-    const searchInputRef = useRef<HTMLInputElement>(null);
-    const mapRef = useRef<any>(null);
-    const markerRef = useRef<any>(null);
-    const geocoderRef = useRef<any>(null);
-    const autocompleteRef = useRef<any>(null);
+    const searchWrapRef = useRef<HTMLDivElement>(null);
+    const mapRef = useRef<import('leaflet').Map | null>(null);
+    const markerRef = useRef<import('leaflet').Marker | null>(null);
+    const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const searchAbortRef = useRef<AbortController | null>(null);
 
     // Kept in a ref so a re-rendered parent callback never re-creates the map
     const onAddressSelectRef = useRef(onAddressSelect);
@@ -130,129 +48,123 @@ const AddressMapPicker: React.FC<AddressMapPickerProps> = ({ onAddressSelect }) 
     const [isLoading, setIsLoading] = useState(true);
     const [isLocating, setIsLocating] = useState(false);
     const [loadError, setLoadError] = useState('');
+    const [searchValue, setSearchValue] = useState('');
+    const [suggestions, setSuggestions] = useState<GeoapifyFeature[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
 
-    const reverseGeocode = useCallback(async (latLng: any) => {
-        const geocoder = geocoderRef.current;
-        if (!geocoder) return;
-
+    const reverseGeocodeAt = useCallback(async (lat: number, lon: number) => {
         try {
-            const response = await geocoder.geocode({ location: latLng });
-            const result = response?.results?.[0];
+            const feature = await reverseGeocode(lat, lon);
 
-            if (!result) {
+            if (!feature) {
                 toast.error('Could not find an address for this location.');
                 return;
             }
 
-            onAddressSelectRef.current(
-                buildAddressDetails(result.address_components || [], result.formatted_address)
-            );
+            onAddressSelectRef.current(toMapAddressDetails(feature.properties));
         } catch (error) {
             console.error('Reverse geocoding failed:', error);
             toast.error('Could not find an address for this location.');
         }
     }, []);
 
-    const applyPosition = useCallback(
-        (latLng: any, options?: { zoom?: number }) => {
-            const map = mapRef.current;
-            const marker = markerRef.current;
+    const moveMarker = useCallback((lat: number, lon: number, zoom?: number) => {
+        const map = mapRef.current;
+        const marker = markerRef.current;
 
-            if (!map || !marker) {
-                return Promise.resolve();
-            }
+        if (!map || !marker) return;
 
-            marker.setPosition(latLng);
-            map.panTo(latLng);
+        marker.setLatLng([lat, lon]);
+        map.panTo([lat, lon]);
 
-            if (options?.zoom) {
-                map.setZoom(options.zoom);
-            }
+        if (zoom) {
+            map.setZoom(zoom);
+        }
+    }, []);
 
-            return reverseGeocode(latLng);
+    const applyFeature = useCallback(
+        (feature: GeoapifyFeature) => {
+            const [lon, lat] = feature.geometry.coordinates;
+
+            moveMarker(lat, lon, 17);
+            setSearchValue(feature.properties.formatted || '');
+            setShowSuggestions(false);
+            onAddressSelectRef.current(toMapAddressDetails(feature.properties));
         },
-        [reverseGeocode]
+        [moveMarker]
     );
 
     useEffect(() => {
         let cancelled = false;
-        let clickListener: any;
-        let dragListener: any;
-        let placeListener: any;
 
         const initialise = async () => {
+            if (!GEOAPIFY_API_KEY) {
+                setLoadError(
+                    'Geoapify API key is missing. Set NEXT_PUBLIC_GEOAPIFY_API_KEY in your environment.'
+                );
+                setIsLoading(false);
+                return;
+            }
+
             try {
-                const maps = await loadGoogleMaps();
+                const L = (await import('leaflet')).default;
 
                 if (cancelled || !mapContainerRef.current) return;
 
-                const map = new maps.Map(mapContainerRef.current, {
-                    center: DEFAULT_CENTER,
+                const map = L.map(mapContainerRef.current, {
+                    center: [DEFAULT_CENTER.lat, DEFAULT_CENTER.lng],
                     zoom: 5,
-                    mapTypeControl: false,
-                    streetViewControl: false,
-                    fullscreenControl: false,
-                    clickableIcons: false,
+                    zoomControl: true,
+                    attributionControl: true,
                 });
 
-                const marker = new maps.Marker({
-                    map,
-                    position: DEFAULT_CENTER,
+                const tileUrl = L.Browser.retina
+                    ? 'https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png'
+                    : 'https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png';
+
+                L.tileLayer(`${tileUrl}?apiKey=${GEOAPIFY_API_KEY}`, {
+                    attribution: MAP_ATTRIBUTION,
+                    maxZoom: 20,
+                }).addTo(map);
+
+                const icon = L.divIcon({
+                    className: 'geoapify-pin',
+                    html: '<span class="geoapify-pin-dot"></span>',
+                    iconSize: [22, 22],
+                    iconAnchor: [11, 11],
+                });
+
+                const marker = L.marker([DEFAULT_CENTER.lat, DEFAULT_CENTER.lng], {
+                    icon,
                     draggable: true,
                     title: 'Drag the marker to adjust your location',
+                }).addTo(map);
+
+                map.on('click', (event: import('leaflet').LeafletMouseEvent) => {
+                    const { lat, lng } = event.latlng;
+                    moveMarker(lat, lng, 16);
+                    void reverseGeocodeAt(lat, lng);
+                });
+
+                marker.on('dragend', () => {
+                    const position = marker.getLatLng();
+                    void reverseGeocodeAt(position.lat, position.lng);
                 });
 
                 mapRef.current = map;
                 markerRef.current = marker;
-                geocoderRef.current = new maps.Geocoder();
-
-                clickListener = map.addListener('click', (event: any) => {
-                    void applyPosition(event.latLng, { zoom: 16 });
-                });
-
-                dragListener = marker.addListener('dragend', () => {
-                    const position = marker.getPosition();
-                    if (position) {
-                        void applyPosition(position);
-                    }
-                });
-
-                const input = searchInputRef.current;
-                if (input && maps.places?.Autocomplete) {
-                    const autocomplete = new maps.places.Autocomplete(input, {
-                        fields: ['geometry', 'formatted_address', 'address_components', 'name'],
-                        componentRestrictions: { country: 'in' },
-                    });
-                    autocompleteRef.current = autocomplete;
-
-                    placeListener = autocomplete.addListener('place_changed', () => {
-                        const place = autocomplete.getPlace();
-                        const location = place?.geometry?.location;
-
-                        if (!location) {
-                            toast.info('Please choose an address from the suggestions.');
-                            return;
-                        }
-
-                        void applyPosition(location, { zoom: 17 });
-                    });
-                }
 
                 if (!cancelled) {
                     setIsReady(true);
                     setIsLoading(false);
                 }
             } catch (error: any) {
-                const message: string = error?.message || 'Unable to load Google Maps.';
+                console.error('Geoapify map initialisation failed:', error);
 
-                // A missing key is a configuration issue; surface it inline only.
-                if (!message.startsWith('Google Maps API key is missing')) {
-                    console.error('Google Maps initialisation failed:', error);
+                if (!cancelled) {
+                    setLoadError(error?.message || 'Unable to load the map.');
+                    setIsLoading(false);
                 }
-
-                if (cancelled) return;
-                setLoadError(message);
-                setIsLoading(false);
             }
         };
 
@@ -260,64 +172,116 @@ const AddressMapPicker: React.FC<AddressMapPickerProps> = ({ onAddressSelect }) 
 
         return () => {
             cancelled = true;
-            clickListener?.remove();
-            dragListener?.remove();
-            placeListener?.remove();
 
-            const autocomplete = autocompleteRef.current;
-            const maps = (window as any).google?.maps;
-            if (autocomplete && maps?.event) {
-                maps.event.clearInstanceListeners(autocomplete);
+            if (searchTimerRef.current) {
+                clearTimeout(searchTimerRef.current);
+            }
+            searchAbortRef.current?.abort();
+
+            const map = mapRef.current;
+            if (map) {
+                map.off();
+                map.remove();
             }
 
-            autocompleteRef.current = null;
             mapRef.current = null;
             markerRef.current = null;
-            geocoderRef.current = null;
+        };
+    }, [moveMarker, reverseGeocodeAt]);
 
-            if (mapContainerRef.current) {
-                mapContainerRef.current.innerHTML = '';
+    // Close the suggestion list when clicking elsewhere on the page
+    useEffect(() => {
+        const handlePointerDown = (event: MouseEvent) => {
+            if (
+                searchWrapRef.current &&
+                !searchWrapRef.current.contains(event.target as Node)
+            ) {
+                setShowSuggestions(false);
             }
         };
-    }, [applyPosition]);
 
-    // Without the Places Autocomplete widget, Enter still searches via Geocoding
-    const handleSearchKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+        document.addEventListener('mousedown', handlePointerDown);
+        return () => document.removeEventListener('mousedown', handlePointerDown);
+    }, []);
+
+    const runSearch = useCallback(async (query: string, pickFirst = false) => {
+        const trimmed = query.trim();
+
+        if (trimmed.length < 3) {
+            setSuggestions([]);
+            setShowSuggestions(false);
+            if (pickFirst) {
+                toast.info('Type at least 3 characters to search for an address.');
+            }
+            return;
+        }
+
+        searchAbortRef.current?.abort();
+        const controller = new AbortController();
+        searchAbortRef.current = controller;
+
+        try {
+            const features = await searchAddresses(trimmed, {
+                limit: 5,
+                signal: controller.signal,
+            });
+
+            setSuggestions(features);
+            setShowSuggestions(features.length > 0);
+
+            if (pickFirst) {
+                if (features[0]) {
+                    applyFeature(features[0]);
+                } else {
+                    toast.error('No matching address found for that search.');
+                }
+            }
+        } catch (error: any) {
+            if (error?.name === 'AbortError') return;
+            console.error('Address search failed:', error);
+            toast.error('Could not search that address. Please try again.');
+        }
+    }, [applyFeature]);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchValue(value);
+
+        if (searchTimerRef.current) {
+            clearTimeout(searchTimerRef.current);
+        }
+
+        if (value.trim().length < 3) {
+            setSuggestions([]);
+            setShowSuggestions(false);
+            return;
+        }
+
+        searchTimerRef.current = setTimeout(() => {
+            void runSearch(value);
+        }, 300);
+    };
+
+    const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key !== 'Enter') return;
 
         // The picker lives inside a form; never submit the address form from here
         event.preventDefault();
 
-        if (autocompleteRef.current) return;
-
-        const query = event.currentTarget.value.trim();
-        const maps = (window as any).google?.maps;
-        const geocoder = geocoderRef.current;
-        if (!query || !geocoder) return;
-
-        setIsLocating(true);
-        try {
-            const response = await geocoder.geocode({ address: query });
-            const result = response?.results?.[0]?.geometry?.location;
-
-            if (!result) {
-                toast.error('No matching address found for that search.');
-                return;
-            }
-
-            void applyPosition(result, { zoom: 17 });
-        } catch (error) {
-            console.error('Address search failed:', error);
-            toast.error('Could not search that address. Please try again.');
-        } finally {
-            setIsLocating(false);
+        if (showSuggestions && suggestions[0]) {
+            applyFeature(suggestions[0]);
+            return;
         }
+
+        void runSearch(event.currentTarget.value, true);
+    };
+
+    const handleSuggestionClick = (feature: GeoapifyFeature) => {
+        applyFeature(feature);
     };
 
     const handleUseCurrentLocation = () => {
-        const maps = (window as any).google?.maps;
-
-        if (!maps || !navigator.geolocation) {
+        if (!navigator.geolocation) {
             toast.error('Location access is not supported in this browser.');
             return;
         }
@@ -325,8 +289,9 @@ const AddressMapPicker: React.FC<AddressMapPickerProps> = ({ onAddressSelect }) 
         setIsLocating(true);
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                const latLng = new maps.LatLng(position.coords.latitude, position.coords.longitude);
-                void applyPosition(latLng, { zoom: 17 }).finally(() => setIsLocating(false));
+                const { latitude, longitude } = position.coords;
+                moveMarker(latitude, longitude, 17);
+                void reverseGeocodeAt(latitude, longitude).finally(() => setIsLocating(false));
             },
             (error) => {
                 setIsLocating(false);
@@ -345,15 +310,38 @@ const AddressMapPicker: React.FC<AddressMapPickerProps> = ({ onAddressSelect }) 
     return (
         <div className="address-map-picker">
             <div className="map-search-row">
-                <input
-                    ref={searchInputRef}
-                    type="text"
-                    className="form-input-addr map-search-input"
-                    placeholder="Search your address..."
-                    aria-label="Search your address"
-                    onKeyDown={handleSearchKeyDown}
-                    disabled={!isReady}
-                />
+                <div className="map-search-wrap" ref={searchWrapRef}>
+                    <input
+                        type="text"
+                        className="form-input-addr map-search-input"
+                        placeholder="Search your address..."
+                        aria-label="Search your address"
+                        value={searchValue}
+                        onChange={handleSearchChange}
+                        onFocus={() => {
+                            if (suggestions.length > 0) setShowSuggestions(true);
+                        }}
+                        onKeyDown={handleSearchKeyDown}
+                        autoComplete="off"
+                    />
+
+                    {showSuggestions && suggestions.length > 0 && (
+                        <ul className="map-search-suggestions" role="listbox">
+                            {suggestions.map((feature, index) => (
+                                <li
+                                    key={`${feature.properties.formatted}-${index}`}
+                                    role="option"
+                                    aria-selected={false}
+                                    onMouseDown={(event) => event.preventDefault()}
+                                    onClick={() => handleSuggestionClick(feature)}
+                                >
+                                    {feature.properties.formatted}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+
                 <button
                     type="button"
                     className="btn-map-location"

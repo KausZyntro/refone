@@ -51,7 +51,7 @@ const ContactSection = () => {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email || !emailRegex.test(formData.email)) {
+    if (!formData.email.trim() || !emailRegex.test(formData.email.trim())) {
       newErrors.email = 'Please enter a valid email address.';
       isValid = false;
     }
@@ -82,6 +82,8 @@ const ContactSection = () => {
     if (name === 'phone') {
       const numericValue = value.replace(/\D/g, '').slice(0, 10);
       setFormData((prev) => ({ ...prev, [name]: numericValue }));
+    } else if (name === 'email') {
+      setFormData((prev) => ({ ...prev, [name]: value.replace(/^\s+/, '') }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -100,7 +102,7 @@ const ContactSection = () => {
     try {
       const payload = {
         name: formData.name,
-        email: formData.email,
+        email: formData.email.trim(),
         phone: formData.phone || undefined,
         subject: formData.subject,
         message: formData.message,
@@ -176,6 +178,25 @@ const ContactSection = () => {
                 placeholder="john@example.com"
                 value={formData.email}
                 onChange={handleChange}
+                onKeyDown={(e) => {
+                  // The first character of an email can never be a space.
+                  if (e.key === " " && e.currentTarget.selectionStart === 0) {
+                    e.preventDefault();
+                  }
+                }}
+                onPaste={(e) => {
+                  const input = e.currentTarget;
+                  const pasted = e.clipboardData?.getData("text") ?? "";
+                  if (input.selectionStart === 0 && /^\s/.test(pasted)) {
+                    e.preventDefault();
+                    const rest = input.value.slice(input.selectionEnd ?? 0);
+                    setFormData((prev) => ({
+                      ...prev,
+                      email: pasted.replace(/^\s+/, "") + rest,
+                    }));
+                    setErrors((prev) => ({ ...prev, email: undefined }));
+                  }
+                }}
               />
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>

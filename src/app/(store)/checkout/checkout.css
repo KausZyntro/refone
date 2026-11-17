@@ -15,7 +15,15 @@
     /* background-color: var(--checkout-bg); */
     min-height: 100vh;
     padding-bottom: 4rem;
-    animation: fadeIn 0.4s ease-out forwards;
+    /* Opacity-only: a transform here (even a finished translateY(0)) makes
+       position: fixed descendants, like the address modal overlay, size and
+       position against this wrapper instead of the viewport. */
+    animation: checkoutFadeIn 0.4s ease-out;
+}
+
+@keyframes checkoutFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .productCard {

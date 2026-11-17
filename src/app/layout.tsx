@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ReduxProvider from "@/redux/ReduxProvider";
+import PreventLeadingSpaces from "@/components/common/PreventLeadingSpaces";
 import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
@@ -49,6 +50,7 @@ export default function RootLayout({
     <html lang="en" className={playball.variable}>
       <body className={outfit.className}>
         <ReduxProvider>
+          <PreventLeadingSpaces />
           <Suspense fallback={null}>
             <Navbar />
           </Suspense>

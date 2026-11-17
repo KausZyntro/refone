@@ -3,8 +3,11 @@ import React, { useEffect, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic';
 import "@/styles/Navbar.css";
 
-import { FiSearch, FiMapPin } from "react-icons/fi";
+import { FiSearch, FiMenu, FiX } from "react-icons/fi";
 import Image from 'next/image';
+import MobileMenu from './MobileMenu';
+import LocationPicker from './LocationPicker';
+import { getCityName, reverseGeocode } from '@/lib/geoapify';
 
 // Auth dialogs are only needed after a click. Loading them on demand keeps the
 // Lottie player, animation JSON and Firebase out of the initial page bundle.
@@ -31,6 +34,7 @@ const MAX_HISTORY = 5;
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [locationOpen, setLocationOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   // const [authOpen, setAuthOpen] = useState(false);
   const [otpOpen, setOtpOpen] = useState(false);
@@ -58,6 +62,11 @@ const Navbar = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Close the header menu after navigating to a new page.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   // Name can be empty for accounts created with a phone number only, so fall
   // back to the email/phone the user signed in with instead of a generic label.
@@ -224,18 +233,11 @@ const getLocation = async () => {
       const { latitude, longitude } = position.coords;
 
       try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-        );
+        const feature = await reverseGeocode(latitude, longitude);
 
-        const data = await response.json();
-
-        const cityName =
-          data.address.city ||
-          data.address.town ||
-          data.address.village ||
-          data.address.state_district ||
-          "Unknown Location";
+        const cityName = feature
+          ? getCityName(feature.properties) || "Unknown Location"
+          : "Unknown Location";
 
         setCity(cityName);
 
@@ -278,6 +280,13 @@ useEffect(() => {
     setCity("Select Location");
   }
 }, []);
+
+const handleCitySelect = (selectedCity: string) => {
+  setCity(selectedCity);
+  localStorage.setItem("user_city", selectedCity);
+  localStorage.setItem("user_city_ts", Date.now().toString());
+  setLocationOpen(false);
+};
   const performSearch = useCallback(
     debounce(async (query: string) => {
       const trimmedQuery = query.trim().toLowerCase();
@@ -409,9 +418,15 @@ useEffect(() => {
           <div className="nav-top-wrapper">
             <div className="nav-left">
               <div className="leftSection">
-                {/* <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-                  {menuOpen ? <FiX size={24} /> : <HiMenuAlt2 size={24} />}
-                </div> */}
+                <div
+                  className="hamburger"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  role="button"
+                  aria-label={menuOpen ? "Close menu" : "Open menu"}
+                  aria-expanded={menuOpen}
+                >
+                  {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+                </div>
 
                 <Link href="/" className="logo">
                   <Image src={"/logo-original.png"} alt="logo" height={40} width={120} />
@@ -479,6 +494,14 @@ useEffect(() => {
                   </div>
                   {profileOpen && (
                     <div className="profile-dropdown">
+                      <div className="profile-dropdown-header">
+                        <span className="profile-dropdown-name">{accountName || "My Profile"}</span>
+                        {accountEmail && (
+                          <span className="profile-dropdown-email" title={accountEmail}>
+                            {accountEmail}
+                          </span>
+                        )}
+                      </div>
                       <div className="dropdown-item" onClick={() => { router.push('/my-account'); setProfileOpen(false); }}>
                         My Account
                       </div>
@@ -519,35 +542,33 @@ useEffect(() => {
         </div>
 
 
-        {menuOpen && (
-          <div className="mobile-menu">
-            <Link href={'/my-account'}>
-              <div className="mobile-item" onClick={() => setMenuOpen(false)}>My Account</div>
-            </Link>
-            <div className="mobile-item">
-              <div className="locations">
-                <FiMapPin />
-                <span>{city}</span>
-              </div>
-            </div>
-            <div className="mobile-item-btn">
-              {
-                mounted && token ? (
-                  <button className="logout-btns" onClick={handleLogout}>Logout</button>
-                ) : (
-                  <button className="login-btns" onClick={() => {
-                    dispatch(openLoginModal());
-                    setMenuOpen(false);
-                  }}
-                  >
-                    Login
-                  </button>
-                )
-              }
-            </div>
-          </div>
-        )}
       </div>
+
+      <MobileMenu
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        isLoggedIn={mounted && !!token}
+        accountLabel={accountLabel}
+        city={city}
+        onLogin={() => {
+          setMenuOpen(false);
+          dispatch(openLoginModal());
+        }}
+        onLogout={() => {
+          setMenuOpen(false);
+          handleLogout();
+        }}
+        onSelectLocation={() => {
+          setMenuOpen(false);
+          setLocationOpen(true);
+        }}
+      />
+
+      <LocationPicker
+        isOpen={locationOpen}
+        onClose={() => setLocationOpen(false)}
+        onSelect={handleCitySelect}
+      />
       {isLoginModalOpen && (
       <AuthModal
         isOpen

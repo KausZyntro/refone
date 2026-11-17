@@ -109,10 +109,15 @@
   resize: vertical;
 }
 
-.error-message {
+/* Scoped to the contact form so footer.css's global .error-message
+   padding/centering cannot leak in here. */
+.contact-form .error-message {
   color: #e02424;
   font-size: 0.85rem;
   margin-top: 2px;
+  padding: 0;
+  text-align: left;
+  line-height: 1.4;
 }
 
 .submit-button {
