@@ -17,6 +17,8 @@ const AddressList = () => {
     // const [addresses, setAddresses] = useState<Address[]>(INITIAL_ADDRESSES);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const savingRef = React.useRef(false);
     const dispatch = useDispatch<AppDispatch>();
     const { addresses, isLoading } = useSelector((state: RootState) => state.address);
     const { user } = useSelector((state: RootState) => state.auth);
@@ -58,9 +60,33 @@ const AddressList = () => {
         }
     };
 
+    // Addresses are compared on the fields the API uses to reject duplicates
+    const normalizeAddressPart = (value?: string) =>
+        (value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+
+    const isDuplicateAddress = (addressData: Omit<Address, 'id' | 'userId'>) =>
+        addresses.some((saved) =>
+            saved.id !== editingAddress?.id &&
+            normalizeAddressPart(saved.address_line1) === normalizeAddressPart(addressData.address_line1) &&
+            normalizeAddressPart(saved.pincode) === normalizeAddressPart(addressData.pincode) &&
+            normalizeAddressPart(saved.city) === normalizeAddressPart(addressData.city)
+        );
+
     const handleSave = async (addressData: Omit<Address, 'id' | 'userId'>) => {
         if (!userId || !user) {
             toast.error("User session not found. Please login again.");
+            return;
+        }
+
+        // Ignore repeated submits while a save request is already running
+        if (savingRef.current) {
+            return;
+        }
+
+        if (!editingAddress && isDuplicateAddress(addressData)) {
+            toast.info("This address is already saved.");
+            setIsModalOpen(false);
+            setEditingAddress(null);
             return;
         }
 
@@ -73,6 +99,9 @@ const AddressList = () => {
             is_default: addressData.isDefault ? 1 : 0
         };
 
+        savingRef.current = true;
+        setIsSaving(true);
+
         try {
             if (editingAddress) {
                 await dispatch(updateAddress({
@@ -82,13 +111,34 @@ const AddressList = () => {
             } else {
                 await dispatch(addAddress(finalPayload)).unwrap();
             }
-            toast.success("Address saved successfully");
+            toast.success(
+                editingAddress ? "Address updated successfully." : "Address added successfully."
+            );
             setIsModalOpen(false);
             setEditingAddress(null);
             dispatch(fetchAddresses(userId));
         } catch (err: any) {
-            console.error("Save Address Error:", err);
-            toast.error(err || "Failed to save address.");
+            const message =
+                typeof err === 'string'
+                    ? err.trim()
+                    : typeof err?.message === 'string'
+                        ? err.message.trim()
+                        : '';
+
+            // The API rejects an address the customer already has; treat it as
+            // information rather than a failed save.
+            if (/already exists/i.test(message)) {
+                toast.info("This address is already saved.");
+                setIsModalOpen(false);
+                setEditingAddress(null);
+                dispatch(fetchAddresses(userId));
+            } else {
+                console.error("Save Address Error:", err);
+                toast.error(message || "Failed to save address.");
+            }
+        } finally {
+            savingRef.current = false;
+            setIsSaving(false);
         }
     };
 
@@ -128,6 +178,7 @@ const AddressList = () => {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
                 initialData={editingAddress}
+                isSaving={isSaving}
             />
             {/* </div> */}
         </>

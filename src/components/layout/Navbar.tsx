@@ -59,6 +59,12 @@ const Navbar = () => {
     setMounted(true);
   }, []);
 
+  // Name can be empty for accounts created with a phone number only, so fall
+  // back to the email/phone the user signed in with instead of a generic label.
+  const accountName = typeof user?.name === 'string' ? user.name.trim() : '';
+  const accountEmail = typeof user?.email === 'string' ? user.email.trim() : '';
+  const accountLabel = accountName || accountEmail || user?.phone || user?.mobile || 'My Profile';
+
   // Defer the badge refresh until the browser is idle so it never competes with
   // the initial render. The slice also dedupes repeated calls for the same user.
   useEffect(() => {
@@ -469,7 +475,7 @@ useEffect(() => {
                   <FaUser size={20} />
                   <div className="nav-action-info">
                     <span className="label">Account</span>
-                    <span className="sub-label">{user?.name || 'My Profile'}</span>
+                    <span className="sub-label">{accountLabel}</span>
                   </div>
                   {profileOpen && (
                     <div className="profile-dropdown">

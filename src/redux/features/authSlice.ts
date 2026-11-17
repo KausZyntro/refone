@@ -31,6 +31,35 @@ const getUser = () => {
   }
   return user;
 }
+
+/* ---------------- USER HELPERS ---------------- */
+
+// API responses wrap the user differently (user, data.user, data). Normalise
+// them to a single object and make sure an id always exists.
+const normalizeUser = (raw: any) => {
+  if (!raw) return null;
+
+  const source = raw.user || raw.data?.user || raw.data || raw;
+  if (!source || typeof source !== "object") return null;
+
+  const id = source.id ?? source.userId ?? source.user_id;
+  return { ...source, ...(id != null ? { id } : {}) };
+};
+
+const persistUser = (user: any) => {
+  if (typeof window === "undefined" || !user) return;
+
+  try {
+    const auth = localStorage.getItem("auth");
+    if (!auth) return;
+
+    const parsedAuth = JSON.parse(auth);
+    localStorage.setItem("auth", JSON.stringify({ ...parsedAuth, user }));
+  } catch (error) {
+    console.error("Failed to persist user", error);
+  }
+};
+
 /* ---------------- LOGIN ---------------- */
 
 export const loginUser = createAsyncThunk(
@@ -116,7 +145,15 @@ export const updateProfileThunk = createAsyncThunk(
     try {
       const response = await userAPI.updateProfile(userData);
       if (response.status === "SUCCESS") {
-        return response.data;
+        // The API may answer with the updated user, a partial object or no data
+        // at all. Fall back to the values that were just sent so the name never
+        // disappears from the header.
+        const raw =
+          response.data && typeof response.data === "object"
+            ? response.data.user || response.data
+            : {};
+
+        return { ...userData, ...raw };
       }
       return rejectWithValue(response.message || "Update failed");
     } catch (error: any) {
@@ -198,9 +235,12 @@ const authSlice = createSlice({
 
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      const rawUser = payload?.data || payload;
-      const normalizedUser = rawUser ? { ...rawUser, id: rawUser.id || rawUser.userId } : null;
-      state.user = normalizedUser;
+      const normalizedUser = normalizeUser(payload);
+      // A login response that only carries the OTP challenge must not wipe the
+      // profile that is already in the store.
+      if (normalizedUser && (normalizedUser.name || normalizedUser.email || normalizedUser.phone || normalizedUser.mobile)) {
+        state.user = normalizedUser;
+      }
       state.token = getToken();
     });
 
@@ -217,16 +257,15 @@ const authSlice = createSlice({
     builder.addCase(googleLoginUser.fulfilled, (state, { payload }) => {
       state.isLoading = false;
       // Robust extraction of user and token
-      const rawUser = payload?.user || payload?.data?.user || payload?.data || payload;
+      const rawUser = normalizeUser(payload);
       const token = payload?.token || payload?.data?.token;
       
       const refreshTime = payload?.refreshTime || payload?.data?.refreshTime || "24";
       const hour = parseInt(refreshTime);
       const maxTimeInSeconds = hour * 60 * 60;
 
-      if (token) {
-        // Normalize user ID (ensure .id exists if .userId does) without mutating
-        const user = { ...rawUser, id: rawUser.id || rawUser.userId };
+      if (token && rawUser) {
+        const user = rawUser;
 
         if (typeof window !== "undefined") {
           document.cookie = `token=${token}; path=/; max-age=${maxTimeInSeconds}; SameSite=Lax; Secure`;
@@ -279,12 +318,12 @@ const authSlice = createSlice({
 
     builder.addCase(verifyOtpUser.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      const rawUser = payload?.user || payload?.data?.user || payload;
+      const rawUser = normalizeUser(payload?.user || payload?.data?.user || payload);
       const token = payload?.token || payload?.data?.token;
       const maxTimeInSeconds = payload?.maxTimeInSeconds || 24 * 60 * 60;
       
-      if (token) {
-        const user = { ...rawUser, id: rawUser.id || rawUser.userId };
+      if (token && rawUser) {
+        const user = rawUser;
         
         if (typeof window !== "undefined") {
           document.cookie = `token=${token}; path=/; max-age=${maxTimeInSeconds}; SameSite=Lax; Secure`;
@@ -319,22 +358,12 @@ const authSlice = createSlice({
 
     builder.addCase(updateProfileThunk.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      const user = payload ? { ...payload, id: payload.id || payload.userId } : null;
-      
-      if (user && typeof window !== "undefined") {
-        const auth = localStorage.getItem("auth");
-        if (auth) {
-          const parsedAuth = JSON.parse(auth);
-          localStorage.setItem(
-            "auth",
-            JSON.stringify({
-              ...parsedAuth,
-              user,
-            })
-          );
-        }
-      }
+
+      const updated = normalizeUser(payload);
+      const user = updated ? { ...(state.user || {}), ...updated } : state.user;
+
       state.user = user;
+      persistUser(user);
     });
 
     builder.addCase(updateProfileThunk.rejected, (state, { payload }) => {

@@ -19,6 +19,37 @@ import { useRouter } from 'next/navigation';
 import AddressList from '../address/AddressList';
 import Link from 'next/link';
 
+// Leading spaces are not allowed in any field
+const stripLeadingSpaces = (value: string) => value.replace(/^\s+/, '');
+
+// Phone fields allow spaces while typing but only digits are kept
+// (spaces are stripped for validation and saving)
+const sanitizePhoneInput = (raw: string) => {
+    let digits = 0;
+    let result = '';
+
+    for (const char of raw) {
+        if (char >= '0' && char <= '9') {
+            if (digits < 10) {
+                result += char;
+                digits += 1;
+            }
+        } else if (/\s/.test(char)) {
+            result += char;
+        }
+    }
+
+    return stripLeadingSpaces(result);
+};
+
+// Pressing space as the very first character of a field is ignored
+const blockLeadingSpace = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const input = e.currentTarget;
+    if (e.key === ' ' && input.selectionStart === 0) {
+        e.preventDefault();
+    }
+};
+
 interface UserProfile {
     id: number;
     name: string;
@@ -45,6 +76,12 @@ const UserDashboard = () => {
         phone: ''
     });
     const [isUpdating, setIsUpdating] = useState(false);
+    const [errors, setErrors] = useState<{
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        phone?: string;
+    }>({});
 
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
@@ -63,10 +100,10 @@ const UserDashboard = () => {
                     const lastName = nameParts.slice(1).join(' ') || '';
 
                     setFormData({
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: data.email || '',
-                        phone: data.mobile || '',
+                        firstName: stripLeadingSpaces(firstName),
+                        lastName: stripLeadingSpaces(lastName),
+                        email: stripLeadingSpaces(data.email || ''),
+                        phone: (data.mobile || '').replace(/\D/g, ''),
                         gender: data.gender || ''
                     });
                     setInitialData({
@@ -84,23 +121,104 @@ const UserDashboard = () => {
         fetchUserData();
     }, []);
 
+    const validate = () => {
+        const newErrors: { firstName?: string; lastName?: string; email?: string; phone?: string } = {};
+        const namePattern = /^[A-Za-z][A-Za-z\s.'-]*$/;
+
+        const firstName = formData.firstName.trim();
+        const lastName = formData.lastName.trim();
+        const email = formData.email.trim();
+        const phone = formData.phone.replace(/\D/g, '');
+
+        if (!firstName) {
+            newErrors.firstName = 'First name is required.';
+        } else if (firstName.length < 2) {
+            newErrors.firstName = 'First name must be at least 2 characters.';
+        } else if (!namePattern.test(firstName)) {
+            newErrors.firstName = 'First name can only contain letters.';
+        }
+
+        if (!lastName) {
+            newErrors.lastName = 'Last name is required.';
+        }
+
+        // Email and phone are only editable when not already set on the account
+        if (!initialData.email) {
+            if (!email) {
+                newErrors.email = 'Email is required.';
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+                newErrors.email = 'Please enter a valid email address.';
+            }
+        }
+
+        if (!initialData.phone) {
+            if (!phone) {
+                newErrors.phone = 'Phone number is required.';
+            } else if (!/^\d{10}$/.test(phone)) {
+                newErrors.phone = 'Phone number must be exactly 10 digits.';
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
+        const { name } = e.target;
+        // Value is kept exactly as typed; spaces must not be stripped while typing
+        let value = e.target.value;
+
+        // Spaces are allowed while typing; letters and symbols are not
+        if (name === 'phone') {
+            value = sanitizePhoneInput(value);
+        }
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+
+        // Typing or clearing a field always removes that field's message.
+        // Validation only runs again when the form is submitted.
+        setErrors((prev) => {
+            const field = name as keyof typeof prev;
+            if (!prev[field]) return prev;
+
+            const next = { ...prev };
+            delete next[field];
+            return next;
         });
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        const { name } = e.target;
+        const value = name === 'phone'
+            ? e.target.value.replace(/\D/g, '').slice(0, 10)
+            : stripLeadingSpaces(e.target.value);
+
+        // Phone is normalised to digits once the user leaves the field
+
+        if (value !== e.target.value) {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validate()) {
+            return;
+        }
         
         setIsUpdating(true);
         try {
-            const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+            const firstName = formData.firstName.trim();
+            const lastName = formData.lastName.trim();
+            const fullName = `${firstName} ${lastName}`.trim();
             const resultAction = await dispatch(updateProfileThunk({
                 name: fullName,
-                email: formData.email,
-                phone: formData.phone
+                email: formData.email.trim(),
+                phone: formData.phone.replace(/\D/g, '')
             }));
 
             if (updateProfileThunk.fulfilled.match(resultAction)) {
@@ -210,48 +328,61 @@ const UserDashboard = () => {
                                             <input
                                                 type="text"
                                                 name="firstName"
-                                                className="form-input"
+                                                className={`form-input${errors.firstName ? ' input-error' : ''}`}
                                                 value={formData.firstName}
                                                 onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                onKeyDown={blockLeadingSpace}
                                                 placeholder="Enter first name"
                                             />
+                                            {errors.firstName && <span className="field-error">{errors.firstName}</span>}
                                         </div>
                                         <div className="form-group">
                                             <label className="form-label">Last Name</label>
                                             <input
                                                 type="text"
                                                 name="lastName"
-                                                className="form-input"
+                                                className={`form-input${errors.lastName ? ' input-error' : ''}`}
                                                 value={formData.lastName}
                                                 onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                onKeyDown={blockLeadingSpace}
                                                 placeholder="Enter last name"
                                             />
+                                            {errors.lastName && <span className="field-error">{errors.lastName}</span>}
                                         </div>
                                         <div className="form-group">
                                             <label className="form-label">Email</label>
                                             <input
                                                 type="email"
                                                 name="email"
-                                                className="form-input"
+                                                className={`form-input${errors.email ? ' input-error' : ''}`}
                                                 value={formData.email}
                                                 onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                onKeyDown={blockLeadingSpace}
                                                 placeholder="Enter email address"
                                                 disabled={!!initialData.email}
                                                 style={{ cursor: initialData.email ? 'not-allowed' : 'text' }}
                                             />
+                                            {errors.email && <span className="field-error">{errors.email}</span>}
                                         </div>
                                         <div className="form-group">
                                             <label className="form-label">Phone</label>
                                             <input
                                                 type="text"
                                                 name="phone"
-                                                className="form-input"
+                                                className={`form-input${errors.phone ? ' input-error' : ''}`}
                                                 value={formData.phone}
                                                 onChange={handleChange}
                                                 placeholder="Enter phone number"
+                                                inputMode="numeric"
+                                                onBlur={handleBlur}
+                                                onKeyDown={blockLeadingSpace}
                                                 disabled={!!initialData.phone}
                                                 style={{ cursor: initialData.phone ? 'not-allowed' : 'text' }}
                                             />
+                                            {errors.phone && <span className="field-error">{errors.phone}</span>}
                                         </div>
                                         {/* <div className="form-group">
                                             <label className="form-label">Gender</label>
