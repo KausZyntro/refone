@@ -317,18 +317,29 @@ const cartSlice = createSlice({
                 state.lastFetchedAt = 0;
 
                 const newItem = payload.data;
+                if (!newItem) {
+                    state.successMessage = payload.message || "Item added to cart";
+                    return;
+                }
 
                 const idx = state.items.findIndex(
                     (i) => i.product_id === newItem.product_id && i.variant_id === newItem.variant_id
                 );
 
                 if (idx !== -1) {
-                    // Update quantity instead of appending duplicate item
-                    const existingQty = Number(state.items[idx].quantity) || 0;
-                    const newQty = Number(newItem.quantity) || 1;
+                    // `cart/add` returns the cart row with its already-updated
+                    // (cumulative) quantity, so take that value as-is. Adding it
+                    // to the locally stored quantity would double-count the item.
+                    const existing = state.items[idx];
+                    const quantity = Number(newItem.quantity) || Number(existing.quantity) || 1;
+                    const unitPrice = parsePrice(
+                        existing.price?.selling_price ?? newItem.price?.selling_price
+                    );
                     state.items[idx] = {
+                        ...existing,
                         ...newItem,
-                        quantity: String(existingQty + newQty)
+                        quantity,
+                        item_total: unitPrice > 0 ? unitPrice * quantity : existing.item_total,
                     };
                 } else {
                     state.items.push(newItem);

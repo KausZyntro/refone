@@ -115,6 +115,12 @@ const ProductDetailTestPage: React.FC<ProductDetailTestPageProps> = ({ productId
         setSelectedVariantId(variant.id);
     }, []);
 
+    // Each variant is its own cart line: after adding one, switching the
+    // selection must show "Add to Cart" again instead of "Go to Cart".
+    useEffect(() => {
+        setAddedToCart(false);
+    }, [selectedVariant?.id]);
+
     /* ── derived values ── */
     const sellingPrice = Number(selectedVariant?.pricing?.selling_price ?? 0);
     const mrp = Number(selectedVariant?.pricing?.mrp ?? 0);

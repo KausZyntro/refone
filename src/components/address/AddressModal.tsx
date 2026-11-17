@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Address } from '../../types/address';
-import { MdMyLocation, MdClose } from 'react-icons/md';
+import { MdClose } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import AddressMapPicker, { MapAddressDetails } from './AddressMapPicker';
 import "@/styles/AddressManagement.css";
 
 interface AddressModalProps {
@@ -218,6 +219,29 @@ const AddressModal: React.FC<AddressModalProps> = ({ isOpen, onClose, onSave, in
         }
     };
 
+    // Map selection fills the address fields automatically
+    const handleMapAddressSelect = (details: MapAddressDetails) => {
+        setFormData((prev) => ({
+            ...prev,
+            address_line1: details.address_line1
+                ? stripLeadingSpaces(details.address_line1.trim())
+                : prev.address_line1,
+            city: details.city ? stripLeadingSpaces(details.city.trim()) : prev.city,
+            state: details.state ? stripLeadingSpaces(details.state.trim()) : prev.state,
+            pincode: details.pincode
+                ? details.pincode.replace(/\D/g, '').slice(0, 6)
+                : prev.pincode,
+        }));
+
+        setErrors((prev) => {
+            const next = { ...prev };
+            (['address_line1', 'city', 'state', 'pincode'] as const).forEach((field) => {
+                if (next[field]) delete next[field];
+            });
+            return next;
+        });
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -274,10 +298,7 @@ const AddressModal: React.FC<AddressModalProps> = ({ isOpen, onClose, onSave, in
                 </div>
 
                 <div className="modal-body">
-                    {/* <button type="button" className="btn-location">
-                        <MdMyLocation size={20} />
-                        Use my current location
-                    </button> */}
+                    <AddressMapPicker onAddressSelect={handleMapAddressSelect} />
 
                     <form onSubmit={handleSubmit} noValidate ref={formRef} aria-busy={isSaving}>
                         <div className="form-group-addr">
