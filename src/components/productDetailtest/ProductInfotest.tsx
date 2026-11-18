@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import RatingStarstest from "@/components/common/RatingStarstest";
 import styles from "./ProductInfotest.module.css";
 import { ProductTest, VariantTest } from "@/types/producttest";
-import { FiShield, FiCheckCircle, FiCreditCard } from "react-icons/fi";
+import { deliveryAPI } from "@/services/api";
+import { FiShield, FiCheckCircle, FiCreditCard, FiAlertCircle } from "react-icons/fi";
 import { LuRefreshCcw } from "react-icons/lu";
 import { FaTruckFast } from "react-icons/fa6";
 import { FaCreditCard, FaShieldAlt } from "react-icons/fa";
@@ -37,22 +38,108 @@ interface ProductInfoTestProps {
 
 const ProductInfotest: React.FC<ProductInfoTestProps> = ({ product, selectedVariant, setSelectedVariant }) => {
 
-        const deliveryBlock = (
+    /* ── Delivery check state ── */
+    const [pincode, setPincode] = useState("");
+    const [deliveryLoading, setDeliveryLoading] = useState(false);
+    const [deliveryError, setDeliveryError] = useState("");
+    const [deliveryResult, setDeliveryResult] = useState<{
+        available: boolean;
+        message: string;
+        estimatedDays?: string;
+        minDate?: string;
+        maxDate?: string;
+    } | null>(null);
+
+    // A delivery estimate belongs to one variant, so drop it when the variant changes.
+    useEffect(() => {
+        setDeliveryResult(null);
+        setDeliveryError("");
+    }, [selectedVariant?.id]);
+
+    const handleCheckDelivery = async () => {
+        const cleanPincode = pincode.replace(/\D/g, "").slice(0, 6);
+        if (cleanPincode.length !== 6) {
+            setDeliveryResult(null);
+            setDeliveryError("Please enter a valid 6-digit pincode.");
+            return;
+        }
+        if (!selectedVariant?.id) return;
+
+        setDeliveryLoading(true);
+        setDeliveryError("");
+        try {
+            const response = await deliveryAPI.checkDelivery(cleanPincode, selectedVariant.id);
+            if (response?.success && response?.data) {
+                setDeliveryResult({
+                    available: true,
+                    message: response.message || "Delivery is available!",
+                    estimatedDays: response.data.estimated_days,
+                    minDate: response.data.min_delivery_date,
+                    maxDate: response.data.max_delivery_date,
+                });
+            } else {
+                setDeliveryResult({
+                    available: false,
+                    message: response?.message || "Delivery is not available at this PIN code.",
+                });
+            }
+        } catch (error) {
+            console.error("Delivery check failed:", error);
+            setDeliveryResult(null);
+            setDeliveryError("Could not check delivery right now. Please try again.");
+        } finally {
+            setDeliveryLoading(false);
+        }
+    };
+
+    const deliveryBlock = (
         <div className={styles.deliveryBlock}>
             <p className={styles.deliveryTitle}>Check Estimated Delivery Date</p>
             <div className={styles.pincodeRow}>
                 <input
                     className={styles.pincodeInput}
                     type="text"
+                    inputMode="numeric"
                     placeholder="Enter Pincode"
                     maxLength={6}
+                    value={pincode}
+                    onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") handleCheckDelivery();
+                    }}
                 />
-                <button className={styles.pincodeBtn}>Check</button>
+                <button
+                    className={styles.pincodeBtn}
+                    onClick={handleCheckDelivery}
+                    disabled={deliveryLoading}
+                >
+                    {deliveryLoading ? "Checking..." : "Check"}
+                </button>
             </div>
-            <div className={styles.deliveryInfo}>
-                <FiCheckCircle className={styles.deliveryCheckIcon} />
-                <span>Usually delivered in 2-4 days</span>
-            </div>
+            {deliveryResult?.available ? (
+                <div className={styles.deliveryInfo}>
+                    <FiCheckCircle className={styles.deliveryCheckIcon} />
+                    <span>
+                        Delivery by {deliveryResult.minDate} - {deliveryResult.maxDate}
+                        {deliveryResult.estimatedDays ? ` (usually in ${deliveryResult.estimatedDays})` : ""}
+                    </span>
+                </div>
+            ) : deliveryResult && !deliveryResult.available ? (
+                <div className={styles.deliveryError}>
+                    <FiAlertCircle className={styles.deliveryCheckIcon} />
+                    <span>{deliveryResult.message}</span>
+                </div>
+            ) : deliveryError ? (
+                <div className={styles.deliveryError}>
+                    <FiAlertCircle className={styles.deliveryCheckIcon} />
+                    <span>{deliveryError}</span>
+                </div>
+            ) : (
+                <div className={styles.deliveryInfo}>
+                    <FiCheckCircle className={styles.deliveryCheckIcon} />
+                    <span>Usually delivered in 2-4 days</span>
+                </div>
+            )}
         </div>
     );
     

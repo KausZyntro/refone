@@ -9,8 +9,10 @@
 .pincodeRow { display: flex; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
 .pincodeInput { flex: 1; border: none; padding: 10px; font-size: 13px; outline: none; }
 .pincodeBtn { background: transparent; color: #006ab0; border: 1.5px solid #006ab0; border-radius: 5px;  font-weight: 700; padding: 0 14px; cursor: pointer; }
+.pincodeBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 .deliveryInfo { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #006ab0; }
-.deliveryCheckIcon { font-size: 14px; }
+.deliveryCheckIcon { font-size: 14px; flex-shrink: 0; }
+.deliveryError { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #d32f2f; }
 
 @keyframes shimmer {
     0% { background-position: 100% 0; }

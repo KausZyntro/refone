@@ -34,6 +34,20 @@ const apie = axios.create({
     }
 });
 
+// Pincode delivery checks are served by the UAT backend, which lives on a
+// different base path from the store API instances above.
+const DELIVERY_URL_BASE = process.env.NEXT_PUBLIC_DELIVERY_API_URL || "https://refones.com/ApiAuthUat/api";
+const DELIVERY_URL = DELIVERY_URL_BASE.endsWith("/") ? DELIVERY_URL_BASE : `${DELIVERY_URL_BASE}/`;
+
+const deliveryApi = axios.create({
+    baseURL: DELIVERY_URL,
+    timeout: 20000,
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+});
+
 
 // Interceptor to add token to requests
 api.interceptors.request.use((config) => {
@@ -376,6 +390,16 @@ export const exchangeAPI = {
         const response = await api.post(`buyback/assessments/${assessmentId}/pickup`, payload);
         return response.data;
     }
+};
+
+export const deliveryAPI = {
+    checkDelivery: async (pincode: string, variantId: number | string) => {
+        const response = await deliveryApi.post("check-delivery", {
+            pincode,
+            variant_id: Number(variantId),
+        });
+        return response.data;
+    },
 };
 
 export const supportAPI = {
